@@ -1,5 +1,0 @@
-C:\Documents and Settings\mschraeder\My Documents\Visual Studio 2005\Projects\CSharp_MARC\CSharp_MARC\bin\Debug\CSharp_MARC.dll
-C:\Documents and Settings\mschraeder\My Documents\Visual Studio 2005\Projects\CSharp_MARC\CSharp_MARC\bin\Debug\CSharp_MARC.pdb
-C:\Documents and Settings\mschraeder\My Documents\Visual Studio 2005\Projects\CSharp_MARC\CSharp_MARC\obj\Debug\ResolveAssemblyReference.cache
-C:\Documents and Settings\mschraeder\My Documents\Visual Studio 2005\Projects\CSharp_MARC\CSharp_MARC\obj\Debug\CSharp_MARC.dll
-C:\Documents and Settings\mschraeder\My Documents\Visual Studio 2005\Projects\CSharp_MARC\CSharp_MARC\obj\Debug\CSharp_MARC.pdb
