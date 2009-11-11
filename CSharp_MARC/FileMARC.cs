@@ -116,7 +116,8 @@ namespace MARC
 
             foreach (string record in source.Split(END_OF_RECORD))
             {
-                this.rawSource.Add(record);
+                if (record != string.Empty)
+                    this.rawSource.Add(record + END_OF_RECORD.ToString());
             }
         }
 
@@ -172,7 +173,8 @@ namespace MARC
 
             foreach (string record in source.Split(END_OF_RECORD))
             {
-                this.rawSource.Add(record);
+                if (record != string.Empty)
+                    this.rawSource.Add(record + END_OF_RECORD.ToString());
             }
         }
 
