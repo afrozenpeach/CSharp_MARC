@@ -280,7 +280,7 @@ namespace MARC
         /// </returns>
         public static bool ValidateIndicator(char ind)
         {
-            Match match = Regex.Match(ind.ToString(), "^[0-9A-Za-z]{1}$");
+            Match match = Regex.Match(ind.ToString(), "^[0-9#]{1}$");
             return (match.Captures.Count > 0 || ind == ' ') ? true : false;
         }
     }
