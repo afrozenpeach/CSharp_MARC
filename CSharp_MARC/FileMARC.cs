@@ -239,7 +239,7 @@ namespace MARC
                 {
                     fieldLength = Convert.ToInt32(directory.Substring(i * DIRECTORY_ENTRY_LEN, DIRECTORY_ENTRY_LEN).Substring(3, 4));
                 }
-                catch (FormatException ex)
+                catch (FormatException)
                 {
                     warnings.Add("Invalid Directory Tag Length for tag " + tag + ".");
                 }
@@ -248,7 +248,7 @@ namespace MARC
                 {
                     fieldOffset = Convert.ToInt32(directory.Substring(i * DIRECTORY_ENTRY_LEN, DIRECTORY_ENTRY_LEN).Substring(7, 5));
                 }
-                catch (FormatException ex)
+                catch (FormatException)
                 {
                     warnings.Add("Invalid Directory Offset for tag " + tag + ".");
                 }

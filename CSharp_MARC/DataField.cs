@@ -89,6 +89,29 @@ namespace MARC
             set { subfields = value; }
         }
 
+        /// <summary>
+        /// Gets the first <see cref="MARC.Subfield"/> with the specified code.
+        /// </summary>
+        /// <value>The first matching subfield or null if not found</value>
+        public Subfield this[char code]
+        {
+            get
+            {
+                Subfield foundSubfield = null;
+
+                foreach (Subfield subfield in subfields)
+                {
+                    if (subfield.Code == code)
+                    {
+                        foundSubfield = subfield;
+                        break;
+                    }
+                }
+
+                return foundSubfield;
+            }
+        }
+
         #endregion
 
         //Constructors
@@ -140,25 +163,6 @@ namespace MARC
         #endregion
 
         /// <summary>
-        /// Gets the first subfield that matches the requested code.
-        /// </summary>
-        /// <param name="code">The code.</param>
-        /// <returns>
-        ///     A MARC Subfield object or <c>null</c> if not found.
-        /// </returns>
-        public Subfield GetSubfield(char code)
-        {
-            foreach (Subfield subfield in subfields)
-            {
-                if (subfield.Code == code)
-                    return subfield;
-            }
-
-            //No matches were found
-            return null;
-        }
-
-        /// <summary>
         /// Returns a List of subfield objects that match a requested code,
         /// or a cloned List that contains all the subfield objects if the
         /// requested code is null.
@@ -171,9 +175,7 @@ namespace MARC
 
             foreach (Subfield subfield in subfields)
             {
-                if (code == null)
-                    results.Add(subfield);
-                else if (code == subfield.Code)
+                if (code == null || subfield.Code == code)
                     results.Add(subfield);
             }
 

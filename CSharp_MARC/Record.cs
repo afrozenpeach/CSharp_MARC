@@ -58,6 +58,28 @@ namespace MARC
         }
 
         /// <summary>
+        /// Gets the first <see cref="MARC.Field"/> with the specified tag.
+        /// </summary>
+        /// <value>The first matching field or null if none are found.</value>
+        public Field this[string tag]
+        {
+            get
+            {
+                Field foundField = null;
+                foreach (Field field in fields)
+                {
+                    if (field.Tag == tag)
+                    {
+                        foundField = field;
+                        break;
+                    }
+                }
+
+                return foundField;
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the leader.
         /// </summary>
         /// <value>The leader.</value>
@@ -86,6 +108,26 @@ namespace MARC
             fields = new List<Field>();
             warnings = new List<string>();
             leader = string.Empty.PadLeft(24);
+        }
+
+        /// <summary>
+        /// Returns a List of field objects that match a requested tag,
+        /// or a cloned List that contains all the subfield objects if the
+        /// requested tag is an empty string.
+        /// </summary>
+        /// <param name="tag">The tag.</param>
+        /// <returns>A List of fields that match the specified tag.</Field></returns>
+        public List<Field> GetFields(string tag)
+        {
+            List<Field> foundFields = new List<Field>();
+
+            foreach (Field field in fields)
+            {
+                if (tag == string.Empty || field.Tag == tag)
+                    foundFields.Add(field);
+            }
+
+            return foundFields;
         }
 
         /// <summary>
