@@ -131,6 +131,29 @@ namespace MARC
         }
 
         /// <summary>
+        /// Inserts the field into position before the first field found with a higher tag number.
+        /// This assumes the record has already been sorted.
+        /// </summary>
+        /// <param name="field">The field.</param>
+        public void InsertField(Field newField)
+        {
+            int rowNum = 0;
+            foreach (Field field in fields)
+            {
+                if (field.Tag.CompareTo(newField.Tag) > 0)
+                {
+                    fields.Insert(rowNum, newField);
+                    return;
+                }
+
+                rowNum++;
+            }
+
+            //Insert at the end
+            fields.Add(newField);
+        }
+
+        /// <summary>
         /// Returns <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>
         /// in raw USMARC format.
         /// 
