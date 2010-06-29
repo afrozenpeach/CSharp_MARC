@@ -112,11 +112,11 @@ namespace MARC
 
         /// <summary>
         /// Returns a List of field objects that match a requested tag,
-        /// or a cloned List that contains all the subfield objects if the
+        /// or a cloned List that contains all the field objects if the
         /// requested tag is an empty string.
         /// </summary>
         /// <param name="tag">The tag.</param>
-        /// <returns>A List of fields that match the specified tag.</Field></returns>
+        /// <returns>A List of fields that match the specified tag.</returns>
         public List<Field> GetFields(string tag)
         {
             List<Field> foundFields = new List<Field>();
