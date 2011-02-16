@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharp_MARC Demo", "CSharp_MARC Demo\CSharp_MARC Demo.csproj", "{DF886736-481D-495D-BDC8-5001A34B2AFA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharp_MARC", "..\CSharp_MARC\CSharp_MARC.csproj", "{D76C0576-2B55-4B45-82F5-97FAD347676C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DF886736-481D-495D-BDC8-5001A34B2AFA}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{DF886736-481D-495D-BDC8-5001A34B2AFA}.Debug|x86.ActiveCfg = Debug|x86
+		{DF886736-481D-495D-BDC8-5001A34B2AFA}.Debug|x86.Build.0 = Debug|x86
+		{DF886736-481D-495D-BDC8-5001A34B2AFA}.Release|Any CPU.ActiveCfg = Release|x86
+		{DF886736-481D-495D-BDC8-5001A34B2AFA}.Release|x86.ActiveCfg = Release|x86
+		{DF886736-481D-495D-BDC8-5001A34B2AFA}.Release|x86.Build.0 = Release|x86
+		{D76C0576-2B55-4B45-82F5-97FAD347676C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D76C0576-2B55-4B45-82F5-97FAD347676C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D76C0576-2B55-4B45-82F5-97FAD347676C}.Debug|x86.ActiveCfg = Debug|x86
+		{D76C0576-2B55-4B45-82F5-97FAD347676C}.Debug|x86.Build.0 = Debug|x86
+		{D76C0576-2B55-4B45-82F5-97FAD347676C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D76C0576-2B55-4B45-82F5-97FAD347676C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D76C0576-2B55-4B45-82F5-97FAD347676C}.Release|x86.ActiveCfg = Release|x86
+		{D76C0576-2B55-4B45-82F5-97FAD347676C}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

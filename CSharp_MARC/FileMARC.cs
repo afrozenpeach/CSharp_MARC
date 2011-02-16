@@ -20,8 +20,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @author    Matt Schraeder <mschraeder@btsb.com>
- * @copyright 2009 Matt Schraeder and Bound to Stay Bound Books <http://www.btsb.com>
+ * @author    Matt Schraeder <mschraeder@btsb.com> <frozen@frozen-solid.net>
+ * @copyright 2009-2011 Matt Schraeder and Bound to Stay Bound Books <http://www.btsb.com>
  * @license   http://www.gnu.org/copyleft/lesser.html  LGPL License 3
  */
 
@@ -94,10 +94,18 @@ namespace MARC
         /// Gets the warnings.
         /// </summary>
         /// <value>The warnings.</value>
-        protected List<string> Warnings
+        public List<string> Warnings
         {
             get { return warnings; }
         }
+
+		/// <summary>
+		/// Gets the number of single records that have been imported.
+		/// </summary>
+		public int Count
+		{
+			get { return rawSource.Count; }
+		}
 
         #endregion
 
@@ -114,7 +122,7 @@ namespace MARC
 
             source = CleanSource(source);
 
-            foreach (string record in source.Split(END_OF_RECORD))
+             foreach (string record in source.Split(END_OF_RECORD))
             {
                 if (record != string.Empty)
                     this.rawSource.Add(record + END_OF_RECORD.ToString());
@@ -261,13 +269,24 @@ namespace MARC
                 if (fieldOffset + fieldLength > recordLength)
                     warnings.Add("Directory entry for tag " + tag + " runs past the end of the record.");
 
-                string tagData = raw.Substring(dataStart + fieldOffset, fieldLength);
+				int fieldStart = dataStart + fieldOffset;
+				if (fieldStart > recordLength)
+				{
+					warnings.Add("Directory entry for tag " + tag + " starts past the end of the record. Skipping tag and all proceeding tags.");
+					break;
+				}
+				else if (fieldStart + fieldLength > recordLength)
+				{
+					warnings.Add("Directory entry for tag " + tag + " runs past the end of the record.");
+					fieldLength = recordLength - fieldStart;
+				}
+                string tagData = raw.Substring(fieldStart, fieldLength);
 
                 if (tagData.Substring(tagData.Length - 1, 1) == END_OF_FIELD.ToString())
                 {
                     //Get rid of the end of tag character
                     tagData = tagData.Remove(tagData.Length - 1);
-                    recordLength--;
+					fieldLength--;
                 }
                 else
                     warnings.Add("Field for tag " + tag + " does not end with an end of field character.");
@@ -284,7 +303,7 @@ namespace MARC
                     char ind1;
                     char ind2;
 
-                    if (indicators.Length > 2 || indicators.Length == 0)
+                    if (indicators.Length != 2)
                     {
                         warnings.Add("Invalid indicators " + indicators + " forced to blanks for tag " + tag + ".");
                         ind1 = ind2 = ' ';
