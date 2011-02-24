@@ -1,0 +1,5 @@
+C:\Users\mschraeder\Documents\Visual Studio 2010\Projects\CSharp_MARC\CSharp_MARC\bin\x86\Release\CSharp_MARC.dll
+C:\Users\mschraeder\Documents\Visual Studio 2010\Projects\CSharp_MARC\CSharp_MARC\bin\x86\Release\CSharp_MARC.pdb
+C:\Users\mschraeder\Documents\Visual Studio 2010\Projects\CSharp_MARC\CSharp_MARC\obj\x86\Release\ResolveAssemblyReference.cache
+C:\Users\mschraeder\Documents\Visual Studio 2010\Projects\CSharp_MARC\CSharp_MARC\obj\x86\Release\CSharp_MARC.dll
+C:\Users\mschraeder\Documents\Visual Studio 2010\Projects\CSharp_MARC\CSharp_MARC\obj\x86\Release\CSharp_MARC.pdb

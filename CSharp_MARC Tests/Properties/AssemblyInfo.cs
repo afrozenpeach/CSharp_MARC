@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("CSharp_MARC")]
+[assembly: AssemblyTitle("CSharp_MARC Tests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Bound To Stay Bound Books")]
-[assembly: AssemblyProduct("CSharp_MARC")]
-[assembly: AssemblyCopyright("Copyright © Bound To Stay Bound Books 2009")]
+[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyProduct("CSharp_MARC Tests")]
+[assembly: AssemblyCopyright("Copyright © Microsoft 2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("6fca2cf5-1cd3-4f78-a009-16f3b52b09a4")]
+[assembly: Guid("87dff84f-a8e2-4135-9288-5722611eb6c3")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -29,7 +29,7 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-// You can specify all the values or you can default the Revision and Build Numbers 
+// You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
-[assembly: AssemblyVersion("0.0.0.9")]
-[assembly: AssemblyFileVersion("0.0.0.9")]
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]
