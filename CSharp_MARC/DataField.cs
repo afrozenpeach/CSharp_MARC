@@ -197,7 +197,7 @@ namespace MARC
         /// <returns>
         /// 	<c>true</c> if this instance is empty; otherwise, <c>false</c>.
         /// </returns>
-        public new bool IsEmpty()
+        public override bool IsEmpty()
         {
             return (subfields == null || subfields.Count == 0) ? true : false;
         }

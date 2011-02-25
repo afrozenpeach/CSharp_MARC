@@ -73,19 +73,6 @@ namespace MARC
         }
 
         /// <summary>
-        /// Determines whether this instance is empty.
-        /// </summary>
-        /// <returns>
-        /// 	<c>true</c> if this instance is empty; otherwise, <c>false</c>.
-        /// </returns>
-        public bool IsEmpty()
-        {
-            if (this.tag != string.Empty)
-                return false;
-            return true;
-        }
-
-        /// <summary>
         /// Determines whether [is control field].
         /// </summary>
         /// <returns>
@@ -121,6 +108,14 @@ namespace MARC
         {
             return tag;
         }
+
+        /// <summary>
+        /// Determines whether this instance is empty.
+        /// </summary>
+        /// <returns>
+        /// 	<c>true</c> if this instance is empty; otherwise, <c>false</c>.
+        /// </returns>
+		public abstract bool IsEmpty();
 
         /// <summary>
         /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>

@@ -66,7 +66,7 @@ namespace MARC
         /// <returns>
         /// 	<c>true</c> if this instance is empty; otherwise, <c>false</c>.
         /// </returns>
-        public new bool IsEmpty()
+        public override bool IsEmpty()
         {
             return (this.data == string.Empty) ? false : true;
         }
