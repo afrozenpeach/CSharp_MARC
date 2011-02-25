@@ -20,7 +20,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @author    Matt Schraeder <mschraeder@btsb.com> <frozen@frozen-solid.net>
+ * @author    Matt Schraeder <mschraeder@btsb.com> <mschraeder@csharpmarc.net>
  * @copyright 2009-2011 Matt Schraeder and Bound to Stay Bound Books <http://www.btsb.com>
  * @license   http://www.gnu.org/copyleft/lesser.html  LGPL License 3
  */
@@ -51,7 +51,13 @@ namespace MARC
         public string Tag
         {
             get { return tag; }
-            set { tag = value; }
+            set 
+			{
+				if (Field.ValidateTag(tag))
+					tag = value;
+				else
+					throw new ArgumentException("Invalid tag.");
+			}
         }
 
         #endregion
@@ -65,11 +71,7 @@ namespace MARC
         /// <param name="ind2">The ind2.</param>
         public Field(string tag)
         {
-            this.tag = tag;
-
-            Match match = Regex.Match(tag, "^[0-9A-Za-z]{3}$");
-            if (match.Captures.Count == 0)
-                throw new ArgumentException("Invalid tag.");
+            this.Tag = tag;
         }
 
         /// <summary>
@@ -108,6 +110,19 @@ namespace MARC
         {
             return tag;
         }
+
+		/// <summary>
+		/// Validates the tag.
+		/// </summary>
+		/// <param name="tag">The tag.</param>
+		/// <returns></returns>
+		public static bool ValidateTag(string tag)
+		{
+			Match match = Regex.Match(tag, "^[0-9A-Za-z]{3}$");
+			if (match.Captures.Count == 0)
+				return false;
+			return true;
+		}
 
         /// <summary>
         /// Determines whether this instance is empty.

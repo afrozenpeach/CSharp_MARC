@@ -20,7 +20,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @author    Matt Schraeder <mschraeder@btsb.com> <frozen@frozen-solid.net>
+ * @author    Matt Schraeder <mschraeder@btsb.com> <mschraeder@csharpmarc.net>
  * @copyright 2009-2011 Matt Schraeder and Bound to Stay Bound Books <http://www.btsb.com>
  * @license   http://www.gnu.org/copyleft/lesser.html  LGPL License 3
  */
@@ -262,9 +262,12 @@ namespace MARC
                 }
                 
                 //Check Directory validity
-                match = Regex.Match(tag, "^[0-9A-Za-z]{3}$");
-                if (match.Captures.Count == 0)
-                    warnings.Add("Invalid tag " + tag + " in directory.");
+
+				//If a tag isn't valid, default it to ZZZ. This should at least make the record valid enough to be readable and not throw exceptions
+				if (Field.ValidateTag(tag))
+					warnings.Add("Invalid tag " + tag + " in directory.");
+				else
+					tag = "ZZZ";
 
                 if (fieldOffset + fieldLength > recordLength)
                     warnings.Add("Directory entry for tag " + tag + " runs past the end of the record.");
