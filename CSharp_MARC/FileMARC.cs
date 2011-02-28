@@ -308,13 +308,26 @@ namespace MARC
 
                     if (indicators.Length != 2)
                     {
-                        warnings.Add("Invalid indicators " + indicators + " forced to blanks for tag " + tag + ".");
+                        warnings.Add("Invalid indicator length. Forced indicators to blanks for tag " + tag + ".");
                         ind1 = ind2 = ' ';
                     }
                     else
                     {
                         ind1 = indicators[0];
+
+						if (!DataField.ValidateIndicator(ind1))
+						{
+							ind1 = ' ';
+							warnings.Add("Invalid first indicator. Forced first indicator to blank for tag " + tag + ".");
+						}
+
                         ind2 = indicators[1];
+
+						if (!DataField.ValidateIndicator(ind2))
+						{
+							ind2 = ' ';
+							warnings.Add("Invalid second indicator. Forced second indicator to blank for tag " + tag + ".");
+						}
                     }
 
                     //Split the subfield data into subfield name and data pairs
