@@ -100,17 +100,6 @@ namespace MARC
             return false;
         }
 
-        /// <summary>
-        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
-        /// </summary>
-        /// <returns>
-        /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
-        /// </returns>
-        public override string ToString()
-        {
-            return tag;
-        }
-
 		/// <summary>
 		/// Validates the tag.
 		/// </summary>
@@ -123,6 +112,14 @@ namespace MARC
 				return false;
 			return true;
 		}
+
+		/// <summary>
+		/// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+		/// </returns>
+		public abstract new string ToString();
 
         /// <summary>
         /// Determines whether this instance is empty.

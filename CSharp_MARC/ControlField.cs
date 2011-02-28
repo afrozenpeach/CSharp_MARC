@@ -68,7 +68,7 @@ namespace MARC
         /// </returns>
         public override bool IsEmpty()
         {
-            return (this.data == string.Empty) ? false : true;
+            return (this.data == string.Empty) ? true : false;
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace MARC
         /// <returns>
         /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
         /// </returns>
-        public new string ToString()
+		public override string ToString()
         {
             return tag.PadRight(3) + "     " + data;
         }

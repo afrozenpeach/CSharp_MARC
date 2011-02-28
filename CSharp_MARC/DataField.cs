@@ -208,7 +208,7 @@ namespace MARC
         /// <returns>
         /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
         /// </returns>
-        public new string ToString()
+        public override string ToString()
         {
             string lines = string.Empty;
             string prefix = tag.PadLeft(3) + " " + ind1 + ind2 + " ";
