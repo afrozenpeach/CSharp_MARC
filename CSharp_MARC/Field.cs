@@ -53,8 +53,8 @@ namespace MARC
             get { return tag; }
             set 
 			{
-				if (Field.ValidateTag(tag))
-					tag = value;
+				if (Field.ValidateTag(value))
+					value = value;
 				else
 					throw new ArgumentException("Invalid tag.");
 			}
