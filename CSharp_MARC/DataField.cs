@@ -274,12 +274,13 @@ namespace MARC
                 }
             }
 
-            return result;
+            return result.Trim();
         }
 
         public override string FormatField()
         {
-            return FormatField(null);
+			char[] excludeCodes = {};
+            return FormatField(excludeCodes);
         }
 
         /// <summary>
