@@ -313,7 +313,7 @@ namespace MARC
                     }
                     else
                     {
-                        ind1 = indicators[0];
+                        ind1 = char.ToLower(indicators[0]);
 
 						if (!DataField.ValidateIndicator(ind1))
 						{
@@ -321,7 +321,7 @@ namespace MARC
 							warnings.Add("Invalid first indicator. Forced first indicator to blank for tag " + tag + ".");
 						}
 
-                        ind2 = indicators[1];
+                        ind2 = char.ToLower(indicators[1]);
 
 						if (!DataField.ValidateIndicator(ind2))
 						{
