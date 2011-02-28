@@ -101,8 +101,18 @@ namespace CSharp_MARC_Tests
 			string data = "Test Data";
 			Subfield target = new Subfield(code, data);
 			Assert.IsInstanceOfType(target, typeof(Subfield));
-			Assert.AreEqual(target.Code, code);
-			Assert.AreEqual(target.Data, data);
+
+			{
+				char expected = 'a';
+				char actual = target.Code;
+				Assert.AreEqual(expected, actual);
+			}
+
+			{
+				string expected = "Test Data";
+				string actual = target.Data;
+				Assert.AreEqual(expected, actual);
+			}
 		}
 
 		/// <summary>
@@ -136,7 +146,7 @@ namespace CSharp_MARC_Tests
 			char code = 'a';
 			string data = "Test Data";
 			Subfield target = new Subfield(code, data);
-			string expected = "\x1F" + "aTest Data";
+			string expected = FileMARC.SUBFIELD_INDICATOR.ToString() + "aTest Data";
 			string actual;
 			actual = target.ToRaw();
 			Assert.AreEqual(expected, actual);

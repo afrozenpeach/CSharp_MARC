@@ -97,10 +97,15 @@ namespace CSharp_MARC_Tests
 		[TestMethod()]
 		public void ControlFieldConstructorTest()
 		{
-			string tag = string.Empty; // TODO: Initialize to an appropriate value
-			string data = string.Empty; // TODO: Initialize to an appropriate value
+			string tag = "001";
+			string data = "  2007032296";
 			ControlField target = new ControlField(tag, data);
-			Assert.Inconclusive("TODO: Implement code to verify target");
+			string expected = "001";
+			string actual = target.Tag;
+			Assert.AreEqual(expected, actual);
+			expected = "  2007032296";
+			actual = target.Data;
+			Assert.AreEqual(expected, actual);
 		}
 
 		/// <summary>
@@ -109,14 +114,13 @@ namespace CSharp_MARC_Tests
 		[TestMethod()]
 		public void FormatFieldTest()
 		{
-			string tag = string.Empty; // TODO: Initialize to an appropriate value
-			string data = string.Empty; // TODO: Initialize to an appropriate value
-			ControlField target = new ControlField(tag, data); // TODO: Initialize to an appropriate value
-			string expected = string.Empty; // TODO: Initialize to an appropriate value
+			string tag = "001";
+			string data = "  2007032296";
+			ControlField target = new ControlField(tag, data);
+			string expected = "  2007032296";
 			string actual;
 			actual = target.FormatField();
 			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
 		}
 
 		/// <summary>
@@ -125,14 +129,17 @@ namespace CSharp_MARC_Tests
 		[TestMethod()]
 		public void IsEmptyTest()
 		{
-			string tag = string.Empty; // TODO: Initialize to an appropriate value
-			string data = string.Empty; // TODO: Initialize to an appropriate value
-			ControlField target = new ControlField(tag, data); // TODO: Initialize to an appropriate value
-			bool expected = false; // TODO: Initialize to an appropriate value
+			string tag = "001";
+			string data = "  2007032296";
+			ControlField target = new ControlField(tag, data);
+			bool expected = false;
 			bool actual;
 			actual = target.IsEmpty();
 			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
+			target = new ControlField(tag, string.Empty);
+			expected = true;
+			actual = target.IsEmpty();
+			Assert.AreEqual(expected, actual);
 		}
 
 		/// <summary>
@@ -141,14 +148,13 @@ namespace CSharp_MARC_Tests
 		[TestMethod()]
 		public void ToRawTest()
 		{
-			string tag = string.Empty; // TODO: Initialize to an appropriate value
-			string data = string.Empty; // TODO: Initialize to an appropriate value
-			ControlField target = new ControlField(tag, data); // TODO: Initialize to an appropriate value
-			string expected = string.Empty; // TODO: Initialize to an appropriate value
+			string tag = "001";
+			string data = "  2007032296";
+			ControlField target = new ControlField(tag, data);
+			string expected = "  2007032296" + FileMARC.END_OF_FIELD.ToString();
 			string actual;
 			actual = target.ToRaw();
 			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
 		}
 
 		/// <summary>
@@ -157,14 +163,13 @@ namespace CSharp_MARC_Tests
 		[TestMethod()]
 		public void ToStringTest()
 		{
-			string tag = string.Empty; // TODO: Initialize to an appropriate value
-			string data = string.Empty; // TODO: Initialize to an appropriate value
-			ControlField target = new ControlField(tag, data); // TODO: Initialize to an appropriate value
-			string expected = string.Empty; // TODO: Initialize to an appropriate value
+			string tag = "001";
+			string data = "  2007032296";
+			ControlField target = new ControlField(tag, data);
+			string expected = "001       2007032296";
 			string actual;
 			actual = target.ToString();
 			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
 		}
 
 		/// <summary>
@@ -173,108 +178,14 @@ namespace CSharp_MARC_Tests
 		[TestMethod()]
 		public void DataTest()
 		{
-			string tag = string.Empty; // TODO: Initialize to an appropriate value
-			string data = string.Empty; // TODO: Initialize to an appropriate value
-			ControlField target = new ControlField(tag, data); // TODO: Initialize to an appropriate value
-			string expected = string.Empty; // TODO: Initialize to an appropriate value
-			string actual;
-			target.Data = expected;
-			actual = target.Data;
-			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
-		}
-
-		/// <summary>
-		///A test for ControlField Constructor
-		///</summary>
-		[TestMethod()]
-		public void ControlFieldConstructorTest1()
-		{
-			string tag = string.Empty; // TODO: Initialize to an appropriate value
-			string data = string.Empty; // TODO: Initialize to an appropriate value
+			string tag = "001";
+			string data = "  2007032296";
 			ControlField target = new ControlField(tag, data);
-			Assert.Inconclusive("TODO: Implement code to verify target");
-		}
-
-		/// <summary>
-		///A test for FormatField
-		///</summary>
-		[TestMethod()]
-		public void FormatFieldTest1()
-		{
-			string tag = string.Empty; // TODO: Initialize to an appropriate value
-			string data = string.Empty; // TODO: Initialize to an appropriate value
-			ControlField target = new ControlField(tag, data); // TODO: Initialize to an appropriate value
-			string expected = string.Empty; // TODO: Initialize to an appropriate value
-			string actual;
-			actual = target.FormatField();
-			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
-		}
-
-		/// <summary>
-		///A test for IsEmpty
-		///</summary>
-		[TestMethod()]
-		public void IsEmptyTest1()
-		{
-			string tag = string.Empty; // TODO: Initialize to an appropriate value
-			string data = string.Empty; // TODO: Initialize to an appropriate value
-			ControlField target = new ControlField(tag, data); // TODO: Initialize to an appropriate value
-			bool expected = false; // TODO: Initialize to an appropriate value
-			bool actual;
-			actual = target.IsEmpty();
-			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
-		}
-
-		/// <summary>
-		///A test for ToRaw
-		///</summary>
-		[TestMethod()]
-		public void ToRawTest1()
-		{
-			string tag = string.Empty; // TODO: Initialize to an appropriate value
-			string data = string.Empty; // TODO: Initialize to an appropriate value
-			ControlField target = new ControlField(tag, data); // TODO: Initialize to an appropriate value
-			string expected = string.Empty; // TODO: Initialize to an appropriate value
-			string actual;
-			actual = target.ToRaw();
-			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
-		}
-
-		/// <summary>
-		///A test for ToString
-		///</summary>
-		[TestMethod()]
-		public void ToStringTest1()
-		{
-			string tag = string.Empty; // TODO: Initialize to an appropriate value
-			string data = string.Empty; // TODO: Initialize to an appropriate value
-			ControlField target = new ControlField(tag, data); // TODO: Initialize to an appropriate value
-			string expected = string.Empty; // TODO: Initialize to an appropriate value
-			string actual;
-			actual = target.ToString();
-			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
-		}
-
-		/// <summary>
-		///A test for Data
-		///</summary>
-		[TestMethod()]
-		public void DataTest1()
-		{
-			string tag = string.Empty; // TODO: Initialize to an appropriate value
-			string data = string.Empty; // TODO: Initialize to an appropriate value
-			ControlField target = new ControlField(tag, data); // TODO: Initialize to an appropriate value
-			string expected = string.Empty; // TODO: Initialize to an appropriate value
+			string expected = "  2011022800";
 			string actual;
 			target.Data = expected;
 			actual = target.Data;
 			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
 		}
 	}
 }

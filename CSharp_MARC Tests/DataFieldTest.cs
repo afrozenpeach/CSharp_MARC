@@ -98,10 +98,45 @@ namespace CSharp_MARC_Tests
 		[TestMethod()]
 		public void DataFieldConstructorTest()
 		{
-			string tag = string.Empty; // TODO: Initialize to an appropriate value
-			List<Subfield> subfields = null; // TODO: Initialize to an appropriate value
+			string tag = "100";
+			List<Subfield> subfields = new List<Subfield>();
+			Subfield subfield = new Subfield('a', "It's a book!");
+			subfields.Add(subfield);
+			subfield = new Subfield('b', "Anne Author");
+			subfields.Add(subfield);
 			DataField target = new DataField(tag, subfields);
-			Assert.Inconclusive("TODO: Implement code to verify target");
+
+			{
+				char expected = ' ';
+				char actual = target.Indicator1;
+				Assert.AreEqual(expected, actual);
+				actual = target.Indicator2;
+				Assert.AreEqual(expected, actual);
+				expected = 'a';
+				actual = target['a'].Code;
+				Assert.AreEqual(expected, actual);
+				expected = 'b';
+				actual = target['b'].Code;
+				Assert.AreEqual(expected, actual);
+			}
+
+			{
+				string expected = "100";
+				string actual = target.Tag;
+				Assert.AreEqual(expected, actual);
+				expected = "It's a book!";
+				actual = target['a'].Data;
+				Assert.AreEqual(expected, actual);
+				expected = "Anne Author";
+				actual = target['b'].Data;
+				Assert.AreEqual(expected, actual);
+			}
+
+			{
+				int expected = 2;
+				int actual = target.Subfields.Count;
+				Assert.AreEqual(expected, actual);
+			}
 		}
 
 		/// <summary>
@@ -110,9 +145,28 @@ namespace CSharp_MARC_Tests
 		[TestMethod()]
 		public void DataFieldConstructorTest1()
 		{
-			string tag = string.Empty; // TODO: Initialize to an appropriate value
+			string tag = "100";
 			DataField target = new DataField(tag);
-			Assert.Inconclusive("TODO: Implement code to verify target");
+
+			{
+				string expected = "100";
+				string actual = target.Tag;
+				Assert.AreEqual(expected, actual);
+			}
+
+			{
+				char expected = ' ';
+				char actual = target.Indicator1;
+				Assert.AreEqual(expected, actual);
+				actual = target.Indicator2;
+				Assert.AreEqual(expected, actual);
+			}
+
+			{
+				int expected = 0;
+				int actual = target.Subfields.Count;
+				Assert.AreEqual(expected, actual);
+			}
 		}
 
 		/// <summary>
@@ -121,12 +175,48 @@ namespace CSharp_MARC_Tests
 		[TestMethod()]
 		public void DataFieldConstructorTest2()
 		{
-			string tag = string.Empty; // TODO: Initialize to an appropriate value
-			List<Subfield> subfields = null; // TODO: Initialize to an appropriate value
-			char ind1 = '\0'; // TODO: Initialize to an appropriate value
-			char ind2 = '\0'; // TODO: Initialize to an appropriate value
+			string tag = "100";
+			List<Subfield> subfields = new List<Subfield>();
+			Subfield subfield = new Subfield('a', "It's a book!");
+			subfields.Add(subfield);
+			subfield = new Subfield('b', "Anne Author");
+			subfields.Add(subfield);
+			char ind1 = '1';
+			char ind2 = '0';
 			DataField target = new DataField(tag, subfields, ind1, ind2);
-			Assert.Inconclusive("TODO: Implement code to verify target");
+
+			{
+				char expected = '1';
+				char actual = target.Indicator1;
+				Assert.AreEqual(expected, actual);
+				expected = '0';
+				actual = target.Indicator2;
+				Assert.AreEqual(expected, actual);
+				expected = 'a';
+				actual = target['a'].Code;
+				Assert.AreEqual(expected, actual);
+				expected = 'b';
+				actual = target['b'].Code;
+				Assert.AreEqual(expected, actual);
+			}
+
+			{
+				string expected = "100";
+				string actual = target.Tag;
+				Assert.AreEqual(expected, actual);
+				expected = "It's a book!";
+				actual = target['a'].Data;
+				Assert.AreEqual(expected, actual);
+				expected = "Anne Author";
+				actual = target['b'].Data;
+				Assert.AreEqual(expected, actual);
+			}
+
+			{
+				int expected = 2;
+				int actual = target.Subfields.Count;
+				Assert.AreEqual(expected, actual);
+			}
 		}
 
 		/// <summary>
@@ -135,11 +225,47 @@ namespace CSharp_MARC_Tests
 		[TestMethod()]
 		public void DataFieldConstructorTest3()
 		{
-			string tag = string.Empty; // TODO: Initialize to an appropriate value
-			List<Subfield> subfields = null; // TODO: Initialize to an appropriate value
-			char ind1 = '\0'; // TODO: Initialize to an appropriate value
+			string tag = "100";
+			List<Subfield> subfields = new List<Subfield>();
+			Subfield subfield = new Subfield('a', "It's a book!");
+			subfields.Add(subfield);
+			subfield = new Subfield('b', "Anne Author");
+			subfields.Add(subfield);
+			char ind1 = '1';
 			DataField target = new DataField(tag, subfields, ind1);
-			Assert.Inconclusive("TODO: Implement code to verify target");
+
+			{
+				char expected = '1';
+				char actual = target.Indicator1;
+				Assert.AreEqual(expected, actual);
+				expected = ' ';
+				actual = target.Indicator2;
+				Assert.AreEqual(expected, actual);
+				expected = 'a';
+				actual = target['a'].Code;
+				Assert.AreEqual(expected, actual);
+				expected = 'b';
+				actual = target['b'].Code;
+				Assert.AreEqual(expected, actual);
+			}
+
+			{
+				string expected = "100";
+				string actual = target.Tag;
+				Assert.AreEqual(expected, actual);
+				expected = "It's a book!";
+				actual = target['a'].Data;
+				Assert.AreEqual(expected, actual);
+				expected = "Anne Author";
+				actual = target['b'].Data;
+				Assert.AreEqual(expected, actual);
+			}
+
+			{
+				int expected = 2;
+				int actual = target.Subfields.Count;
+				Assert.AreEqual(expected, actual);
+			}
 		}
 
 		/// <summary>
@@ -148,14 +274,26 @@ namespace CSharp_MARC_Tests
 		[TestMethod()]
 		public void FormatFieldTest()
 		{
-			string tag = string.Empty; // TODO: Initialize to an appropriate value
-			DataField target = new DataField(tag); // TODO: Initialize to an appropriate value
-			char[] excludeCodes = null; // TODO: Initialize to an appropriate value
-			string expected = string.Empty; // TODO: Initialize to an appropriate value
+			string tag = "600";
+			List<Subfield> subfields = new List<Subfield>();
+			Subfield subfield = new Subfield('a', "It's a book!");
+			subfields.Add(subfield);
+			subfield = new Subfield('b', "Anne Author");
+			subfields.Add(subfield);
+			subfield = new Subfield('c', "Some text");
+			subfields.Add(subfield);
+			subfield = new Subfield('d', "Some more text");
+			subfields.Add(subfield);
+			subfield = new Subfield('v', "Some fancy text");
+			subfields.Add(subfield);
+			subfield = new Subfield('z', "Some more fancy text");
+			subfields.Add(subfield);
+			DataField target = new DataField(tag, subfields);
+			char[] excludeCodes = { 'a', 'b' };
+			string expected = "Some text Some more text -- Some fancy text -- Some more fancy text";
 			string actual;
 			actual = target.FormatField(excludeCodes);
 			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
 		}
 
 		/// <summary>
@@ -164,13 +302,25 @@ namespace CSharp_MARC_Tests
 		[TestMethod()]
 		public void FormatFieldTest1()
 		{
-			string tag = string.Empty; // TODO: Initialize to an appropriate value
-			DataField target = new DataField(tag); // TODO: Initialize to an appropriate value
-			string expected = string.Empty; // TODO: Initialize to an appropriate value
+			string tag = "600";
+			List<Subfield> subfields = new List<Subfield>();
+			Subfield subfield = new Subfield('a', "It's a book!");
+			subfields.Add(subfield);
+			subfield = new Subfield('b', "Anne Author");
+			subfields.Add(subfield);
+			subfield = new Subfield('c', "Some text");
+			subfields.Add(subfield);
+			subfield = new Subfield('d', "Some more text");
+			subfields.Add(subfield);
+			subfield = new Subfield('v', "Some fancy text");
+			subfields.Add(subfield);
+			subfield = new Subfield('z', "Some more fancy text");
+			subfields.Add(subfield);
+			DataField target = new DataField(tag, subfields);
+			string expected = "It's a book! Anne Author Some text Some more text -- Some fancy text -- Some more fancy text";
 			string actual;
 			actual = target.FormatField();
 			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
 		}
 
 		/// <summary>
@@ -179,13 +329,27 @@ namespace CSharp_MARC_Tests
 		[TestMethod()]
 		public void GetSubfieldsTest()
 		{
-			string tag = string.Empty; // TODO: Initialize to an appropriate value
-			DataField target = new DataField(tag); // TODO: Initialize to an appropriate value
-			List<Subfield> expected = null; // TODO: Initialize to an appropriate value
+			string tag = "100";
+			List<Subfield> subfields = new List<Subfield>();
+			Subfield subfield = new Subfield('a', "It's a book!");
+			subfields.Add(subfield);
+			subfield = new Subfield('b', "Anne Author");
+			subfields.Add(subfield);
+			DataField target = new DataField(tag, subfields);
+			List<Subfield> expected = new List<Subfield>();
+			subfield = new Subfield('a', "It's a book!");
+			expected.Add(subfield);
+			subfield = new Subfield('b', "Anne Author");
+			expected.Add(subfield);
 			List<Subfield> actual;
 			actual = target.GetSubfields();
-			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
+
+			Assert.AreEqual(expected.Count, actual.Count);
+			for (int i = 0; i < expected.Count; i++)
+			{
+				Assert.AreEqual(expected[i].Code, actual[i].Code);
+				Assert.AreEqual(expected[i].Data, actual[i].Data);
+			}
 		}
 
 		/// <summary>
@@ -194,14 +358,29 @@ namespace CSharp_MARC_Tests
 		[TestMethod()]
 		public void GetSubfieldsTest1()
 		{
-			string tag = string.Empty; // TODO: Initialize to an appropriate value
-			DataField target = new DataField(tag); // TODO: Initialize to an appropriate value
-			Nullable<char> code = new Nullable<char>(); // TODO: Initialize to an appropriate value
-			List<Subfield> expected = null; // TODO: Initialize to an appropriate value
+			string tag = "100";
+			List<Subfield> subfields = new List<Subfield>();
+			Subfield subfield = new Subfield('a', "It's a book!");
+			subfields.Add(subfield);
+			subfield = new Subfield('b', "Anne Author");
+			subfields.Add(subfield);
+			subfield = new Subfield('b', "Anne Otter Author");
+			subfields.Add(subfield);
+			DataField target = new DataField(tag, subfields);
+			List<Subfield> expected = new List<Subfield>();
+			subfield = new Subfield('b', "Anne Author");
+			expected.Add(subfield);
+			subfield = new Subfield('b', "Anne Otter Author");
+			expected.Add(subfield);
 			List<Subfield> actual;
-			actual = target.GetSubfields(code);
-			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
+			actual = target.GetSubfields('b');
+
+			Assert.AreEqual(expected.Count, actual.Count);
+			for (int i = 0; i < expected.Count; i++)
+			{
+				Assert.AreEqual(expected[i].Code, actual[i].Code);
+				Assert.AreEqual(expected[i].Data, actual[i].Data);
+			}
 		}
 
 		/// <summary>
@@ -210,13 +389,23 @@ namespace CSharp_MARC_Tests
 		[TestMethod()]
 		public void IsEmptyTest()
 		{
-			string tag = string.Empty; // TODO: Initialize to an appropriate value
-			DataField target = new DataField(tag); // TODO: Initialize to an appropriate value
-			bool expected = false; // TODO: Initialize to an appropriate value
+			string tag = "100";
+			DataField target = new DataField(tag);
+			bool expected = true;
 			bool actual;
 			actual = target.IsEmpty();
 			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
+			List<Subfield> subfields = new List<Subfield>();
+			Subfield subfield = new Subfield('a', "It's a book!");
+			subfields.Add(subfield);
+			subfield = new Subfield('b', "Anne Author");
+			subfields.Add(subfield);
+			subfield = new Subfield('b', "Anne Otter Author");
+			subfields.Add(subfield);
+			target = new DataField(tag, subfields);
+			expected = false;
+			actual = target.IsEmpty();
+			Assert.AreEqual(expected, actual);
 		}
 
 		/// <summary>
@@ -225,13 +414,17 @@ namespace CSharp_MARC_Tests
 		[TestMethod()]
 		public void ToRawTest()
 		{
-			string tag = string.Empty; // TODO: Initialize to an appropriate value
-			DataField target = new DataField(tag); // TODO: Initialize to an appropriate value
-			string expected = string.Empty; // TODO: Initialize to an appropriate value
+			string tag = "100";
+			List<Subfield> subfields = new List<Subfield>();
+			Subfield subfield = new Subfield('a', "It's a book!");
+			subfields.Add(subfield);
+			subfield = new Subfield('b', "Anne Author");
+			subfields.Add(subfield);
+			DataField target = new DataField(tag, subfields);
+			string expected = "  " + FileMARC.SUBFIELD_INDICATOR.ToString() + "aIt's a book!" + FileMARC.SUBFIELD_INDICATOR.ToString() + "bAnne Author" + FileMARC.END_OF_FIELD.ToString();
 			string actual;
 			actual = target.ToRaw();
 			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
 		}
 
 		/// <summary>
@@ -240,13 +433,17 @@ namespace CSharp_MARC_Tests
 		[TestMethod()]
 		public void ToStringTest()
 		{
-			string tag = string.Empty; // TODO: Initialize to an appropriate value
-			DataField target = new DataField(tag); // TODO: Initialize to an appropriate value
-			string expected = string.Empty; // TODO: Initialize to an appropriate value
+			string tag = "100";
+			List<Subfield> subfields = new List<Subfield>();
+			Subfield subfield = new Subfield('a', "It's a book!");
+			subfields.Add(subfield);
+			subfield = new Subfield('b', "Anne Author");
+			subfields.Add(subfield);
+			DataField target = new DataField(tag, subfields);
+			string expected = "100    [a]: It's a book!" + Environment.NewLine + "       [b]: Anne Author";
 			string actual;
 			actual = target.ToString();
 			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
 		}
 
 		/// <summary>
@@ -255,44 +452,54 @@ namespace CSharp_MARC_Tests
 		[TestMethod()]
 		public void ValidateIndicatorTest()
 		{
-			char ind = '\0'; // TODO: Initialize to an appropriate value
-			bool expected = false; // TODO: Initialize to an appropriate value
+			char ind = 'x';
+			bool expected = true;
 			bool actual;
 			actual = DataField.ValidateIndicator(ind);
 			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
+			ind = '1';
+			actual = DataField.ValidateIndicator(ind);
+			Assert.AreEqual(expected, actual);
+			ind = '%';
+			expected = false;
+			actual = DataField.ValidateIndicator(ind);
+			Assert.AreEqual(expected, actual);
 		}
 
 		/// <summary>
 		///A test for Indicator1
 		///</summary>
 		[TestMethod()]
+		[ExpectedException(typeof(ArgumentException), "Invalid indicator.")]
 		public void Indicator1Test()
 		{
-			string tag = string.Empty; // TODO: Initialize to an appropriate value
-			DataField target = new DataField(tag); // TODO: Initialize to an appropriate value
-			char expected = '\0'; // TODO: Initialize to an appropriate value
+			string tag = "100";
+			DataField target = new DataField(tag);
+			char expected = '1';
 			char actual;
 			target.Indicator1 = expected;
 			actual = target.Indicator1;
 			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
+			expected = '%';
+			target.Indicator1 = expected; //Will throw exception
 		}
 
 		/// <summary>
 		///A test for Indicator2
 		///</summary>
 		[TestMethod()]
+		[ExpectedException(typeof(ArgumentException), "Invalid indicator.")]
 		public void Indicator2Test()
 		{
-			string tag = string.Empty; // TODO: Initialize to an appropriate value
-			DataField target = new DataField(tag); // TODO: Initialize to an appropriate value
-			char expected = '\0'; // TODO: Initialize to an appropriate value
+			string tag = "100";
+			DataField target = new DataField(tag);
+			char expected = '1';
 			char actual;
 			target.Indicator2 = expected;
 			actual = target.Indicator2;
 			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
+			expected = '%';
+			target.Indicator2 = expected; //Will throw exception
 		}
 
 		/// <summary>
@@ -301,12 +508,19 @@ namespace CSharp_MARC_Tests
 		[TestMethod()]
 		public void ItemTest()
 		{
-			string tag = string.Empty; // TODO: Initialize to an appropriate value
-			DataField target = new DataField(tag); // TODO: Initialize to an appropriate value
-			char code = '\0'; // TODO: Initialize to an appropriate value
+			string tag = "100";
+			List<Subfield> subfields = new List<Subfield>();
+			Subfield subfield = new Subfield('a', "It's a book!");
+			subfields.Add(subfield);
+			subfield = new Subfield('b', "Anne Author");
+			subfields.Add(subfield);
+			DataField target = new DataField(tag, subfields);
+			char code = 'a';
+			Subfield expected = new Subfield('a', "It's a book!");
 			Subfield actual;
 			actual = target[code];
-			Assert.Inconclusive("Verify the correctness of this test method.");
+			Assert.AreEqual(expected.Code, actual.Code);
+			Assert.AreEqual(expected.Data, actual.Data);
 		}
 
 		/// <summary>
@@ -315,247 +529,28 @@ namespace CSharp_MARC_Tests
 		[TestMethod()]
 		public void SubfieldsTest()
 		{
-			string tag = string.Empty; // TODO: Initialize to an appropriate value
-			DataField target = new DataField(tag); // TODO: Initialize to an appropriate value
-			List<Subfield> expected = null; // TODO: Initialize to an appropriate value
-			List<Subfield> actual;
-			target.Subfields = expected;
-			actual = target.Subfields;
-			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
-		}
-
-		/// <summary>
-		///A test for DataField Constructor
-		///</summary>
-		[TestMethod()]
-		public void DataFieldConstructorTest4()
-		{
-			string tag = string.Empty; // TODO: Initialize to an appropriate value
-			List<Subfield> subfields = null; // TODO: Initialize to an appropriate value
+			string tag = "100";
+			List<Subfield> subfields = new List<Subfield>();
+			Subfield subfield = new Subfield('a', "It's a book!");
+			subfields.Add(subfield);
+			subfield = new Subfield('b', "Anne Author");
+			subfields.Add(subfield);
 			DataField target = new DataField(tag, subfields);
-			Assert.Inconclusive("TODO: Implement code to verify target");
-		}
-
-		/// <summary>
-		///A test for DataField Constructor
-		///</summary>
-		[TestMethod()]
-		public void DataFieldConstructorTest5()
-		{
-			string tag = string.Empty; // TODO: Initialize to an appropriate value
-			DataField target = new DataField(tag);
-			Assert.Inconclusive("TODO: Implement code to verify target");
-		}
-
-		/// <summary>
-		///A test for DataField Constructor
-		///</summary>
-		[TestMethod()]
-		public void DataFieldConstructorTest6()
-		{
-			string tag = string.Empty; // TODO: Initialize to an appropriate value
-			List<Subfield> subfields = null; // TODO: Initialize to an appropriate value
-			char ind1 = '\0'; // TODO: Initialize to an appropriate value
-			char ind2 = '\0'; // TODO: Initialize to an appropriate value
-			DataField target = new DataField(tag, subfields, ind1, ind2);
-			Assert.Inconclusive("TODO: Implement code to verify target");
-		}
-
-		/// <summary>
-		///A test for DataField Constructor
-		///</summary>
-		[TestMethod()]
-		public void DataFieldConstructorTest7()
-		{
-			string tag = string.Empty; // TODO: Initialize to an appropriate value
-			List<Subfield> subfields = null; // TODO: Initialize to an appropriate value
-			char ind1 = '\0'; // TODO: Initialize to an appropriate value
-			DataField target = new DataField(tag, subfields, ind1);
-			Assert.Inconclusive("TODO: Implement code to verify target");
-		}
-
-		/// <summary>
-		///A test for FormatField
-		///</summary>
-		[TestMethod()]
-		public void FormatFieldTest2()
-		{
-			string tag = string.Empty; // TODO: Initialize to an appropriate value
-			DataField target = new DataField(tag); // TODO: Initialize to an appropriate value
-			char[] excludeCodes = null; // TODO: Initialize to an appropriate value
-			string expected = string.Empty; // TODO: Initialize to an appropriate value
-			string actual;
-			actual = target.FormatField(excludeCodes);
-			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
-		}
-
-		/// <summary>
-		///A test for FormatField
-		///</summary>
-		[TestMethod()]
-		public void FormatFieldTest3()
-		{
-			string tag = string.Empty; // TODO: Initialize to an appropriate value
-			DataField target = new DataField(tag); // TODO: Initialize to an appropriate value
-			string expected = string.Empty; // TODO: Initialize to an appropriate value
-			string actual;
-			actual = target.FormatField();
-			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
-		}
-
-		/// <summary>
-		///A test for GetSubfields
-		///</summary>
-		[TestMethod()]
-		public void GetSubfieldsTest2()
-		{
-			string tag = string.Empty; // TODO: Initialize to an appropriate value
-			DataField target = new DataField(tag); // TODO: Initialize to an appropriate value
-			List<Subfield> expected = null; // TODO: Initialize to an appropriate value
-			List<Subfield> actual;
-			actual = target.GetSubfields();
-			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
-		}
-
-		/// <summary>
-		///A test for GetSubfields
-		///</summary>
-		[TestMethod()]
-		public void GetSubfieldsTest3()
-		{
-			string tag = string.Empty; // TODO: Initialize to an appropriate value
-			DataField target = new DataField(tag); // TODO: Initialize to an appropriate value
-			Nullable<char> code = new Nullable<char>(); // TODO: Initialize to an appropriate value
-			List<Subfield> expected = null; // TODO: Initialize to an appropriate value
-			List<Subfield> actual;
-			actual = target.GetSubfields(code);
-			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
-		}
-
-		/// <summary>
-		///A test for IsEmpty
-		///</summary>
-		[TestMethod()]
-		public void IsEmptyTest1()
-		{
-			string tag = string.Empty; // TODO: Initialize to an appropriate value
-			DataField target = new DataField(tag); // TODO: Initialize to an appropriate value
-			bool expected = false; // TODO: Initialize to an appropriate value
-			bool actual;
-			actual = target.IsEmpty();
-			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
-		}
-
-		/// <summary>
-		///A test for ToRaw
-		///</summary>
-		[TestMethod()]
-		public void ToRawTest1()
-		{
-			string tag = string.Empty; // TODO: Initialize to an appropriate value
-			DataField target = new DataField(tag); // TODO: Initialize to an appropriate value
-			string expected = string.Empty; // TODO: Initialize to an appropriate value
-			string actual;
-			actual = target.ToRaw();
-			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
-		}
-
-		/// <summary>
-		///A test for ToString
-		///</summary>
-		[TestMethod()]
-		public void ToStringTest1()
-		{
-			string tag = string.Empty; // TODO: Initialize to an appropriate value
-			DataField target = new DataField(tag); // TODO: Initialize to an appropriate value
-			string expected = string.Empty; // TODO: Initialize to an appropriate value
-			string actual;
-			actual = target.ToString();
-			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
-		}
-
-		/// <summary>
-		///A test for ValidateIndicator
-		///</summary>
-		[TestMethod()]
-		public void ValidateIndicatorTest1()
-		{
-			char ind = '\0'; // TODO: Initialize to an appropriate value
-			bool expected = false; // TODO: Initialize to an appropriate value
-			bool actual;
-			actual = DataField.ValidateIndicator(ind);
-			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
-		}
-
-		/// <summary>
-		///A test for Indicator1
-		///</summary>
-		[TestMethod()]
-		public void Indicator1Test1()
-		{
-			string tag = string.Empty; // TODO: Initialize to an appropriate value
-			DataField target = new DataField(tag); // TODO: Initialize to an appropriate value
-			char expected = '\0'; // TODO: Initialize to an appropriate value
-			char actual;
-			target.Indicator1 = expected;
-			actual = target.Indicator1;
-			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
-		}
-
-		/// <summary>
-		///A test for Indicator2
-		///</summary>
-		[TestMethod()]
-		public void Indicator2Test1()
-		{
-			string tag = string.Empty; // TODO: Initialize to an appropriate value
-			DataField target = new DataField(tag); // TODO: Initialize to an appropriate value
-			char expected = '\0'; // TODO: Initialize to an appropriate value
-			char actual;
-			target.Indicator2 = expected;
-			actual = target.Indicator2;
-			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
-		}
-
-		/// <summary>
-		///A test for Item
-		///</summary>
-		[TestMethod()]
-		public void ItemTest1()
-		{
-			string tag = string.Empty; // TODO: Initialize to an appropriate value
-			DataField target = new DataField(tag); // TODO: Initialize to an appropriate value
-			char code = '\0'; // TODO: Initialize to an appropriate value
-			Subfield actual;
-			actual = target[code];
-			Assert.Inconclusive("Verify the correctness of this test method.");
-		}
-
-		/// <summary>
-		///A test for Subfields
-		///</summary>
-		[TestMethod()]
-		public void SubfieldsTest1()
-		{
-			string tag = string.Empty; // TODO: Initialize to an appropriate value
-			DataField target = new DataField(tag); // TODO: Initialize to an appropriate value
-			List<Subfield> expected = null; // TODO: Initialize to an appropriate value
+			List<Subfield> expected = new List<Subfield>();
+			subfield = new Subfield('a', "It's another book!");
+			expected.Add(subfield);
+			subfield = new Subfield('b', "Anne Otter Author");
+			expected.Add(subfield);
 			List<Subfield> actual;
 			target.Subfields = expected;
 			actual = target.Subfields;
-			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
+
+			Assert.AreEqual(expected.Count, actual.Count);
+			for (int i = 0; i < expected.Count; i++)
+			{
+				Assert.AreEqual(expected[i].Code, actual[i].Code);
+				Assert.AreEqual(expected[i].Data, actual[i].Data);
+			}
 		}
 	}
 }

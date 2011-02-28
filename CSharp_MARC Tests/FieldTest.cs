@@ -157,53 +157,52 @@ namespace CSharp_MARC_Tests
 
 		/// <summary>
 		///A test for IsEmpty
-		///Relying on derived members to test actual output. This test is verify I can the function is accessible as the base class.
 		///</summary>
 		[TestMethod()]
 		public void IsEmptyTest()
 		{
 			Field target = CreateControlField();
-			bool expected = false;
+			bool expected = true;
 			bool actual;
 			actual = target.IsEmpty();
-			Assert.AreNotEqual(expected, actual);
+			Assert.AreEqual(expected, actual);
 			target = CreateDataField();
 			actual = target.IsEmpty();
-			Assert.AreNotEqual(expected, actual);
+			Assert.AreEqual(expected, actual);
 		}
 
 		/// <summary>
 		///A test for ToRaw
-		///Relying on derived members to test actual output. This test is verify I can the function is accessible as the base class.
 		///</summary>
 		[TestMethod()]
 		public void ToRawTest()
 		{
 			Field target = CreateControlField();
-			string expected = string.Empty;
+			string expected = "  2007032296" + FileMARC.END_OF_FIELD.ToString();
 			string actual;
 			actual = target.ToRaw();
-			Assert.AreNotEqual(expected, actual);
+			Assert.AreEqual(expected, actual);
 			target = CreateDataField();
+			expected = "1 " + FileMARC.SUBFIELD_INDICATOR.ToString() + "aIt's a book!" + FileMARC.SUBFIELD_INDICATOR.ToString() + "bAnne Author" + FileMARC.END_OF_FIELD.ToString();
 			actual = target.ToRaw();
-			Assert.AreNotEqual(expected, actual);
+			Assert.AreEqual(expected, actual);
 		}
 
 		/// <summary>
 		///A test for ToString
-		///Relying on derived members to test actual output. This test is verify I can the function is accessible as the base class.
 		///</summary>
 		[TestMethod()]
 		public void ToStringTest()
 		{
-			Field target = CreateControlField(); 
-			string expected = string.Empty;
+			Field target = CreateControlField();
+			string expected = "001       2007032296";
 			string actual;
 			actual = target.ToString();
-			Assert.AreNotEqual(expected, actual);
+			Assert.AreEqual(expected, actual);
 			target = CreateDataField();
+			expected = "100 1  [a]: It's a book!" + Environment.NewLine + "       [b]: Anne Author";
 			actual = target.ToString();
-			Assert.AreNotEqual(expected, actual);
+			Assert.AreEqual(expected, actual);
 		}
 
 		/// <summary>
