@@ -85,7 +85,7 @@ namespace MARC
         /// <value>The leader.</value>
         public string Leader
         {
-            get { return leader; }
+            get { return leader.Substring(0, 24); }
             set { leader = value; }
         }
 
@@ -100,15 +100,15 @@ namespace MARC
 
         #endregion
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Record"/> class.
-        /// </summary>
-        public Record()
-        {
-            fields = new List<Field>();
-            warnings = new List<string>();
-            leader = string.Empty.PadLeft(24);
-        }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Record"/> class.
+		/// </summary>
+		public Record()
+		{
+			fields = new List<Field>();
+			warnings = new List<string>();
+			leader = string.Empty.PadLeft(24);
+		}
 
         /// <summary>
         /// Returns a List of field objects that match a requested tag,
@@ -193,7 +193,7 @@ namespace MARC
             leader = leader.Remove(10, 2).Insert(10, "22");
             leader = leader.Remove(20, 4).Insert(20, "4500");
 
-            return leader + directory + FileMARC.END_OF_FIELD.ToString() + rawFields + FileMARC.END_OF_RECORD.ToString();
+            return leader.Substring(0,24) + directory + FileMARC.END_OF_FIELD.ToString() + rawFields + FileMARC.END_OF_RECORD.ToString();
         }
 
         /// <summary>
@@ -222,5 +222,14 @@ namespace MARC
 
             return formatted;
         }
+
+		/// <summary>
+		/// Adds the warnings.
+		/// </summary>
+		/// <param name="warning">The warning.</param>
+		public void AddWarnings(string warning) 
+		{
+			warnings.Add(warning);
+		}
     }
 }

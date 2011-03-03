@@ -70,7 +70,6 @@ namespace MARC
         //Source containing new records
         protected List<string> rawSource = null;
         protected int position = -1;
-        private List<string> warnings = new List<string>();
 
         /// <summary>
         /// Gets the raw source.
@@ -88,15 +87,6 @@ namespace MARC
         public Record this[int index]
         {
             get { return decode(index);  }
-        }
-
-        /// <summary>
-        /// Gets the warnings.
-        /// </summary>
-        /// <value>The warnings.</value>
-        public List<string> Warnings
-        {
-            get { return warnings; }
         }
 
 		/// <summary>
@@ -205,13 +195,13 @@ namespace MARC
 
             // Store record length
             if (match.Captures.Count == 0)
-                warnings.Add("MARC record length is not numeric.");
+                marc.AddWarnings("MARC record length is not numeric.");
             else
                 recordLength = Convert.ToInt32(match.Captures[0].Value);
 
             if (recordLength != raw.Length)
             {
-                warnings.Add("MARC record length does not match actual length.");
+				marc.AddWarnings("MARC record length does not match actual length.");
                 recordLength = raw.Length;
             }
 
@@ -229,11 +219,11 @@ namespace MARC
 
             //Character after the directory should be END_OF_FIELD
             if (raw.Substring(dataStart - 1, 1) != END_OF_FIELD.ToString())
-                warnings.Add("No directory found.");
+                marc.AddWarnings("No directory found.");
 
             //All directory entries must be DIRECTORY_ENTRY_LEN long, so length % DIRECTORY_ENTRY_LEN should be 0
             if (directory.Length % DIRECTORY_ENTRY_LEN != 0)
-                warnings.Add("Invalid directory length.");
+                marc.AddWarnings("Invalid directory length.");
 
             //Go through all the fields
             int fieldCount = directory.Length / DIRECTORY_ENTRY_LEN;
@@ -249,7 +239,7 @@ namespace MARC
                 }
                 catch (FormatException)
                 {
-                    warnings.Add("Invalid Directory Tag Length for tag " + tag + ".");
+                    marc.AddWarnings("Invalid Directory Tag Length for tag " + tag + ".");
                 }
 
                 try
@@ -258,29 +248,29 @@ namespace MARC
                 }
                 catch (FormatException)
                 {
-                    warnings.Add("Invalid Directory Offset for tag " + tag + ".");
+                    marc.AddWarnings("Invalid Directory Offset for tag " + tag + ".");
                 }
                 
                 //Check Directory validity
 
 				//If a tag isn't valid, default it to ZZZ. This should at least make the record valid enough to be readable and not throw exceptions
 				if (Field.ValidateTag(tag))
-					warnings.Add("Invalid tag " + tag + " in directory.");
+					marc.AddWarnings("Invalid tag " + tag + " in directory.");
 				else
 					tag = "ZZZ";
 
                 if (fieldOffset + fieldLength > recordLength)
-                    warnings.Add("Directory entry for tag " + tag + " runs past the end of the record.");
+                    marc.AddWarnings("Directory entry for tag " + tag + " runs past the end of the record.");
 
 				int fieldStart = dataStart + fieldOffset;
 				if (fieldStart > recordLength)
 				{
-					warnings.Add("Directory entry for tag " + tag + " starts past the end of the record. Skipping tag and all proceeding tags.");
+					marc.AddWarnings("Directory entry for tag " + tag + " starts past the end of the record. Skipping tag and all proceeding tags.");
 					break;
 				}
 				else if (fieldStart + fieldLength > recordLength)
 				{
-					warnings.Add("Directory entry for tag " + tag + " runs past the end of the record.");
+					marc.AddWarnings("Directory entry for tag " + tag + " runs past the end of the record.");
 					fieldLength = recordLength - fieldStart;
 				}
                 string tagData = raw.Substring(fieldStart, fieldLength);
@@ -292,7 +282,7 @@ namespace MARC
 					fieldLength--;
                 }
                 else
-                    warnings.Add("Field for tag " + tag + " does not end with an end of field character.");
+                    marc.AddWarnings("Field for tag " + tag + " does not end with an end of field character.");
 
                 match = Regex.Match(tag, "^\\d+$");
                 if (match.Captures.Count > 0 && Convert.ToInt32(tag) < 10)
@@ -308,7 +298,7 @@ namespace MARC
 
                     if (indicators.Length != 2)
                     {
-                        warnings.Add("Invalid indicator length. Forced indicators to blanks for tag " + tag + ".");
+                        marc.AddWarnings("Invalid indicator length. Forced indicators to blanks for tag " + tag + ".");
                         ind1 = ind2 = ' ';
                     }
                     else
@@ -318,7 +308,7 @@ namespace MARC
 						if (!DataField.ValidateIndicator(ind1))
 						{
 							ind1 = ' ';
-							warnings.Add("Invalid first indicator. Forced first indicator to blank for tag " + tag + ".");
+							marc.AddWarnings("Invalid first indicator. Forced first indicator to blank for tag " + tag + ".");
 						}
 
                         ind2 = char.ToLower(indicators[1]);
@@ -326,7 +316,7 @@ namespace MARC
 						if (!DataField.ValidateIndicator(ind2))
 						{
 							ind2 = ' ';
-							warnings.Add("Invalid second indicator. Forced second indicator to blank for tag " + tag + ".");
+							marc.AddWarnings("Invalid second indicator. Forced second indicator to blank for tag " + tag + ".");
 						}
                     }
 
@@ -337,24 +327,16 @@ namespace MARC
                         if (subfield.Length > 0)
                             subfieldData.Add(new Subfield(subfield[0], subfield.Substring(1)));
                         else
-                            warnings.Add("No subfield data found in tag " + tag + ".");
+                            marc.AddWarnings("No subfield data found in tag " + tag + ".");
                     }
 
                     if (subfieldData.Count == 0)
-                        warnings.Add("No subfield data found in tag " + tag + ".");
+                        marc.AddWarnings("No subfield data found in tag " + tag + ".");
 
                     marc.Fields.Add(new DataField(tag, subfieldData, ind1, ind2));
                 }              
             }
             return marc;
-        }
-
-        /// <summary>
-        /// Resets the warnings.
-        /// </summary>
-        private void ResetWarnings()
-        {
-            warnings = new List<string>();
         }
 
         /// <summary>
@@ -364,9 +346,6 @@ namespace MARC
         /// <returns></returns>
         private string CleanSource(string source)
         {
-            Match match = Regex.Match(source, "^[\\x0a\\x0d\\x00]+");
-            if (match.Captures.Count != 0)
-                warnings.Add("Illegal characters found between records.");
             return Regex.Replace(source, "^[\\x0a\\x0d\\x00]+", "");
         }
 
