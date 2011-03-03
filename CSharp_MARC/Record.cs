@@ -85,7 +85,7 @@ namespace MARC
         /// <value>The leader.</value>
         public string Leader
         {
-            get { return leader.PadRight(24).Substring(0, 24); }
+			get { return leader; }
             set { leader = value; }
         }
 
@@ -107,7 +107,7 @@ namespace MARC
 		{
 			fields = new List<Field>();
 			warnings = new List<string>();
-			leader = string.Empty.PadLeft(24);
+			leader = string.Empty.PadRight(FileMARC.LEADER_LEN);
 		}
 
         /// <summary>
@@ -188,13 +188,13 @@ namespace MARC
             int recordLength = baseAddress + dataEnd + 1;
 
             //Set Leader Lengths
-			leader = leader.PadRight(24);
+			leader = leader.PadRight(FileMARC.LEADER_LEN);
             leader = leader.Remove(0, 5).Insert(0, recordLength.ToString().PadLeft(5, '0'));
             leader = leader.Remove(12, 5).Insert(12, baseAddress.ToString().PadLeft(5, '0'));
             leader = leader.Remove(10, 2).Insert(10, "22");
             leader = leader.Remove(20, 4).Insert(20, "4500");
 
-            return leader.Substring(0,24) + directory + FileMARC.END_OF_FIELD.ToString() + rawFields + FileMARC.END_OF_RECORD.ToString();
+			return leader.Substring(0, FileMARC.LEADER_LEN) + directory + FileMARC.END_OF_FIELD.ToString() + rawFields + FileMARC.END_OF_RECORD.ToString();
         }
 
         /// <summary>
@@ -206,7 +206,7 @@ namespace MARC
         /// </returns>
         public override string ToString()
         {
-            string formatted = "LDR " + leader.Substring(0,24) + Environment.NewLine;
+			string formatted = "LDR " + leader.Substring(0, FileMARC.LEADER_LEN) + Environment.NewLine;
 
             foreach (Field field in fields)
             {
