@@ -205,7 +205,7 @@ namespace MARC
         /// </returns>
         public override string ToString()
         {
-            string formatted = "LDR " + leader + Environment.NewLine;
+            string formatted = "LDR " + leader.Substring(0,24) + Environment.NewLine;
 
             foreach (Field field in fields)
             {
