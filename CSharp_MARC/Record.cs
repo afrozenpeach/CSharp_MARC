@@ -85,7 +85,7 @@ namespace MARC
         /// <value>The leader.</value>
         public string Leader
         {
-            get { return leader.Substring(0, 24); }
+            get { return leader.PadRight(24).Substring(0, 24); }
             set { leader = value; }
         }
 
@@ -188,6 +188,7 @@ namespace MARC
             int recordLength = baseAddress + dataEnd + 1;
 
             //Set Leader Lengths
+			leader = leader.PadRight(24);
             leader = leader.Remove(0, 5).Insert(0, recordLength.ToString().PadLeft(5, '0'));
             leader = leader.Remove(12, 5).Insert(12, baseAddress.ToString().PadLeft(5, '0'));
             leader = leader.Remove(10, 2).Insert(10, "22");
