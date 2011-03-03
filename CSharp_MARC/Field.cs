@@ -119,7 +119,7 @@ namespace MARC
 		/// <returns>
 		/// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
 		/// </returns>
-		public abstract new string ToString();
+		public abstract override string ToString();
 
         /// <summary>
         /// Determines whether this instance is empty.

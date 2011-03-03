@@ -211,14 +211,7 @@ namespace MARC
             foreach (Field field in fields)
             {
                 if (!field.IsEmpty())
-                {
-                    if (field.IsControlField())
-                        formatted += ((ControlField)field).ToString() + Environment.NewLine;
-                    else if (field.IsDataField())
-                        formatted += ((DataField)field).ToString() + Environment.NewLine;
-                    else
-                        formatted += field.ToString() + Environment.NewLine;
-                }
+					formatted += field.ToString() + Environment.NewLine;
             }
 
             return formatted;
