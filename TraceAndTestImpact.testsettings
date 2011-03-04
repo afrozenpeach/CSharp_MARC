@@ -2,7 +2,13 @@
 <TestSettings name="Trace and Test Impact" id="245a6c62-f14f-4d78-affb-e856f911513d" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
   <Description>These are test settings for Trace and Test Impact.</Description>
   <Execution>
-    <TestTypeSpecific />
+    <TestTypeSpecific>
+      <UnitTestRunConfig testTypeId="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b">
+        <AssemblyResolution>
+          <TestDirectory useLoadContext="true" />
+        </AssemblyResolution>
+      </UnitTestRunConfig>
+    </TestTypeSpecific>
     <AgentRule name="Execution Agents">
     </AgentRule>
   </Execution>

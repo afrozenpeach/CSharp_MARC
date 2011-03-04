@@ -1,3 +1,10 @@
+C:\Users\mschraeder\Documents\Visual Studio 2010\Projects\CSharp_MARC\CSharp_MARC Tests\bin\Release\Test Records\bad_example.mrc
+C:\Users\mschraeder\Documents\Visual Studio 2010\Projects\CSharp_MARC\CSharp_MARC Tests\bin\Release\Test Records\example.mrc
+C:\Users\mschraeder\Documents\Visual Studio 2010\Projects\CSharp_MARC\CSharp_MARC Tests\bin\Release\Test Records\music.mrc
+C:\Users\mschraeder\Documents\Visual Studio 2010\Projects\CSharp_MARC\CSharp_MARC Tests\bin\Release\Test Records\record.mrc
+C:\Users\mschraeder\Documents\Visual Studio 2010\Projects\CSharp_MARC\CSharp_MARC Tests\bin\Release\Test Records\record2.mrc
+C:\Users\mschraeder\Documents\Visual Studio 2010\Projects\CSharp_MARC\CSharp_MARC Tests\bin\Release\Test Records\sandburg.mrc
+C:\Users\mschraeder\Documents\Visual Studio 2010\Projects\CSharp_MARC\CSharp_MARC Tests\bin\Release\Test Records\xmlescape.mrc
 C:\Users\mschraeder\Documents\Visual Studio 2010\Projects\CSharp_MARC\CSharp_MARC Tests\bin\Release\CSharp_MARC Tests.dll
 C:\Users\mschraeder\Documents\Visual Studio 2010\Projects\CSharp_MARC\CSharp_MARC Tests\bin\Release\CSharp_MARC Tests.pdb
 C:\Users\mschraeder\Documents\Visual Studio 2010\Projects\CSharp_MARC\CSharp_MARC Tests\bin\Release\CSharp_MARC.dll

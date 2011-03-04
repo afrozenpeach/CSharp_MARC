@@ -162,11 +162,20 @@ namespace CSharp_MARC_Tests
 		public void IsEmptyTest()
 		{
 			Field target = CreateControlField();
-			bool expected = true;
+			bool expected = false;
 			bool actual;
 			actual = target.IsEmpty();
 			Assert.AreEqual(expected, actual);
+			expected = true;
+			((ControlField)target).Data = string.Empty;
+			actual = target.IsEmpty();
+			Assert.AreEqual(expected, actual);
+			expected = false;
 			target = CreateDataField();
+			actual = target.IsEmpty();
+			Assert.AreEqual(expected, actual);
+			expected = true;
+			((DataField)target).Subfields.Clear();
 			actual = target.IsEmpty();
 			Assert.AreEqual(expected, actual);
 		}
