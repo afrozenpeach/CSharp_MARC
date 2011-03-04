@@ -25,6 +25,27 @@
  * @license   http://www.gnu.org/copyleft/lesser.html  LGPL License 3
  */
 
+2011-03-04 Changes:
+
+Updated copyright information
+Added x86 Platform for easier testing. Apparently it didn't stick when I added it earlier.
+Testing suite to test the class structure and included methods. This will get more advanced as I port specific tests from File_MARC.
+Added a bit of extra error checking to a Field's tag so that it's not possible to assign an invalid tag.
+If the FileMARC parser comes across an invalid tag, it forces the tag to "ZZZ" and should no longer throw an exception. 
+Made Field.IsEmpty() abstract. It's not possible to assign a Field with an empty string tag. Doing so should cause an exception. If this is in fact the case, then IsEmpty on Field should never return true. Because of this IsEmpty is now an override on both DataField and ControlField. Field.IsEmpty now returns the result of it's inherited version.
+ToString functions for ControlField and DataField changed to overrides. Field.ToString seemed odd to only output the tag and not the inner data if available.
+Fixed bug in ControlField.IsEmpty() returning opposite of expected results. Amazing how much unit testing helps!
+DataField.FormatField() with no exclude codes as parameters actually works now.
+Added a bit of extra error checking and cleanup to the indicators in the decode function.
+Indicators are now closer to the MARC21 standard, allowing both numbers and letters. Uppercase letters are forced to lowercase. # is no longer a valid character, as it is supposed to indicate an ASCII SPACE. Invalid characters are automatically changed to ASCII SPACE and warnings are added to indicate this
+Moved warnings into the Record object rather than FileMARC. This makes it easier to track which warnings were for which Record. This change may be API breaking and I apologize for that.
+Fixed a bug where it is possible to make an invalid record by setting the Leader to a string longer than 24 characters. Now it will still allow you to set a long Leader but will only output the first 24 characters.
+Fixed a bug where if the Leader was less than 24 characters it would make an invalid record.
+You can now make tags that are not exactly 3 characters. It will automatically pad the leading 0s.
+Field.ToString() is now an abstract override rather than an abstract new. No idea what I was thinking with it as new.
+Record.ToString() doesn't have to check what type it is, thanks to override!
+Totally had the IEnumerable designed wrong. Reset should reset to -1, as MoveNext will take you to the first record.  After a reset it was ignoring the first record. My bad!
+
 2011-02-16 Changes:
 
 Added personal email to copyright notices.
