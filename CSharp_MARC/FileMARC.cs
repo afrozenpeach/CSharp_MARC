@@ -366,7 +366,7 @@ namespace MARC
 
         public void Reset()
         {
-            position = 0;
+            position = -1;
         }
 
         #endregion
