@@ -1,7 +1,0 @@
-C:\Users\mschraeder\Documents\Visual Studio 2010\Projects\CSharp_MARC\CSharp_MARC Demo\CSharp_MARC Demo\bin\Debug\CSharp_MARC Demo.exe
-C:\Users\mschraeder\Documents\Visual Studio 2010\Projects\CSharp_MARC\CSharp_MARC Demo\CSharp_MARC Demo\bin\Debug\CSharp_MARC Demo.pdb
-C:\Users\mschraeder\Documents\Visual Studio 2010\Projects\CSharp_MARC\CSharp_MARC Demo\CSharp_MARC Demo\bin\Debug\CSharp_MARC.dll
-C:\Users\mschraeder\Documents\Visual Studio 2010\Projects\CSharp_MARC\CSharp_MARC Demo\CSharp_MARC Demo\bin\Debug\CSharp_MARC.pdb
-C:\Users\mschraeder\Documents\Visual Studio 2010\Projects\CSharp_MARC\CSharp_MARC Demo\CSharp_MARC Demo\obj\x86\Debug\ResolveAssemblyReference.cache
-C:\Users\mschraeder\Documents\Visual Studio 2010\Projects\CSharp_MARC\CSharp_MARC Demo\CSharp_MARC Demo\obj\x86\Debug\CSharp_MARC Demo.exe
-C:\Users\mschraeder\Documents\Visual Studio 2010\Projects\CSharp_MARC\CSharp_MARC Demo\CSharp_MARC Demo\obj\x86\Debug\CSharp_MARC Demo.pdb
