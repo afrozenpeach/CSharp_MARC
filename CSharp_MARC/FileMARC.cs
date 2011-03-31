@@ -1,12 +1,12 @@
 /**
  * Parser for MARC records
  *
- * This project is based on the File_MARC package 
+ * This project is based on the File_MARC package
  * (http://pear.php.net/package/File_MARC) by Dan Scott , which was based on PHP
- * MARC package, originally called "php-marc", that is part of the Emilda 
+ * MARC package, originally called "php-marc", that is part of the Emilda
  * Project (http://www.emilda.org). Both projects were released under the LGPL
  * which allowed me to port the project to C# for use with the .NET Framework.
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
@@ -182,7 +182,7 @@ namespace MARC
         #region Private utility functions
 
         /// <summary>
-        /// Decodes the raw MARC record into a <see cref="MARC.Record"/> at the specified index./// 
+        /// Decodes the raw MARC record into a <see cref="MARC.Record"/> at the specified index.///
         /// </summary>
         /// <param name="index">The index of the record to retrieve.</param>
         /// <returns></returns>
@@ -250,7 +250,7 @@ namespace MARC
                 {
                     marc.AddWarnings("Invalid Directory Offset for tag " + tag + ".");
                 }
-                
+
                 //Check Directory validity
 
 				//If a tag isn't valid, default it to ZZZ. This should at least make the record valid enough to be readable and not throw exceptions
@@ -334,7 +334,7 @@ namespace MARC
                         marc.AddWarnings("No subfield data found in tag " + tag + ".");
 
                     marc.Fields.Add(new DataField(tag, subfieldData, ind1, ind2));
-                }              
+                }
             }
             return marc;
         }
