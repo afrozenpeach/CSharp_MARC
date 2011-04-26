@@ -254,10 +254,11 @@ namespace MARC
                 //Check Directory validity
 
 				//If a tag isn't valid, default it to ZZZ. This should at least make the record valid enough to be readable and not throw exceptions
-				if (Field.ValidateTag(tag))
+				if (!Field.ValidateTag(tag))
+				{
 					marc.AddWarnings("Invalid tag " + tag + " in directory.");
-				else
 					tag = "ZZZ";
+				}
 
                 if (fieldOffset + fieldLength > recordLength)
                     marc.AddWarnings("Directory entry for tag " + tag + " runs past the end of the record.");

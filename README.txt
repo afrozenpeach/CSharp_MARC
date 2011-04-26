@@ -20,10 +20,14 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @author    Matt Schraeder <mschraeder@btsb.com> <frozen@frozen-solid.net>
+ * @author    Matt Schraeder <mschraeder@csharpmarc.net> <mschraeder@btsb.com>
  * @copyright 2009-2011 Matt Schraeder and Bound to Stay Bound Books <http://www.btsb.com>
  * @license   http://www.gnu.org/copyleft/lesser.html  LGPL License 3
  */
+
+2011-04-26 Change:
+
+Changed how validating a tag works when decoding due to "not thinking syndrome"
 
 2011-03-04 Changes:
 
