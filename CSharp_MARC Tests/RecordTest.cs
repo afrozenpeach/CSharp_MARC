@@ -1,12 +1,12 @@
 ﻿/**
  * Parser for MARC records
  *
- * This project is based on the File_MARC package 
+ * This project is based on the File_MARC package
  * (http://pear.php.net/package/File_MARC) by Dan Scott , which was based on PHP
- * MARC package, originally called "php-marc", that is part of the Emilda 
+ * MARC package, originally called "php-marc", that is part of the Emilda
  * Project (http://www.emilda.org). Both projects were released under the LGPL
  * which allowed me to port the project to C# for use with the .NET Framework.
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
@@ -32,8 +32,8 @@ using System.Collections.Generic;
 
 namespace CSharp_MARC_Tests
 {
-    
-    
+
+
     /// <summary>
     ///This is a test class for RecordTest and is intended
     ///to contain all RecordTest Unit Tests
@@ -62,7 +62,7 @@ namespace CSharp_MARC_Tests
 		}
 
 		#region Additional test attributes
-		// 
+		//
 		//You can use the following additional attributes as you write your tests:
 		//
 		//Use ClassInitialize to run code before running the first test in the class
@@ -178,7 +178,7 @@ namespace CSharp_MARC_Tests
 			target.Fields.Add(new ControlField("001", "I am data! (But not Data from Star Trek TNG)"));
 			//This will be empty, and thus not written
 			target.Fields.Add(new DataField("245"));
-			string expected = "LDR                         " + Environment.NewLine +
+			string expected = "LDR 00083     2200037   4500" + Environment.NewLine +
 							  "001" + "     " + "I am data! (But not Data from Star Trek TNG)" + Environment.NewLine;
 			string actual;
 			actual = target.ToString();
