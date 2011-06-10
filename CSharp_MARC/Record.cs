@@ -1,12 +1,12 @@
 /**
  * Parser for MARC records
  *
- * This project is based on the File_MARC package 
+ * This project is based on the File_MARC package
  * (http://pear.php.net/package/File_MARC) by Dan Scott , which was based on PHP
- * MARC package, originally called "php-marc", that is part of the Emilda 
+ * MARC package, originally called "php-marc", that is part of the Emilda
  * Project (http://www.emilda.org). Both projects were released under the LGPL
  * which allowed me to port the project to C# for use with the .NET Framework.
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
@@ -33,7 +33,7 @@ namespace MARC
 {
     /// <summary>
     /// A MARC record contains a leader and zero or more fields held within a
-    /// List structure.  Fields are represented by MARC ControlField and 
+    /// List structure.  Fields are represented by MARC ControlField and
     /// DataField objects.
     /// </summary>
     public class Record
@@ -156,7 +156,7 @@ namespace MARC
         /// <summary>
         /// Returns <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>
         /// in raw USMARC format.
-        /// 
+        ///
         /// If you have modified an existing MARC record or created a new MARC record, use this method
         /// to save the record for use in other programs that accept the MARC format -- for example,
         /// your integrated library system.
@@ -197,6 +197,36 @@ namespace MARC
 			return leader.Substring(0, FileMARC.LEADER_LEN) + directory + FileMARC.END_OF_FIELD.ToString() + rawFields + FileMARC.END_OF_RECORD.ToString();
         }
 
+		/// <summary>
+		/// Calculates the leader.
+		/// </summary>
+		private void CalculateLeader()
+		{
+			int dataEnd = 0;
+			int count = 0;
+
+			foreach (Field field in fields)
+			{
+				//No empty fields allowed
+				if (!field.IsEmpty())
+				{
+					string rawField = field.ToRaw();
+					dataEnd += rawField.Length;
+					count++;
+				}
+			}
+
+			int baseAddress = FileMARC.LEADER_LEN + (count * FileMARC.DIRECTORY_ENTRY_LEN) + 1;
+			int recordLength = baseAddress + dataEnd + 1;
+
+			//Set Leader Lengths
+			leader = leader.PadRight(FileMARC.LEADER_LEN);
+			leader = leader.Remove(0, 5).Insert(0, recordLength.ToString().PadLeft(5, '0'));
+			leader = leader.Remove(12, 5).Insert(12, baseAddress.ToString().PadLeft(5, '0'));
+			leader = leader.Remove(10, 2).Insert(10, "22");
+			leader = leader.Remove(20, 4).Insert(20, "4500");
+		}
+
         /// <summary>
         /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
         /// This method produces an easy-to-read textual display of a MARC record.
@@ -206,6 +236,7 @@ namespace MARC
         /// </returns>
         public override string ToString()
         {
+			CalculateLeader();
 			string formatted = "LDR " + leader.Substring(0, FileMARC.LEADER_LEN) + Environment.NewLine;
 
             foreach (Field field in fields)
@@ -221,7 +252,7 @@ namespace MARC
 		/// Adds the warnings.
 		/// </summary>
 		/// <param name="warning">The warning.</param>
-		public void AddWarnings(string warning) 
+		public void AddWarnings(string warning)
 		{
 			warnings.Add(warning);
 		}
