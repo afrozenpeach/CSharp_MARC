@@ -1,12 +1,12 @@
 ﻿/**
  * Parser for MARC records
  *
- * This project is based on the File_MARC package 
+ * This project is based on the File_MARC package
  * (http://pear.php.net/package/File_MARC) by Dan Scott , which was based on PHP
- * MARC package, originally called "php-marc", that is part of the Emilda 
+ * MARC package, originally called "php-marc", that is part of the Emilda
  * Project (http://www.emilda.org). Both projects were released under the LGPL
  * which allowed me to port the project to C# for use with the .NET Framework.
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
@@ -32,8 +32,8 @@ using System.Collections.Generic;
 
 namespace CSharp_MARC_Tests
 {
-    
-    
+
+
     /// <summary>
     ///This is a test class for FieldTest and is intended
     ///to contain all FieldTest Unit Tests
@@ -62,7 +62,7 @@ namespace CSharp_MARC_Tests
 		}
 
 		#region Additional test attributes
-		// 
+		//
 		//You can use the following additional attributes as you write your tests:
 		//
 		//Use ClassInitialize to run code before running the first test in the class
@@ -128,7 +128,7 @@ namespace CSharp_MARC_Tests
 		public void IsControlFieldTest()
 		{
 			Field target = CreateControlField();
-			bool expected = true; 
+			bool expected = true;
 			bool actual;
 			actual = target.IsControlField();
 			Assert.AreEqual(expected, actual);
@@ -144,7 +144,7 @@ namespace CSharp_MARC_Tests
 		[TestMethod()]
 		public void IsDataFieldTest()
 		{
-			Field target = CreateDataField(); 
+			Field target = CreateDataField();
 			bool expected = true;
 			bool actual;
 			actual = target.IsDataField();
@@ -247,6 +247,24 @@ namespace CSharp_MARC_Tests
 			expected = false;
 			actual = Field.ValidateTag(tag);
 			Assert.AreEqual(expected, actual);
+		}
+
+		/// <summary>
+		///A test for Clone
+		///</summary>
+		[TestMethod()]
+		public void CloneTest()
+		{
+			Field target = CreateControlField();
+			Field expected = target;
+			Field actual;
+			actual = target.Clone();
+			Assert.AreNotEqual(expected, actual);
+
+			target = CreateDataField();
+			expected = target;
+			actual = target.Clone();
+			Assert.AreNotEqual(expected, actual);
 		}
 	}
 }

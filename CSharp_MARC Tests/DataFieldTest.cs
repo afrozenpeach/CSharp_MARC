@@ -1,12 +1,12 @@
 ﻿/**
  * Parser for MARC records
  *
- * This project is based on the File_MARC package 
+ * This project is based on the File_MARC package
  * (http://pear.php.net/package/File_MARC) by Dan Scott , which was based on PHP
- * MARC package, originally called "php-marc", that is part of the Emilda 
+ * MARC package, originally called "php-marc", that is part of the Emilda
  * Project (http://www.emilda.org). Both projects were released under the LGPL
  * which allowed me to port the project to C# for use with the .NET Framework.
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
@@ -32,8 +32,8 @@ using System.Collections.Generic;
 
 namespace CSharp_MARC_Tests
 {
-    
-    
+
+
     /// <summary>
     ///This is a test class for DataFieldTest and is intended
     ///to contain all DataFieldTest Unit Tests
@@ -62,7 +62,7 @@ namespace CSharp_MARC_Tests
 		}
 
 		#region Additional test attributes
-		// 
+		//
 		//You can use the following additional attributes as you write your tests:
 		//
 		//Use ClassInitialize to run code before running the first test in the class
@@ -551,6 +551,49 @@ namespace CSharp_MARC_Tests
 				Assert.AreEqual(expected[i].Code, actual[i].Code);
 				Assert.AreEqual(expected[i].Data, actual[i].Data);
 			}
+		}
+
+		/// <summary>
+		///A test for Clone
+		///</summary>
+		[TestMethod()]
+		[ExpectedException(typeof(NullReferenceException))]
+		public void CloneTest()
+		{
+			string tag = "100";
+			List<Subfield> subfields = new List<Subfield>();
+			Subfield subfield = new Subfield('a', "It's a book!");
+			subfields.Add(subfield);
+			subfield = new Subfield('b', "Anne Author");
+			subfields.Add(subfield);
+			Field target = new DataField(tag, subfields);
+			Field actual;
+			actual = target.Clone();
+			Assert.AreNotEqual(target, actual);
+
+			target.Tag = "200";
+
+			string expectedString = tag;
+			string actualString;
+			actualString = actual.Tag;
+			Assert.AreEqual(expectedString, actualString);
+
+			((DataField)target).Indicator1 = '1';
+			((DataField)target).Indicator2 = '2';
+
+			expectedString = "  ";
+			actualString = ((DataField)actual).Indicator1.ToString() + ((DataField)actual).Indicator2.ToString();
+			Assert.AreEqual(expectedString, actualString);
+
+			((DataField)target)['a'].Code = 'c';
+			((DataField)target)['c'].Data = "It's a NEW book!";
+
+			expectedString = "aIt's a book!";
+			actualString = ((DataField)actual)['a'].Code.ToString() + ((DataField)actual)['a'].Data;
+			Assert.AreEqual(expectedString, actualString);
+
+			//This next line will fail as there's no subfield c!
+			((DataField)actual)['c'].Code = 'a';
 		}
 	}
 }

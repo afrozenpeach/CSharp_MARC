@@ -1,12 +1,12 @@
 /**
  * Parser for MARC records
  *
- * This project is based on the File_MARC package 
+ * This project is based on the File_MARC package
  * (http://pear.php.net/package/File_MARC) by Dan Scott , which was based on PHP
- * MARC package, originally called "php-marc", that is part of the Emilda 
+ * MARC package, originally called "php-marc", that is part of the Emilda
  * Project (http://www.emilda.org). Both projects were released under the LGPL
  * which allowed me to port the project to C# for use with the .NET Framework.
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
@@ -33,7 +33,7 @@ using System.Text.RegularExpressions;
 namespace MARC
 {
     /// <summary>
-    /// The MARC Field class is a bare bones field that simply stores a tag 
+    /// The MARC Field class is a bare bones field that simply stores a tag
     /// name. It is extended by the DataField and ControlField classes and
     /// should never be instantiated on its own.
     /// </summary>
@@ -51,7 +51,7 @@ namespace MARC
         public string Tag
         {
             get { return tag; }
-            set 
+            set
 			{
 				if (Field.ValidateTag(value.PadLeft(3)))
 					tag = value.PadLeft(3);
@@ -132,7 +132,7 @@ namespace MARC
         /// <summary>
         /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>
         /// in raw USMARC format.
-        /// 
+        ///
         /// This stub method is extended by child classes.
         /// </summary>
         /// <returns></returns>
@@ -140,10 +140,18 @@ namespace MARC
 
         /// <summary>
         /// Print a MARC Field object without tags, indicators, etc
-        /// 
+        ///
         /// This stub method is extended by child classes.
         /// </summary>
         /// <returns></returns>
         public abstract string FormatField();
+
+		/// <summary>
+		/// Makes a deep clone of this instance.
+		///
+		/// This stub method is extended by child classes.
+		/// </summary>
+		/// <returns></returns>
+		public abstract Field Clone();
     }
 }

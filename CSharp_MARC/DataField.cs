@@ -1,12 +1,12 @@
 /**
  * Parser for MARC records
  *
- * This project is based on the File_MARC package 
+ * This project is based on the File_MARC package
  * (http://pear.php.net/package/File_MARC) by Dan Scott , which was based on PHP
- * MARC package, originally called "php-marc", that is part of the Emilda 
+ * MARC package, originally called "php-marc", that is part of the Emilda
  * Project (http://www.emilda.org). Both projects were released under the LGPL
  * which allowed me to port the project to C# for use with the .NET Framework.
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
@@ -54,7 +54,7 @@ namespace MARC
         public char Indicator1
         {
             get { return ind1; }
-            set 
+            set
             {
                 if (ValidateIndicator(value))
                     ind1 = value;
@@ -70,7 +70,7 @@ namespace MARC
         public char Indicator2
         {
             get { return ind2; }
-            set 
+            set
             {
                 if (ValidateIndicator(value))
                     ind2 = value;
@@ -132,7 +132,7 @@ namespace MARC
                 this.ind1 = ind1;
             else
                 throw new ArgumentException("Invalid indicator.");
-            
+
             if (ValidateIndicator(ind2))
                 this.ind2 = ind2;
             else
@@ -295,5 +295,17 @@ namespace MARC
             Match match = Regex.Match(ind.ToString(), "^[0-9a-z]{1}$");
             return (match.Captures.Count > 0 || ind == ' ') ? true : false;
         }
+
+		/// <summary>
+		/// Makes a deep clone of this instance.
+		/// </summary>
+		/// <returns></returns>
+		public override Field Clone()
+		{
+			Field clone = new DataField(this.tag, new List<Subfield>(), this.ind1, this.ind2);
+			foreach (Subfield needsCloned in this.subfields)
+				((DataField)clone).subfields.Add(needsCloned.Clone());
+			return clone;
+		}
     }
 }

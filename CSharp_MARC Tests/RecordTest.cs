@@ -277,5 +277,38 @@ namespace CSharp_MARC_Tests
 			actual = target.Warnings;
 			Assert.AreEqual(expected, actual[0]);
 		}
+
+		/// <summary>
+		///A test for Clone
+		///</summary>
+		[TestMethod()]
+		public void CloneTest()
+		{
+			Record target = new Record();
+			Record expected = target;
+			Record actual;
+			actual = target.Clone();
+			Assert.AreNotEqual(expected, actual);
+
+			target.Leader = "Take me to your leader!";
+
+			string expectedString = string.Empty.PadRight(FileMARC.LEADER_LEN);
+			string actualString;
+			actualString = actual.Leader;
+			Assert.AreEqual(expectedString, actualString);
+
+			target.Warnings.Add("Testing!");
+
+			int expectedCount = 0;
+			int actualCount;
+			actualCount = actual.Warnings.Count;
+			Assert.AreEqual(expectedCount, actualCount);
+
+			target.Fields.Add(new ControlField("001", "Test Data"));
+
+			expectedCount = 0;
+			actualCount = actual.Fields.Count;
+			Assert.AreEqual(expectedCount, actualCount);
+		}
 	}
 }

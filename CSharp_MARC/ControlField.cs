@@ -1,12 +1,12 @@
 /**
  * Parser for MARC records
  *
- * This project is based on the File_MARC package 
+ * This project is based on the File_MARC package
  * (http://pear.php.net/package/File_MARC) by Dan Scott , which was based on PHP
- * MARC package, originally called "php-marc", that is part of the Emilda 
+ * MARC package, originally called "php-marc", that is part of the Emilda
  * Project (http://www.emilda.org). Both projects were released under the LGPL
  * which allowed me to port the project to C# for use with the .NET Framework.
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
@@ -100,5 +100,15 @@ namespace MARC
         {
             return data;
         }
+
+		/// <summary>
+		/// Makes a deep clone of this instance.
+		/// </summary>
+		/// <returns></returns>
+		public override Field Clone()
+		{
+			Field clone = new ControlField(this.tag, this.data);
+			return clone;
+		}
     }
 }

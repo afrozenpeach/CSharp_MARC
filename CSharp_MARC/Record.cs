@@ -256,5 +256,23 @@ namespace MARC
 		{
 			warnings.Add(warning);
 		}
+
+		/// <summary>
+		/// Makes a deep clone of this instance.
+		/// </summary>
+		/// <returns></returns>
+		public Record Clone()
+		{
+			Record clone = new Record();
+
+			clone.leader = this.leader;
+			foreach (string needsCloned in warnings)
+				clone.AddWarnings(needsCloned);
+
+			foreach (Field needsCloned in this.fields)
+				clone.fields.Add(needsCloned.Clone());
+
+			return clone;
+		}
     }
 }

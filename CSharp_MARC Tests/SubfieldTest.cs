@@ -1,12 +1,12 @@
 ﻿/**
  * Parser for MARC records
  *
- * This project is based on the File_MARC package 
+ * This project is based on the File_MARC package
  * (http://pear.php.net/package/File_MARC) by Dan Scott , which was based on PHP
- * MARC package, originally called "php-marc", that is part of the Emilda 
+ * MARC package, originally called "php-marc", that is part of the Emilda
  * Project (http://www.emilda.org). Both projects were released under the LGPL
  * which allowed me to port the project to C# for use with the .NET Framework.
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
@@ -31,8 +31,8 @@ using System;
 
 namespace CSharp_MARC_Tests
 {
-    
-    
+
+
     /// <summary>
     ///This is a test class for SubfieldTest and is intended
     ///to contain all SubfieldTest Unit Tests
@@ -61,7 +61,7 @@ namespace CSharp_MARC_Tests
 		}
 
 		#region Additional test attributes
-		// 
+		//
 		//You can use the following additional attributes as you write your tests:
 		//
 		//Use ClassInitialize to run code before running the first test in the class
@@ -197,6 +197,34 @@ namespace CSharp_MARC_Tests
 			target.Data = expected;
 			actual = target.Data;
 			Assert.AreEqual(expected, actual);
+		}
+
+		/// <summary>
+		///A test for Clone
+		///</summary>
+		[TestMethod()]
+		public void CloneTest()
+		{
+			char code = 'a';
+			string data = "Test Data";
+			Subfield target = new Subfield(code, data);
+			Subfield expected = target;
+			Subfield actual;
+			actual = target.Clone();
+			Assert.AreNotEqual(expected, actual);
+
+			target.Code = 'b';
+
+			string expectedString = "a";
+			string actualString;
+			actualString = actual.Code.ToString();
+			Assert.AreEqual(expectedString, actualString);
+
+			target.Data = "New Test Data";
+
+			expectedString = data;
+			actualString = actual.Data;
+			Assert.AreEqual(expectedString, actualString);
 		}
 	}
 }
