@@ -25,6 +25,9 @@
  * @license   http://www.gnu.org/copyleft/lesser.html  LGPL License 3
  */
 
+2011-06-30 Change:
+Added Clone() to Fields, Subfields, and Records. This is a DEEP clone and all members should be properly cloned as new instances.
+
 2011-04-26 Change:
 
 Changed how validating a tag works when decoding due to "not thinking syndrome"
