@@ -134,24 +134,14 @@ namespace MARC
         {
             string fileContents = null;
 
-            using (StreamReader sr = new StreamReader(file))
-            {
-                fileContents = sr.ReadToEnd();
-            }
-
-            fileContents = CleanSource(fileContents);
+			using (StreamReader sr = new StreamReader(file))
+			{
+				fileContents = sr.ReadToEnd();
+			}
 
             if (fileContents != null)
             {
-                foreach (string record in fileContents.Split(END_OF_RECORD))
-                {
-                    //Make sure the record isn't empty, or isn't the end of a file
-                    if (record != string.Empty && record != "\x1A")
-                    {
-                        //Split removes the END_OF_RECORD. Put it back in
-                        this.rawSource.Add(record + END_OF_RECORD.ToString());
-                    }
-                }
+				this.Add(fileContents);
             }
         }
 
@@ -165,8 +155,12 @@ namespace MARC
 
             foreach (string record in source.Split(END_OF_RECORD))
             {
-                if (record != string.Empty)
-                    this.rawSource.Add(record + END_OF_RECORD.ToString());
+				//Make sure the record isn't empty, or isn't the end of a file
+				if (record != string.Empty && record != "\x1A")
+				{
+					//Split removes the END_OF_RECORD. Put it back in
+					this.rawSource.Add(record + END_OF_RECORD.ToString());
+				}
             }
         }
 
