@@ -36,7 +36,7 @@ using System.Collections;
 namespace MARC
 {
     /// <summary>
-    /// The main File_MARC class enables you to return File_MARC_Record
+    /// The main FileMARC class enables you to return Record
     /// objects from a stream or string.
     /// </summary>
     public class FileMARC : IEnumerator, IEnumerable
@@ -110,13 +110,7 @@ namespace MARC
         {
             this.rawSource = new List<string>();
 
-            source = CleanSource(source);
-
-             foreach (string record in source.Split(END_OF_RECORD))
-            {
-                if (record != string.Empty)
-                    this.rawSource.Add(record + END_OF_RECORD.ToString());
-            }
+			this.Add(source);
         }
 
         /// <summary>
