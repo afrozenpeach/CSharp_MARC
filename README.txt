@@ -25,7 +25,10 @@
  * @license   http://www.gnu.org/copyleft/lesser.html  LGPL License 3
  */
 
-2011-09-12 Changes:
+2011-09-12.2 Changes:
+Apparently not even Library of Congress MARCXML records follow the XSD specification.  I've removed the requirement that records validate before being added.
+
+2011-09-12.1 Changes:
 
 CSharp_MARC can now read MARCXML files.  The FileMARCXML class can accept XML strings or native .NET XDocument objects and convert them to Record objects.
 The FileMARC(string source) constructor and ImportMARC function were duplicating code from the FileMARC.Add(string source) function. The coding horror is me :negative:

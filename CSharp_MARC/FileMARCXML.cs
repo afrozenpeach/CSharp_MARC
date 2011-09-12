@@ -142,26 +142,21 @@ namespace MARC
 		{
 			int addCount = 0;
 
-			if (Validate(source).Count > 0)
-				throw new XmlSchemaValidationException("XML source file does not validate as a MARC21 XML file.");
-			else
+			//Usually there will be a collection tag wrapping the records
+			foreach (XElement collection in source.Elements().Where(e => e.Name.LocalName == "collection"))
 			{
-				//Usually there will be a collection tag wrapping the records
-				foreach (XElement collection in source.Elements().Where(e => e.Name.LocalName == "collection"))
-				{
-					foreach (XElement record in collection.Elements().Where(e => e.Name.LocalName == "record"))
-					{
-						rawSource.Add(record);
-						addCount++;
-					}
-				}
-
-				//Sometimes there's just a record
-				foreach (XElement record in source.Elements().Where(e => e.Name.LocalName == "record"))
+				foreach (XElement record in collection.Elements().Where(e => e.Name.LocalName == "record"))
 				{
 					rawSource.Add(record);
 					addCount++;
 				}
+			}
+
+			//Sometimes there's just a record
+			foreach (XElement record in source.Elements().Where(e => e.Name.LocalName == "record"))
+			{
+				rawSource.Add(record);
+				addCount++;
 			}
 
 			return addCount;
@@ -215,14 +210,14 @@ namespace MARC
 			marcXML.Leader = record.Elements().First(e => e.Name.LocalName == "leader").Value;
 
 			//Now we get the control fields
-			foreach (XElement controlField in record.Elements().Where(e => e.Name.LocalName == "controlfield").OrderBy(e => e.Attribute("tag").Value))
+			foreach (XElement controlField in record.Elements().Where(e => e.Name.LocalName == "controlfield"))
 			{
 				ControlField newField = new ControlField(controlField.Attribute("tag").Value, controlField.Value);
 				marcXML.Fields.Add(newField);
 			}
 
 			//Now we get the data fields
-			foreach (XElement dataField in record.Elements().Where(e => e.Name.LocalName == "datafield").OrderBy(e => e.Attribute("tag").Value))
+			foreach (XElement dataField in record.Elements().Where(e => e.Name.LocalName == "datafield"))
 			{
 				DataField newField = new DataField(dataField.Attribute("tag").Value, new List<Subfield>(), dataField.Attribute("ind1").Value[0], dataField.Attribute("ind2").Value[0]);
 
