@@ -27,6 +27,7 @@
 
 2011-09-12.2 Changes:
 Apparently not even Library of Congress MARCXML records follow the XSD specification.  I've removed the requirement that records validate before being added.
+No longer ordering the tags when importing a MARCXML record.
 
 2011-09-12.1 Changes:
 
