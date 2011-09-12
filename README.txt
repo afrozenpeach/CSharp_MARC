@@ -25,7 +25,13 @@
  * @license   http://www.gnu.org/copyleft/lesser.html  LGPL License 3
  */
 
+2011-09-12 Changes:
+
+CSharp_MARC can now read MARCXML files.  The FileMARCXML class can accept XML strings or native .NET XDocument objects and convert them to Record objects.
+The FileMARC(string source) constructor and ImportMARC function were duplicating code from the FileMARC.Add(string source) function. The coding horror is me :negative:
+
 2011-06-30 Change:
+
 Added Clone() to Fields, Subfields, and Records. This is a DEEP clone and all members should be properly cloned as new instances.
 
 2011-04-26 Change:
