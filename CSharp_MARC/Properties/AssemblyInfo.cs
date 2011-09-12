@@ -1,12 +1,12 @@
 ﻿/**
  * Parser for MARC records
  *
- * This project is based on the File_MARC package 
+ * This project is based on the File_MARC package
  * (http://pear.php.net/package/File_MARC) by Dan Scott , which was based on PHP
- * MARC package, originally called "php-marc", that is part of the Emilda 
+ * MARC package, originally called "php-marc", that is part of the Emilda
  * Project (http://www.emilda.org). Both projects were released under the LGPL
  * which allowed me to port the project to C# for use with the .NET Framework.
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
@@ -29,7 +29,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-// General Information about an assembly is controlled through the following 
+// General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("CSharp_MARC")]
@@ -41,8 +41,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
-// Setting ComVisible to false makes the types in this assembly not visible 
-// to COM components.  If you need to access a type in this assembly from 
+// Setting ComVisible to false makes the types in this assembly not visible
+// to COM components.  If you need to access a type in this assembly from
 // COM, set the ComVisible attribute to true on that type.
 [assembly: ComVisible(false)]
 
@@ -52,11 +52,11 @@ using System.Runtime.InteropServices;
 // Version information for an assembly consists of the following four values:
 //
 //      Major Version
-//      Minor Version 
+//      Minor Version
 //      Build Number
 //      Revision
 //
-// You can specify all the values or you can default the Revision and Build Numbers 
+// You can specify all the values or you can default the Revision and Build Numbers
 // by using the '*' as shown below:
-[assembly: AssemblyVersion("0.0.1.0")]
-[assembly: AssemblyFileVersion("0.0.1.0")]
+[assembly: AssemblyVersion("0.0.1.1")]
+[assembly: AssemblyFileVersion("0.0.1.1")]
