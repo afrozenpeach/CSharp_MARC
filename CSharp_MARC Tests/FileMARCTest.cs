@@ -104,7 +104,6 @@ namespace CSharp_MARC_Tests
 			int actual;
 			actual = target.RawSource.Count;
 			Assert.AreEqual(expected, actual);
-
 		}
 
 		/// <summary>
