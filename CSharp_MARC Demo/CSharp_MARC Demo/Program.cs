@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Parser for MARC records
  *
  * This project is based on the File_MARC package 
@@ -20,8 +20,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @author    Matt Schraeder <mschraeder@btsb.com> <frozen@frozen-solid.net>
- * @copyright 2009-2011 Matt Schraeder and Bound to Stay Bound Books <http://www.btsb.com>
+ * @author    Matt Schraeder <frozen@frozen-solid.net> <mschraeder@btsb.com>
+ * @copyright 2009-2012 Matt Schraeder and Bound to Stay Bound Books <http://www.btsb.com>
  * @license   http://www.gnu.org/copyleft/lesser.html  LGPL License 3
  */
 

@@ -1,12 +1,12 @@
 ﻿/**
  * Parser for MARC records
  *
- * This project is based on the File_MARC package 
+ * This project is based on the File_MARC package
  * (http://pear.php.net/package/File_MARC) by Dan Scott , which was based on PHP
- * MARC package, originally called "php-marc", that is part of the Emilda 
+ * MARC package, originally called "php-marc", that is part of the Emilda
  * Project (http://www.emilda.org). Both projects were released under the LGPL
  * which allowed me to port the project to C# for use with the .NET Framework.
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
@@ -21,7 +21,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author    Matt Schraeder <mschraeder@btsb.com> <mschraeder@csharpmarc.net>
- * @copyright 2009-2011 Matt Schraeder and Bound to Stay Bound Books <http://www.btsb.com>
+ * @copyright 2009-2012 Matt Schraeder and Bound to Stay Bound Books <http://www.btsb.com>
  * @license   http://www.gnu.org/copyleft/lesser.html  LGPL License 3
  */
 
@@ -33,8 +33,8 @@ using System.Collections.Generic;
 
 namespace CSharp_MARC_Tests
 {
-    
-    
+
+
     /// <summary>
     ///This is a test class for FileMARCTest and is intended
     ///to contain all FileMARCTest Unit Tests
@@ -63,7 +63,7 @@ namespace CSharp_MARC_Tests
 		}
 
 		#region Additional test attributes
-		// 
+		//
 		//You can use the following additional attributes as you write your tests:
 		//
 		//Use ClassInitialize to run code before running the first test in the class
@@ -138,7 +138,7 @@ namespace CSharp_MARC_Tests
 		[TestMethod()]
 		public void AddTest()
 		{
-			FileMARC target = new FileMARC(); 
+			FileMARC target = new FileMARC();
 			//This string is taken as a copy and paste from record.mrc in the Test Records directory.
 			string source = "01754cam a2200397 a 45000010009000000050017000090080041000269060045000679250044001129550187001560100017003430200034003600200037003940350023004310350020004540370060004740400049005340420009005830500024005920820014006161000018006302450070006482600038007183000029007565860037007855200280008226500038011026500034011406500031011746500031012056500029012366500025012656500022012906500022013126500022013341460273320110216094643.0061020s2007    nyua   c      000 f eng    a7bcbccorignewd1eecipf20gy-gencatlg0 aacquireb2 shelf copiesxpolicy default  alb18 2006-10-20ilb18 2006-10-20elb18 2006-10-20 to CIPaps04 2007-05-17 1 copy rec'd., to CIP ver.fld11 2007-07-02 Z-CipVergld11 2007-07-02 to BCCDalf27 2007-07-11 cp. 2 to BCCD  a  2006031847  a0810993139 (paper over board)  a9780810993136 (paper over board)  a(OCoLC)ocm74029165  a(OCoLC)74029165  bJunior Library Guildnhttp://www.juniorlibraryguild.com  aDLCcDLCdBAKERdBTCTAdTEFdYDXCPdEHHdDLC  alcac00aPZ7.K6232bDia 200700a[Fic]2221 aKinney, Jeff.10aDiary of a wimpy kid :bGreg Heffley's journal /cby Jeff Kinney.  aNew York :bAmulet Books,cc2007.  a217 p. :bill. ;c22 cm.8 aA Junior Library Guild selection  aGreg records his sixth grade experiences in a middle school where he and his best friend, Rowley, undersized weaklings amid boys who need to shave twice daily, hope just to survive, but when Rowley grows more popular, Greg must take drastic measures to save their friendship. 0aMiddle schoolsvJuvenile fiction. 0aFriendshipvJuvenile fiction. 0aSchoolsvJuvenile fiction. 0aDiariesvJuvenile fiction. 1aMiddle schoolsvFiction. 1aFriendshipvFiction. 1aSchoolsvFiction. 1aDiariesvFiction. 1aHumorous stories.";
 			target.Add(source);

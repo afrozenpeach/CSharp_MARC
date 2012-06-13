@@ -69,6 +69,7 @@
     <Compile Include="ControlFieldTest.cs" />
     <Compile Include="DataFieldTest.cs" />
     <Compile Include="FieldTest.cs" />
+    <Compile Include="FileMARCReaderTest.cs" />
     <Compile Include="FileMARCTest.cs" />
     <Compile Include="FileMARCXMLTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -89,6 +90,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Test Records\example.mrc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Test Records\manyrecords.mrc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Test Records\music.mrc">

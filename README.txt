@@ -21,9 +21,13 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author    Matt Schraeder <mschraeder@csharpmarc.net> <mschraeder@btsb.com>
- * @copyright 2009-2011 Matt Schraeder and Bound to Stay Bound Books <http://www.btsb.com>
+ * @copyright 2009-2012 Matt Schraeder and Bound to Stay Bound Books <http://www.btsb.com>
  * @license   http://www.gnu.org/copyleft/lesser.html  LGPL License 3
  */
+ 
+2012-06-13 Changes:
+Added FileMARCReader class for handling large MARC21 files without loading the entire file into memory. Special thanks to Stas Paladiy for reporting this issue and helping resolve it.
+Updated Copyright information for the year 2012!
 
 2011-09-12.2 Changes:
 Apparently not even Library of Congress MARCXML records follow the XSD specification.  I've removed the requirement that records validate before being added.
