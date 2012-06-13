@@ -80,7 +80,7 @@ namespace MARC
 					if (RealReadSize != bufferSize)
 						Array.Resize(ref ByteArray, RealReadSize + 1);
 
-					DelPosition = Array.LastIndexOf(ByteArray, Convert.ToByte(29)) + 1;
+					DelPosition = Array.LastIndexOf(ByteArray, Convert.ToByte(FileMARC.END_OF_RECORD)) + 1;
 
 					if (DelPosition == 0 & RealReadSize == bufferSize)
 					{
