@@ -24,6 +24,13 @@
  * @copyright 2009-2012 Matt Schraeder and Bound to Stay Bound Books <http://www.btsb.com>
  * @license   http://www.gnu.org/copyleft/lesser.html  LGPL License 3
  */
+
+2013-04-10 Changes:
+Some special characters in a normal MARC21 file are saved using non-standard character encoding. The proper encoding should be MARC8, which .Net does not support. This version adds support for a select few special characters, most importantly the copyright symbol which is used in RDA records. The FileMARCWriter class makes it easier to write records and should follow MARC8/UTF-8 specifications from the 9th character of the Leader. The FileMARCReader class had to be updated to read these MARC8 characters back in correctly.
+
+Initial commit of FileMARCWriter
+Updated FileMARCReader to support features of FileMARCWriter
+UTF-8 support is only loosely tested. If you are using UTF-8 please let me know how well it works for you.
  
 2012-06-13 Changes:
 Added FileMARCReader class for handling large MARC21 files without loading the entire file into memory. Special thanks to Stas Paladiy for reporting this issue and helping resolve it.
