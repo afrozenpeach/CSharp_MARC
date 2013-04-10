@@ -71,6 +71,7 @@
     <Compile Include="FieldTest.cs" />
     <Compile Include="FileMARCReaderTest.cs" />
     <Compile Include="FileMARCTest.cs" />
+    <Compile Include="FileMARCWriterTest.cs" />
     <Compile Include="FileMARCXMLTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RecordTest.cs" />
@@ -105,6 +106,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Test Records\sandburg.mrc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Test Records\tworecords_onerda.mrc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Test Records\xmlescape.mrc">

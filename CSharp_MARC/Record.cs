@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Parser for MARC records
  *
  * This project is based on the File_MARC package
