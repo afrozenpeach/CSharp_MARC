@@ -37,7 +37,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Bound To Stay Bound Books")]
 [assembly: AssemblyProduct("CSharp_MARC")]
-[assembly: AssemblyCopyright("Copyright © Matt Schraeder and Bound To Stay Bound Books 2009-2012")]
+[assembly: AssemblyCopyright("Copyright © Matt Schraeder and Bound To Stay Bound Books 2009-2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -58,5 +58,5 @@ using System.Runtime.InteropServices;
 //
 // You can specify all the values or you can default the Revision and Build Numbers
 // by using the '*' as shown below:
-[assembly: AssemblyVersion("0.0.1.4")]
-[assembly: AssemblyFileVersion("0.0.1.4")]
+[assembly: AssemblyVersion("2013.04.10.0")]
+[assembly: AssemblyFileVersion("2013.04.10.0")]
