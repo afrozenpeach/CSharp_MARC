@@ -25,6 +25,9 @@
  * @license   http://www.gnu.org/copyleft/lesser.html  LGPL License 3
  */
 
+2013-04-11 Changes:
+Fix issue relating to the FileMARCWriter needing to write multiple bytes per character in some cases, as well as handling encoding of non-special characters better.
+
 2013-04-10 Changes:
 Some special characters in a normal MARC21 file are saved using non-standard character encoding. The proper encoding should be MARC8, which .Net does not support. This version adds support for a select few special characters, most importantly the copyright symbol which is used in RDA records. The FileMARCWriter class makes it easier to write records and should follow MARC8/UTF-8 specifications from the 9th character of the Leader. The FileMARCReader class had to be updated to read these MARC8 characters back in correctly.
 
