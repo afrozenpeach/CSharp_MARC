@@ -80,11 +80,14 @@ namespace MARC
             foreach (char c in rawCharArray)
             {
 				if (record.Leader[9] == ' ')
-					writer.WriteByte(GetMARC8Byte(c));
+				{
+					byte[] marcBytes = GetMARC8Bytes(c);
+					writer.Write(marcBytes, 0, marcBytes.Length);
+				}
 				else
 				{
-					byte[] array = Encoding.UTF8.GetBytes(new char[] { c });
-					writer.Write(array, 0, array.Length);
+					byte[] bytes = Encoding.UTF8.GetBytes(new char[] { c });
+					writer.Write(bytes, 0, bytes.Length);
 				}
             }
         }
@@ -112,8 +115,9 @@ namespace MARC
 		/// Right now this just takes care of most of the single byte special characters, such as the copyright symbol. 
         /// </summary>
         /// <param name="c">The c.</param>
-        private byte GetMARC8Byte(char c)
+        private byte[] GetMARC8Bytes(char c)
         {
+            byte[] bytes;
             byte b;
 
             switch (c)
@@ -227,11 +231,16 @@ namespace MARC
                     b = 200;
                     break;
                 default:
-					b = Convert.ToByte(c);
+					b = 0;
                     break;
             }
 
-            return b;
+			if (b == 0)
+				bytes = Encoding.ASCII.GetBytes(new char[] { c });
+			else
+				bytes = new byte[] { b };
+
+            return bytes;
         }
 
         /// <summary>
