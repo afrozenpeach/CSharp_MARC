@@ -73,7 +73,6 @@ namespace MARC
 				bufferSize = Convert.ToInt32(reader.Length);
 
 			byte[] ByteArray = new byte[bufferSize];
-			byte[] bytesToParse = null;
 
 			while (reader.Position < reader.Length)
 			{
@@ -106,8 +105,8 @@ namespace MARC
 
 					if (marc8utf8Flag == ' ')
 					{
-						bytesToParse = ConvertMARC8Characters(ByteArray, DelPosition);
-						encoded = Encoding.UTF8.GetString(bytesToParse, 0, bytesToParse.Length);
+						Encoding encoding = new MARC8();
+						encoded = encoding.GetString(ByteArray, 0, DelPosition);
 					}
 					else
 						encoded = Encoding.UTF8.GetString(ByteArray, 0, DelPosition);
@@ -119,136 +118,6 @@ namespace MARC
 					}
 				}
 			}
-		}
-
-		/// <summary>
-		/// Converts the MARC8 characters.
-		/// </summary>
-		/// <param name="array">The array.</param>
-		/// <returns>A byte array with characters encoded into UTF8</returns>
-		private byte[] ConvertMARC8Characters(byte[] array, int delPosition)
-		{
-			List<byte> converted = new List<byte>();
-
-			for (int i = 0; i < delPosition; i++)
-			{
-				switch (array[i])
-				{
-					case 161:
-						converted.AddRange(Encoding.Unicode.GetBytes(new char[] { 'Ł' }));
-						break;
-					case 162:
-						converted.AddRange(Encoding.UTF8.GetBytes(new char[] { 'Ø' }));
-						break;
-					case 163:
-						converted.AddRange(Encoding.UTF8.GetBytes(new char[] { 'Đ' }));
-						break;
-					case 164:
-						converted.AddRange(Encoding.UTF8.GetBytes(new char[] { 'Þ' }));
-						break;
-					case 165:
-						converted.AddRange(Encoding.UTF8.GetBytes(new char[] { 'Æ' }));
-						break;
-					case 166:
-						converted.AddRange(Encoding.UTF8.GetBytes(new char[] { 'Œ' }));
-						break;
-					case 167:
-						converted.AddRange(Encoding.UTF8.GetBytes(new char[] { 'ʹ' }));
-						break;
-					case 168:
-						converted.AddRange(Encoding.UTF8.GetBytes(new char[] { '·' }));
-						break;
-					case 169:
-						converted.AddRange(Encoding.UTF8.GetBytes(new char[] { '♭' }));
-						break;
-					case 170:
-						converted.AddRange(Encoding.UTF8.GetBytes(new char[] { '®' }));
-						break;
-					case 171:
-						converted.AddRange(Encoding.UTF8.GetBytes(new char[] { '±' }));
-						break;
-					case 172:
-						converted.AddRange(Encoding.UTF8.GetBytes(new char[] { 'Ơ' }));
-						break;
-					case 173:
-						converted.AddRange(Encoding.UTF8.GetBytes(new char[] { 'Ư' }));
-						break;
-					case 174:
-						converted.AddRange(Encoding.UTF8.GetBytes(new char[] { 'ʼ' }));
-						break;
-					case 176:
-						converted.AddRange(Encoding.UTF8.GetBytes(new char[] { 'ʻ' }));
-						break;
-					case 177:
-						converted.AddRange(Encoding.UTF8.GetBytes(new char[] { 'ł' }));
-						break;
-					case 178:
-						converted.AddRange(Encoding.UTF8.GetBytes(new char[] { 'ø' }));
-						break;
-					case 179:
-						converted.AddRange(Encoding.UTF8.GetBytes(new char[] { 'đ' }));
-						break;
-					case 180:
-						converted.AddRange(Encoding.UTF8.GetBytes(new char[] { 'þ' }));
-						break;
-					case 181:
-						converted.AddRange(Encoding.UTF8.GetBytes(new char[] { 'æ' }));
-						break;
-					case 182:
-						converted.AddRange(Encoding.UTF8.GetBytes(new char[] { 'œ' }));
-						break;
-					case 183:
-						converted.AddRange(Encoding.UTF8.GetBytes(new char[] { 'ʺ' }));
-						break;
-					case 184:
-						converted.AddRange(Encoding.UTF8.GetBytes(new char[] { 'ı' }));
-						break;
-					case 185:
-						converted.AddRange(Encoding.UTF8.GetBytes(new char[] { '£' }));
-						break;
-					case 186:
-						converted.AddRange(Encoding.UTF8.GetBytes(new char[] { 'ð' }));
-						break;
-					case 189:
-						converted.AddRange(Encoding.UTF8.GetBytes(new char[] { 'ơ' }));
-						break;
-					case 190:
-						converted.AddRange(Encoding.UTF8.GetBytes(new char[] { 'ư' }));
-						break;
-					case 192:
-						converted.AddRange(Encoding.UTF8.GetBytes(new char[] { '°' }));
-						break;
-					case 193:
-						converted.AddRange(Encoding.UTF8.GetBytes(new char[] { 'ℓ' }));
-						break;
-					case 194:
-						converted.AddRange(Encoding.UTF8.GetBytes(new char[] { '℗' }));
-						break;
-					case 195:
-						converted.AddRange(Encoding.UTF8.GetBytes(new char[] { '©' }));
-						break;
-					case 196:
-						converted.AddRange(Encoding.UTF8.GetBytes(new char[] { '♯' }));
-						break;
-					case 197:
-						converted.AddRange(Encoding.UTF8.GetBytes(new char[] { '¿' }));
-						break;
-					case 198:
-						converted.AddRange(Encoding.UTF8.GetBytes(new char[] { '¡' }));
-						break;
-					case 199:
-						converted.AddRange(Encoding.UTF8.GetBytes(new char[] { 'ß' }));
-						break;
-					case 200:
-						converted.AddRange(Encoding.UTF8.GetBytes(new char[] { '€' }));
-						break;
-					default:
-						converted.Add(array[i]);
-						break;
-				}
-			}
-
-			return converted.ToArray();
 		}
 
 		#endregion

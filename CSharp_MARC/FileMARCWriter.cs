@@ -38,9 +38,12 @@ namespace MARC
         //Member Variables and Properties
         #region Member Variables and Properties
 
-        private string filename = null;
-        private FileStream writer = null;
+		public enum RecordEncoding { MARC8, UTF8 };
         public const char END_OF_FILE = '\x1A';
+
+        private string filename = null;
+        private StreamWriter writer = null;
+		private Encoding encoding;
 
         #endregion
 
@@ -52,7 +55,7 @@ namespace MARC
         /// Will overwrite the given filename
         /// </summary>
         /// <param name="filename">The filename.</param>
-		public FileMARCWriter(string filename) : this(filename, FileMode.Create)
+		public FileMARCWriter(string filename) : this(filename, RecordEncoding.MARC8)
 		{
 		}
 
@@ -61,10 +64,16 @@ namespace MARC
         /// </summary>
         /// <param name="filename">The filename.</param>
         /// <param name="mode">The FileMode.</param>
-        public FileMARCWriter(string filename, FileMode mode)
+        public FileMARCWriter(string filename, RecordEncoding recordEncoding)
         {
             this.filename = filename;
-            writer = new FileStream(filename, mode);
+
+			if (recordEncoding == RecordEncoding.MARC8)
+				encoding = new MARC8();
+			else
+				encoding = Encoding.UTF8;
+
+			writer = new StreamWriter(filename, false, encoding);
         }
 
 		#endregion
@@ -76,20 +85,20 @@ namespace MARC
         public void Write(Record record)
         {
             string raw = record.ToRaw();
-            char[] rawCharArray = raw.ToCharArray();
-            foreach (char c in rawCharArray)
-            {
-				if (record.Leader[9] == ' ')
-				{
-					byte[] marcBytes = GetMARC8Bytes(c);
-					writer.Write(marcBytes, 0, marcBytes.Length);
-				}
-				else
-				{
-					byte[] bytes = Encoding.UTF8.GetBytes(new char[] { c });
-					writer.Write(bytes, 0, bytes.Length);
-				}
-            }
+
+			//Fix the leader if it doesn't match the correct encoding
+			if (encoding.EncodingName == "MARC8" && record.Leader[9] != ' ')
+			{
+				record.Leader = record.Leader.Remove(9, 1);
+				record.Leader = record.Leader.Insert(9, " ");
+			}
+			else if (encoding.EncodingName == "Unicode (UTF-8)" && record.Leader[9] != 'a')
+			{
+				record.Leader = record.Leader.Remove(9, 1);
+				record.Leader = record.Leader.Insert(9, "a");
+			}
+
+			writer.Write(raw);
         }
 
         /// <summary>
@@ -106,141 +115,8 @@ namespace MARC
         /// Writes the end of file marker.
         /// </summary>
         public void WriteEnd()
-        {
-            writer.WriteByte(Convert.ToByte(END_OF_FILE));
-        }
-
-        /// <summary>
-        /// Gets the MARC8 byte.
-		/// Right now this just takes care of most of the single byte special characters, such as the copyright symbol. 
-        /// </summary>
-        /// <param name="c">The c.</param>
-        private byte[] GetMARC8Bytes(char c)
-        {
-            byte[] bytes;
-            byte b;
-
-            switch (c)
-            {
-                case 'Ł':
-                    b = 161;
-                    break;
-                case 'Ø':
-                    b = 162;
-                    break;
-                case 'Đ':
-                    b = 163;
-                    break;
-                case 'Þ':
-                    b = 164;
-                    break;
-                case 'Æ':
-                    b = 165;
-                    break;
-                case 'Œ':
-					b = 166;
-                    break;
-                case 'ʹ':
-                    b = 167;
-                    break;
-                case '·':
-					b = 168;
-                    break;
-                case '♭':
-					b = 169;
-                    break;
-                case '®':
-					b = 170;
-                    break;
-                case '±':
-					b = 171;
-                    break;
-                case 'Ơ':
-					b = 172;
-                    break;
-                case 'Ư':
-					b = 173;
-                    break;
-                case 'ʼ':
-					b = 174;
-                    break;
-                case 'ʻ':
-					b = 176;
-                    break;
-                case 'ł':
-                    b = 177;
-                    break;
-                case 'ø':
-					b = 178;
-                    break;
-                case 'đ':
-                    b = 179;
-                    break;
-                case 'þ':
-                    b = 180;
-                    break;
-                case 'æ':
-                    b = 181;
-                    break;
-                case 'œ':
-                    b = 182;
-                    break;
-                case 'ʺ':
-                    b = 183;
-                    break;
-                case 'ı':
-                    b = 184;
-                    break;
-                case '£':
-                    b = 185;
-                    break;
-                case 'ð':
-                    b = 186;
-                    break;
-                case 'ơ':
-                    b = 189;
-                    break;
-                case 'ư':
-                    b = 190;
-                    break;
-                case '°':
-                    b = 192;
-                    break;
-                case 'ℓ':
-                    b = 193;
-                    break;
-                case '℗':
-                    b = 194;
-                    break;
-                case '©':
-                    b = 195;
-                    break;
-                case '♯':
-                    b = 196;
-                    break;
-                case '¿':
-                    b = 197;
-                    break;
-                case '¡':
-                    b = 198;
-                    break;
-                case 'ß':
-                    b = 199;
-                    break;
-                case '€':
-                    b = 200;
-                    break;
-                default:
-					b = 0;
-                    break;
-            }
-
-			if (b == 0)
-				bytes = Encoding.ASCII.GetBytes(new char[] { c });
-			else
-				bytes = new byte[] { b };
-
-            return bytes;
+		{
+			writer.Write(END_OF_FILE);
         }
 
         /// <summary>

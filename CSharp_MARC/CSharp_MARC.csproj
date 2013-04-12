@@ -68,6 +68,7 @@
     <Compile Include="FileMARCReader.cs" />
     <Compile Include="FileMARCWriter.cs" />
     <Compile Include="FileMARCXML.cs" />
+    <Compile Include="MARC8.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
