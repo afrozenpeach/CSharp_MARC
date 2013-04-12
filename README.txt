@@ -25,6 +25,9 @@
  * @license   http://www.gnu.org/copyleft/lesser.html  LGPL License 3
  */
 
+2013-04-12 Changes:
+More support for special MARC8 characters thanks to my new MARC8 Encoding class. Special thanks to Mark V. Sullivan of Sobek CM MARC Library (https://sourceforge.net/projects/marclibrary/) for code used to read the MARC8 format, which much of the Encoding was based on.
+
 2013-04-11 Changes:
 Fix issue relating to the FileMARCWriter needing to write multiple bytes per character in some cases, as well as handling encoding of non-special characters better.
 
