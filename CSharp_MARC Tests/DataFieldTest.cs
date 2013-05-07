@@ -595,5 +595,50 @@ namespace CSharp_MARC_Tests
 			//This next line will fail as there's no subfield c!
 			((DataField)actual)['c'].Code = 'a';
 		}
+
+		/// <summary>
+		///A test for InsertSubfield
+		///</summary>
+		[TestMethod()]
+		public void InsertSubfieldTest()
+		{
+			string tag = "600";
+			List<Subfield> subfields = new List<Subfield>();
+			Subfield subfield = new Subfield('b', "Anne Author");
+			subfields.Add(subfield);
+			subfield = new Subfield('d', "Some text");
+			subfields.Add(subfield);
+			subfield = new Subfield('2', "Some more text");
+			subfields.Add(subfield);
+			subfield = new Subfield('3', "Some fancy text");
+			subfields.Add(subfield);
+			subfield = new Subfield('5', "Some more fancy text");
+			subfields.Add(subfield);
+			DataField target = new DataField(tag, subfields);
+			Subfield newSubfield = new Subfield('a', "Testing an insert at the beginning!");
+			target.InsertSubfield(newSubfield);
+			newSubfield = new Subfield('c', "Testing an insert between letters!");
+			target.InsertSubfield(newSubfield);
+			newSubfield = new Subfield('e', "Testing an insert at the end of letters before numbers");
+			target.InsertSubfield(newSubfield);
+			newSubfield = new Subfield('1', "Testing a numbered insert before numbers!");
+			target.InsertSubfield(newSubfield);
+			newSubfield = new Subfield('4', "Testing a numbered insert between numbers!");
+			target.InsertSubfield(newSubfield);
+			newSubfield = new Subfield('6', "Testing a numbered insert after numbers!");
+			target.InsertSubfield(newSubfield);
+
+			Assert.AreEqual('a', target.Subfields[0].Code);
+			Assert.AreEqual('b', target.Subfields[1].Code);
+			Assert.AreEqual('c', target.Subfields[2].Code);
+			Assert.AreEqual('d', target.Subfields[3].Code);
+			Assert.AreEqual('e', target.Subfields[4].Code);
+			Assert.AreEqual('1', target.Subfields[5].Code);
+			Assert.AreEqual('2', target.Subfields[6].Code);
+			Assert.AreEqual('3', target.Subfields[7].Code);
+			Assert.AreEqual('4', target.Subfields[8].Code);
+			Assert.AreEqual('5', target.Subfields[9].Code);
+			Assert.AreEqual('6', target.Subfields[10].Code);
+		}
 	}
 }
