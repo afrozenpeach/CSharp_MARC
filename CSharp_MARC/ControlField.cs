@@ -21,13 +21,14 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author    Matt Schraeder <mschraeder@csharpmarc.net> <mschraeder@btsb.com>
- * @copyright 2009-2012 Matt Schraeder and Bound to Stay Bound Books <http://www.btsb.com>
+ * @copyright 2009-2014 Matt Schraeder and Bound to Stay Bound Books <http://www.btsb.com>
  * @license   http://www.gnu.org/copyleft/lesser.html  LGPL License 3
  */
 
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Xml.Linq;
 
 namespace MARC
 {
@@ -90,6 +91,15 @@ namespace MARC
         public override string ToRaw()
         {
             return data + FileMARC.END_OF_FIELD.ToString();
+        }
+
+        /// <summary>
+        /// Returns a <see cref="T:XElement" /> that represents the current <see cref="T:System.Object" />
+        /// </summary>
+        /// <returns></returns>
+        public override XElement ToXML()
+        {
+            return new XElement(FileMARCXML.Namespace + "controlfield", new XAttribute("tag", this.tag), this.data);
         }
 
         /// <summary>

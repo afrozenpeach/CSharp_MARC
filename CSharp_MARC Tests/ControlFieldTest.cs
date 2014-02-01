@@ -21,13 +21,14 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author    Matt Schraeder <mschraeder@btsb.com> <mschraeder@csharpmarc.net>
- * @copyright 2009-2012 Matt Schraeder and Bound to Stay Bound Books <http://www.btsb.com>
+ * @copyright 2009-2014 Matt Schraeder and Bound to Stay Bound Books <http://www.btsb.com>
  * @license   http://www.gnu.org/copyleft/lesser.html  LGPL License 3
  */
 
 using MARC;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Xml.Linq;
 
 namespace CSharp_MARC_Tests
 {
@@ -216,5 +217,21 @@ namespace CSharp_MARC_Tests
 			actualString = ((ControlField)actual).Tag;
 			Assert.AreEqual(expectedString, actualString);
 		}
+
+        /// <summary>
+        ///A test for ToXML
+        ///</summary>
+        [TestMethod()]
+        public void ToXMLTest()
+        {
+            string tag = "001";
+            string data = "  2007032296";
+            ControlField target = new ControlField(tag, data);
+
+            XElement expected = new XElement(FileMARCXML.Namespace + "controlfield", new XAttribute("tag", "001"), "  2007032296");
+            XElement actual;
+            actual = target.ToXML();
+            Assert.IsTrue(XNode.DeepEquals(expected, actual));
+        }
 	}
 }

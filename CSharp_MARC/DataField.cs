@@ -21,7 +21,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author    Matt Schraeder <mschraeder@csharpmarc.net> <mschraeder@btsb.com>
- * @copyright 2009-2012 Matt Schraeder and Bound to Stay Bound Books <http://www.btsb.com>
+ * @copyright 2009-2014 Matt Schraeder and Bound to Stay Bound Books <http://www.btsb.com>
  * @license   http://www.gnu.org/copyleft/lesser.html  LGPL License 3
  */
 
@@ -29,6 +29,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
 
 namespace MARC
 {
@@ -277,6 +278,20 @@ namespace MARC
             }
 
             return ind1.ToString() + ind2.ToString() + raw + FileMARC.END_OF_FIELD.ToString();
+        }
+
+        /// <summary>
+        /// Returns a <see cref="T:XElement" /> that represents the current <see cref="T:System.Object" />
+        /// </summary>
+        /// <returns></returns>
+        public override XElement ToXML()
+        {
+            XElement dataField = new XElement(FileMARCXML.Namespace + "datafield", new XAttribute("tag", this.tag), new XAttribute("ind1", this.ind1.ToString()), new XAttribute("ind2", this.ind2.ToString()));
+            foreach (Subfield subfield in this.subfields)
+            {
+                dataField.Add(subfield.ToXML());
+            }
+            return dataField;
         }
 
         /// <summary>

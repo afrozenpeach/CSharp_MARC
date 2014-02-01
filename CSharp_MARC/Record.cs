@@ -21,13 +21,14 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author    Matt Schraeder <mschraeder@csharpmarc.net> <mschraeder@btsb.com>
- * @copyright 2009-2012 Matt Schraeder and Bound to Stay Bound Books <http://www.btsb.com>
+ * @copyright 2009-2014 Matt Schraeder and Bound to Stay Bound Books <http://www.btsb.com>
  * @license   http://www.gnu.org/copyleft/lesser.html  LGPL License 3
  */
 
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Xml.Linq;
 
 namespace MARC
 {
@@ -195,6 +196,38 @@ namespace MARC
             leader = leader.Remove(20, 4).Insert(20, "4500");
 
 			return leader.Substring(0, FileMARC.LEADER_LEN) + directory + FileMARC.END_OF_FIELD.ToString() + rawFields + FileMARC.END_OF_RECORD.ToString();
+        }
+
+        /// <summary>
+        /// Returns <see cref="T:XElement"/> that represents the current <see cref="T:System.Object"/>
+        ///
+        /// This sould be used when returning multiple records into a single larger XDocument. 
+        /// </summary>
+        /// <returns></returns>
+        public XElement ToXML()
+        {
+            XElement record = new XElement(FileMARCXML.Namespace + "record");
+            this.CalculateLeader();
+            record.Add(new XElement(FileMARCXML.Namespace + "leader", this.leader));
+            foreach (Field field in this.fields)
+            {
+                record.Add(field.ToXML());
+            }
+
+            return record;
+        }
+
+        /// <summary>
+        /// Returns <see cref="T:XDocument"/> that represents the current <see cref="T:System.Object"/>
+        ///
+        /// This sould be used when needing a finalized XML document of this record and only this record.
+        /// </summary>
+        /// <returns></returns>
+        public XDocument ToXMLDocument()
+        {
+            XDocument recordDocument = new XDocument(new XDeclaration("1.0", "utf-8", null));
+            recordDocument.Add(this.ToXML());
+            return recordDocument;
         }
 
 		/// <summary>

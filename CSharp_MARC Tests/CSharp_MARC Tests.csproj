@@ -73,6 +73,7 @@
     <Compile Include="FileMARCTest.cs" />
     <Compile Include="FileMARCWriterTest.cs" />
     <Compile Include="FileMARCXMLTest.cs" />
+    <Compile Include="FileMARCXMLWriterTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RecordTest.cs" />
     <Compile Include="SubfieldTest.cs" />

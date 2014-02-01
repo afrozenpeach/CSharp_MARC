@@ -29,6 +29,10 @@ using MARC;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Xml.Linq;
+using System.Linq;
+using System.IO;
+using System.Text;
 
 namespace CSharp_MARC_Tests
 {
@@ -310,5 +314,51 @@ namespace CSharp_MARC_Tests
 			actualCount = actual.Fields.Count;
 			Assert.AreEqual(expectedCount, actualCount);
 		}
+
+        /// <summary>
+        ///A test for ToXML
+        ///</summary>
+        [TestMethod()]
+        [DeploymentItem("Test Records\\sandburg.xml")]
+        public void ToXMLTest()
+        {
+            string source = File.ReadAllText("sandburg.xml");
+            FileMARCXML targetXML = new FileMARCXML(source);
+            Record target = targetXML[0];
+
+            XDocument xdoc = XDocument.Parse(source);
+            XElement expected = xdoc.Elements().First(e => e.Name.LocalName == "collection").Elements().First(e => e.Name.LocalName == "record");
+            XElement actual;
+            actual = target.ToXML();
+            Assert.IsTrue(XNode.DeepEquals(expected, actual));
+        }
+
+        /// <summary>
+        ///A test for ToXMLDocument
+        ///</summary>
+        [TestMethod()]
+        [DeploymentItem("Test Records\\onerecord.xml")]
+        public void ToXMLDocumentTest()
+        {
+            string source = File.ReadAllText("onerecord.xml");
+            FileMARCXML targetXML = new FileMARCXML(source);
+            Record target = targetXML[0];
+
+            string expected = source;
+            string actual;
+            XDocument xdoc = target.ToXMLDocument();
+            using (StringWriter writer = new Utf8StringWriter())
+            {
+                xdoc.Save(writer);
+                actual = writer.ToString();
+                Assert.AreEqual(expected, actual);
+            }
+        }
+
+        public class Utf8StringWriter : StringWriter
+        {
+            public override Encoding Encoding { get { return Encoding.UTF8; } }
+        }
+
 	}
 }

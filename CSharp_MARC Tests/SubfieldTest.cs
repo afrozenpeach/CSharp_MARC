@@ -28,6 +28,7 @@
 using MARC;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Xml.Linq;
 
 namespace CSharp_MARC_Tests
 {
@@ -226,5 +227,20 @@ namespace CSharp_MARC_Tests
 			actualString = actual.Data;
 			Assert.AreEqual(expectedString, actualString);
 		}
+
+        /// <summary>
+        ///A test for ToXML
+        ///</summary>
+        [TestMethod()]
+        public void ToXMLTest()
+        {
+            char code = 'a';
+            string data = "Test Data";
+            Subfield target = new Subfield(code, data);
+            XElement expected = new XElement(FileMARCXML.Namespace + "subfield", new XAttribute("code", "a"), "Test Data");
+            XElement actual;
+            actual = target.ToXML();
+            Assert.IsTrue(XNode.DeepEquals(expected, actual));
+        }
 	}
 }

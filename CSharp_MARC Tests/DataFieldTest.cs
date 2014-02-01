@@ -29,6 +29,7 @@ using MARC;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Xml.Linq;
 
 namespace CSharp_MARC_Tests
 {
@@ -640,5 +641,30 @@ namespace CSharp_MARC_Tests
 			Assert.AreEqual('5', target.Subfields[9].Code);
 			Assert.AreEqual('6', target.Subfields[10].Code);
 		}
+
+        /// <summary>
+        ///A test for ToXML
+        ///</summary>
+        [TestMethod()]
+        public void ToXMLTest()
+        {
+            string tag = "100";
+            List<Subfield> subfields = new List<Subfield>();
+            Subfield subfield = new Subfield('a', "It's a book!");
+            subfields.Add(subfield);
+            subfield = new Subfield('b', "Anne Author");
+            subfields.Add(subfield);
+            char ind1 = '1';
+            char ind2 = '0';
+            DataField target = new DataField(tag, subfields, ind1, ind2);
+
+            XElement expected = new XElement(FileMARCXML.Namespace + "datafield", new XAttribute("tag", "100"), new XAttribute("ind1", "1"), new XAttribute("ind2", "0"),
+                                        new XElement(FileMARCXML.Namespace + "subfield", new XAttribute("code", "a"), "It's a book!"),
+                                        new XElement(FileMARCXML.Namespace + "subfield", new XAttribute("code", "b"), "Anne Author"));
+
+            XElement actual;
+            actual = target.ToXML();
+            Assert.IsTrue(XNode.DeepEquals(expected, actual));
+        }
 	}
 }
