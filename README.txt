@@ -25,6 +25,11 @@
  * @license   http://www.gnu.org/copyleft/lesser.html  LGPL License 3
  */
 
+2014-02-01 Changes:
+Added support for exporting MARCXML.
+Added FileMARCXMLWriter to make saving single records, as well as lists for records, to XML a simple process
+Updated copyright information for the year 2014!
+
 2013-04-12 Changes:
 More support for special MARC8 characters thanks to my new MARC8 Encoding class. Special thanks to Mark V. Sullivan of Sobek CM MARC Library (https://sourceforge.net/projects/marclibrary/) for code used to read the MARC8 format, which much of the Encoding was based on.
 
