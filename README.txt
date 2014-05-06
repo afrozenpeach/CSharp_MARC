@@ -25,6 +25,9 @@
  * @license   http://www.gnu.org/copyleft/lesser.html  LGPL License 3
  */
 
+2014-05-06 Changes:
+Fixed issue with special characters not being properly calculated in the directory length
+
 2014-02-01 Changes:
 Added support for exporting MARCXML.
 Added FileMARCXMLWriter to make saving single records, as well as lists for records, to XML a simple process
