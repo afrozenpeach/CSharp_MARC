@@ -173,6 +173,25 @@ namespace CSharp_MARC_Tests
 		}
 
 		/// <summary>
+		///A test for ToRaw
+		///</summary>
+		[TestMethod()]
+		public void ToRawTestEncoding()
+		{
+			Record target = new Record();
+			Encoding encoding = Encoding.UTF8;
+			target.Fields.Add(new ControlField("001", "I am data! © (But not Data from Star Trek TNG)"));
+			//This will be empty, and thus not written
+			target.Fields.Add(new DataField("245"));
+			//I broke each bit of the record out into their own strings and concatenated because it's easier to follow.
+			//Leader -> Tag -> Length (+1 for EoF) -> Starts At -> EoF -> Data -> EoF -> EoR
+			string expected = "00086     2200037   4500" + "001" + "0048" + "00000" + FileMARC.END_OF_FIELD + "I am data! © (But not Data from Star Trek TNG)" + FileMARC.END_OF_FIELD + FileMARC.END_OF_RECORD;
+			string actual;
+			actual = target.ToRaw(encoding);
+			Assert.AreEqual(expected, actual);
+		}
+
+		/// <summary>
 		///A test for ToString
 		///</summary>
 		[TestMethod()]
@@ -359,6 +378,5 @@ namespace CSharp_MARC_Tests
         {
             public override Encoding Encoding { get { return Encoding.UTF8; } }
         }
-
 	}
 }

@@ -84,7 +84,7 @@ namespace MARC
         /// <param name="record">The record.</param>
         public void Write(Record record)
         {
-            string raw = record.ToRaw();
+            string raw = record.ToRaw(encoding);
 
 			//Fix the leader if it doesn't match the correct encoding
 			if (encoding.EncodingName == "MARC8" && record.Leader[9] != ' ')

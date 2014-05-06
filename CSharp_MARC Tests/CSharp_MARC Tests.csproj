@@ -128,6 +128,7 @@
     </None>
     <Content Include="Test Records\onerecord.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <None Include="Test Records\sandburg.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

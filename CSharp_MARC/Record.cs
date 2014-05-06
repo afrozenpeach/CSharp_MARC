@@ -154,6 +154,20 @@ namespace MARC
             fields.Add(newField);
         }
 
+		/// <summary>
+		/// Returns <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>
+		/// in raw USMARC format.
+		///
+		/// If you have modified an existing MARC record or created a new MARC record, use this method
+		/// to save the record for use in other programs that accept the MARC format -- for example,
+		/// your integrated library system.
+		/// </summary>
+		/// <returns></returns>
+		public string ToRaw()
+		{
+			return ToRaw(new MARC8());
+		}
+
         /// <summary>
         /// Returns <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>
         /// in raw USMARC format.
@@ -163,7 +177,7 @@ namespace MARC
         /// your integrated library system.
         /// </summary>
         /// <returns></returns>
-        public string ToRaw()
+        public string ToRaw(Encoding encoding)
         {
             //Build the directory
             string rawFields = string.Empty;
@@ -179,8 +193,9 @@ namespace MARC
                     string rawField = field.ToRaw();
                     rawFields += rawField;
 
-                    directory += field.Tag.PadLeft(3, '0') + rawField.Length.ToString().PadLeft(4, '0') + dataEnd.ToString().PadLeft(5, '0');
-                    dataEnd += rawField.Length;
+					int rawFieldLength = encoding.GetBytes(rawField).Length;
+					directory += field.Tag.PadLeft(3, '0') + rawFieldLength.ToString().PadLeft(4, '0') + dataEnd.ToString().PadLeft(5, '0');
+					dataEnd += rawFieldLength;
                     count++;
                 }
             }
