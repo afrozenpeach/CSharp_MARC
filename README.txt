@@ -25,6 +25,9 @@
  * @license   http://www.gnu.org/copyleft/lesser.html  LGPL License 3
  */
 
+2014-05-21 Changes:
+FileMARCWriter and FileMARCXMLWriter now have an append option
+
 2014-05-06 Changes:
 Fixed issue with special characters not being properly calculated in the directory length
 

@@ -52,12 +52,16 @@ namespace MARC
         /// </summary>
         /// <param name="filename">The filename.</param>
         /// <param name="mode">The FileMode.</param>
-        public FileMARCXMLWriter(string filename)
+        public FileMARCXMLWriter(string filename) : this(filename, false)
         {
-            this.filename = filename;
-
-			writer = new StreamWriter(filename, false, Encoding.UTF8);
         }
+
+		public FileMARCXMLWriter(string filename, bool append)
+		{
+			this.filename = filename;
+
+			writer = new StreamWriter(filename, append, Encoding.UTF8);
+		}
 
 		#endregion
 

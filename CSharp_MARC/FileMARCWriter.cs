@@ -64,17 +64,36 @@ namespace MARC
         /// </summary>
         /// <param name="filename">The filename.</param>
         /// <param name="mode">The FileMode.</param>
-        public FileMARCWriter(string filename, RecordEncoding recordEncoding)
+        public FileMARCWriter(string filename, RecordEncoding recordEncoding) : this(filename, recordEncoding, false)
         {
-            this.filename = filename;
+        }
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="FileMARCWriter"/> class.
+		/// </summary>
+		/// <param name="filename">The filename.</param>
+		/// <param name="append">if set to <c>true</c> [append].</param>
+		public FileMARCWriter(string filename, bool append) : this(filename, RecordEncoding.MARC8, append)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="FileMARCWriter"/> class.
+		/// </summary>
+		/// <param name="filename">The filename.</param>
+		/// <param name="recordEncoding">The record encoding.</param>
+		/// <param name="append">if set to <c>true</c> [append].</param>
+		public FileMARCWriter(string filename, RecordEncoding recordEncoding, bool append)
+		{
+			this.filename = filename;
 
 			if (recordEncoding == RecordEncoding.MARC8)
 				encoding = new MARC8();
 			else
 				encoding = Encoding.UTF8;
 
-			writer = new StreamWriter(filename, false, encoding);
-        }
+			writer = new StreamWriter(filename, append, encoding);
+		}
 
 		#endregion
 
