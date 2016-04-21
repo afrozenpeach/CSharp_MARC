@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharp_MARC Editor", "CSharp_MARC Editor\CSharp_MARC Editor.csproj", "{921BAF58-4AC3-415C-AB47-69AB8EDFB327}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = CSharp_MARC.vsmdi
@@ -39,6 +41,14 @@ Global
 		{3058AE50-0078-41FF-A43C-DD8877862AC8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3058AE50-0078-41FF-A43C-DD8877862AC8}.Release|x86.ActiveCfg = Release|x86
 		{3058AE50-0078-41FF-A43C-DD8877862AC8}.Release|x86.Build.0 = Release|x86
+		{921BAF58-4AC3-415C-AB47-69AB8EDFB327}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{921BAF58-4AC3-415C-AB47-69AB8EDFB327}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{921BAF58-4AC3-415C-AB47-69AB8EDFB327}.Debug|x86.ActiveCfg = Debug|x86
+		{921BAF58-4AC3-415C-AB47-69AB8EDFB327}.Debug|x86.Build.0 = Debug|x86
+		{921BAF58-4AC3-415C-AB47-69AB8EDFB327}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{921BAF58-4AC3-415C-AB47-69AB8EDFB327}.Release|Any CPU.Build.0 = Release|Any CPU
+		{921BAF58-4AC3-415C-AB47-69AB8EDFB327}.Release|x86.ActiveCfg = Release|x86
+		{921BAF58-4AC3-415C-AB47-69AB8EDFB327}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -21,7 +21,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author    Matt Schraeder <mschraeder@csharpmarc.net> <mschraeder@btsb.com>
- * @copyright 2009-2014 Matt Schraeder and Bound to Stay Bound Books <http://www.btsb.com>
+ * @copyright 2009-2016 Matt Schraeder and Bound to Stay Bound Books <http://www.btsb.com>
  * @license   http://www.gnu.org/copyleft/lesser.html  LGPL License 3
  */
 
@@ -264,14 +264,19 @@ namespace MARC
 				}
                 string tagData = raw.Substring(fieldStart, fieldLength);
 
-                if (tagData.Substring(tagData.Length - 1, 1) == END_OF_FIELD.ToString())
+                if (fieldLength > 0)
                 {
-                    //Get rid of the end of tag character
-                    tagData = tagData.Remove(tagData.Length - 1);
-					fieldLength--;
+                    if (tagData.Substring(tagData.Length - 1, 1) == END_OF_FIELD.ToString())
+                    {
+                        //Get rid of the end of tag character
+                        tagData = tagData.Remove(tagData.Length - 1);
+                        fieldLength--;
+                    }
+                    else
+                        marc.AddWarnings("Field for tag " + tag + " does not end with an end of field character.");
                 }
                 else
-                    marc.AddWarnings("Field for tag " + tag + " does not end with an end of field character.");
+                    marc.AddWarnings("Field for tag " + tag + " has a length of 0.");
 
                 match = Regex.Match(tag, "^\\d+$");
                 if (match.Captures.Count > 0 && Convert.ToInt32(tag) < 10)
