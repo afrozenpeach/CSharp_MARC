@@ -21,9 +21,13 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author    Matt Schraeder <mschraeder@csharpmarc.net> <mschraeder@btsb.com>
- * @copyright 2009-2012 Matt Schraeder and Bound to Stay Bound Books <http://www.btsb.com>
+ * @copyright 2009-2016 Matt Schraeder and Bound to Stay Bound Books <http://www.btsb.com>
  * @license   http://www.gnu.org/copyleft/lesser.html  LGPL License 3
  */
+
+2016-04-21 Changes:
+Bump .NET Version to 4
+An issue was discovered that resulted in incorrectly reading multi-byte characters when loading records.
 
 2014-05-21 Changes:
 FileMARCWriter and FileMARCXMLWriter now have an append option

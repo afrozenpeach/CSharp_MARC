@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="MARCDataSet" targetNamespace="http://tempuri.org/MARCDataSet.xsd" xmlns:mstns="http://tempuri.org/MARCDataSet.xsd" xmlns="http://tempuri.org/MARCDataSet.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="MARCDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="MARCDataSet" msprop:Generator_UserDSName="MARCDataSet">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="Records" msprop:Generator_TableClassName="RecordsDataTable" msprop:Generator_TableVarName="tableRecords" msprop:Generator_RowChangedName="RecordsRowChanged" msprop:Generator_TablePropName="Records" msprop:Generator_RowDeletingName="RecordsRowDeleting" msprop:Generator_RowChangingName="RecordsRowChanging" msprop:Generator_RowEvHandlerName="RecordsRowChangeEventHandler" msprop:Generator_RowDeletedName="RecordsRowDeleted" msprop:Generator_RowClassName="RecordsRow" msprop:Generator_UserTableName="Records" msprop:Generator_RowEvArgName="RecordsRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="RecordID" msprop:Generator_ColumnVarNameInTable="columnRecordID" msprop:Generator_ColumnPropNameInRow="RecordID" msprop:Generator_ColumnPropNameInTable="RecordIDColumn" msprop:Generator_UserColumnName="RecordID" type="xs:string" minOccurs="0" />
+              <xs:element name="DateAdded" msprop:Generator_ColumnVarNameInTable="columnDateAdded" msprop:Generator_ColumnPropNameInRow="DateAdded" msprop:Generator_ColumnPropNameInTable="DateAddedColumn" msprop:Generator_UserColumnName="DateAdded" type="xs:string" minOccurs="0" />
+              <xs:element name="DateChanged" msprop:Generator_ColumnVarNameInTable="columnDateChanged" msprop:Generator_ColumnPropNameInRow="DateChanged" msprop:Generator_ColumnPropNameInTable="DateChangedColumn" msprop:Generator_UserColumnName="DateChanged" type="xs:string" minOccurs="0" />
+              <xs:element name="Author" msprop:Generator_ColumnVarNameInTable="columnAuthor" msprop:Generator_ColumnPropNameInRow="Author" msprop:Generator_ColumnPropNameInTable="AuthorColumn" msprop:Generator_UserColumnName="Author" type="xs:string" minOccurs="0" />
+              <xs:element name="Title" msprop:Generator_ColumnVarNameInTable="columnTitle" msprop:Generator_ColumnPropNameInRow="Title" msprop:Generator_ColumnPropNameInTable="TitleColumn" msprop:Generator_UserColumnName="Title" type="xs:string" minOccurs="0" />
+              <xs:element name="Barcode" msprop:Generator_ColumnVarNameInTable="columnBarcode" msprop:Generator_ColumnPropNameInRow="Barcode" msprop:Generator_ColumnPropNameInTable="BarcodeColumn" msprop:Generator_UserColumnName="Barcode" type="xs:string" minOccurs="0" />
+              <xs:element name="Classification" msprop:Generator_ColumnVarNameInTable="columnClassification" msprop:Generator_ColumnPropNameInRow="Classification" msprop:Generator_ColumnPropNameInTable="ClassificationColumn" msprop:Generator_UserColumnName="Classification" type="xs:string" minOccurs="0" />
+              <xs:element name="MainEntry" msprop:Generator_ColumnVarNameInTable="columnMainEntry" msprop:Generator_ColumnPropNameInRow="MainEntry" msprop:Generator_ColumnPropNameInTable="MainEntryColumn" msprop:Generator_UserColumnName="MainEntry" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="Fields" msprop:Generator_TableClassName="FieldsDataTable" msprop:Generator_TableVarName="tableFields" msprop:Generator_RowChangedName="FieldsRowChanged" msprop:Generator_TablePropName="Fields" msprop:Generator_RowDeletingName="FieldsRowDeleting" msprop:Generator_RowChangingName="FieldsRowChanging" msprop:Generator_RowEvHandlerName="FieldsRowChangeEventHandler" msprop:Generator_RowDeletedName="FieldsRowDeleted" msprop:Generator_RowClassName="FieldsRow" msprop:Generator_UserTableName="Fields" msprop:Generator_RowEvArgName="FieldsRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="FieldID" msprop:Generator_ColumnVarNameInTable="columnFieldID" msprop:Generator_ColumnPropNameInRow="FieldID" msprop:Generator_ColumnPropNameInTable="FieldIDColumn" msprop:Generator_UserColumnName="FieldID" type="xs:string" minOccurs="0" />
+              <xs:element name="RecordID" msprop:Generator_ColumnVarNameInTable="columnRecordID" msprop:Generator_ColumnPropNameInRow="RecordID" msprop:Generator_ColumnPropNameInTable="RecordIDColumn" msprop:Generator_UserColumnName="RecordID" type="xs:string" minOccurs="0" />
+              <xs:element name="TagNumber" msprop:Generator_ColumnVarNameInTable="columnTagNumber" msprop:Generator_ColumnPropNameInRow="TagNumber" msprop:Generator_ColumnPropNameInTable="TagNumberColumn" msprop:Generator_UserColumnName="TagNumber" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="3" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Ind1" msprop:Generator_ColumnVarNameInTable="columnInd1" msprop:Generator_ColumnPropNameInRow="Ind1" msprop:Generator_ColumnPropNameInTable="Ind1Column" msprop:Generator_UserColumnName="Ind1" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="1" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Ind2" msprop:Generator_ColumnVarNameInTable="columnInd2" msprop:Generator_ColumnPropNameInRow="Ind2" msprop:Generator_ColumnPropNameInTable="Ind2Column" msprop:Generator_UserColumnName="Ind2" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="1" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="ControlData" msprop:Generator_ColumnVarNameInTable="columnControlData" msprop:Generator_ColumnPropNameInRow="ControlData" msprop:Generator_ColumnPropNameInTable="ControlDataColumn" msprop:Generator_UserColumnName="ControlData" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="Subfields" msprop:Generator_TableClassName="SubfieldsDataTable" msprop:Generator_TableVarName="tableSubfields" msprop:Generator_RowChangedName="SubfieldsRowChanged" msprop:Generator_TablePropName="Subfields" msprop:Generator_RowDeletingName="SubfieldsRowDeleting" msprop:Generator_RowChangingName="SubfieldsRowChanging" msprop:Generator_RowEvHandlerName="SubfieldsRowChangeEventHandler" msprop:Generator_RowDeletedName="SubfieldsRowDeleted" msprop:Generator_RowClassName="SubfieldsRow" msprop:Generator_UserTableName="Subfields" msprop:Generator_RowEvArgName="SubfieldsRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="SubfieldID" msprop:Generator_ColumnVarNameInTable="columnSubfieldID" msprop:Generator_ColumnPropNameInRow="SubfieldID" msprop:Generator_ColumnPropNameInTable="SubfieldIDColumn" msprop:Generator_UserColumnName="SubfieldID" type="xs:string" minOccurs="0" />
+              <xs:element name="FieldID" msprop:Generator_ColumnVarNameInTable="columnFieldID" msprop:Generator_ColumnPropNameInRow="FieldID" msprop:Generator_ColumnPropNameInTable="FieldIDColumn" msprop:Generator_UserColumnName="FieldID" type="xs:string" minOccurs="0" />
+              <xs:element name="Code" msprop:Generator_ColumnVarNameInTable="columnCode" msprop:Generator_ColumnPropNameInRow="Code" msprop:Generator_ColumnPropNameInTable="CodeColumn" msprop:Generator_UserColumnName="Code" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="1" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Data" msprop:Generator_ColumnVarNameInTable="columnData" msprop:Generator_ColumnPropNameInRow="Data" msprop:Generator_ColumnPropNameInTable="DataColumn" msprop:Generator_UserColumnName="Data" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
