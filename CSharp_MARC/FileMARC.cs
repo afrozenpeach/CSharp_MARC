@@ -180,6 +180,7 @@ namespace MARC
             Record marc = new Record();
             Match match = Regex.Match(raw, "^(\\d{5})");
             int recordLength = 0;
+            int totalExtraBytesRead = 0;
 
             // Store record length
             if (match.Captures.Count == 0)
@@ -189,8 +190,20 @@ namespace MARC
 
             if (recordLength != raw.Length)
             {
-				marc.AddWarnings("MARC record length does not match actual length.");
-                recordLength = raw.Length;
+                //Check if there are multi-byte characters in the string
+                System.Globalization.StringInfo stringInfo = new System.Globalization.StringInfo(raw);
+                int extraBytes = raw.Length - stringInfo.LengthInTextElements;
+
+                if (recordLength == extraBytes + raw.Length)
+                {
+                    //There are multi-byte characters, so the recordLength is effectively longer
+                    recordLength -= extraBytes;
+                }
+                else
+                {
+                    marc.AddWarnings("MARC record length does not match actual length.");
+                    recordLength = raw.Length;
+                }
             }
 
             if (!raw.EndsWith(END_OF_RECORD.ToString()))
@@ -232,7 +245,7 @@ namespace MARC
 
                 try
                 {
-                    fieldOffset = Convert.ToInt32(directory.Substring(i * DIRECTORY_ENTRY_LEN, DIRECTORY_ENTRY_LEN).Substring(7, 5));
+                    fieldOffset = Convert.ToInt32(directory.Substring(i * DIRECTORY_ENTRY_LEN, DIRECTORY_ENTRY_LEN).Substring(7, 5)) + totalExtraBytesRead;
                 }
                 catch (FormatException)
                 {
@@ -251,7 +264,7 @@ namespace MARC
                 if (fieldOffset + fieldLength > recordLength)
                     marc.AddWarnings("Directory entry for tag " + tag + " runs past the end of the record.");
 
-				int fieldStart = dataStart + fieldOffset;
+				int fieldStart = dataStart + fieldOffset - (totalExtraBytesRead * 2);
 				if (fieldStart > recordLength)
 				{
 					marc.AddWarnings("Directory entry for tag " + tag + " starts past the end of the record. Skipping tag and all proceeding tags.");
@@ -261,8 +274,20 @@ namespace MARC
 				{
 					marc.AddWarnings("Directory entry for tag " + tag + " runs past the end of the record.");
 					fieldLength = recordLength - fieldStart;
-				}
+                }
+
                 string tagData = raw.Substring(fieldStart, fieldLength);
+
+                //Check if there are multi-byte characters in the string
+                System.Globalization.StringInfo stringInfo = new System.Globalization.StringInfo(tagData);
+                int extraBytes = fieldLength - stringInfo.LengthInTextElements;
+
+                if (extraBytes > 0)
+                {
+                    fieldLength -= extraBytes;
+                    totalExtraBytesRead += extraBytes;
+                    tagData = raw.Substring(fieldStart, fieldLength);
+                }
 
                 if (fieldLength > 0)
                 {
@@ -273,7 +298,9 @@ namespace MARC
                         fieldLength--;
                     }
                     else
+                    {
                         marc.AddWarnings("Field for tag " + tag + " does not end with an end of field character.");
+                    }
                 }
                 else
                     marc.AddWarnings("Field for tag " + tag + " has a length of 0.");
