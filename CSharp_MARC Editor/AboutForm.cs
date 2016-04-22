@@ -34,6 +34,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace CSharp_MARC_Editor
 {
@@ -52,6 +53,16 @@ namespace CSharp_MARC_Editor
         private void AboutForm_Load(object sender, EventArgs e)
         {
             versionLabel.Text = "Version: " + Application.ProductVersion;
+        }
+
+        /// <summary>
+        /// Handles the Click event of the btsbPictureBox control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void btsbPictureBox_Click(object sender, EventArgs e)
+        {
+            Process.Start("http://www.btsb.com");
         }
 
         /// <summary>
