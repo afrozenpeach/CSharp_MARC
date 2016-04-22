@@ -1,53 +1,62 @@
--- Script Date: 4/18/2016 9:05 PM  - ErikEJ.SqlCeScripting version 3.5.2.58
--- Database information:
--- Database: C:\Users\froze_000\Documents\SVN\CSharp MARC\CSharp_MARC Editor\MARC.db
--- ServerVersion: 3.9.2
--- DatabaseSize: 8 KB
--- Created: 4/12/2016 8:46 PM
+/**
+ * Editor for MARC records
+ *
+ * This project is built upon the CSharp_MARC project of the same name available
+ * at http://csharpmarc.net, which itself is based on the File_MARC package
+ * (http://pear.php.net/package/File_MARC) by Dan Scott, which was based on PHP
+ * MARC package, originally called "php-marc", that is part of the Emilda
+ * Project (http://www.emilda.org). Both projects were released under the LGPL
+ * which allowed me to port the project to C# for use with the .NET Framework.
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author    Matt Schraeder <mschraeder@csharpmarc.net>
+ * @copyright 2016 Matt Schraeder
+ * @license   http://www.gnu.org/licenses/gpl-3.0.html  GPL License 3
+ */
 
--- User Table information:
--- Number of tables: 3
--- Fields: -1 row(s)
--- Records: -1 row(s)
--- Subfields: -1 row(s)
+CREATE TABLE [Fields](
+    [FieldID] integer PRIMARY KEY ASC AUTOINCREMENT NOT NULL, 
+    [RecordID] nvarchar(2147483647) NOT NULL, 
+    [TagNumber] nvarchar(2147483647) NOT NULL, 
+    [Ind1] char, 
+    [Ind2] char, 
+    [ControlData] nvarchar(2147483647), 
+    FOREIGN KEY([RecordID]) REFERENCES Records([RecordID]) ON DELETE CASCADE ON UPDATE RESTRICT);
 
--- Warning - constraint: Fields Parent Columns and Child Columns don't have type-matching columns.
+CREATE TABLE [Records](
+    [RecordID] integer PRIMARY KEY ASC AUTOINCREMENT NOT NULL, 
+    [DateAdded] datetime NOT NULL, 
+    [DateChanged] datetime, 
+    [Author] nvarchar(2147483647), 
+    [Title] nvarchar(2147483647), 
+    [Barcode] nvarchar(2147483647), 
+    [Classification] nvarchar(2147483647), 
+    [MainEntry] nvarchar(2147483647));
 
---DROP TABLE [Fields];
---DROP TABLE [Records];
---DROP TABLE [Subfields];
+CREATE TABLE [Subfields](
+    [SubfieldID] integer PRIMARY KEY ASC AUTOINCREMENT NOT NULL, 
+    [FieldID] bigint NOT NULL, 
+    [Code] char NOT NULL, 
+    [Data] nvarchar(2147483647) NOT NULL, 
+    FOREIGN KEY([FieldID]) REFERENCES Fields([FieldID]) ON DELETE CASCADE ON UPDATE RESTRICT);
 
-SELECT 1;
-PRAGMA foreign_keys=OFF;
-BEGIN TRANSACTION;
-CREATE TABLE [Subfields] (
-  [SubfieldID] bigint NOT NULL
-, [FieldID] bigint NOT NULL
-, [Code] char NOT NULL
-, [Data] nvarchar(2147483647) NOT NULL
-, CONSTRAINT [sqlite_master_PK_Subfields] PRIMARY KEY ([SubfieldID])
-, FOREIGN KEY ([FieldID]) REFERENCES [Fields] ([FieldID]) ON DELETE CASCADE ON UPDATE RESTRICT
-);
-CREATE TABLE [Records] (
-  [RecordID] bigint NOT NULL
-, [DateAdded] datetime NOT NULL
-, [DateChanged] datetime NULL
-, [Author] nvarchar(2147483647) NULL
-, [Title] nvarchar(2147483647) NULL
-, [Barcode] nvarchar(2147483647) NULL
-, [Classification] nvarchar(2147483647) NULL
-, [MainEntry] nvarchar(2147483647) NULL
-, CONSTRAINT [sqlite_master_PK_Records] PRIMARY KEY ([RecordID])
-);
-CREATE TABLE [Fields] (
-  [FieldID] bigint NOT NULL
-, [RecordID] nvarchar(2147483647) NOT NULL
-, [TagNumber] nvarchar(2147483647) NOT NULL
-, [Ind1] char NOT NULL
-, [Ind2] char NOT NULL
-, [ControlData] nvarchar(2147483647) NULL
-, CONSTRAINT [sqlite_master_PK_Fields] PRIMARY KEY ([FieldID])
-, FOREIGN KEY ([RecordID]) REFERENCES [Records] ([RecordID]) ON DELETE CASCADE ON UPDATE RESTRICT
-);
-COMMIT;
+CREATE INDEX [FieldID]
+ON [Subfields](
+    [FieldID] ASC);
+
+CREATE INDEX [RecordID]
+ON [Fields](
+    [RecordID] ASC);
 
