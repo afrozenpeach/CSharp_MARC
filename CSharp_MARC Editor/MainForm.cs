@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Editor for MARC records
  *
  * This project is built upon the CSharp_MARC project of the same name available
@@ -36,6 +36,7 @@ using System.Text;
 using System.Windows.Forms;
 using MARC;
 using System.Data.SQLite;
+using System.IO;
 
 namespace CSharp_MARC_Editor
 {
@@ -98,8 +99,8 @@ namespace CSharp_MARC_Editor
         /// <summary>
         /// Loads the field.
         /// </summary>
-        /// <param name="RecordID">The record identifier.</param>
-        private void LoadFields(int RecordID)
+        /// <param name="recordID">The record identifier.</param>
+        private void LoadFields(int recordID)
         {
             marcDataSet.Tables["Fields"].Rows.Clear();
 
@@ -110,7 +111,7 @@ namespace CSharp_MARC_Editor
                 
                 using (SQLiteCommand command = new SQLiteCommand(query, connection))
                 {
-                    command.Parameters.Add("@RecordID", DbType.Int32).Value = RecordID;
+                    command.Parameters.Add("@RecordID", DbType.Int32).Value = recordID;
                     SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter(command);
                     dataAdapter.Fill(marcDataSet, "Fields");
                     fieldsDataGridView.DataSource = marcDataSet.Tables["Fields"];
@@ -132,6 +133,7 @@ namespace CSharp_MARC_Editor
                 fieldsDataGridView_CellClick(this, args);
             }
 
+            LoadPreview(recordID);
             splitContainer.Panel2.Enabled = true;
         }
 
@@ -160,9 +162,55 @@ namespace CSharp_MARC_Editor
             }
         }
 
-        private void LoadPreview(int RecordID)
+        /// <summary>
+        /// Loads the preview.
+        /// </summary>
+        /// <param name="recordID">The record identifier.</param>
+        private void LoadPreview(int recordID)
         {
-            
+            Record record = new Record();
+
+            using (SQLiteCommand fieldsCommand = new SQLiteCommand("SELECT * FROM Fields WHERE RecordID = @RecordID ORDER BY FieldID", new SQLiteConnection(connectionString)))
+            {
+                fieldsCommand.Connection.Open();
+                fieldsCommand.Parameters.Add("@RecordID", DbType.Int32);
+
+                using (SQLiteCommand subfieldsCommand = new SQLiteCommand("SELECT * FROM Subfields WHERE FieldID = @FieldID ORDER BY SubfieldID", new SQLiteConnection(connectionString)))
+                {
+                    subfieldsCommand.Connection.Open();
+                    subfieldsCommand.Parameters.Add("@FieldID", DbType.Int32);
+                    fieldsCommand.Parameters["@RecordID"].Value = recordID;
+
+                    using (SQLiteDataReader fieldsReader = fieldsCommand.ExecuteReader())
+                    {
+                        while (fieldsReader.Read())
+                        {
+                            if (fieldsReader["TagNumber"].ToString().StartsWith("00"))
+                            {
+                                ControlField controlField = new ControlField(fieldsReader["TagNumber"].ToString(), fieldsReader["ControlData"].ToString());
+                                record.InsertField(controlField);
+                            }
+                            else
+                            {
+                                DataField dataField = new DataField(fieldsReader["TagNumber"].ToString(), new List<Subfield>(), fieldsReader["Ind1"].ToString()[0], fieldsReader["Ind2"].ToString()[0]);
+                                subfieldsCommand.Parameters["@FieldID"].Value = fieldsReader["FieldID"];
+
+                                using (SQLiteDataReader subfieldReader = subfieldsCommand.ExecuteReader())
+                                {
+                                    while (subfieldReader.Read())
+                                    {
+                                        dataField.InsertSubfield(new Subfield(subfieldReader["Code"].ToString()[0], subfieldReader["Data"].ToString()));
+                                    }
+                                }
+
+                                record.InsertField(dataField);
+                            }
+                        }
+                    }
+                }
+            }
+
+            previewTextBox.Text = record.ToString();
         }
 
         /// <summary>
@@ -180,6 +228,72 @@ namespace CSharp_MARC_Editor
             newRow["Code"] = "";
             newRow["Data"] = data;
             marcDataSet.Tables["Subfields"].Rows.Add(newRow);
+        }
+
+        /// <summary>
+        /// Resets the database.
+        /// </summary>
+        /// <param name="force">if set to <c>true</c> [force].</param>
+        private void ResetDatabase(bool force = false)
+        {
+            if (force || MessageBox.Show("This will permanently delete all records, and recreate the database." + Environment.NewLine + Environment.NewLine + "Are you sure you want to reset the database?", "Are you sure you want to reset the database?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            {
+                this.Enabled = false;
+
+                GC.Collect();
+                GC.WaitForFullGCComplete();
+
+                if (File.Exists("MARC.db"))
+                    File.Delete("MARC.db");
+
+                using (SQLiteCommand command = new SQLiteCommand(new SQLiteConnection(connectionString)))
+                {
+                    command.Connection.Open();
+
+                    command.CommandText = @"CREATE TABLE [Fields](
+                                                [FieldID] integer PRIMARY KEY ASC AUTOINCREMENT NOT NULL, 
+                                                [RecordID] nvarchar(2147483647) NOT NULL, 
+                                                [TagNumber] nvarchar(2147483647) NOT NULL, 
+                                                [Ind1] char, 
+                                                [Ind2] char, 
+                                                [ControlData] nvarchar(2147483647), 
+                                                FOREIGN KEY([RecordID]) REFERENCES Records([RecordID]) ON DELETE CASCADE ON UPDATE RESTRICT);
+
+                                            CREATE TABLE [Records](
+                                                [RecordID] integer PRIMARY KEY ASC AUTOINCREMENT NOT NULL, 
+                                                [DateAdded] datetime NOT NULL, 
+                                                [DateChanged] datetime, 
+                                                [Author] nvarchar(2147483647), 
+                                                [Title] nvarchar(2147483647), 
+                                                [Barcode] nvarchar(2147483647), 
+                                                [Classification] nvarchar(2147483647), 
+                                                [MainEntry] nvarchar(2147483647));
+
+                                            CREATE TABLE [Subfields](
+                                                [SubfieldID] integer PRIMARY KEY ASC AUTOINCREMENT NOT NULL, 
+                                                [FieldID] bigint NOT NULL, 
+                                                [Code] char NOT NULL, 
+                                                [Data] nvarchar(2147483647) NOT NULL, 
+                                                FOREIGN KEY([FieldID]) REFERENCES Fields([FieldID]) ON DELETE CASCADE ON UPDATE RESTRICT);
+
+                                            CREATE INDEX [FieldID]
+                                            ON [Subfields](
+                                                [FieldID] ASC);
+
+                                            CREATE INDEX [RecordID]
+                                            ON [Fields](
+                                                [RecordID] ASC);";
+
+                    command.ExecuteNonQuery();
+                }
+
+                marcDataSet.Tables["Records"].Rows.Clear();
+                marcDataSet.Tables["Fields"].Rows.Clear();
+                marcDataSet.Tables["Subfields"].Rows.Clear();
+
+                this.OnLoad(new EventArgs());
+                this.Enabled = true;
+            }
         }
 
         #endregion
@@ -233,7 +347,14 @@ namespace CSharp_MARC_Editor
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error loading database. " + ex.Message);
+                if (MessageBox.Show("Error loading database. " + ex.Message + Environment.NewLine + Environment.NewLine + "If you continue to see this message, it may be necessary to reset the database. Doing so will permanently delete all records from the database." + Environment.NewLine + Environment.NewLine + "Do you want to reset the database?", "Error loading database.", MessageBoxButtons.YesNo, MessageBoxIcon.Error, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+                {
+                    ResetDatabase(true);
+                }
+                else
+                {
+                    this.Close();
+                }
             }
         }
 
@@ -785,6 +906,7 @@ namespace CSharp_MARC_Editor
         {
             startEdit = false;
             fieldsDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].ErrorText = "";
+            LoadPreview(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()));
         }
 
         /// <summary>
@@ -796,6 +918,29 @@ namespace CSharp_MARC_Editor
         {
             startEdit = false;
             subfieldsDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].ErrorText = "";
+            LoadPreview(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()));
+        }
+
+        /// <summary>
+        /// Handles the SelectionChanged event of the recordsDataGridView control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void recordsDataGridView_SelectionChanged(object sender, EventArgs e)
+        {
+            if (!loading && recordsDataGridView.SelectedCells.Count > 0)
+                recordsDataGridView_CellClick(sender, new DataGridViewCellEventArgs(recordsDataGridView.SelectedCells[0].ColumnIndex, recordsDataGridView.SelectedCells[0].RowIndex));
+        }
+
+        /// <summary>
+        /// Handles the SelectionChanged event of the fieldsDataGridView control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void fieldsDataGridView_SelectionChanged(object sender, EventArgs e)
+        {
+            if (!loading && fieldsDataGridView.SelectedCells.Count > 0)
+                fieldsDataGridView_CellClick(sender, new DataGridViewCellEventArgs(fieldsDataGridView.SelectedCells[0].ColumnIndex, fieldsDataGridView.SelectedCells[0].RowIndex));
         }
 
         /// <summary>
@@ -814,6 +959,56 @@ namespace CSharp_MARC_Editor
             {
                 recordListAtTopToolStripMenuItem.Checked = true;
                 splitContainer.Orientation = Orientation.Horizontal;
+            }
+        }
+
+        /// <summary>
+        /// Handles the Click event of the clearDatabaseToolStripMenuItem control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void clearDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("This will permanently delete all records from the MARC database." + Environment.NewLine + Environment.NewLine + "Are you sure you want to delete all records?", "Delete all records?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            {
+                this.Enabled = false;
+
+                using (SQLiteCommand command = new SQLiteCommand(new SQLiteConnection(connectionString)))
+                {
+                    command.Connection.Open();
+                    command.CommandText = "DELETE FROM Records";
+                    command.ExecuteNonQuery();
+                }
+
+                marcDataSet.Tables["Records"].Rows.Clear();
+                marcDataSet.Tables["Fields"].Rows.Clear();
+                marcDataSet.Tables["Subfields"].Rows.Clear();
+
+                this.OnLoad(new EventArgs());
+                this.Enabled = true;
+            }
+        }
+
+        /// <summary>
+        /// Handles the Click event of the resetDatabaseToolStripMenuItem control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void resetDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ResetDatabase();
+        }
+
+        /// <summary>
+        /// Handles the Click event of the aboutToolStripMenuItem control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (AboutForm form = new AboutForm())
+            {
+                form.ShowDialog();
             }
         }
 
