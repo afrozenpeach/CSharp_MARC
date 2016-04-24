@@ -93,10 +93,13 @@ namespace CSharp_MARC_Editor
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importRecordsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportRecordsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.printToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.allRecordsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.currentRecordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.selectedRecordsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.batchEditingComingSoonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.recordListAtTopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.databaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -106,10 +109,7 @@ namespace CSharp_MARC_Editor
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.exportingBackgroundWorker = new System.ComponentModel.BackgroundWorker();
-            this.printToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.allRecordsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.currentRecordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.selectedRecordsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.findAndReplaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -290,7 +290,7 @@ namespace CSharp_MARC_Editor
             this.previewTextBox.Name = "previewTextBox";
             this.previewTextBox.ReadOnly = true;
             this.previewTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.previewTextBox.Size = new System.Drawing.Size(357, 398);
+            this.previewTextBox.Size = new System.Drawing.Size(357, 420);
             this.previewTextBox.TabIndex = 2;
             // 
             // subfieldsDataGridView
@@ -311,7 +311,7 @@ namespace CSharp_MARC_Editor
             this.subfieldsDataGridView.Location = new System.Drawing.Point(211, 3);
             this.subfieldsDataGridView.MultiSelect = false;
             this.subfieldsDataGridView.Name = "subfieldsDataGridView";
-            this.subfieldsDataGridView.Size = new System.Drawing.Size(407, 398);
+            this.subfieldsDataGridView.Size = new System.Drawing.Size(407, 420);
             this.subfieldsDataGridView.TabIndex = 1;
             this.subfieldsDataGridView.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.subfieldsDataGridView_CellBeginEdit);
             this.subfieldsDataGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.subfieldsDataGridView_CellEndEdit);
@@ -368,7 +368,7 @@ namespace CSharp_MARC_Editor
             this.fieldsDataGridView.Location = new System.Drawing.Point(3, 3);
             this.fieldsDataGridView.MultiSelect = false;
             this.fieldsDataGridView.Name = "fieldsDataGridView";
-            this.fieldsDataGridView.Size = new System.Drawing.Size(202, 398);
+            this.fieldsDataGridView.Size = new System.Drawing.Size(202, 420);
             this.fieldsDataGridView.TabIndex = 0;
             this.fieldsDataGridView.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.fieldsDataGridView_CellBeginEdit);
             this.fieldsDataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.fieldsDataGridView_CellClick);
@@ -485,6 +485,38 @@ namespace CSharp_MARC_Editor
             this.exportRecordsToolStripMenuItem.Text = "Export Records";
             this.exportRecordsToolStripMenuItem.Click += new System.EventHandler(this.exportRecordsToolStripMenuItem_Click);
             // 
+            // printToolStripMenuItem
+            // 
+            this.printToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.allRecordsToolStripMenuItem,
+            this.currentRecordToolStripMenuItem,
+            this.selectedRecordsToolStripMenuItem});
+            this.printToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("printToolStripMenuItem.Image")));
+            this.printToolStripMenuItem.Name = "printToolStripMenuItem";
+            this.printToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.printToolStripMenuItem.Text = "Print";
+            // 
+            // allRecordsToolStripMenuItem
+            // 
+            this.allRecordsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("allRecordsToolStripMenuItem.Image")));
+            this.allRecordsToolStripMenuItem.Name = "allRecordsToolStripMenuItem";
+            this.allRecordsToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.allRecordsToolStripMenuItem.Text = "All Records";
+            // 
+            // currentRecordToolStripMenuItem
+            // 
+            this.currentRecordToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("currentRecordToolStripMenuItem.Image")));
+            this.currentRecordToolStripMenuItem.Name = "currentRecordToolStripMenuItem";
+            this.currentRecordToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.currentRecordToolStripMenuItem.Text = "Current Record";
+            // 
+            // selectedRecordsToolStripMenuItem
+            // 
+            this.selectedRecordsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("selectedRecordsToolStripMenuItem.Image")));
+            this.selectedRecordsToolStripMenuItem.Name = "selectedRecordsToolStripMenuItem";
+            this.selectedRecordsToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.selectedRecordsToolStripMenuItem.Text = "Selected Records";
+            // 
             // toolStripSeparator
             // 
             this.toolStripSeparator.Name = "toolStripSeparator";
@@ -500,16 +532,10 @@ namespace CSharp_MARC_Editor
             // editToolStripMenuItem
             // 
             this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.batchEditingComingSoonToolStripMenuItem});
+            this.findAndReplaceToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.editToolStripMenuItem.Text = "Edit";
-            // 
-            // batchEditingComingSoonToolStripMenuItem
-            // 
-            this.batchEditingComingSoonToolStripMenuItem.Name = "batchEditingComingSoonToolStripMenuItem";
-            this.batchEditingComingSoonToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
-            this.batchEditingComingSoonToolStripMenuItem.Text = "Batch editing coming soon...";
             // 
             // optionsToolStripMenuItem
             // 
@@ -579,37 +605,13 @@ namespace CSharp_MARC_Editor
             this.exportingBackgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.exportingBackgroundWorker_ProgressChanged);
             this.exportingBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.exportingBackgroundWorker_RunWorkerCompleted);
             // 
-            // printToolStripMenuItem
+            // findAndReplaceToolStripMenuItem
             // 
-            this.printToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.allRecordsToolStripMenuItem,
-            this.currentRecordToolStripMenuItem,
-            this.selectedRecordsToolStripMenuItem});
-            this.printToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("printToolStripMenuItem.Image")));
-            this.printToolStripMenuItem.Name = "printToolStripMenuItem";
-            this.printToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
-            this.printToolStripMenuItem.Text = "Print";
-            // 
-            // allRecordsToolStripMenuItem
-            // 
-            this.allRecordsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("allRecordsToolStripMenuItem.Image")));
-            this.allRecordsToolStripMenuItem.Name = "allRecordsToolStripMenuItem";
-            this.allRecordsToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
-            this.allRecordsToolStripMenuItem.Text = "All Records";
-            // 
-            // currentRecordToolStripMenuItem
-            // 
-            this.currentRecordToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("currentRecordToolStripMenuItem.Image")));
-            this.currentRecordToolStripMenuItem.Name = "currentRecordToolStripMenuItem";
-            this.currentRecordToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
-            this.currentRecordToolStripMenuItem.Text = "Current Record";
-            // 
-            // selectedRecordsToolStripMenuItem
-            // 
-            this.selectedRecordsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("selectedRecordsToolStripMenuItem.Image")));
-            this.selectedRecordsToolStripMenuItem.Name = "selectedRecordsToolStripMenuItem";
-            this.selectedRecordsToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
-            this.selectedRecordsToolStripMenuItem.Text = "Selected Records";
+            this.findAndReplaceToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("findAndReplaceToolStripMenuItem.Image")));
+            this.findAndReplaceToolStripMenuItem.Name = "findAndReplaceToolStripMenuItem";
+            this.findAndReplaceToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.findAndReplaceToolStripMenuItem.Text = "Find and Replace";
+            this.findAndReplaceToolStripMenuItem.Click += new System.EventHandler(this.findAndReplaceToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -688,7 +690,6 @@ namespace CSharp_MARC_Editor
         private System.Windows.Forms.DataGridViewTextBoxColumn controlDataDataGridViewTextBoxColumn;
         private System.Windows.Forms.ErrorProvider errorProvider;
         private System.ComponentModel.BackgroundWorker exportingBackgroundWorker;
-        private System.Windows.Forms.ToolStripMenuItem batchEditingComingSoonToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem databaseToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem clearDatabaseToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem resetDatabaseToolStripMenuItem;
@@ -696,6 +697,7 @@ namespace CSharp_MARC_Editor
         private System.Windows.Forms.ToolStripMenuItem allRecordsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem currentRecordToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem selectedRecordsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem findAndReplaceToolStripMenuItem;
 
     }
 }

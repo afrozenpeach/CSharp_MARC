@@ -82,6 +82,12 @@
     <Compile Include="AboutForm.Designer.cs">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="FindReplaceForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FindReplaceForm.Designer.cs">
+      <DependentUpon>FindReplaceForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -97,6 +103,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FindReplaceForm.resx">
+      <DependentUpon>FindReplaceForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
@@ -144,9 +153,18 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Images\document-open.png" />
+    <Content Include="Images\document-save.png" />
+    <Content Include="Images\edit-clear.png" />
+    <Content Include="Images\edit-find-replace.png" />
+    <Content Include="Images\edit-select-all.png" />
     <Content Include="Images\lgplv3-147x51.png" />
     <Content Include="Images\logo-header.png" />
     <Content Include="Images\matt.png" />
+    <Content Include="Images\printer.png" />
+    <Content Include="Images\text-x-generic.png" />
+    <Content Include="Images\view-refresh.png" />
+    <Content Include="Images\x-office-address-book.png" />
     <Content Include="SQLite.Interop.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

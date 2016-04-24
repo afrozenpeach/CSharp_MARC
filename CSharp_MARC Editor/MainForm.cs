@@ -43,13 +43,13 @@ namespace CSharp_MARC_Editor
     public partial class MainForm : Form
     {
         private FileMARCReader marcRecords;
-        private string connectionString = "Data Source=MARC.db;Version=3";
+        public static string connectionString = "Data Source=MARC.db;Version=3";
 
-        string reloadingDB = "Reloading Database...";
-        string committingTransaction = "Committing Transaction...";
-        bool startEdit = false;
-        bool loading = true;
-        bool reloadFields = false;
+        private string reloadingDB = "Reloading Database...";
+        private string committingTransaction = "Committing Transaction...";
+        private bool startEdit = false;
+        private bool loading = true;
+        private bool reloadFields = false;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainForm"/> class.
@@ -293,6 +293,124 @@ namespace CSharp_MARC_Editor
 
                 this.OnLoad(new EventArgs());
                 this.Enabled = true;
+            }
+        }
+
+        /// <summary>
+        /// Rebuilds the records preview information.
+        /// This consists of the Author, Title, Barcode, Classification, and MainEntry fields
+        /// </summary>
+        private void RebuildRecordsPreviewInformation(int? recordID = null)
+        {
+            using (SQLiteConnection readerConnection = new SQLiteConnection(connectionString))
+            {
+                readerConnection.Open();
+
+                using (SQLiteCommand readerCommand = new SQLiteCommand(readerConnection))
+                {
+                    StringBuilder query = new StringBuilder("SELECT r.RecordID as RecordID, TagNumber, Code, Data, Author, Title, Barcode, Classification, MainEntry FROM Records r LEFT OUTER JOIN Fields f ON r.RecordID = f.RecordID LEFT OUTER JOIN Subfields s ON f.FieldID = s.FieldID");
+
+                    if (recordID.HasValue)
+                    {
+                        query.Append(" WHERE r.RecordID = @RecordID");
+                        readerCommand.Parameters.Add("@RecordID", DbType.Int32).Value = recordID;
+                    }
+
+                    query.Append(" UNION SELECT '-2' as RecordID, '', '', '', '', '', '', '', ''");
+                    query.Append(" ORDER BY RecordID, TagNumber, Code");
+
+                    readerCommand.CommandText = query.ToString();
+
+                    using (SQLiteConnection updaterConnection = new SQLiteConnection(connectionString))
+                    {
+                        updaterConnection.Open();
+
+                        using (SQLiteCommand updaterCommand = new SQLiteCommand(updaterConnection))
+                        {
+                            updaterCommand.CommandText = "BEGIN;";
+                            updaterCommand.ExecuteNonQuery();
+
+                            updaterCommand.CommandText = "UPDATE Records SET DateChanged = @DateChanged, Author = @Author, Title = @Title, Barcode = @Barcode, Classification = @Classification, MainEntry = @MainEntry WHERE RecordID = @RecordID";
+                            
+                            updaterCommand.Parameters.Add("@Author", DbType.String);
+                            updaterCommand.Parameters.Add("@Title", DbType.String);
+                            updaterCommand.Parameters.Add("@Barcode", DbType.String);
+                            updaterCommand.Parameters.Add("@Classification", DbType.String);
+                            updaterCommand.Parameters.Add("@MainEntry", DbType.String);
+                            updaterCommand.Parameters.Add("@RecordID", DbType.Int32);
+                            updaterCommand.Parameters.Add("@DateChanged", DbType.DateTime);
+
+                            using (SQLiteDataReader reader = readerCommand.ExecuteReader())
+                            {
+                                int currentRecord = -1;
+
+                                string author = null;
+                                string title = null;
+                                string barcode = "";
+                                string classification = "";
+                                string mainEntry = "";
+
+                                while (reader.Read())
+                                {
+
+                                    if (currentRecord != Int32.Parse(reader["RecordID"].ToString()))
+                                    {
+                                        if (currentRecord >= 0)
+                                        {
+                                            updaterCommand.Parameters["@DateChanged"].Value = DateTime.Now;
+                                            updaterCommand.Parameters["@Author"].Value = author;
+                                            updaterCommand.Parameters["@Title"].Value = title;
+                                            updaterCommand.Parameters["@Barcode"].Value = barcode;
+                                            updaterCommand.Parameters["@Classification"].Value = classification;
+                                            updaterCommand.Parameters["@MainEntry"].Value = mainEntry;
+                                            updaterCommand.Parameters["@RecordID"].Value = currentRecord;
+
+                                            updaterCommand.ExecuteNonQuery();
+
+                                            if (recordID != null)
+                                            {
+                                                foreach (DataGridViewRow row in recordsDataGridView.Rows)
+                                                {
+                                                    if (Int32.Parse(row.Cells[0].Value.ToString()) == recordID)
+                                                    {
+                                                        row.Cells[2].Value = updaterCommand.Parameters["@DateChanged"].Value.ToString();
+                                                        row.Cells[3].Value = author;
+                                                        row.Cells[4].Value = title;
+                                                        row.Cells[5].Value = barcode;
+                                                        row.Cells[6].Value = classification;
+                                                        row.Cells[7].Value = mainEntry;
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        currentRecord = Int32.Parse(reader["RecordID"].ToString());
+
+                                        author = null;
+                                        title = null;
+                                        barcode = "";
+                                        classification = "";
+                                        mainEntry = "";
+                                    }
+
+                                    if (author == null && (string)reader["TagNumber"] == "100" && (string)reader["Code"] == "a")
+                                        author = (string)reader["Data"];
+                                    else if (author == null && (string)reader["TagNumber"] == "245" && (string)reader["Code"] == "c")
+                                        author = (string)reader["Data"];
+
+                                    if (title == null && (string)reader["TagNumber"] == "245" && (string)reader["Code"] == "a")
+                                        title = (string)reader["Data"];
+                                    else if (title == null && (string)reader["TagNumber"] == "245" && (string)reader["Code"] == "b")
+                                        title += " " + (string)reader["Data"];
+                                }
+                            }
+                            
+                            updaterCommand.CommandText = "END;";
+                            updaterCommand.ExecuteNonQuery();
+                        }
+                    }
+                }
             }
         }
 
@@ -730,6 +848,8 @@ namespace CSharp_MARC_Editor
                             command.ExecuteNonQuery();
                         }
                     }
+
+                    RebuildRecordsPreviewInformation(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()));
                 }
             }
             catch (Exception ex)
@@ -817,6 +937,8 @@ namespace CSharp_MARC_Editor
                             }
                         }
                     }
+
+                    RebuildRecordsPreviewInformation(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()));
                 }
             }
             catch (Exception ex)
@@ -919,6 +1041,177 @@ namespace CSharp_MARC_Editor
             startEdit = false;
             subfieldsDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].ErrorText = "";
             LoadPreview(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()));
+        }
+
+        /// <summary>
+        /// Handles the Click event of the findAndReplaceToolStripMenuItem control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void findAndReplaceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (FindReplaceForm form = new FindReplaceForm())
+            {
+                if (form.ShowDialog() == DialogResult.OK)
+                {
+                    this.Enabled = false;
+
+                    using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                    {
+                        connection.Open();
+                        using (SQLiteCommand command = new SQLiteCommand(connection))
+                        {
+                            StringBuilder query = new StringBuilder("UPDATE Subfields SET Data = ");
+
+                            if (form.CaseSensitive)
+                            {
+                                query.Append("REPLACE(Data, @ReplaceData, @ReplaceWith)");
+                                query.Insert(0, "PRAGMA case_sensitive_like=ON;");
+                            }
+                            else
+                            {
+                                query.Append("(SUBSTR(Data, 0, INSTR(Data, @ReplaceData)) || @ReplaceWith || SUBSTR(Data, INSTR(Data, @ReplaceData) + LENGTH(@ReplaceData)))");
+                            }
+
+                            command.Parameters.Add("@ReplaceData", DbType.String).Value = form.Data;
+                            command.Parameters.Add("@ReplaceWith", DbType.String).Value = form.ReplaceWith;
+
+                            StringBuilder whereClause = new StringBuilder(" WHERE ");
+
+                            if (form.SelectedTags.Contains("Any"))
+                            {
+                                // Do nothing!
+                            } 
+                            else if (form.SelectedTags.Count == 1)
+                            {
+                                whereClause.Append("FieldID IN (SELECT FieldID FROM Fields WHERE TagNumber = @TagNumber) AND ");
+                                command.Parameters.Add("@TagNumber", DbType.String).Value = form.SelectedTags[0];
+                            }
+                            else if (form.SelectedTags.Count > 1)
+                            {
+                                int i = 0;
+                                whereClause.Append("FieldID IN (SELECT FieldID FROM Fields WHERE TagNumber IN (");
+
+                                foreach (string tag in form.SelectedTags)
+                                {
+                                    string tagNumber = string.Format("@TagNumber{0}", i);
+                                    command.Parameters.Add(tagNumber, DbType.String).Value = tag;
+                                    whereClause.AppendFormat("{0}, ", tagNumber);
+
+                                    i++;
+                                }
+
+                                whereClause.Remove(whereClause.Length - 2, 2);
+                                whereClause.Append(") AND ");
+                            }
+
+                            if (form.SelectedIndicator1s.Contains("Any"))
+                            {
+                                // Do nothing!
+                            }
+                            else if (form.SelectedIndicator1s.Count == 1)
+                            {
+                                whereClause.Append("FieldID IN (SELECT FieldID FROM Fields WHERE Ind1 = @Ind1) AND ");
+                                command.Parameters.Add("@Ind1", DbType.String).Value = form.SelectedIndicator1s[0];
+                            }
+                            else if (form.SelectedIndicator1s.Count > 1)
+                            {
+                                int i = 0;
+                                whereClause.Append("FieldID IN (SELECT FieldID FROM Fields WHERE Ind1 IN (");
+
+                                foreach (string ind1 in form.SelectedIndicator1s)
+                                {
+                                    string indicator = string.Format("@Ind1{0}", i);
+                                    command.Parameters.Add(indicator, DbType.String).Value = ind1;
+                                    whereClause.AppendFormat("{0}, ", indicator);
+
+                                    i++;
+                                }
+                                whereClause.Remove(whereClause.Length - 2, 2);
+                                whereClause.Append(") AND ");
+                            }
+
+                            if (form.SelectedIndicator2s.Contains("Any"))
+                            {
+                                // Do nothing!
+                            }
+                            else if (form.SelectedIndicator2s.Count == 1)
+                            {
+                                whereClause.Append("FieldID IN (SELECT FieldID FROM Fields WHERE Ind2 = @Ind2) AND ");
+                                command.Parameters.Add("@Ind2", DbType.String).Value = form.SelectedIndicator2s[0];
+                            }
+                            else if (form.SelectedIndicator1s.Count > 1)
+                            {
+                                int i = 0;
+                                whereClause.Append("FieldID IN (SELECT FieldID FROM Fields WHERE Ind2 IN (");
+
+                                foreach (string ind2 in form.SelectedIndicator2s)
+                                {
+                                    string indicator = string.Format("@Ind2{0}", i);
+                                    command.Parameters.Add(indicator, DbType.String).Value = ind2;
+                                    whereClause.AppendFormat("{0}, ", indicator);
+
+                                    i++;
+                                }
+                                whereClause.Remove(whereClause.Length - 2, 2);
+                                whereClause.Append(") AND ");
+                            }
+
+                            if (form.SelectedCodes.Contains("Any"))
+                            {
+                                // Do nothing!
+                            }
+                            else if (form.SelectedCodes.Count == 1)
+                            {
+                                whereClause.Append("Code = @Code AND ");
+                                command.Parameters.Add("@Code", DbType.String).Value = form.SelectedCodes[0];
+                            }
+                            else if (form.SelectedCodes.Count > 1)
+                            {
+                                int i = 0;
+                                whereClause.Append("Code IN (");
+
+                                foreach (string code in form.SelectedCodes)
+                                {
+                                    string codeParam = string.Format("@Code{0}", i);
+                                    command.Parameters.Add(codeParam, DbType.String).Value = code;
+                                    whereClause.AppendFormat("{0}, ", codeParam);
+
+                                    i++;
+                                }
+                                whereClause.Remove(whereClause.Length - 2, 2);
+                                whereClause.Append(") AND ");
+                            }
+
+                            if (whereClause.ToString() != " WHERE ")
+                                whereClause.Remove(whereClause.Length - 4, 4);
+
+                            whereClause.Append("Data LIKE @Data;");
+                            command.Parameters.Add("@Data", DbType.String).Value = "%" + form.Data + "%";
+
+                            query.Append(whereClause);
+                            query.Append("PRAGMA case_sensitive_like=OFF;");
+
+                            command.CommandText = query.ToString();
+                            int count = command.ExecuteNonQuery();
+                            MessageBox.Show("Found and replaced " + count + " instances.", "Find and Replace Completed.", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                    }
+
+                    RebuildRecordsPreviewInformation();
+
+                    recordsDataGridView.DataSource = null;
+                    fieldsDataGridView.DataSource = null;
+                    subfieldsDataGridView.DataSource = null;
+
+                    marcDataSet.Tables["Records"].Rows.Clear();
+                    marcDataSet.Tables["Fields"].Rows.Clear();
+                    marcDataSet.Tables["Subfields"].Rows.Clear();
+
+                    this.OnLoad(new EventArgs());
+                    this.Enabled = true;
+                }
+            }
         }
 
         /// <summary>
