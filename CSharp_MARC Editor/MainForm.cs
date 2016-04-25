@@ -192,7 +192,16 @@ namespace CSharp_MARC_Editor
                             }
                             else
                             {
-                                DataField dataField = new DataField(fieldsReader["TagNumber"].ToString(), new List<Subfield>(), fieldsReader["Ind1"].ToString()[0], fieldsReader["Ind2"].ToString()[0]);
+                                char ind1 = ' ';
+                                char ind2 = ' ';
+
+                                if (fieldsReader["Ind1"].ToString().Length > 0)
+                                    ind1 = fieldsReader["Ind1"].ToString()[0];
+
+                                if (fieldsReader["Ind2"].ToString().Length > 0)
+                                    ind2 = fieldsReader["Ind2"].ToString()[0];
+
+                                DataField dataField = new DataField(fieldsReader["TagNumber"].ToString(), new List<Subfield>(), ind1, ind2);
                                 subfieldsCommand.Parameters["@FieldID"].Value = fieldsReader["FieldID"];
 
                                 using (SQLiteDataReader subfieldReader = subfieldsCommand.ExecuteReader())
@@ -503,7 +512,7 @@ namespace CSharp_MARC_Editor
             if (e.RowIndex >= 0)
             {
                 DataGridViewRow rowClicked = fieldsDataGridView.Rows[e.RowIndex];
-                if (!rowClicked.IsNewRow)
+                if (!rowClicked.IsNewRow && rowClicked.Cells[0].Value.ToString() != "")
                 {
                     if (rowClicked.Cells[2].Value.ToString().StartsWith("00"))
                         LoadControlField(Int32.Parse(rowClicked.Cells[0].Value.ToString()), rowClicked.Cells[5].Value.ToString());
@@ -511,7 +520,7 @@ namespace CSharp_MARC_Editor
                         LoadSubfields(Int32.Parse(rowClicked.Cells[0].Value.ToString()));
                 }
                 else
-                    subfieldsDataGridView.Rows.Clear();
+                    marcDataSet.Tables["Subfields"].Clear();
             }
         }
 
@@ -957,17 +966,16 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="DataGridViewCellCancelEventArgs"/> instance containing the event data.</param>
         private void fieldsDataGridView_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
         {
-            if (!loading)
+            if (!loading && fieldsDataGridView.Rows[e.RowIndex].Cells[0].Value.ToString() != "")
             {
-                startEdit = true;
-
                 switch (e.ColumnIndex)
                 {
                     case 2:
                         break;
                     case 3:
                     case 4:
-                        if (fieldsDataGridView.Rows[e.RowIndex].Cells[2].Value.ToString().StartsWith("00"))
+                        string tagNumber = fieldsDataGridView.Rows[e.RowIndex].Cells[2].Value.ToString();
+                        if (tagNumber.StartsWith("00") || tagNumber == "")
                         {
                             MessageBox.Show("Cannot edit indicators on control fields.");
                             startEdit = false;
@@ -987,7 +995,7 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="DataGridViewCellCancelEventArgs"/> instance containing the event data.</param>
         private void subfieldsDataGridView_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
         {
-            if (!loading)
+            if (!loading && subfieldsDataGridView.Rows[e.RowIndex].Cells[0].Value.ToString() != "")
                 startEdit = true;
         }
 
@@ -1041,6 +1049,98 @@ namespace CSharp_MARC_Editor
             startEdit = false;
             subfieldsDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].ErrorText = "";
             LoadPreview(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()));
+        }
+
+        private void fieldsDataGridView_UserAddedRow(object sender, DataGridViewRowEventArgs e)
+        {
+            int recordID = Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString());
+            e.Row.Cells[1].Value = recordID;
+        }
+
+        /// <summary>
+        /// Handles the RowValidating event of the fieldsDataGridView control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="DataGridViewCellCancelEventArgs"/> instance containing the event data.</param>
+        private void fieldsDataGridView_RowValidating(object sender, DataGridViewCellCancelEventArgs e)
+        {
+            if (!loading && !fieldsDataGridView.Rows[e.RowIndex].IsNewRow && fieldsDataGridView.Rows[e.RowIndex].Cells[0].Value.ToString() == "")
+            {
+                try
+                {
+                    int recordID = Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString());
+                    string tagNumber = fieldsDataGridView.Rows[e.RowIndex].Cells[2].Value.ToString();
+                    string ind1 = fieldsDataGridView.Rows[e.RowIndex].Cells[3].Value.ToString();
+                    string ind2 = fieldsDataGridView.Rows[e.RowIndex].Cells[4].Value.ToString();
+
+                    if (!Field.ValidateTag(tagNumber) || (tagNumber.StartsWith("00") && (ind1 != "" || ind2 != "")))
+                    {
+                        e.Cancel = true;
+                        return;
+                    }
+
+                    using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                    {
+                        connection.Open();
+
+                        string query = "INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2) VALUES (@RecordID, @TagNumber, @Ind1, @Ind2)";
+
+                        using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                        {
+                            command.Parameters.Add("@RecordID", DbType.Int32).Value = recordID;
+                            command.Parameters.Add("@TagNumber", DbType.String).Value = tagNumber;
+                            command.Parameters.Add("@Ind1", DbType.String).Value = ind1;
+                            command.Parameters.Add("@Ind2", DbType.String).Value = ind2;
+
+                            command.ExecuteNonQuery();
+                            LoadFields(recordID);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    e.Cancel = true;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Handles the RowValidating event of the subfieldsDataGridView control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="DataGridViewCellCancelEventArgs"/> instance containing the event data.</param>
+        private void subfieldsDataGridView_RowValidating(object sender, DataGridViewCellCancelEventArgs e)
+        {
+            if (!loading && !subfieldsDataGridView.Rows[e.RowIndex].IsNewRow && subfieldsDataGridView.Rows[e.RowIndex].Cells[0].Value.ToString() == "")
+            {
+                try
+                {
+                    int fieldID = Int32.Parse(fieldsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString());
+                    string code = subfieldsDataGridView.Rows[e.RowIndex].Cells[2].Value.ToString();
+                    string data = subfieldsDataGridView.Rows[e.RowIndex].Cells[3].Value.ToString();
+
+                    using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                    {
+                        connection.Open();
+
+                        string query = "INSERT INTO Subfields (FieldID, Code, Data) VALUES (@FieldID, @Code, @Data)";
+
+                        using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                        {
+                            command.Parameters.Add("@FieldID", DbType.Int32).Value = fieldID;
+                            command.Parameters.Add("@Code", DbType.String).Value = code;
+                            command.Parameters.Add("@Data", DbType.String).Value = data;
+
+                            command.ExecuteNonQuery();
+                            LoadSubfields(fieldID);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    e.Cancel = true;
+                }
+            }
         }
 
         /// <summary>
