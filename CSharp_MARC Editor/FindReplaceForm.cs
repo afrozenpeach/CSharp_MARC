@@ -194,7 +194,7 @@ namespace CSharp_MARC_Editor
                             codesListBox.Items.Add(reader["Code"]);
                     }
 
-                    command.CommandText = "SELECT DISTINCT Ind1 as Ind FROM Fields UNION SELECT DISTINCT Ind2 as Ind FROM Fields ORDER BY Ind";
+                    command.CommandText = "SELECT DISTINCT Ind1 as Ind FROM Fields WHERE Ind1 IS NOT NULL UNION SELECT DISTINCT Ind2 as Ind FROM Fields WHERE Ind2 IS NOT NULL ORDER BY Ind";
 
                     using (SQLiteDataReader reader = command.ExecuteReader())
                     {
