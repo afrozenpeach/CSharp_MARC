@@ -42,6 +42,8 @@ namespace CSharp_MARC_Editor
 {
     public partial class MainForm : Form
     {
+        #region Private member variables
+
         private FileMARCReader marcRecords;
         public static string connectionString = "Data Source=MARC.db;Version=3";
 
@@ -50,6 +52,8 @@ namespace CSharp_MARC_Editor
         private bool startEdit = false;
         private bool loading = true;
         private bool reloadFields = false;
+
+        #endregion
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainForm"/> class.
@@ -485,6 +489,8 @@ namespace CSharp_MARC_Editor
             }
         }
 
+        #region Loading Records
+
         /// <summary>
         /// Handles the CellClick event of the recordsDataGridView control.
         /// </summary>
@@ -523,6 +529,10 @@ namespace CSharp_MARC_Editor
                     marcDataSet.Tables["Subfields"].Clear();
             }
         }
+
+        #endregion
+
+        #region Importing Records
 
         /// <summary>
         /// Handles the Click event of the openToolStripMenuItem control.
@@ -690,6 +700,10 @@ namespace CSharp_MARC_Editor
             this.Enabled = true;
         }
 
+        #endregion
+
+        #region Exporting Records
+
         /// <summary>
         /// Handles the Click event of the exportRecordsToolStripMenuItem control.
         /// </summary>
@@ -797,6 +811,10 @@ namespace CSharp_MARC_Editor
             this.Enabled = true;
 
         }
+
+        #endregion
+
+        #region Editing Cells
 
         /// <summary>
         /// Handles the CellValidating event of the fieldsDataGridView control.
@@ -1051,6 +1069,10 @@ namespace CSharp_MARC_Editor
             LoadPreview(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()));
         }
 
+        #endregion
+
+        #region Adding Rows
+
         private void fieldsDataGridView_UserAddedRow(object sender, DataGridViewRowEventArgs e)
         {
             int recordID = Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString());
@@ -1143,6 +1165,10 @@ namespace CSharp_MARC_Editor
             }
         }
 
+        #endregion
+
+        #region Deleting Rows
+
         /// <summary>
         /// Handles the UserDeletingRow event of the recordsDataGridView control.
         /// </summary>
@@ -1220,6 +1246,10 @@ namespace CSharp_MARC_Editor
                 }
             }
         }
+
+        #endregion
+
+        #region Batch Editing
 
         /// <summary>
         /// Handles the Click event of the findAndReplaceToolStripMenuItem control.
@@ -1392,6 +1422,10 @@ namespace CSharp_MARC_Editor
             }
         }
 
+        #endregion
+
+        #region Selecting cells
+
         /// <summary>
         /// Handles the SelectionChanged event of the recordsDataGridView control.
         /// </summary>
@@ -1413,6 +1447,10 @@ namespace CSharp_MARC_Editor
             if (!loading && fieldsDataGridView.SelectedCells.Count > 0)
                 fieldsDataGridView_CellClick(sender, new DataGridViewCellEventArgs(fieldsDataGridView.SelectedCells[0].ColumnIndex, fieldsDataGridView.SelectedCells[0].RowIndex));
         }
+
+        #endregion
+
+        #region Misc Events
 
         /// <summary>
         /// Handles the Click event of the recordListAtTopToolStripMenuItem control.
@@ -1492,6 +1530,8 @@ namespace CSharp_MARC_Editor
         {
             Close();
         }
+        
+        #endregion
 
         #endregion
     }
