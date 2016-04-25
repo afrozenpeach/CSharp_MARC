@@ -1097,7 +1097,7 @@ namespace CSharp_MARC_Editor
                         }
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     e.Cancel = true;
                 }
@@ -1136,9 +1136,87 @@ namespace CSharp_MARC_Editor
                         }
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     e.Cancel = true;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Handles the UserDeletingRow event of the recordsDataGridView control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="DataGridViewRowCancelEventArgs"/> instance containing the event data.</param>
+        private void recordsDataGridView_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
+        {
+            if (e.Row.Cells[0].Value.ToString() != "")
+            {
+                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                {
+                    connection.Open();
+
+                    string query = "DELETE FROM Records WHERE RecordID = @RecordID";
+
+                    using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                    {
+                        command.Parameters.Add("@RecordID", DbType.Int32).Value = Int32.Parse(e.Row.Cells[0].Value.ToString());
+                        command.ExecuteNonQuery();
+                    }
+
+                    RebuildRecordsPreviewInformation(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Handles the UserDeletingRow event of the fieldsDataGridView control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="DataGridViewRowCancelEventArgs"/> instance containing the event data.</param>
+        private void fieldsDataGridView_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
+        {
+            if (e.Row.Cells[0].Value.ToString() != "")
+            {
+                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                {
+                    connection.Open();
+
+                    string query = "DELETE FROM Fields WHERE FieldID = @FieldID";
+
+                    using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                    {
+                        command.Parameters.Add("@FieldID", DbType.Int32).Value = Int32.Parse(e.Row.Cells[0].Value.ToString());
+                        command.ExecuteNonQuery();
+                    }
+
+                    RebuildRecordsPreviewInformation(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Handles the UserDeletingRow event of the subfieldsDataGridView control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="DataGridViewRowCancelEventArgs"/> instance containing the event data.</param>
+        private void subfieldsDataGridView_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
+        {
+            if (e.Row.Cells[0].Value.ToString() != "")
+            {
+                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                {
+                    connection.Open();
+
+                    string query = "DELETE FROM Subfields WHERE SubfieldID = @SubfieldID";
+
+                    using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                    {
+                        command.Parameters.Add("@SubfieldID", DbType.Int32).Value = Int32.Parse(e.Row.Cells[0].Value.ToString());
+                        command.ExecuteNonQuery();
+                    }
+
+                    RebuildRecordsPreviewInformation(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()));
                 }
             }
         }

@@ -179,6 +179,7 @@ namespace CSharp_MARC_Editor
             this.recordsDataGridView.TabIndex = 0;
             this.recordsDataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.recordsDataGridView_CellClick);
             this.recordsDataGridView.SelectionChanged += new System.EventHandler(this.recordsDataGridView_SelectionChanged);
+            this.recordsDataGridView.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.recordsDataGridView_UserDeletingRow);
             // 
             // recordIDDataGridViewTextBoxColumn
             // 
@@ -318,6 +319,7 @@ namespace CSharp_MARC_Editor
             this.subfieldsDataGridView.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.subfieldsDataGridView_CellValidated);
             this.subfieldsDataGridView.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.subfieldsDataGridView_CellValidating);
             this.subfieldsDataGridView.RowValidating += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.subfieldsDataGridView_RowValidating);
+            this.subfieldsDataGridView.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.subfieldsDataGridView_UserDeletingRow);
             // 
             // fieldsDataGridView
             // 
@@ -349,6 +351,7 @@ namespace CSharp_MARC_Editor
             this.fieldsDataGridView.RowValidating += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.fieldsDataGridView_RowValidating);
             this.fieldsDataGridView.SelectionChanged += new System.EventHandler(this.fieldsDataGridView_SelectionChanged);
             this.fieldsDataGridView.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.fieldsDataGridView_UserAddedRow);
+            this.fieldsDataGridView.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.fieldsDataGridView_UserDeletingRow);
             // 
             // saveFileDialog
             // 
