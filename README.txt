@@ -26,38 +26,46 @@
  */
 
 2016-04-21 Changes:
+
 Bump .NET Version to 4
 An issue was discovered that resulted in incorrectly reading multi-byte characters when loading records.
 
 2014-05-21 Changes:
+
 FileMARCWriter and FileMARCXMLWriter now have an append option
 
 2014-05-06 Changes:
+
 Fixed issue with special characters not being properly calculated in the directory length
 
 2014-02-01 Changes:
+
 Added support for exporting MARCXML.
 Added FileMARCXMLWriter to make saving single records, as well as lists for records, to XML a simple process
 Updated copyright information for the year 2014!
 
 2013-04-12 Changes:
+
 More support for special MARC8 characters thanks to my new MARC8 Encoding class. Special thanks to Mark V. Sullivan of Sobek CM MARC Library (https://sourceforge.net/projects/marclibrary/) for code used to read the MARC8 format, which much of the Encoding was based on.
 
 2013-04-11 Changes:
+
 Fix issue relating to the FileMARCWriter needing to write multiple bytes per character in some cases, as well as handling encoding of non-special characters better.
 
 2013-04-10 Changes:
-Some special characters in a normal MARC21 file are saved using non-standard character encoding. The proper encoding should be MARC8, which .Net does not support. This version adds support for a select few special characters, most importantly the copyright symbol which is used in RDA records. The FileMARCWriter class makes it easier to write records and should follow MARC8/UTF-8 specifications from the 9th character of the Leader. The FileMARCReader class had to be updated to read these MARC8 characters back in correctly.
 
+Some special characters in a normal MARC21 file are saved using non-standard character encoding. The proper encoding should be MARC8, which .Net does not support. This version adds support for a select few special characters, most importantly the copyright symbol which is used in RDA records. The FileMARCWriter class makes it easier to write records and should follow MARC8/UTF-8 specifications from the 9th character of the Leader. The FileMARCReader class had to be updated to read these MARC8 characters back in correctly.
 Initial commit of FileMARCWriter
 Updated FileMARCReader to support features of FileMARCWriter
 UTF-8 support is only loosely tested. If you are using UTF-8 please let me know how well it works for you.
  
 2012-06-13 Changes:
+
 Added FileMARCReader class for handling large MARC21 files without loading the entire file into memory. Special thanks to Stas Paladiy for reporting this issue and helping resolve it.
 Updated Copyright information for the year 2012!
 
 2011-09-12.2 Changes:
+
 Apparently not even Library of Congress MARCXML records follow the XSD specification.  I've removed the requirement that records validate before being added.
 No longer ordering the tags when importing a MARCXML record.
 

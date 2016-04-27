@@ -300,10 +300,6 @@ namespace CSharp_MARC_Editor
                     command.ExecuteNonQuery();
                 }
 
-                marcDataSet.Tables["Records"].Rows.Clear();
-                marcDataSet.Tables["Fields"].Rows.Clear();
-                marcDataSet.Tables["Subfields"].Rows.Clear();
-
                 this.OnLoad(new EventArgs());
                 this.Enabled = true;
             }
@@ -441,6 +437,15 @@ namespace CSharp_MARC_Editor
             try
             {
                 loading = true;
+
+                recordsDataGridView.DataSource = null;
+                fieldsDataGridView.DataSource = null;
+                subfieldsDataGridView.DataSource = null;
+
+                marcDataSet.Tables["Records"].Rows.Clear();
+                marcDataSet.Tables["Fields"].Rows.Clear();
+                marcDataSet.Tables["Subfields"].Rows.Clear();
+
                 //MessageBox.Show((Convert.ToDateTime("4/19/2016 7:09:06 PM") - Convert.ToDateTime("4/19/2016 6:13:04 PM")).TotalSeconds.ToString());
                 using (SQLiteConnection connection = new SQLiteConnection(connectionString))
                 {
@@ -1073,6 +1078,30 @@ namespace CSharp_MARC_Editor
 
         #region Adding Rows
 
+        /// <summary>
+        /// Handles the Click event of the createBlankRecordToolStripMenuItem control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void createBlankRecordToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            {
+                connection.Open();
+
+                string query = "INSERT INTO Records (DateAdded, Author, Title) VALUES (CURRENT_DATE, 'New Record', 'New Record')";
+
+                using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                {
+                    command.ExecuteNonQuery();
+                    int recordID = (int)connection.LastInsertRowId;
+
+                    this.OnLoad(new EventArgs());
+                    recordsDataGridView.Rows[recordsDataGridView.Rows.Count - 1].Cells[0].Selected = true;
+                }
+            }
+        }
+
         private void fieldsDataGridView_UserAddedRow(object sender, DataGridViewRowEventArgs e)
         {
             int recordID = Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString());
@@ -1116,6 +1145,7 @@ namespace CSharp_MARC_Editor
 
                             command.ExecuteNonQuery();
                             LoadFields(recordID);
+                            RebuildRecordsPreviewInformation(recordID);
                         }
                     }
                 }
@@ -1137,6 +1167,7 @@ namespace CSharp_MARC_Editor
             {
                 try
                 {
+                    int recordID = Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString());
                     int fieldID = Int32.Parse(fieldsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString());
                     string code = subfieldsDataGridView.Rows[e.RowIndex].Cells[2].Value.ToString();
                     string data = subfieldsDataGridView.Rows[e.RowIndex].Cells[3].Value.ToString();
@@ -1155,6 +1186,7 @@ namespace CSharp_MARC_Editor
 
                             command.ExecuteNonQuery();
                             LoadSubfields(fieldID);
+                            RebuildRecordsPreviewInformation(recordID);
                         }
                     }
                 }
@@ -1408,14 +1440,6 @@ namespace CSharp_MARC_Editor
 
                     RebuildRecordsPreviewInformation();
 
-                    recordsDataGridView.DataSource = null;
-                    fieldsDataGridView.DataSource = null;
-                    subfieldsDataGridView.DataSource = null;
-
-                    marcDataSet.Tables["Records"].Rows.Clear();
-                    marcDataSet.Tables["Fields"].Rows.Clear();
-                    marcDataSet.Tables["Subfields"].Rows.Clear();
-
                     this.OnLoad(new EventArgs());
                     this.Enabled = true;
                 }
@@ -1488,10 +1512,6 @@ namespace CSharp_MARC_Editor
                     command.CommandText = "DELETE FROM Records";
                     command.ExecuteNonQuery();
                 }
-
-                marcDataSet.Tables["Records"].Rows.Clear();
-                marcDataSet.Tables["Fields"].Rows.Clear();
-                marcDataSet.Tables["Subfields"].Rows.Clear();
 
                 this.OnLoad(new EventArgs());
                 this.Enabled = true;

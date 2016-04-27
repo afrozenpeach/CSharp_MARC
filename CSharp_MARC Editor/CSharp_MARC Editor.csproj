@@ -153,6 +153,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Images\document-new.png" />
     <Content Include="Images\document-open.png" />
     <Content Include="Images\document-save.png" />
     <Content Include="Images\edit-clear.png" />

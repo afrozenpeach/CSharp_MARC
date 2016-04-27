@@ -110,6 +110,7 @@ namespace CSharp_MARC_Editor
             this.fieldIDDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.codeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.createBlankRecordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -463,6 +464,7 @@ namespace CSharp_MARC_Editor
             // editToolStripMenuItem
             // 
             this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.createBlankRecordToolStripMenuItem,
             this.findAndReplaceToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
@@ -623,6 +625,14 @@ namespace CSharp_MARC_Editor
             this.dataDataGridViewTextBoxColumn.Name = "dataDataGridViewTextBoxColumn";
             this.dataDataGridViewTextBoxColumn.Width = 300;
             // 
+            // createBlankRecordToolStripMenuItem
+            // 
+            this.createBlankRecordToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("createBlankRecordToolStripMenuItem.Image")));
+            this.createBlankRecordToolStripMenuItem.Name = "createBlankRecordToolStripMenuItem";
+            this.createBlankRecordToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.createBlankRecordToolStripMenuItem.Text = "Create Blank Record";
+            this.createBlankRecordToolStripMenuItem.Click += new System.EventHandler(this.createBlankRecordToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -708,6 +718,7 @@ namespace CSharp_MARC_Editor
         private System.Windows.Forms.DataGridViewTextBoxColumn ind1DataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn ind2DataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn controlDataDataGridViewTextBoxColumn;
+        private System.Windows.Forms.ToolStripMenuItem createBlankRecordToolStripMenuItem;
 
     }
 }
