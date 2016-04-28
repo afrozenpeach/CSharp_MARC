@@ -555,7 +555,7 @@ namespace CSharp_MARC_Editor
                         subfieldsDataGridView.DataSource = marcDataSet.Tables["Subfields"];
                     }
 
-                    using (SQLiteCommand command = new SQLiteCommand("SELECT TOP 1 * FROM Settings"))
+                    using (SQLiteCommand command = new SQLiteCommand("SELECT TOP 1 * FROM Settings", connection))
                     {
                         using (SQLiteDataReader reader = command.ExecuteReader())
                         {
