@@ -1423,9 +1423,6 @@ namespace CSharp_MARC_Editor
                                 whereClause.Append(") AND ");
                             }
 
-                            if (whereClause.ToString() != " WHERE ")
-                                whereClause.Remove(whereClause.Length - 4, 4);
-
                             whereClause.Append("Data LIKE @Data;");
                             command.Parameters.Add("@Data", DbType.String).Value = "%" + form.Data + "%";
 
