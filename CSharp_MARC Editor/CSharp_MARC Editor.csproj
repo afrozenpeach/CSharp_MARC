@@ -55,6 +55,9 @@
     <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>CatCardIcon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="SQLite.Designer">
       <HintPath>..\..\..\..\..\..\Program Files\System.Data.SQLite\2008\bin\SQLite.Designer.dll</HintPath>
@@ -153,6 +156,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="CatCardIcon.ico" />
     <Content Include="Images\CatCardIcon.ico" />
     <Content Include="Images\document-new.png" />
     <Content Include="Images\document-open.png" />

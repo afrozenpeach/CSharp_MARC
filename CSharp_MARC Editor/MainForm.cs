@@ -265,7 +265,7 @@ namespace CSharp_MARC_Editor
         /// <param name="force">if set to <c>true</c> [force].</param>
         private void ResetDatabase(bool force = false)
         {
-            if (force || MessageBox.Show("This will permanently delete all records, and recreate the database." + Environment.NewLine + Environment.NewLine + "Are you sure you want to reset the database?", "Are you sure you want to reset the database?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            if (force || MessageBox.Show("This will permanently delete all records and reset the customizable options to their defaults." + Environment.NewLine + Environment.NewLine + "Are you sure you want to reset the database?", "Are you sure you want to reset the database?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
             {
                 this.Enabled = false;
 
@@ -298,6 +298,25 @@ namespace CSharp_MARC_Editor
                                                 [Barcode] nvarchar(2147483647), 
                                                 [Classification] nvarchar(2147483647), 
                                                 [MainEntry] nvarchar(2147483647));
+
+                                            CREATE TABLE [Settings](
+                                                [RecordListAtTop] bool, 
+                                                [ClearDatabaseOnExit] bool, 
+                                                [CustomTag1] nvarchar(3), 
+                                                [CustomCode1] nvarchar(1), 
+                                                [CustomData1] nvarchar(2147483647), 
+                                                [CustomTag2] nvarchar(3), 
+                                                [CustomCode2] nvarchar(1), 
+                                                [CustomData2] nvarchar(2147483647), 
+                                                [CustomTag3] nvarchar(3), 
+                                                [CustomCode3] nvarchar(1), 
+                                                [CustomData3] nvarchar(2147483647), 
+                                                [CustomTag4] nvarchar(3), 
+                                                [CustomCode4] nvarchar(1), 
+                                                [CustomData4] nvarchar(2147483647), 
+                                                [CustomTag5] nvarchar(3), 
+                                                [CustomCode5] varchar(1), 
+                                                [CustomData5] nvarchar(2147483647));
 
                                             CREATE TABLE [Subfields](
                                                 [SubfieldID] integer PRIMARY KEY ASC AUTOINCREMENT NOT NULL, 
@@ -452,6 +471,41 @@ namespace CSharp_MARC_Editor
             }
         }
 
+        /// <summary>
+        /// Saves the options.
+        /// </summary>
+        private void SaveOptions()
+        {
+            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            {
+                connection.Open();
+
+                string query = "UPDATE Settings SET RecordListAtTop = @RecordListAtTop, ClearDatabaseOnExit = @ClearDatabaseOnExit, CustomTag1 = @CustomTag1, CustomCode1 = @CustomCode1, CustomData1 = @CustomData1, CustomTag2 = @CustomTag2, CustomCode2 = @CustomCode2, CustomData2 = @CustomData2, CustomTag3 = @CustomTag3, CustomCode3 = @CustomCode3, CustomData3 = @CustomData3, CustomTag4 = @CustomTag4, CustomCode4 = @CustomCode4, CustomData4 = @CustomData4, CustomTag5 = @CustomTag5 CustomCode5 = @CustomCode5, CustomData5 = @CustomData5";
+                using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                {
+                    command.Parameters.Add("@RecordListAtTop", DbType.Boolean).Value = recordListAtTopToolStripMenuItem.Checked;
+                    command.Parameters.Add("@ClearDatabaseOnExit", DbType.Boolean).Value = clearDatabaseOnExitToolStripMenuItem.Checked;
+                    command.Parameters.Add("@CustomTag1", DbType.String).Value = null;
+                    command.Parameters.Add("@CustomCode1", DbType.String).Value = null;
+                    command.Parameters.Add("@CustomData1", DbType.String).Value = null;
+                    command.Parameters.Add("@CustomTag2", DbType.String).Value = null;
+                    command.Parameters.Add("@CustomCode2", DbType.String).Value = null;
+                    command.Parameters.Add("@CustomData2", DbType.String).Value = null;
+                    command.Parameters.Add("@CustomTag3", DbType.String).Value = null;
+                    command.Parameters.Add("@CustomCode3", DbType.String).Value = null;
+                    command.Parameters.Add("@CustomData3", DbType.String).Value = null;
+                    command.Parameters.Add("@CustomTag4", DbType.String).Value = null;
+                    command.Parameters.Add("@CustomCode4", DbType.String).Value = null;
+                    command.Parameters.Add("@CustomData4", DbType.String).Value = null;
+                    command.Parameters.Add("@CustomTag5", DbType.String).Value = null;
+                    command.Parameters.Add("@CustomCode5", DbType.String).Value = null;
+                    command.Parameters.Add("@CustomData5", DbType.String).Value = null;
+
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
         #endregion
 
         #region Form Events
@@ -499,6 +553,25 @@ namespace CSharp_MARC_Editor
                         SQLiteDataAdapter recordsDataAdapter = new SQLiteDataAdapter(command);
                         recordsDataAdapter.Fill(marcDataSet, "Subfields");
                         subfieldsDataGridView.DataSource = marcDataSet.Tables["Subfields"];
+                    }
+
+                    using (SQLiteCommand command = new SQLiteCommand("SELECT TOP 1 * FROM Settings"))
+                    {
+                        using (SQLiteDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                if (reader["RecordListAtTop"] != DBNull.Value)
+                                    recordListAtTopToolStripMenuItem.Checked = (bool)reader["RecordListAtTop"];
+                                else
+                                    recordListAtTopToolStripMenuItem.Checked = true;
+
+                                if (reader["ClearDatabaseOnExit"] != DBNull.Value)
+                                    clearDatabaseOnExitToolStripMenuItem.Checked = (bool)reader["ClearDatabaseOnExit"];
+                                else
+                                    clearDatabaseOnExitToolStripMenuItem.Checked = false;
+                            }
+                        }
                     }
                 }
 
@@ -1520,6 +1593,23 @@ namespace CSharp_MARC_Editor
                 recordListAtTopToolStripMenuItem.Checked = true;
                 splitContainer.Orientation = Orientation.Horizontal;
             }
+
+            SaveOptions();
+        }
+
+        /// <summary>
+        /// Handles the Click event of the clearDatabaseOnExitToolStripMenuItem control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void clearDatabaseOnExitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (clearDatabaseOnExitToolStripMenuItem.Checked)
+                clearDatabaseOnExitToolStripMenuItem.Checked = false;
+            else
+                clearDatabaseOnExitToolStripMenuItem.Checked = true;
+
+            SaveOptions();
         }
 
         /// <summary>
@@ -1566,6 +1656,17 @@ namespace CSharp_MARC_Editor
             {
                 form.ShowDialog();
             }
+        }
+
+        /// <summary>
+        /// Handles the FormClosing event of the MainForm control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="FormClosingEventArgs"/> instance containing the event data.</param>
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (clearDatabaseOnExitToolStripMenuItem.Checked)
+                clearDatabaseToolStripMenuItem_Click(sender, e);
         }
 
         /// <summary>

@@ -112,6 +112,8 @@ namespace CSharp_MARC_Editor
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.exportingBackgroundWorker = new System.ComponentModel.BackgroundWorker();
+            this.clearDatabaseOnExitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.customFieldsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -576,7 +578,9 @@ namespace CSharp_MARC_Editor
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.recordListAtTopToolStripMenuItem});
+            this.recordListAtTopToolStripMenuItem,
+            this.clearDatabaseOnExitToolStripMenuItem,
+            this.customFieldsToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.optionsToolStripMenuItem.Text = "Options";
@@ -641,6 +645,19 @@ namespace CSharp_MARC_Editor
             this.exportingBackgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.exportingBackgroundWorker_ProgressChanged);
             this.exportingBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.exportingBackgroundWorker_RunWorkerCompleted);
             // 
+            // clearDatabaseOnExitToolStripMenuItem
+            // 
+            this.clearDatabaseOnExitToolStripMenuItem.Name = "clearDatabaseOnExitToolStripMenuItem";
+            this.clearDatabaseOnExitToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.clearDatabaseOnExitToolStripMenuItem.Text = "Clear database on exit";
+            this.clearDatabaseOnExitToolStripMenuItem.Click += new System.EventHandler(this.clearDatabaseOnExitToolStripMenuItem_Click);
+            // 
+            // customFieldsToolStripMenuItem
+            // 
+            this.customFieldsToolStripMenuItem.Name = "customFieldsToolStripMenuItem";
+            this.customFieldsToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.customFieldsToolStripMenuItem.Text = "Custom Fields";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -653,6 +670,7 @@ namespace CSharp_MARC_Editor
             this.MinimumSize = new System.Drawing.Size(1000, 676);
             this.Name = "MainForm";
             this.Text = "C# MARC Editor";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.splitContainer.Panel1.ResumeLayout(false);
             this.splitContainer.Panel2.ResumeLayout(false);
@@ -729,6 +747,8 @@ namespace CSharp_MARC_Editor
         private System.Windows.Forms.DataGridViewTextBoxColumn barcodeDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn classificationDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn mainEntryDataGridViewTextBoxColumn;
+        private System.Windows.Forms.ToolStripMenuItem clearDatabaseOnExitToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem customFieldsToolStripMenuItem;
 
     }
 }

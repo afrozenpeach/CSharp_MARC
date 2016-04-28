@@ -25,7 +25,7 @@
  * @copyright 2016 Matt Schraeder
  * @license   http://www.gnu.org/licenses/gpl-3.0.html  GPL License 3
  */
-
+ 
 CREATE TABLE [Fields](
     [FieldID] integer PRIMARY KEY ASC AUTOINCREMENT NOT NULL, 
     [RecordID] nvarchar(2147483647) NOT NULL, 
@@ -46,6 +46,25 @@ CREATE TABLE [Records](
     [Classification] nvarchar(2147483647), 
     [MainEntry] nvarchar(2147483647));
 
+CREATE TABLE [Settings](
+    [RecordListAtTop] bool, 
+    [ClearDatabaseOnExit] bool, 
+    [CustomTag1] nvarchar(3), 
+    [CustomCode1] nvarchar(1), 
+    [CustomData1] nvarchar(2147483647), 
+    [CustomTag2] nvarchar(3), 
+    [CustomCode2] nvarchar(1), 
+    [CustomData2] nvarchar(2147483647), 
+    [CustomTag3] nvarchar(3), 
+    [CustomCode3] nvarchar(1), 
+    [CustomData3] nvarchar(2147483647), 
+    [CustomTag4] nvarchar(3), 
+    [CustomCode4] nvarchar(1), 
+    [CustomData4] nvarchar(2147483647), 
+    [CustomTag5] nvarchar(3), 
+    [CustomCode5] varchar(1), 
+    [CustomData5] nvarchar(2147483647));
+
 CREATE TABLE [Subfields](
     [SubfieldID] integer PRIMARY KEY ASC AUTOINCREMENT NOT NULL, 
     [FieldID] bigint NOT NULL, 
@@ -60,4 +79,3 @@ ON [Subfields](
 CREATE INDEX [RecordID]
 ON [Fields](
     [RecordID] ASC);
-
