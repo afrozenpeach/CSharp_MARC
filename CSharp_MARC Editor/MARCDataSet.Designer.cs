@@ -359,6 +359,8 @@ namespace CSharp_MARC_Editor {
             
             private global::System.Data.DataColumn columnTitle;
             
+            private global::System.Data.DataColumn columnCopyrightDate;
+            
             private global::System.Data.DataColumn columnBarcode;
             
             private global::System.Data.DataColumn columnClassification;
@@ -440,6 +442,14 @@ namespace CSharp_MARC_Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn CopyrightDateColumn {
+                get {
+                    return this.columnCopyrightDate;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public global::System.Data.DataColumn BarcodeColumn {
                 get {
                     return this.columnBarcode;
@@ -499,7 +509,7 @@ namespace CSharp_MARC_Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public RecordsRow AddRecordsRow(string RecordID, string DateAdded, string DateChanged, string Author, string Title, string Barcode, string Classification, string MainEntry) {
+            public RecordsRow AddRecordsRow(int RecordID, string DateAdded, string DateChanged, string Author, string Title, int CopyrightDate, string Barcode, string Classification, string MainEntry) {
                 RecordsRow rowRecordsRow = ((RecordsRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         RecordID,
@@ -507,6 +517,7 @@ namespace CSharp_MARC_Editor {
                         DateChanged,
                         Author,
                         Title,
+                        CopyrightDate,
                         Barcode,
                         Classification,
                         MainEntry};
@@ -537,6 +548,7 @@ namespace CSharp_MARC_Editor {
                 this.columnDateChanged = base.Columns["DateChanged"];
                 this.columnAuthor = base.Columns["Author"];
                 this.columnTitle = base.Columns["Title"];
+                this.columnCopyrightDate = base.Columns["CopyrightDate"];
                 this.columnBarcode = base.Columns["Barcode"];
                 this.columnClassification = base.Columns["Classification"];
                 this.columnMainEntry = base.Columns["MainEntry"];
@@ -545,7 +557,7 @@ namespace CSharp_MARC_Editor {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             private void InitClass() {
-                this.columnRecordID = new global::System.Data.DataColumn("RecordID", typeof(string), null, global::System.Data.MappingType.Element);
+                this.columnRecordID = new global::System.Data.DataColumn("RecordID", typeof(int), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnRecordID);
                 this.columnDateAdded = new global::System.Data.DataColumn("DateAdded", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnDateAdded);
@@ -555,6 +567,8 @@ namespace CSharp_MARC_Editor {
                 base.Columns.Add(this.columnAuthor);
                 this.columnTitle = new global::System.Data.DataColumn("Title", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnTitle);
+                this.columnCopyrightDate = new global::System.Data.DataColumn("CopyrightDate", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCopyrightDate);
                 this.columnBarcode = new global::System.Data.DataColumn("Barcode", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnBarcode);
                 this.columnClassification = new global::System.Data.DataColumn("Classification", typeof(string), null, global::System.Data.MappingType.Element);
@@ -824,7 +838,7 @@ namespace CSharp_MARC_Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public FieldsRow AddFieldsRow(string FieldID, string RecordID, string TagNumber, string Ind1, string Ind2, string ControlData) {
+            public FieldsRow AddFieldsRow(int FieldID, int RecordID, string TagNumber, string Ind1, string Ind2, string ControlData) {
                 FieldsRow rowFieldsRow = ((FieldsRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         FieldID,
@@ -866,9 +880,9 @@ namespace CSharp_MARC_Editor {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             private void InitClass() {
-                this.columnFieldID = new global::System.Data.DataColumn("FieldID", typeof(string), null, global::System.Data.MappingType.Element);
+                this.columnFieldID = new global::System.Data.DataColumn("FieldID", typeof(int), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnFieldID);
-                this.columnRecordID = new global::System.Data.DataColumn("RecordID", typeof(string), null, global::System.Data.MappingType.Element);
+                this.columnRecordID = new global::System.Data.DataColumn("RecordID", typeof(int), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnRecordID);
                 this.columnTagNumber = new global::System.Data.DataColumn("TagNumber", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnTagNumber);
@@ -1124,7 +1138,7 @@ namespace CSharp_MARC_Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public SubfieldsRow AddSubfieldsRow(string SubfieldID, string FieldID, string Code, string Data) {
+            public SubfieldsRow AddSubfieldsRow(int SubfieldID, int FieldID, string Code, string Data) {
                 SubfieldsRow rowSubfieldsRow = ((SubfieldsRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         SubfieldID,
@@ -1162,9 +1176,9 @@ namespace CSharp_MARC_Editor {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             private void InitClass() {
-                this.columnSubfieldID = new global::System.Data.DataColumn("SubfieldID", typeof(string), null, global::System.Data.MappingType.Element);
+                this.columnSubfieldID = new global::System.Data.DataColumn("SubfieldID", typeof(int), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnSubfieldID);
-                this.columnFieldID = new global::System.Data.DataColumn("FieldID", typeof(string), null, global::System.Data.MappingType.Element);
+                this.columnFieldID = new global::System.Data.DataColumn("FieldID", typeof(int), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnFieldID);
                 this.columnCode = new global::System.Data.DataColumn("Code", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnCode);
@@ -1313,10 +1327,10 @@ namespace CSharp_MARC_Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string RecordID {
+            public int RecordID {
                 get {
                     try {
-                        return ((string)(this[this.tableRecords.RecordIDColumn]));
+                        return ((int)(this[this.tableRecords.RecordIDColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
                         throw new global::System.Data.StrongTypingException("The value for column \'RecordID\' in table \'Records\' is DBNull.", e);
@@ -1388,6 +1402,22 @@ namespace CSharp_MARC_Editor {
                 }
                 set {
                     this[this.tableRecords.TitleColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public int CopyrightDate {
+                get {
+                    try {
+                        return ((int)(this[this.tableRecords.CopyrightDateColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'CopyrightDate\' in table \'Records\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableRecords.CopyrightDateColumn] = value;
                 }
             }
             
@@ -1501,6 +1531,18 @@ namespace CSharp_MARC_Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsCopyrightDateNull() {
+                return this.IsNull(this.tableRecords.CopyrightDateColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetCopyrightDateNull() {
+                this[this.tableRecords.CopyrightDateColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsBarcodeNull() {
                 return this.IsNull(this.tableRecords.BarcodeColumn);
             }
@@ -1552,10 +1594,10 @@ namespace CSharp_MARC_Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string FieldID {
+            public int FieldID {
                 get {
                     try {
-                        return ((string)(this[this.tableFields.FieldIDColumn]));
+                        return ((int)(this[this.tableFields.FieldIDColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
                         throw new global::System.Data.StrongTypingException("The value for column \'FieldID\' in table \'Fields\' is DBNull.", e);
@@ -1568,10 +1610,10 @@ namespace CSharp_MARC_Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string RecordID {
+            public int RecordID {
                 get {
                     try {
-                        return ((string)(this[this.tableFields.RecordIDColumn]));
+                        return ((int)(this[this.tableFields.RecordIDColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
                         throw new global::System.Data.StrongTypingException("The value for column \'RecordID\' in table \'Fields\' is DBNull.", e);
@@ -1735,10 +1777,10 @@ namespace CSharp_MARC_Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string SubfieldID {
+            public int SubfieldID {
                 get {
                     try {
-                        return ((string)(this[this.tableSubfields.SubfieldIDColumn]));
+                        return ((int)(this[this.tableSubfields.SubfieldIDColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
                         throw new global::System.Data.StrongTypingException("The value for column \'SubfieldID\' in table \'Subfields\' is DBNull.", e);
@@ -1751,10 +1793,10 @@ namespace CSharp_MARC_Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string FieldID {
+            public int FieldID {
                 get {
                     try {
-                        return ((string)(this[this.tableSubfields.FieldIDColumn]));
+                        return ((int)(this[this.tableSubfields.FieldIDColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
                         throw new global::System.Data.StrongTypingException("The value for column \'FieldID\' in table \'Subfields\' is DBNull.", e);

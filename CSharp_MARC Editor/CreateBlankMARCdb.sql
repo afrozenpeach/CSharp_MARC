@@ -41,6 +41,7 @@ CREATE TABLE [Records](
     [DateChanged] datetime, 
     [Author] nvarchar(2147483647), 
     [Title] nvarchar(2147483647), 
+    [CopyrightDate] integer, 
     [Barcode] nvarchar(2147483647), 
     [Classification] nvarchar(2147483647), 
     [MainEntry] nvarchar(2147483647));

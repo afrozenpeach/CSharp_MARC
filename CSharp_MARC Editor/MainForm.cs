@@ -37,6 +37,7 @@ using System.Windows.Forms;
 using MARC;
 using System.Data.SQLite;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace CSharp_MARC_Editor
 {
@@ -76,8 +77,13 @@ namespace CSharp_MARC_Editor
 
             DataField record100 = (DataField)record["100"];
             DataField record245 = (DataField)record["245"];
+            DataField record260 = (DataField)record["260"];
+            DataField record264 = (DataField)record["264"];
+
             string author = "";
             string title = "";
+            int tempCopyrightDate = -1;
+            int? copyrightDate = null;
 
             if (record100 != null && record100['a'] != null)
                 author = record100['a'].Data;
@@ -92,10 +98,19 @@ namespace CSharp_MARC_Editor
             if (record245 != null && record245['b'] != null)
                 title += " " + record245['b'].Data;
 
+            if (record260 != null && record260['c'] != null && int.TryParse(Regex.Replace(record260['c'].Data, "[^0-9]", ""), out tempCopyrightDate))
+                copyrightDate = tempCopyrightDate;
+            else if (record264 != null && record264['c'] != null && int.TryParse(Regex.Replace(record264['c'].Data, "[^0-9]", ""), out tempCopyrightDate))
+                copyrightDate = tempCopyrightDate;
+
+
             newRow["DateAdded"] = new DateTime();
             newRow["DateChanged"] = DBNull.Value;
             newRow["Author"] = author;
             newRow["Title"] = title;
+
+            if (copyrightDate.HasValue)
+                newRow["CopyrightDate"] = copyrightDate;
 
             return newRow;
         }
@@ -237,6 +252,7 @@ namespace CSharp_MARC_Editor
             codeDataGridViewTextBoxColumn.Visible = false;
             subfieldsDataGridView.AllowUserToAddRows = false;
             DataRow newRow = marcDataSet.Tables["Subfields"].NewRow();
+            newRow["SubfieldID"] = -1;
             newRow["FieldID"] = FieldID;
             newRow["Code"] = "";
             newRow["Data"] = data;
@@ -278,6 +294,7 @@ namespace CSharp_MARC_Editor
                                                 [DateChanged] datetime, 
                                                 [Author] nvarchar(2147483647), 
                                                 [Title] nvarchar(2147483647), 
+                                                [CopyrightDate] integer, 
                                                 [Barcode] nvarchar(2147483647), 
                                                 [Classification] nvarchar(2147483647), 
                                                 [MainEntry] nvarchar(2147483647));
@@ -339,11 +356,12 @@ namespace CSharp_MARC_Editor
                             updaterCommand.CommandText = "BEGIN;";
                             updaterCommand.ExecuteNonQuery();
 
-                            updaterCommand.CommandText = "UPDATE Records SET DateChanged = @DateChanged, Author = @Author, Title = @Title, Barcode = @Barcode, Classification = @Classification, MainEntry = @MainEntry WHERE RecordID = @RecordID";
+                            updaterCommand.CommandText = "UPDATE Records SET DateChanged = @DateChanged, Author = @Author, Title = @Title, CopyrightDate = @CopyrightDate, Barcode = @Barcode, Classification = @Classification, MainEntry = @MainEntry WHERE RecordID = @RecordID";
                             
                             updaterCommand.Parameters.Add("@Author", DbType.String);
                             updaterCommand.Parameters.Add("@Title", DbType.String);
                             updaterCommand.Parameters.Add("@Barcode", DbType.String);
+                            updaterCommand.Parameters.Add("@CopyrightDate", DbType.Int32);
                             updaterCommand.Parameters.Add("@Classification", DbType.String);
                             updaterCommand.Parameters.Add("@MainEntry", DbType.String);
                             updaterCommand.Parameters.Add("@RecordID", DbType.Int32);
@@ -358,10 +376,11 @@ namespace CSharp_MARC_Editor
                                 string barcode = "";
                                 string classification = "";
                                 string mainEntry = "";
+                                int tempCopyrightDate = -1;
+                                int? copyrightDate = null;
 
                                 while (reader.Read())
                                 {
-
                                     if (currentRecord != Int32.Parse(reader["RecordID"].ToString()))
                                     {
                                         if (currentRecord >= 0)
@@ -369,6 +388,10 @@ namespace CSharp_MARC_Editor
                                             updaterCommand.Parameters["@DateChanged"].Value = DateTime.Now;
                                             updaterCommand.Parameters["@Author"].Value = author;
                                             updaterCommand.Parameters["@Title"].Value = title;
+                                            if (copyrightDate.HasValue)
+                                                updaterCommand.Parameters["@CopyrightDate"].Value = copyrightDate;
+                                            else
+                                                updaterCommand.Parameters["@CopyrightDate"].Value = DBNull.Value;
                                             updaterCommand.Parameters["@Barcode"].Value = barcode;
                                             updaterCommand.Parameters["@Classification"].Value = classification;
                                             updaterCommand.Parameters["@MainEntry"].Value = mainEntry;
@@ -385,9 +408,10 @@ namespace CSharp_MARC_Editor
                                                         row.Cells[2].Value = updaterCommand.Parameters["@DateChanged"].Value.ToString();
                                                         row.Cells[3].Value = author;
                                                         row.Cells[4].Value = title;
-                                                        row.Cells[5].Value = barcode;
-                                                        row.Cells[6].Value = classification;
-                                                        row.Cells[7].Value = mainEntry;
+                                                        row.Cells[5].Value = copyrightDate;
+                                                        row.Cells[6].Value = barcode;
+                                                        row.Cells[7].Value = classification;
+                                                        row.Cells[8].Value = mainEntry;
                                                         break;
                                                     }
                                                 }
@@ -412,6 +436,11 @@ namespace CSharp_MARC_Editor
                                         title = (string)reader["Data"];
                                     else if (title == null && (string)reader["TagNumber"] == "245" && (string)reader["Code"] == "b")
                                         title += " " + (string)reader["Data"];
+
+                                    if (copyrightDate == null && (string)reader["TagNumber"] == "260" && (string)reader["Code"] == "c" && int.TryParse(Regex.Replace((string)reader["Data"], "[^0-9]", ""), out tempCopyrightDate))
+                                        copyrightDate = tempCopyrightDate;
+                                    else if (copyrightDate == null && (string)reader["TagNumber"] == "264" && (string)reader["Code"] == "c" && int.TryParse(Regex.Replace((string)reader["Data"], "[^0-9]", ""), out tempCopyrightDate))
+                                        copyrightDate = tempCopyrightDate;
                                 }
                             }
                             
@@ -584,11 +613,12 @@ namespace CSharp_MARC_Editor
                         i++;
                         DataRow newRow = GetMARCRecordRow(record);
                         
-                        command.CommandText = "INSERT INTO Records (DateAdded, DateChanged, Author, Title, Barcode, Classification, MainEntry) VALUES (@DateAdded, @DateChanged, @Author, @Title, @Barcode, @Classification, @MainEntry)";
+                        command.CommandText = "INSERT INTO Records (DateAdded, DateChanged, Author, Title, CopyrightDate, Barcode, Classification, MainEntry) VALUES (@DateAdded, @DateChanged, @Author, @Title, @CopyrightDate, @Barcode, @Classification, @MainEntry)";
                         command.Parameters.Add("@DateAdded", DbType.DateTime).Value = DateTime.Now;
                         command.Parameters.Add("@DateChanged", DbType.DateTime).Value = DBNull.Value;
                         command.Parameters.Add("@Author", DbType.String).Value = newRow["Author"];
                         command.Parameters.Add("@Title", DbType.String).Value = newRow["Title"];
+                        command.Parameters.Add("@CopyrightDate", DbType.String).Value = newRow["CopyrightDate"];
                         command.Parameters.Add("@Barcode", DbType.String).Value = newRow["Barcode"];
                         command.Parameters.Add("@Classification", DbType.String).Value = newRow["Classification"];
                         command.Parameters.Add("@MainEntry", DbType.String).Value = newRow["MainEntry"];
