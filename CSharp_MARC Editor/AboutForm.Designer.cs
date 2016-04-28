@@ -69,9 +69,11 @@ namespace CSharp_MARC_Editor
             this.emailLabel = new System.Windows.Forms.LinkLabel();
             this.btsbLabel = new System.Windows.Forms.Label();
             this.btsbLinkLabel = new System.Windows.Forms.LinkLabel();
+            this.gpl3PictureBox = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.mattPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lgpl3PictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btsbPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gpl3PictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // mattPictureBox
@@ -197,6 +199,16 @@ namespace CSharp_MARC_Editor
             this.btsbLinkLabel.TabStop = true;
             this.btsbLinkLabel.Text = "http://www.btsb.com";
             // 
+            // gpl3PictureBox
+            // 
+            this.gpl3PictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.gpl3PictureBox.Image = ((System.Drawing.Image)(resources.GetObject("gpl3PictureBox.Image")));
+            this.gpl3PictureBox.Location = new System.Drawing.Point(606, 12);
+            this.gpl3PictureBox.Name = "gpl3PictureBox";
+            this.gpl3PictureBox.Size = new System.Drawing.Size(130, 50);
+            this.gpl3PictureBox.TabIndex = 12;
+            this.gpl3PictureBox.TabStop = false;
+            // 
             // AboutForm
             // 
             this.AcceptButton = this.okButton;
@@ -204,6 +216,7 @@ namespace CSharp_MARC_Editor
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.okButton;
             this.ClientSize = new System.Drawing.Size(902, 423);
+            this.Controls.Add(this.gpl3PictureBox);
             this.Controls.Add(this.btsbLinkLabel);
             this.Controls.Add(this.btsbLabel);
             this.Controls.Add(this.emailLabel);
@@ -227,6 +240,7 @@ namespace CSharp_MARC_Editor
             ((System.ComponentModel.ISupportInitialize)(this.mattPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lgpl3PictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btsbPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gpl3PictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -246,5 +260,6 @@ namespace CSharp_MARC_Editor
         private System.Windows.Forms.LinkLabel emailLabel;
         private System.Windows.Forms.Label btsbLabel;
         private System.Windows.Forms.LinkLabel btsbLinkLabel;
+        private System.Windows.Forms.PictureBox gpl3PictureBox;
     }
 }

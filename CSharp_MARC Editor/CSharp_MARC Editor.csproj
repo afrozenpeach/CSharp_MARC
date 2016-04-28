@@ -153,12 +153,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Images\CatCardIcon.ico" />
     <Content Include="Images\document-new.png" />
     <Content Include="Images\document-open.png" />
     <Content Include="Images\document-save.png" />
     <Content Include="Images\edit-clear.png" />
+    <Content Include="Images\edit-find-replace.ico" />
     <Content Include="Images\edit-find-replace.png" />
     <Content Include="Images\edit-select-all.png" />
+    <Content Include="Images\gplv3-127x51.png" />
     <Content Include="Images\lgplv3-147x51.png" />
     <Content Include="Images\logo-header.png" />
     <Content Include="Images\matt.png" />

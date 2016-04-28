@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FindReplaceForm));
             this.tagsListBox = new System.Windows.Forms.ListBox();
             this.tagsLabel = new System.Windows.Forms.Label();
             this.indicatorsLabel = new System.Windows.Forms.Label();
@@ -213,6 +214,7 @@
             this.Controls.Add(this.tagsLabel);
             this.Controls.Add(this.tagsListBox);
             this.HelpButton = true;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(258, 307);
