@@ -1,0 +1,12 @@
+﻿<Properties StartupItem="CSharp_MARC Editor\CSharp_MARC Editor.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="CSharp_MARC Editor\FindReplaceForm.cs">
+    <Files>
+      <File FileName="CSharp_MARC Editor\FindReplaceForm.cs" Line="15" Column="30" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

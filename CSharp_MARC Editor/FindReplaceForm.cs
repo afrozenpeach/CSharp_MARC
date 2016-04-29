@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using System.Data.SQLite;
+using Mono.Data.Sqlite;
 
 namespace CSharp_MARC_Editor
 {
@@ -172,15 +172,15 @@ namespace CSharp_MARC_Editor
             ind2ListBox.SelectedIndex = 0;
             codesListBox.SelectedIndex = 0;
 
-            using (SQLiteConnection connection = new SQLiteConnection(MainForm.connectionString))
+            using (SqliteConnection connection = new SqliteConnection(MainForm.connectionString))
             {
-                using (SQLiteCommand command = new SQLiteCommand(connection))
+                using (SqliteCommand command = new SqliteCommand(connection))
                 {
                     connection.Open();
 
                     command.CommandText = "SELECT DISTINCT TagNumber FROM Fields ORDER BY ABS(TagNumber), TagNumber";
                     
-                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    using (SqliteDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
                             tagsListBox.Items.Add(reader["TagNumber"]);
@@ -188,7 +188,7 @@ namespace CSharp_MARC_Editor
 
                     command.CommandText = "SELECT DISTINCT Code FROM Subfields ORDER BY Code";
 
-                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    using (SqliteDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
                             codesListBox.Items.Add(reader["Code"]);
@@ -196,7 +196,7 @@ namespace CSharp_MARC_Editor
 
                     command.CommandText = "SELECT DISTINCT Ind1 as Ind FROM Fields WHERE Ind1 IS NOT NULL UNION SELECT DISTINCT Ind2 as Ind FROM Fields WHERE Ind2 IS NOT NULL ORDER BY Ind";
 
-                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    using (SqliteDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
                         {

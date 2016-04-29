@@ -35,7 +35,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using MARC;
-using System.Data.SQLite;
+using Mono.Data.Sqlite;
 using System.IO;
 using System.Text.RegularExpressions;
 
@@ -207,15 +207,15 @@ namespace CSharp_MARC_Editor
         {
             marcDataSet.Tables["Fields"].Rows.Clear();
 
-            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            using (SqliteConnection connection = new SqliteConnection(connectionString))
             {
                 connection.Open();
                 string query = "SELECT * FROM Fields where RecordiD = @RecordID";
                 
-                using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                using (SqliteCommand command = new SqliteCommand(query, connection))
                 {
                     command.Parameters.Add("@RecordID", DbType.Int32).Value = recordID;
-                    SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter(command);
+                    SqliteDataAdapter dataAdapter = new SqliteDataAdapter(command);
                     dataAdapter.Fill(marcDataSet, "Fields");
                     fieldsDataGridView.DataSource = marcDataSet.Tables["Fields"];
                 }
@@ -250,15 +250,15 @@ namespace CSharp_MARC_Editor
             codeDataGridViewTextBoxColumn.Visible = true;
             subfieldsDataGridView.AllowUserToAddRows = true;
 
-            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            using (SqliteConnection connection = new SqliteConnection(connectionString))
             {
                 connection.Open();
                 string query = "SELECT * FROM Subfields where FieldID = @FieldID";
 
-                using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                using (SqliteCommand command = new SqliteCommand(query, connection))
                 {
                     command.Parameters.Add("@FieldID", DbType.Int32).Value = FieldID;
-                    SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter(command);
+                    SqliteDataAdapter dataAdapter = new SqliteDataAdapter(command);
                     dataAdapter.Fill(marcDataSet, "Subfields");
                     subfieldsDataGridView.DataSource = marcDataSet.Tables["Subfields"];
                 }
@@ -273,18 +273,18 @@ namespace CSharp_MARC_Editor
         {
             Record record = new Record();
 
-            using (SQLiteCommand fieldsCommand = new SQLiteCommand("SELECT * FROM Fields WHERE RecordID = @RecordID ORDER BY FieldID", new SQLiteConnection(connectionString)))
+            using (SqliteCommand fieldsCommand = new SqliteCommand("SELECT * FROM Fields WHERE RecordID = @RecordID ORDER BY FieldID", new SqliteConnection(connectionString)))
             {
                 fieldsCommand.Connection.Open();
                 fieldsCommand.Parameters.Add("@RecordID", DbType.Int32);
 
-                using (SQLiteCommand subfieldsCommand = new SQLiteCommand("SELECT * FROM Subfields WHERE FieldID = @FieldID ORDER BY SubfieldID", new SQLiteConnection(connectionString)))
+                using (SqliteCommand subfieldsCommand = new SqliteCommand("SELECT * FROM Subfields WHERE FieldID = @FieldID ORDER BY SubfieldID", new SqliteConnection(connectionString)))
                 {
                     subfieldsCommand.Connection.Open();
                     subfieldsCommand.Parameters.Add("@FieldID", DbType.Int32);
                     fieldsCommand.Parameters["@RecordID"].Value = recordID;
 
-                    using (SQLiteDataReader fieldsReader = fieldsCommand.ExecuteReader())
+                    using (SqliteDataReader fieldsReader = fieldsCommand.ExecuteReader())
                     {
                         while (fieldsReader.Read())
                         {
@@ -307,7 +307,7 @@ namespace CSharp_MARC_Editor
                                 DataField dataField = new DataField(fieldsReader["TagNumber"].ToString(), new List<Subfield>(), ind1, ind2);
                                 subfieldsCommand.Parameters["@FieldID"].Value = fieldsReader["FieldID"];
 
-                                using (SQLiteDataReader subfieldReader = subfieldsCommand.ExecuteReader())
+                                using (SqliteDataReader subfieldReader = subfieldsCommand.ExecuteReader())
                                 {
                                     while (subfieldReader.Read())
                                     {
@@ -359,7 +359,7 @@ namespace CSharp_MARC_Editor
                 if (File.Exists("MARC.db"))
                     File.Delete("MARC.db");
 
-                using (SQLiteCommand command = new SQLiteCommand(new SQLiteConnection(connectionString)))
+                using (SqliteCommand command = new SqliteCommand(new SqliteConnection(connectionString)))
                 {
                     command.Connection.Open();
 
@@ -431,11 +431,11 @@ namespace CSharp_MARC_Editor
         /// </summary>
         private void RebuildRecordsPreviewInformation(int? recordID = null)
         {
-            using (SQLiteConnection readerConnection = new SQLiteConnection(connectionString))
+            using (SqliteConnection readerConnection = new SqliteConnection(connectionString))
             {
                 readerConnection.Open();
 
-                using (SQLiteCommand readerCommand = new SQLiteCommand(readerConnection))
+                using (SqliteCommand readerCommand = new SqliteCommand(readerConnection))
                 {
                     StringBuilder query = new StringBuilder("SELECT r.RecordID as RecordID, TagNumber, Code, Data, Author, Title, Barcode, Classification, MainEntry FROM Records r LEFT OUTER JOIN Fields f ON r.RecordID = f.RecordID LEFT OUTER JOIN Subfields s ON f.FieldID = s.FieldID");
 
@@ -450,11 +450,11 @@ namespace CSharp_MARC_Editor
 
                     readerCommand.CommandText = query.ToString();
 
-                    using (SQLiteConnection updaterConnection = new SQLiteConnection(connectionString))
+                    using (SqliteConnection updaterConnection = new SqliteConnection(connectionString))
                     {
                         updaterConnection.Open();
 
-                        using (SQLiteCommand updaterCommand = new SQLiteCommand(updaterConnection))
+                        using (SqliteCommand updaterCommand = new SqliteCommand(updaterConnection))
                         {
                             updaterCommand.CommandText = "BEGIN;";
                             updaterCommand.ExecuteNonQuery();
@@ -470,7 +470,7 @@ namespace CSharp_MARC_Editor
                             updaterCommand.Parameters.Add("@RecordID", DbType.Int32);
                             updaterCommand.Parameters.Add("@DateChanged", DbType.DateTime);
 
-                            using (SQLiteDataReader reader = readerCommand.ExecuteReader())
+                            using (SqliteDataReader reader = readerCommand.ExecuteReader())
                             {
                                 int currentRecord = -1;
 
@@ -645,12 +645,12 @@ namespace CSharp_MARC_Editor
             if (loading)
                 return;
 
-            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            using (SqliteConnection connection = new SqliteConnection(connectionString))
             {
                 connection.Open();
 
                 string query = "UPDATE Settings SET RecordListAtTop = @RecordListAtTop, ClearDatabaseOnExit = @ClearDatabaseOnExit, CustomTag1 = @CustomTag1, CustomCode1 = @CustomCode1, CustomData1 = @CustomData1, CustomTag2 = @CustomTag2, CustomCode2 = @CustomCode2, CustomData2 = @CustomData2, CustomTag3 = @CustomTag3, CustomCode3 = @CustomCode3, CustomData3 = @CustomData3, CustomTag4 = @CustomTag4, CustomCode4 = @CustomCode4, CustomData4 = @CustomData4, CustomTag5 = @CustomTag5, CustomCode5 = @CustomCode5, CustomData5 = @CustomData5";
-                using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                using (SqliteCommand command = new SqliteCommand(query, connection))
                 {
                     command.Parameters.Add("@RecordListAtTop", DbType.Boolean).Value = recordListAtTopToolStripMenuItem.Checked;
                     command.Parameters.Add("@ClearDatabaseOnExit", DbType.Boolean).Value = clearDatabaseOnExitToolStripMenuItem.Checked;
@@ -705,34 +705,34 @@ namespace CSharp_MARC_Editor
                 marcDataSet.Tables["Subfields"].Rows.Clear();
 
                 //MessageBox.Show((Convert.ToDateTime("4/19/2016 7:09:06 PM") - Convert.ToDateTime("4/19/2016 6:13:04 PM")).TotalSeconds.ToString());
-                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                using (SqliteConnection connection = new SqliteConnection(connectionString))
                 {
                     connection.Open();
 
-                    using (SQLiteCommand command = new SQLiteCommand("SELECT * FROM Records", connection))
+                    using (SqliteCommand command = new SqliteCommand("SELECT * FROM Records", connection))
                     {
-                        SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter(command);
+                        SqliteDataAdapter dataAdapter = new SqliteDataAdapter(command);
                         dataAdapter.Fill(marcDataSet, "Records");
                         recordsDataGridView.DataSource = marcDataSet.Tables["Records"];
                     }
 
-                    using (SQLiteCommand command = new SQLiteCommand("SELECT * FROM Fields WHERE 1 = 0", connection))
+                    using (SqliteCommand command = new SqliteCommand("SELECT * FROM Fields WHERE 1 = 0", connection))
                     {
-                        SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter(command);
+                        SqliteDataAdapter dataAdapter = new SqliteDataAdapter(command);
                         dataAdapter.Fill(marcDataSet, "Fields");
                         fieldsDataGridView.DataSource = marcDataSet.Tables["Fields"];
                     }
 
-                    using (SQLiteCommand command = new SQLiteCommand("SELECT * FROM Subfields WHERE 1 = 0", connection))
+                    using (SqliteCommand command = new SqliteCommand("SELECT * FROM Subfields WHERE 1 = 0", connection))
                     {
-                        SQLiteDataAdapter recordsDataAdapter = new SQLiteDataAdapter(command);
+                        SqliteDataAdapter recordsDataAdapter = new SqliteDataAdapter(command);
                         recordsDataAdapter.Fill(marcDataSet, "Subfields");
                         subfieldsDataGridView.DataSource = marcDataSet.Tables["Subfields"];
                     }
 
-                    using (SQLiteCommand command = new SQLiteCommand("SELECT * FROM Settings LIMIT 1", connection))
+                    using (SqliteCommand command = new SqliteCommand("SELECT * FROM Settings LIMIT 1", connection))
                     {
-                        using (SQLiteDataReader reader = command.ExecuteReader())
+                        using (SqliteDataReader reader = command.ExecuteReader())
                         {
                             if (reader.Read())
                             {
@@ -856,10 +856,10 @@ namespace CSharp_MARC_Editor
 
             int i = 0;
 
-            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            using (SqliteConnection connection = new SqliteConnection(connectionString))
             {
                 connection.Open();
-                using (SQLiteCommand command = new SQLiteCommand(connection))
+                using (SqliteCommand command = new SqliteCommand(connection))
                 {
                     command.CommandText = "BEGIN";
                     command.ExecuteNonQuery();
@@ -869,7 +869,7 @@ namespace CSharp_MARC_Editor
                         i++;
                         DataRow newRow = GetMARCRecordRow(record);
                         
-                        command.CommandText = "INSERT INTO Records (DateAdded, DateChanged, Author, Title, CopyrightDate, Barcode, Classification, MainEntry) VALUES (@DateAdded, @DateChanged, @Author, @Title, @CopyrightDate, @Barcode, @Classification, @MainEntry)";
+						command.CommandText = "INSERT INTO Records (DateAdded, DateChanged, Author, Title, CopyrightDate, Barcode, Classification, MainEntry) VALUES (@DateAdded, @DateChanged, @Author, @Title, @CopyrightDate, @Barcode, @Classification, @MainEntry);SELECT last_insert_rowid();";
                         command.Parameters.Add("@DateAdded", DbType.DateTime).Value = DateTime.Now;
                         command.Parameters.Add("@DateChanged", DbType.DateTime).Value = DBNull.Value;
                         command.Parameters.Add("@Author", DbType.String).Value = newRow["Author"];
@@ -878,14 +878,12 @@ namespace CSharp_MARC_Editor
                         command.Parameters.Add("@Barcode", DbType.String).Value = newRow["Barcode"];
                         command.Parameters.Add("@Classification", DbType.String).Value = newRow["Classification"];
                         command.Parameters.Add("@MainEntry", DbType.String).Value = newRow["MainEntry"];
-
-                        command.ExecuteNonQuery();
                         
-                        int recordID = (int)connection.LastInsertRowId;
+						int recordID = Int32.Parse(command.ExecuteScalar().ToString());
 
                         foreach (Field field in record.Fields)
                         {
-                            command.CommandText = "INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2, ControlData) VALUES (@RecordID, @TagNumber, @Ind1, @Ind2, @ControlData)";
+							command.CommandText = "INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2, ControlData) VALUES (@RecordID, @TagNumber, @Ind1, @Ind2, @ControlData);SELECT last_insert_rowid();";
                             command.Parameters.Add("@RecordID", DbType.Int32).Value = recordID;
                             command.Parameters.Add("@TagNumber", DbType.String).Value = field.Tag;
                             if (field.IsDataField())
@@ -894,9 +892,7 @@ namespace CSharp_MARC_Editor
                                 command.Parameters.Add("@Ind2", DbType.String).Value = ((DataField)field).Indicator2;
                                 command.Parameters.Add("@ControlData", DbType.String).Value = DBNull.Value;
                                 
-                                command.ExecuteNonQuery();
-                                
-                                int fieldID = (int)connection.LastInsertRowId;
+								int fieldID = Int32.Parse(command.ExecuteScalar().ToString());
 
                                 foreach (Subfield subfield in ((DataField)field).Subfields)
                                 {
@@ -962,13 +958,13 @@ namespace CSharp_MARC_Editor
         {
             marcDataSet.Tables["Records"].Rows.Clear();
 
-            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            using (SqliteConnection connection = new SqliteConnection(connectionString))
             {
-                using (SQLiteCommand command = new SQLiteCommand("SELECT * FROM Records", connection))
+                using (SqliteCommand command = new SqliteCommand("SELECT * FROM Records", connection))
                 {
-                    SQLiteDataAdapter recordsDataAdapter = new SQLiteDataAdapter(command);
+                    SqliteDataAdapter recordsDataAdapter = new SqliteDataAdapter(command);
                     recordsDataAdapter.Fill(marcDataSet, "Records");
-                    SQLiteCommandBuilder commandBuilder = new SQLiteCommandBuilder(recordsDataAdapter);
+                    SqliteCommandBuilder commandBuilder = new SqliteCommandBuilder(recordsDataAdapter);
                     recordsDataAdapter.InsertCommand = commandBuilder.GetInsertCommand();
                     recordsDataGridView.DataSource = marcDataSet.Tables["Records"];
                 }
@@ -1020,12 +1016,12 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="DoWorkEventArgs"/> instance containing the event data.</param>
         private void exportingBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            using (SQLiteCommand fieldsCommand = new SQLiteCommand("SELECT * FROM Fields WHERE RecordID = @RecordID ORDER BY FieldID", new SQLiteConnection(connectionString)))
+            using (SqliteCommand fieldsCommand = new SqliteCommand("SELECT * FROM Fields WHERE RecordID = @RecordID ORDER BY FieldID", new SqliteConnection(connectionString)))
             {
                 fieldsCommand.Connection.Open();
                 fieldsCommand.Parameters.Add("@RecordID", DbType.Int32);
 
-                using (SQLiteCommand subfieldsCommand = new SQLiteCommand("SELECT * FROM Subfields WHERE FieldID = @FieldID ORDER BY SubfieldID", new SQLiteConnection(connectionString)))
+                using (SqliteCommand subfieldsCommand = new SqliteCommand("SELECT * FROM Subfields WHERE FieldID = @FieldID ORDER BY SubfieldID", new SqliteConnection(connectionString)))
                 {
                     subfieldsCommand.Connection.Open();
                     subfieldsCommand.Parameters.Add("@FieldID", DbType.Int32);
@@ -1039,7 +1035,7 @@ namespace CSharp_MARC_Editor
                         Record record = new Record();
                         fieldsCommand.Parameters["@RecordID"].Value = row.Cells[0].Value;
 
-                        using (SQLiteDataReader fieldsReader = fieldsCommand.ExecuteReader())
+                        using (SqliteDataReader fieldsReader = fieldsCommand.ExecuteReader())
                         {
                             while (fieldsReader.Read())
                             {
@@ -1053,7 +1049,7 @@ namespace CSharp_MARC_Editor
                                     DataField dataField = new DataField(fieldsReader["TagNumber"].ToString(), new List<Subfield>(), fieldsReader["Ind1"].ToString()[0], fieldsReader["Ind2"].ToString()[0]);
                                     subfieldsCommand.Parameters["@FieldID"].Value = fieldsReader["FieldID"];
 
-                                    using (SQLiteDataReader subfieldReader = subfieldsCommand.ExecuteReader())
+                                    using (SqliteDataReader subfieldReader = subfieldsCommand.ExecuteReader())
                                     {
                                         while (subfieldReader.Read())
                                         {
@@ -1154,11 +1150,11 @@ namespace CSharp_MARC_Editor
 
                     query += "WHERE FieldID = @FieldID";
 
-                    using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                    using (SqliteConnection connection = new SqliteConnection(connectionString))
                     {
                         connection.Open();
 
-                        using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                        using (SqliteCommand command = new SqliteCommand(query, connection))
                         {
                             command.Parameters.Add("@Value", DbType.String).Value = e.FormattedValue;
                             command.Parameters.Add("@FieldID", DbType.String).Value = fieldsDataGridView.Rows[e.RowIndex].Cells[0].Value.ToString();
@@ -1213,11 +1209,11 @@ namespace CSharp_MARC_Editor
 
                         query += "WHERE SubfieldID = @SubfieldID";
 
-                        using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                        using (SqliteConnection connection = new SqliteConnection(connectionString))
                         {
                             connection.Open();
 
-                            using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                            using (SqliteCommand command = new SqliteCommand(query, connection))
                             {
                                 command.Parameters.Add("@Value", DbType.String).Value = e.FormattedValue;
                                 command.Parameters.Add("@SubfieldID", DbType.String).Value = subfieldsDataGridView.Rows[e.RowIndex].Cells[0].Value.ToString();
@@ -1241,11 +1237,11 @@ namespace CSharp_MARC_Editor
 
                         query += "WHERE FieldID = @FieldID";
 
-                        using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                        using (SqliteConnection connection = new SqliteConnection(connectionString))
                         {
                             connection.Open();
 
-                            using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                            using (SqliteCommand command = new SqliteCommand(query, connection))
                             {
                                 command.Parameters.Add("@Value", DbType.String).Value = e.FormattedValue;
                                 command.Parameters.Add("@FieldID", DbType.String).Value = subfieldsDataGridView.Rows[e.RowIndex].Cells[1].Value.ToString();
@@ -1371,16 +1367,15 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void createBlankRecordToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            using (SqliteConnection connection = new SqliteConnection(connectionString))
             {
                 connection.Open();
 
-                string query = "INSERT INTO Records (DateAdded, Author, Title) VALUES (CURRENT_DATE, 'New Record', 'New Record')";
+				string query = "INSERT INTO Records (DateAdded, Author, Title) VALUES (CURRENT_DATE, 'New Record', 'New Record');SELECT last_insert_rowid();";
 
-                using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                using (SqliteCommand command = new SqliteCommand(query, connection))
                 {
-                    command.ExecuteNonQuery();
-                    int recordID = (int)connection.LastInsertRowId;
+                    int recordID = Int32.Parse(command.ExecuteScalar().ToString());
 
                     this.OnLoad(new EventArgs());
                     recordsDataGridView.Rows[recordsDataGridView.Rows.Count - 1].Cells[0].Selected = true;
@@ -1416,13 +1411,13 @@ namespace CSharp_MARC_Editor
                         return;
                     }
 
-                    using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                    using (SqliteConnection connection = new SqliteConnection(connectionString))
                     {
                         connection.Open();
 
                         string query = "INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2) VALUES (@RecordID, @TagNumber, @Ind1, @Ind2)";
 
-                        using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                        using (SqliteCommand command = new SqliteCommand(query, connection))
                         {
                             command.Parameters.Add("@RecordID", DbType.Int32).Value = recordID;
                             command.Parameters.Add("@TagNumber", DbType.String).Value = tagNumber;
@@ -1458,13 +1453,13 @@ namespace CSharp_MARC_Editor
                     string code = subfieldsDataGridView.Rows[e.RowIndex].Cells[2].Value.ToString();
                     string data = subfieldsDataGridView.Rows[e.RowIndex].Cells[3].Value.ToString();
 
-                    using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                    using (SqliteConnection connection = new SqliteConnection(connectionString))
                     {
                         connection.Open();
 
                         string query = "INSERT INTO Subfields (FieldID, Code, Data) VALUES (@FieldID, @Code, @Data)";
 
-                        using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                        using (SqliteCommand command = new SqliteCommand(query, connection))
                         {
                             command.Parameters.Add("@FieldID", DbType.Int32).Value = fieldID;
                             command.Parameters.Add("@Code", DbType.String).Value = code;
@@ -1496,13 +1491,13 @@ namespace CSharp_MARC_Editor
         {
             if (e.Row.Cells[0].Value.ToString() != "")
             {
-                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                using (SqliteConnection connection = new SqliteConnection(connectionString))
                 {
                     connection.Open();
 
                     string query = "DELETE FROM Records WHERE RecordID = @RecordID";
 
-                    using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                    using (SqliteCommand command = new SqliteCommand(query, connection))
                     {
                         command.Parameters.Add("@RecordID", DbType.Int32).Value = Int32.Parse(e.Row.Cells[0].Value.ToString());
                         command.ExecuteNonQuery();
@@ -1522,13 +1517,13 @@ namespace CSharp_MARC_Editor
         {
             if (e.Row.Cells[0].Value.ToString() != "")
             {
-                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                using (SqliteConnection connection = new SqliteConnection(connectionString))
                 {
                     connection.Open();
 
                     string query = "DELETE FROM Fields WHERE FieldID = @FieldID";
 
-                    using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                    using (SqliteCommand command = new SqliteCommand(query, connection))
                     {
                         command.Parameters.Add("@FieldID", DbType.Int32).Value = Int32.Parse(e.Row.Cells[0].Value.ToString());
                         command.ExecuteNonQuery();
@@ -1548,13 +1543,13 @@ namespace CSharp_MARC_Editor
         {
             if (e.Row.Cells[0].Value.ToString() != "")
             {
-                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                using (SqliteConnection connection = new SqliteConnection(connectionString))
                 {
                     connection.Open();
 
                     string query = "DELETE FROM Subfields WHERE SubfieldID = @SubfieldID";
 
-                    using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                    using (SqliteCommand command = new SqliteCommand(query, connection))
                     {
                         command.Parameters.Add("@SubfieldID", DbType.Int32).Value = Int32.Parse(e.Row.Cells[0].Value.ToString());
                         command.ExecuteNonQuery();
@@ -1582,10 +1577,10 @@ namespace CSharp_MARC_Editor
                 {
                     this.Enabled = false;
 
-                    using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                    using (SqliteConnection connection = new SqliteConnection(connectionString))
                     {
                         connection.Open();
-                        using (SQLiteCommand command = new SQLiteCommand(connection))
+                        using (SqliteCommand command = new SqliteCommand(connection))
                         {
                             StringBuilder query = new StringBuilder("UPDATE Subfields SET Data = ");
 
@@ -1806,7 +1801,7 @@ namespace CSharp_MARC_Editor
             {
                 this.Enabled = false;
 
-                using (SQLiteCommand command = new SQLiteCommand(new SQLiteConnection(connectionString)))
+                using (SqliteCommand command = new SqliteCommand(new SqliteConnection(connectionString)))
                 {
                     command.Connection.Open();
                     command.CommandText = "DELETE FROM Records";
