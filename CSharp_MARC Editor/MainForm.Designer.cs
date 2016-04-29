@@ -105,6 +105,8 @@ namespace CSharp_MARC_Editor
             this.findAndReplaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.recordListAtTopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clearDatabaseOnExitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.customFieldsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.databaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -112,8 +114,6 @@ namespace CSharp_MARC_Editor
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.exportingBackgroundWorker = new System.ComponentModel.BackgroundWorker();
-            this.clearDatabaseOnExitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.customFieldsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -302,7 +302,7 @@ namespace CSharp_MARC_Editor
             this.previewTextBox.Name = "previewTextBox";
             this.previewTextBox.ReadOnly = true;
             this.previewTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.previewTextBox.Size = new System.Drawing.Size(357, 387);
+            this.previewTextBox.Size = new System.Drawing.Size(357, 420);
             this.previewTextBox.TabIndex = 2;
             // 
             // subfieldsDataGridView
@@ -323,7 +323,7 @@ namespace CSharp_MARC_Editor
             this.subfieldsDataGridView.Location = new System.Drawing.Point(211, 3);
             this.subfieldsDataGridView.MultiSelect = false;
             this.subfieldsDataGridView.Name = "subfieldsDataGridView";
-            this.subfieldsDataGridView.Size = new System.Drawing.Size(407, 387);
+            this.subfieldsDataGridView.Size = new System.Drawing.Size(407, 420);
             this.subfieldsDataGridView.TabIndex = 1;
             this.subfieldsDataGridView.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.subfieldsDataGridView_CellBeginEdit);
             this.subfieldsDataGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.subfieldsDataGridView_CellEndEdit);
@@ -383,7 +383,7 @@ namespace CSharp_MARC_Editor
             this.fieldsDataGridView.Location = new System.Drawing.Point(3, 3);
             this.fieldsDataGridView.MultiSelect = false;
             this.fieldsDataGridView.Name = "fieldsDataGridView";
-            this.fieldsDataGridView.Size = new System.Drawing.Size(202, 387);
+            this.fieldsDataGridView.Size = new System.Drawing.Size(202, 420);
             this.fieldsDataGridView.TabIndex = 0;
             this.fieldsDataGridView.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.fieldsDataGridView_CellBeginEdit);
             this.fieldsDataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.fieldsDataGridView_CellClick);
@@ -590,9 +590,22 @@ namespace CSharp_MARC_Editor
             this.recordListAtTopToolStripMenuItem.Checked = true;
             this.recordListAtTopToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.recordListAtTopToolStripMenuItem.Name = "recordListAtTopToolStripMenuItem";
-            this.recordListAtTopToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+            this.recordListAtTopToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.recordListAtTopToolStripMenuItem.Text = "Record List at Top";
             this.recordListAtTopToolStripMenuItem.Click += new System.EventHandler(this.recordListAtTopToolStripMenuItem_Click);
+            // 
+            // clearDatabaseOnExitToolStripMenuItem
+            // 
+            this.clearDatabaseOnExitToolStripMenuItem.Name = "clearDatabaseOnExitToolStripMenuItem";
+            this.clearDatabaseOnExitToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.clearDatabaseOnExitToolStripMenuItem.Text = "Clear database on exit";
+            this.clearDatabaseOnExitToolStripMenuItem.Click += new System.EventHandler(this.clearDatabaseOnExitToolStripMenuItem_Click);
+            // 
+            // customFieldsToolStripMenuItem
+            // 
+            this.customFieldsToolStripMenuItem.Name = "customFieldsToolStripMenuItem";
+            this.customFieldsToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.customFieldsToolStripMenuItem.Text = "Custom Fields";
             // 
             // databaseToolStripMenuItem
             // 
@@ -644,19 +657,6 @@ namespace CSharp_MARC_Editor
             this.exportingBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.exportingBackgroundWorker_DoWork);
             this.exportingBackgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.exportingBackgroundWorker_ProgressChanged);
             this.exportingBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.exportingBackgroundWorker_RunWorkerCompleted);
-            // 
-            // clearDatabaseOnExitToolStripMenuItem
-            // 
-            this.clearDatabaseOnExitToolStripMenuItem.Name = "clearDatabaseOnExitToolStripMenuItem";
-            this.clearDatabaseOnExitToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
-            this.clearDatabaseOnExitToolStripMenuItem.Text = "Clear database on exit";
-            this.clearDatabaseOnExitToolStripMenuItem.Click += new System.EventHandler(this.clearDatabaseOnExitToolStripMenuItem_Click);
-            // 
-            // customFieldsToolStripMenuItem
-            // 
-            this.customFieldsToolStripMenuItem.Name = "customFieldsToolStripMenuItem";
-            this.customFieldsToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
-            this.customFieldsToolStripMenuItem.Text = "Custom Fields";
             // 
             // MainForm
             // 

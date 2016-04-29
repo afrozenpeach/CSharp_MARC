@@ -79,11 +79,16 @@ namespace CSharp_MARC_Editor
             DataField record245 = (DataField)record["245"];
             DataField record260 = (DataField)record["260"];
             DataField record264 = (DataField)record["264"];
+            DataField record852 = (DataField)record["852"];
+            DataField record949 = (DataField)record["949"];
 
             string author = "";
             string title = "";
             int tempCopyrightDate = -1;
             int? copyrightDate = null;
+            string barcode = "";
+            string classification = "";
+            string mainEntry = "";
 
             if (record100 != null && record100['a'] != null)
                 author = record100['a'].Data;
@@ -103,6 +108,82 @@ namespace CSharp_MARC_Editor
             else if (record264 != null && record264['c'] != null && int.TryParse(Regex.Replace(record264['c'].Data, "[^0-9]", ""), out tempCopyrightDate))
                 copyrightDate = tempCopyrightDate;
 
+            if (record852 != null)
+            {
+                if (record852['p'] != null)
+                    barcode = record852['p'].Data;
+
+                if (record852['k'] != null)
+                    classification = record852['k'].Data + " ";
+
+                if (record852['h'] != null)
+                {
+                    string[] split = record852['h'].Data.Split(' ');
+                    classification = split[0];
+                    
+                    if (split.Length > 1)
+                        mainEntry = split[1];
+                }
+
+                if (record852['i'] != null)
+                    mainEntry = record852['i'].Data;
+            }
+            else if (record949 != null)
+            {
+                if (record949['i'] != null)
+                    barcode = record949['i'].Data;
+                else if (record949['g'] != null)
+                    barcode = record949['g'].Data;
+                else if (record949['b'] != null)
+                    barcode = record949['b'].Data;
+
+                if (record949['a'] != null)
+                {
+                    string[] split = record949['a'].Data.Split(' ');
+                    if (split.Length > 2)
+                    {
+                        classification = split[0] + " " + split[1];
+                        mainEntry = split[2];
+                    }
+                    else
+                    {
+                        classification = split[0];
+                        mainEntry = split[1];
+                    }
+                }
+                else if (record949['b'] != null && record949['c'] != null)
+                    classification = record949['b'].Data + " " + record949['c'].Data;
+                else if (record949['c'] != null)
+                {
+                    string[] split = record949['c'].Data.Split(' ');
+                    if (split.Length > 2)
+                    {
+                        classification = split[0] + " " + split[1];
+                        mainEntry = split[2];
+                    }
+                    else if (split.Length > 1)
+                    {
+                        classification = split[0];
+                        mainEntry = split[1];
+                    }
+                    else
+                        classification = split[0];
+                }
+                else if (record949['d'] != null)
+                {
+                    string[] split = record949['d'].Data.Split(' ');
+                    if (split.Length > 2)
+                    {
+                        classification = split[0] + " " + split[1];
+                        mainEntry = split[2];
+                    }
+                    else
+                    {
+                        classification = split[0];
+                        mainEntry = split[1];
+                    }
+                }
+            }
 
             newRow["DateAdded"] = new DateTime();
             newRow["DateChanged"] = DBNull.Value;
