@@ -25,6 +25,10 @@
  * @license   http://www.gnu.org/copyleft/lesser.html  LGPL License 3
  */
 
+2016-04-28 Changes:
+
+First release of C# MARC Editor - a full featured MARC Editing suite
+
 2016-04-21 Changes:
 
 Bump .NET Version to 4
