@@ -189,6 +189,9 @@ namespace CSharp_MARC_Editor
             newRow["DateChanged"] = DBNull.Value;
             newRow["Author"] = author;
             newRow["Title"] = title;
+            newRow["Barcode"] = barcode;
+            newRow["Classification"] = classification;
+            newRow["MainEntry"] = mainEntry;
 
             if (copyrightDate.HasValue)
                 newRow["CopyrightDate"] = copyrightDate;
