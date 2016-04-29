@@ -476,11 +476,12 @@ namespace CSharp_MARC_Editor
 
                                 string author = null;
                                 string title = null;
-                                string barcode = "";
-                                string classification = "";
-                                string mainEntry = "";
+                                string barcode = null;
+                                string classification = null;
+                                string mainEntry = null;
                                 int tempCopyrightDate = -1;
                                 int? copyrightDate = null;
+                                bool bc = false;
 
                                 while (reader.Read())
                                 {
@@ -508,6 +509,15 @@ namespace CSharp_MARC_Editor
                                                 {
                                                     if (Int32.Parse(row.Cells[0].Value.ToString()) == recordID)
                                                     {
+                                                        if (barcode == null)
+                                                            barcode = "";
+                                                        
+                                                        if (classification == null)
+                                                            classification = "";
+                                                        
+                                                        if (mainEntry == null)
+                                                            mainEntry = "";
+
                                                         row.Cells[2].Value = updaterCommand.Parameters["@DateChanged"].Value.ToString();
                                                         row.Cells[3].Value = author;
                                                         row.Cells[4].Value = title;
@@ -525,9 +535,9 @@ namespace CSharp_MARC_Editor
 
                                         author = null;
                                         title = null;
-                                        barcode = "";
-                                        classification = "";
-                                        mainEntry = "";
+                                        barcode = null;
+                                        classification = null;
+                                        mainEntry = null;
                                     }
 
                                     if (author == null && (string)reader["TagNumber"] == "100" && (string)reader["Code"] == "a")
@@ -544,6 +554,78 @@ namespace CSharp_MARC_Editor
                                         copyrightDate = tempCopyrightDate;
                                     else if (copyrightDate == null && (string)reader["TagNumber"] == "264" && (string)reader["Code"] == "c" && int.TryParse(Regex.Replace((string)reader["Data"], "[^0-9]", ""), out tempCopyrightDate))
                                         copyrightDate = tempCopyrightDate;
+
+                                    if (barcode == null && (string)reader["TagNumber"] == "852" && (string)reader["Code"] == "p")
+                                        barcode = (string)reader["Data"];
+                                    else if (barcode == null && (string)reader["TagNumber"] == "949" && (string)reader["Code"] == "i")
+                                        barcode = (string)reader["Data"];
+                                    else if (barcode == null && (string)reader["TagNumber"] == "949" && (string)reader["Code"] == "g")
+                                        barcode = (string)reader["Data"];
+                                    else if (barcode == null && (string)reader["TagNumber"] == "949" && (string)reader["Code"] == "b")
+                                        barcode = (string)reader["Data"];
+
+                                    if (classification == null && (string)reader["TagNumber"] == "852" && (string)reader["Code"] == "h")
+                                    {
+                                        string[] split = ((string)reader["Data"]).Split(' ');
+                                        classification = split[0];
+
+                                        if (split.Length > 1)
+                                            mainEntry = split[1];
+                                    }
+                                    else if (classification == null && (string)reader["TagNumber"] == "949" && (string)reader["Code"] == "a")
+                                    {
+                                        string[] split = ((string)reader["Data"]).Split(' ');
+                                        if (split.Length > 2)
+                                        {
+                                            classification = split[0] + " " + split[1];
+                                            mainEntry = split[2];
+                                        }
+                                        else
+                                        {
+                                            classification = split[0];
+                                            mainEntry = split[1];
+                                        }
+                                    }
+                                    else if (classification == null && (string)reader["TagNumber"] == "949" && (string)reader["Code"] == "b")
+                                    {
+                                        classification = (string)reader["Data"];
+                                        bc = true;
+                                    }
+                                    else if (classification != null && (string)reader["TagNumber"] == "949" && (string)reader["Code"] == "c" && bc)
+                                    {
+                                        classification += " " + (string)reader["Data"];
+                                        bc = false;
+                                    }
+                                    else if (classification == null && (string)reader["TagNumber"] == "949" && (string)reader["Code"] == "c")
+                                    {
+                                        string[] split = ((string)reader["Data"]).Split(' ');
+                                        if (split.Length > 2)
+                                        {
+                                            classification = split[0] + " " + split[1];
+                                            mainEntry = split[2];
+                                        }
+                                        else if (split.Length > 1)
+                                        {
+                                            classification = split[0];
+                                            mainEntry = split[1];
+                                        }
+                                        else
+                                            classification = split[0];
+                                    }
+                                    else if (classification == null && (string)reader["TagNumber"] == "949" && (string)reader["Code"] == "c")
+                                    {
+                                        string[] split = ((string)reader["Data"]).Split(' ');
+                                        if (split.Length > 2)
+                                        {
+                                            classification = split[0] + " " + split[1];
+                                            mainEntry = split[2];
+                                        }
+                                        else
+                                        {
+                                            classification = split[0];
+                                            mainEntry = split[1];
+                                        }
+                                    }
                                 }
                             }
                             
