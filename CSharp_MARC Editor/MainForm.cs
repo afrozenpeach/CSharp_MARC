@@ -476,11 +476,14 @@ namespace CSharp_MARC_Editor
         /// </summary>
         private void SaveOptions()
         {
+            if (loading)
+                return;
+
             using (SQLiteConnection connection = new SQLiteConnection(connectionString))
             {
                 connection.Open();
 
-                string query = "UPDATE Settings SET RecordListAtTop = @RecordListAtTop, ClearDatabaseOnExit = @ClearDatabaseOnExit, CustomTag1 = @CustomTag1, CustomCode1 = @CustomCode1, CustomData1 = @CustomData1, CustomTag2 = @CustomTag2, CustomCode2 = @CustomCode2, CustomData2 = @CustomData2, CustomTag3 = @CustomTag3, CustomCode3 = @CustomCode3, CustomData3 = @CustomData3, CustomTag4 = @CustomTag4, CustomCode4 = @CustomCode4, CustomData4 = @CustomData4, CustomTag5 = @CustomTag5 CustomCode5 = @CustomCode5, CustomData5 = @CustomData5";
+                string query = "UPDATE Settings SET RecordListAtTop = @RecordListAtTop, ClearDatabaseOnExit = @ClearDatabaseOnExit, CustomTag1 = @CustomTag1, CustomCode1 = @CustomCode1, CustomData1 = @CustomData1, CustomTag2 = @CustomTag2, CustomCode2 = @CustomCode2, CustomData2 = @CustomData2, CustomTag3 = @CustomTag3, CustomCode3 = @CustomCode3, CustomData3 = @CustomData3, CustomTag4 = @CustomTag4, CustomCode4 = @CustomCode4, CustomData4 = @CustomData4, CustomTag5 = @CustomTag5, CustomCode5 = @CustomCode5, CustomData5 = @CustomData5";
                 using (SQLiteCommand command = new SQLiteCommand(query, connection))
                 {
                     command.Parameters.Add("@RecordListAtTop", DbType.Boolean).Value = recordListAtTopToolStripMenuItem.Checked;
@@ -501,7 +504,13 @@ namespace CSharp_MARC_Editor
                     command.Parameters.Add("@CustomCode5", DbType.String).Value = null;
                     command.Parameters.Add("@CustomData5", DbType.String).Value = null;
 
-                    command.ExecuteNonQuery();
+                    int changes = command.ExecuteNonQuery();
+
+                    if (changes == 0)
+                    {
+                        command.CommandText = "INSERT INTO Settings (RecordListAtTop, ClearDatabaseOnExit, CustomTag1, CustomCode1, CustomData1, CustomTag2, CustomCode2, CustomData2, CustomTag3, CustomCode3, CustomData3, CustomTag4, CustomCode4, CustomData4, CustomTag5, CustomCode5, CustomData5) VALUES (@RecordListAtTop, @ClearDatabaseOnExit, @CustomTag1, @CustomCode1, @CustomData1, @CustomTag2, @CustomCode2, @CustomData2, @CustomTag3, @CustomCode3, @CustomData3, @CustomTag4, @CustomCode4, @CustomData4, @CustomTag5, @CustomCode5, @CustomData5)";
+                        command.ExecuteNonQuery();
+                    }
                 }
             }
         }
@@ -555,21 +564,29 @@ namespace CSharp_MARC_Editor
                         subfieldsDataGridView.DataSource = marcDataSet.Tables["Subfields"];
                     }
 
-                    using (SQLiteCommand command = new SQLiteCommand("SELECT TOP 1 * FROM Settings", connection))
+                    using (SQLiteCommand command = new SQLiteCommand("SELECT * FROM Settings LIMIT 1", connection))
                     {
                         using (SQLiteDataReader reader = command.ExecuteReader())
                         {
                             if (reader.Read())
                             {
-                                if (reader["RecordListAtTop"] != DBNull.Value)
-                                    recordListAtTopToolStripMenuItem.Checked = (bool)reader["RecordListAtTop"];
+                                if (reader["RecordListAtTop"] != DBNull.Value && !(bool)reader["RecordListAtTop"] && recordListAtTopToolStripMenuItem.Checked)
+                                    recordListAtTopToolStripMenuItem_Click(sender, e);
                                 else
                                     recordListAtTopToolStripMenuItem.Checked = true;
 
-                                if (reader["ClearDatabaseOnExit"] != DBNull.Value)
-                                    clearDatabaseOnExitToolStripMenuItem.Checked = (bool)reader["ClearDatabaseOnExit"];
+                                if (reader["ClearDatabaseOnExit"] != DBNull.Value && (bool)reader["ClearDatabaseOnExit"] && !clearDatabaseOnExitToolStripMenuItem.Checked)
+                                    clearDatabaseOnExitToolStripMenuItem_Click(sender, e);
                                 else
                                     clearDatabaseOnExitToolStripMenuItem.Checked = false;
+                            }
+                            else
+                            {
+                                reader.Close();
+                                command.CommandText = "INSERT INTO Settings (RecordListAtTop, ClearDatabaseOnExit) VALUES (@RecordListAtTop, @ClearDatabaseOnExit)";
+                                command.Parameters.Add("@RecordListAtTop", DbType.Boolean).Value = true;
+                                command.Parameters.Add("@ClearDatabaseOnExit", DbType.Boolean).Value = false;
+                                command.ExecuteNonQuery();
                             }
                         }
                     }
