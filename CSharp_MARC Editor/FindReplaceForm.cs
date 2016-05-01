@@ -138,6 +138,20 @@ namespace CSharp_MARC_Editor
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether [regex].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [regex]; otherwise, <c>false</c>.
+        /// </value>
+        public bool Regex
+        {
+            get
+            {
+                return regexCheckBox.Checked;
+            }
+        }
+
         #endregion
 
         /// <summary>

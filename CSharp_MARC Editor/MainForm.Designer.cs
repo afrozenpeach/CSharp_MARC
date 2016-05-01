@@ -261,6 +261,7 @@ namespace CSharp_MARC_Editor
             // 
             // marcDataSet
             // 
+            this.marcDataSet.DataSetName = "MARCDataSet";
             this.marcDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
             // statusStrip
@@ -302,7 +303,7 @@ namespace CSharp_MARC_Editor
             this.previewTextBox.Name = "previewTextBox";
             this.previewTextBox.ReadOnly = true;
             this.previewTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.previewTextBox.Size = new System.Drawing.Size(357, 420);
+            this.previewTextBox.Size = new System.Drawing.Size(357, 387);
             this.previewTextBox.TabIndex = 2;
             // 
             // subfieldsDataGridView
@@ -323,7 +324,7 @@ namespace CSharp_MARC_Editor
             this.subfieldsDataGridView.Location = new System.Drawing.Point(211, 3);
             this.subfieldsDataGridView.MultiSelect = false;
             this.subfieldsDataGridView.Name = "subfieldsDataGridView";
-            this.subfieldsDataGridView.Size = new System.Drawing.Size(407, 420);
+            this.subfieldsDataGridView.Size = new System.Drawing.Size(407, 387);
             this.subfieldsDataGridView.TabIndex = 1;
             this.subfieldsDataGridView.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.subfieldsDataGridView_CellBeginEdit);
             this.subfieldsDataGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.subfieldsDataGridView_CellEndEdit);
@@ -383,7 +384,7 @@ namespace CSharp_MARC_Editor
             this.fieldsDataGridView.Location = new System.Drawing.Point(3, 3);
             this.fieldsDataGridView.MultiSelect = false;
             this.fieldsDataGridView.Name = "fieldsDataGridView";
-            this.fieldsDataGridView.Size = new System.Drawing.Size(202, 420);
+            this.fieldsDataGridView.Size = new System.Drawing.Size(202, 387);
             this.fieldsDataGridView.TabIndex = 0;
             this.fieldsDataGridView.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.fieldsDataGridView_CellBeginEdit);
             this.fieldsDataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.fieldsDataGridView_CellClick);

@@ -43,6 +43,7 @@
             this.replaceAllButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.caseSensitiveCheckBox = new System.Windows.Forms.CheckBox();
+            this.regexCheckBox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // tagsListBox
@@ -136,7 +137,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dataTextBox.Location = new System.Drawing.Point(12, 145);
             this.dataTextBox.Name = "dataTextBox";
-            this.dataTextBox.Size = new System.Drawing.Size(218, 20);
+            this.dataTextBox.Size = new System.Drawing.Size(224, 20);
             this.dataTextBox.TabIndex = 8;
             // 
             // replaceWithLabel
@@ -155,7 +156,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.replaceWithTextBox.Location = new System.Drawing.Point(12, 184);
             this.replaceWithTextBox.Name = "replaceWithTextBox";
-            this.replaceWithTextBox.Size = new System.Drawing.Size(218, 20);
+            this.replaceWithTextBox.Size = new System.Drawing.Size(224, 20);
             this.replaceWithTextBox.TabIndex = 10;
             // 
             // replaceAllButton
@@ -192,13 +193,24 @@
             this.caseSensitiveCheckBox.Text = "Case Sensitive";
             this.caseSensitiveCheckBox.UseVisualStyleBackColor = true;
             // 
+            // regexCheckBox
+            // 
+            this.regexCheckBox.AutoSize = true;
+            this.regexCheckBox.Location = new System.Drawing.Point(114, 210);
+            this.regexCheckBox.Name = "regexCheckBox";
+            this.regexCheckBox.Size = new System.Drawing.Size(122, 17);
+            this.regexCheckBox.TabIndex = 14;
+            this.regexCheckBox.Text = "Regular Expressions";
+            this.regexCheckBox.UseVisualStyleBackColor = true;
+            // 
             // FindReplaceForm
             // 
             this.AcceptButton = this.replaceAllButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(242, 268);
+            this.ClientSize = new System.Drawing.Size(248, 268);
+            this.Controls.Add(this.regexCheckBox);
             this.Controls.Add(this.caseSensitiveCheckBox);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.replaceAllButton);
@@ -217,7 +229,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(258, 307);
+            this.MinimumSize = new System.Drawing.Size(264, 307);
             this.Name = "FindReplaceForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Find and Replace";
@@ -243,5 +255,6 @@
         private System.Windows.Forms.Button replaceAllButton;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.CheckBox caseSensitiveCheckBox;
+        private System.Windows.Forms.CheckBox regexCheckBox;
     }
 }

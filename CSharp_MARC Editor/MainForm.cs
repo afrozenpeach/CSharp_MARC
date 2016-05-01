@@ -681,6 +681,42 @@ namespace CSharp_MARC_Editor
             }
         }
 
+        [SQLiteFunction(Name = "REGEXP", Arguments = 2, FuncType = FunctionType.Scalar)]
+        class REGEXP : SQLiteFunction
+        {
+            public override object Invoke(object[] args)
+            {
+                return Regex.IsMatch(args[1].ToString(), args[0].ToString());
+            }
+        }
+
+        [SQLiteFunction(Name = "REGEXREPLACE", Arguments = 3, FuncType = FunctionType.Scalar)]
+        class REGEXREPLACE : SQLiteFunction
+        {
+            public override object Invoke(object[] args)
+            {
+                return Regex.Replace(args[0].ToString(), args[1].ToString(), args[2].ToString());
+            }
+        }
+
+        [SQLiteFunction(Name = "REPLACENOCASE", Arguments = 3, FuncType = FunctionType.Scalar)]
+        class REPLACENOCASE : SQLiteFunction
+        {
+            public override object Invoke(object[] args)
+            {
+                return Regex.Replace(args[0].ToString(), Regex.Escape(args[1].ToString()), args[2].ToString().Replace("$", "$$"), RegexOptions.IgnoreCase);
+            }
+        }
+
+        [SQLiteFunction(Name = "REGEXREPLACENOCASE", Arguments = 3, FuncType = FunctionType.Scalar)]
+        class REGEXREPLACENOCASE : SQLiteFunction
+        {
+            public override object Invoke(object[] args)
+            {
+                return Regex.Replace(args[0].ToString(), args[1].ToString(), args[2].ToString().Replace("$", "$$"), RegexOptions.IgnoreCase);
+            }
+        }
+
         #endregion
 
         #region Form Events
@@ -1591,12 +1627,20 @@ namespace CSharp_MARC_Editor
 
                             if (form.CaseSensitive)
                             {
+                                if (form.Regex)
+                                    query.Append("REGEX");
+                                else //Make sure the where clause is also case sensitive
+                                    query.Insert(0, "PRAGMA case_sensitive_like=ON;");
+
                                 query.Append("REPLACE(Data, @ReplaceData, @ReplaceWith)");
-                                query.Insert(0, "PRAGMA case_sensitive_like=ON;");
+                                
                             }
                             else
                             {
-                                query.Append("(SUBSTR(Data, 0, INSTR(Data, @ReplaceData)) || @ReplaceWith || SUBSTR(Data, INSTR(Data, @ReplaceData) + LENGTH(@ReplaceData)))");
+                                if (form.Regex)
+                                    query.Append("REGEX");
+
+                                query.Append("REPLACENOCASE(Data, @ReplaceData, @ReplaceWith)");
                             }
 
                             command.Parameters.Add("@ReplaceData", DbType.String).Value = form.Data;
@@ -1709,7 +1753,11 @@ namespace CSharp_MARC_Editor
                                 whereClause.Append(") AND ");
                             }
 
-                            whereClause.Append("Data LIKE @Data;");
+                            if (form.Regex)
+                                whereClause.Append("Data REGEXP @Data;");
+                            else
+                                whereClause.Append("Data LIKE @Data;");
+                            
                             command.Parameters.Add("@Data", DbType.String).Value = "%" + form.Data + "%";
 
                             query.Append(whereClause);
