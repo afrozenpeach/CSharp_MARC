@@ -52,6 +52,10 @@
  * @copyright 2016 Matt Schraeder
  * @license   http://www.gnu.org/licenses/gpl-3.0.html  GPL License 3
  */ 
+2016-05-01 Changes:
+
+Added support for MARC8, UTF8, and MARCXML exports
+Added support for 5 custom fields
 
 2016-04-30 Changes:
 
