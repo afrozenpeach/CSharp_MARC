@@ -225,7 +225,6 @@
             this.Controls.Add(this.indicatorsLabel);
             this.Controls.Add(this.tagsLabel);
             this.Controls.Add(this.tagsListBox);
-            this.HelpButton = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;

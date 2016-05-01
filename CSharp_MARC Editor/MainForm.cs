@@ -53,6 +53,7 @@ namespace CSharp_MARC_Editor
         private bool startEdit = false;
         private bool loading = true;
         private bool reloadFields = false;
+        private decimal recordsPerFile = 0;
 
         #endregion
 
@@ -359,11 +360,13 @@ namespace CSharp_MARC_Editor
                 if (File.Exists("MARC.db"))
                     File.Delete("MARC.db");
 
-                using (SQLiteCommand command = new SQLiteCommand(new SQLiteConnection(connectionString)))
+                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
                 {
-                    command.Connection.Open();
+                    connection.Open();
 
-                    command.CommandText = @"CREATE TABLE [Fields](
+                    using (SQLiteCommand command = new SQLiteCommand(connection))
+                    {
+                        command.CommandText = @"CREATE TABLE [Fields](
                                                 [FieldID] integer PRIMARY KEY ASC AUTOINCREMENT NOT NULL, 
                                                 [RecordID] nvarchar(2147483647) NOT NULL, 
                                                 [TagNumber] nvarchar(2147483647) NOT NULL, 
@@ -417,7 +420,8 @@ namespace CSharp_MARC_Editor
                                             ON [Fields](
                                                 [RecordID] ASC);";
 
-                    command.ExecuteNonQuery();
+                        command.ExecuteNonQuery();
+                    }
                 }
 
                 this.OnLoad(new EventArgs());
@@ -1040,6 +1044,17 @@ namespace CSharp_MARC_Editor
         {
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
+                if (sender == splitToolStripMenuItem)
+                {
+                    using (ExportSplitDialog splitDialog = new ExportSplitDialog())
+                    {
+                        if (splitDialog.ShowDialog() == DialogResult.OK)
+                            recordsPerFile = splitDialog.RecordsPerFile;
+                        else
+                            return;
+                    }
+                }
+
                 this.Enabled = false;
                 toolStripProgressBar.Style = ProgressBarStyle.Continuous;
                 toolStripProgressBar.Enabled = true;
@@ -1066,9 +1081,12 @@ namespace CSharp_MARC_Editor
                     subfieldsCommand.Connection.Open();
                     subfieldsCommand.Parameters.Add("@FieldID", DbType.Int32);
 
-                    int i = 0;
+                    int i = 1;
+                    int recordCounter = 1;
+                    int fileCounter = 1;
+
                     int max = marcDataSet.Tables["Records"].Rows.Count;
-                    FileMARCWriter marcWriter = new FileMARCWriter(saveFileDialog.FileName);
+                    FileMARCWriter marcWriter = new FileMARCWriter(e.Argument.ToString().Substring(0, e.Argument.ToString().LastIndexOf('.')) + "." + fileCounter + "." + e.Argument.ToString().Substring(e.Argument.ToString().LastIndexOf('.') + 1));
 
                     foreach (DataGridViewRow row in recordsDataGridView.Rows)
                     {
@@ -1103,7 +1121,18 @@ namespace CSharp_MARC_Editor
                         }
 
                         marcWriter.Write(record);
+                        i++;
+                        recordCounter++;
                         exportingBackgroundWorker.ReportProgress(i / max);
+
+                        if (recordsPerFile != 0 && recordCounter > recordsPerFile)
+                        {
+                            recordCounter = 1;
+                            fileCounter++;
+                            marcWriter.WriteEnd();
+                            marcWriter.Dispose();
+                            marcWriter = new FileMARCWriter(e.Argument.ToString().Substring(0, e.Argument.ToString().LastIndexOf('.')) + "." + fileCounter + "." + e.Argument.ToString().Substring(e.Argument.ToString().LastIndexOf('.')+1));
+                        }
                     }
 
                     marcWriter.WriteEnd();
@@ -1134,6 +1163,7 @@ namespace CSharp_MARC_Editor
             toolStripProgressBar.Enabled = false;
             progressToolStripStatusLabel.Visible = false;
             toolStripProgressBar.MarqueeAnimationSpeed = 0;
+            recordsPerFile = 0;
             loading = false;
             this.Enabled = true;
 
@@ -1854,11 +1884,15 @@ namespace CSharp_MARC_Editor
             {
                 this.Enabled = false;
 
-                using (SQLiteCommand command = new SQLiteCommand(new SQLiteConnection(connectionString)))
+                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
                 {
-                    command.Connection.Open();
-                    command.CommandText = "DELETE FROM Records";
-                    command.ExecuteNonQuery();
+                    connection.Open();
+
+                    using (SQLiteCommand command = new SQLiteCommand(connection))
+                    {
+                        command.CommandText = "DELETE FROM Records";
+                        command.ExecuteNonQuery();
+                    }
                 }
 
                 this.OnLoad(new EventArgs());
