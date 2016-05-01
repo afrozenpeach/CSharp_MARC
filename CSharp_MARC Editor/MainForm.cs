@@ -69,139 +69,6 @@ namespace CSharp_MARC_Editor
         #region Utilities
 
         /// <summary>
-        /// Gets the marc record row for inserting into the Record List Data Table
-        /// </summary>
-        /// <param name="record">The record.</param>
-        /// <returns></returns>
-        private DataRow GetMARCRecordRow(Record record)
-        {
-            DataRow newRow = marcDataSet.Tables["Records"].NewRow();
-
-            DataField record100 = (DataField)record["100"];
-            DataField record245 = (DataField)record["245"];
-            DataField record260 = (DataField)record["260"];
-            DataField record264 = (DataField)record["264"];
-            DataField record852 = (DataField)record["852"];
-            DataField record949 = (DataField)record["949"];
-
-            string author = "";
-            string title = "";
-            int tempCopyrightDate = -1;
-            int? copyrightDate = null;
-            string barcode = "";
-            string classification = "";
-            string mainEntry = "";
-
-            if (record100 != null && record100['a'] != null)
-                author = record100['a'].Data;
-            else if (record245 != null && record245['c'] != null)
-                author += " " + record245['c'].Data;
-
-            if (record245 != null && record245['a'] != null)
-                title = record245['a'].Data;
-            else
-                title = string.Empty;
-
-            if (record245 != null && record245['b'] != null)
-                title += " " + record245['b'].Data;
-
-            if (record260 != null && record260['c'] != null && int.TryParse(Regex.Replace(record260['c'].Data, "[^0-9]", ""), out tempCopyrightDate))
-                copyrightDate = tempCopyrightDate;
-            else if (record264 != null && record264['c'] != null && int.TryParse(Regex.Replace(record264['c'].Data, "[^0-9]", ""), out tempCopyrightDate))
-                copyrightDate = tempCopyrightDate;
-
-            if (record852 != null)
-            {
-                if (record852['p'] != null)
-                    barcode = record852['p'].Data;
-
-                if (record852['k'] != null)
-                    classification = record852['k'].Data + " ";
-
-                if (record852['h'] != null)
-                {
-                    string[] split = record852['h'].Data.Split(' ');
-                    classification = split[0];
-                    
-                    if (split.Length > 1)
-                        mainEntry = split[1];
-                }
-
-                if (record852['i'] != null)
-                    mainEntry = record852['i'].Data;
-            }
-            else if (record949 != null)
-            {
-                if (record949['i'] != null)
-                    barcode = record949['i'].Data;
-                else if (record949['g'] != null)
-                    barcode = record949['g'].Data;
-                else if (record949['b'] != null)
-                    barcode = record949['b'].Data;
-
-                if (record949['a'] != null)
-                {
-                    string[] split = record949['a'].Data.Split(' ');
-                    if (split.Length > 2)
-                    {
-                        classification = split[0] + " " + split[1];
-                        mainEntry = split[2];
-                    }
-                    else
-                    {
-                        classification = split[0];
-                        mainEntry = split[1];
-                    }
-                }
-                else if (record949['b'] != null && record949['c'] != null)
-                    classification = record949['b'].Data + " " + record949['c'].Data;
-                else if (record949['c'] != null)
-                {
-                    string[] split = record949['c'].Data.Split(' ');
-                    if (split.Length > 2)
-                    {
-                        classification = split[0] + " " + split[1];
-                        mainEntry = split[2];
-                    }
-                    else if (split.Length > 1)
-                    {
-                        classification = split[0];
-                        mainEntry = split[1];
-                    }
-                    else
-                        classification = split[0];
-                }
-                else if (record949['d'] != null)
-                {
-                    string[] split = record949['d'].Data.Split(' ');
-                    if (split.Length > 2)
-                    {
-                        classification = split[0] + " " + split[1];
-                        mainEntry = split[2];
-                    }
-                    else
-                    {
-                        classification = split[0];
-                        mainEntry = split[1];
-                    }
-                }
-            }
-
-            newRow["DateAdded"] = new DateTime();
-            newRow["DateChanged"] = DBNull.Value;
-            newRow["Author"] = author;
-            newRow["Title"] = title;
-            newRow["Barcode"] = barcode;
-            newRow["Classification"] = classification;
-            newRow["MainEntry"] = mainEntry;
-
-            if (copyrightDate.HasValue)
-                newRow["CopyrightDate"] = copyrightDate;
-
-            return newRow;
-        }
-
-        /// <summary>
         /// Loads the field.
         /// </summary>
         /// <param name="recordID">The record identifier.</param>
@@ -390,7 +257,8 @@ namespace CSharp_MARC_Editor
                                                     [Custom2] nvarchar(2147483647), 
                                                     [Custom3] nvarchar(2147483647), 
                                                     [Custom4] nvarchar(2147483647), 
-                                                    [Custom5] nvarchar(2147483647));
+                                                    [Custom5] nvarchar(2147483647), 
+                                                    [ImportErrors] nvarchar(2147483647));
 
                                                 CREATE TABLE [Settings](
                                                     [RecordListAtTop] bool, 
@@ -1041,17 +909,19 @@ namespace CSharp_MARC_Editor
                     foreach (Record record in marcRecords)
                     {
                         i++;
-                        DataRow newRow = GetMARCRecordRow(record);
                         
-                        command.CommandText = "INSERT INTO Records (DateAdded, DateChanged, Author, Title, CopyrightDate, Barcode, Classification, MainEntry) VALUES (@DateAdded, @DateChanged, @Author, @Title, @CopyrightDate, @Barcode, @Classification, @MainEntry)";
+                        command.CommandText = "INSERT INTO Records (DateAdded, DateChanged, ImportErrors) VALUES (@DateAdded, @DateChanged, @ImportErrors)";
                         command.Parameters.Add("@DateAdded", DbType.DateTime).Value = DateTime.Now;
                         command.Parameters.Add("@DateChanged", DbType.DateTime).Value = DBNull.Value;
-                        command.Parameters.Add("@Author", DbType.String).Value = newRow["Author"];
-                        command.Parameters.Add("@Title", DbType.String).Value = newRow["Title"];
-                        command.Parameters.Add("@CopyrightDate", DbType.String).Value = newRow["CopyrightDate"];
-                        command.Parameters.Add("@Barcode", DbType.String).Value = newRow["Barcode"];
-                        command.Parameters.Add("@Classification", DbType.String).Value = newRow["Classification"];
-                        command.Parameters.Add("@MainEntry", DbType.String).Value = newRow["MainEntry"];
+                        
+                        string errors = "";
+                        foreach (string error in record.Warnings)
+                            errors += error + Environment.NewLine;
+                        
+                        if (errors.Length > 1)
+                            errors = errors.Substring(0, errors.Length - 1);
+
+                        command.Parameters.Add("@ImportErrors", DbType.String).Value = errors;
 
                         command.ExecuteNonQuery();
                         
@@ -1090,7 +960,6 @@ namespace CSharp_MARC_Editor
                             }
                         }
                         command.Parameters.Clear();
-
                         importingBackgroundWorker.ReportProgress(i);
                     }
 
