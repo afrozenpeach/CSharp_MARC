@@ -367,58 +367,59 @@ namespace CSharp_MARC_Editor
                     using (SQLiteCommand command = new SQLiteCommand(connection))
                     {
                         command.CommandText = @"CREATE TABLE [Fields](
-                                                [FieldID] integer PRIMARY KEY ASC AUTOINCREMENT NOT NULL, 
-                                                [RecordID] nvarchar(2147483647) NOT NULL, 
-                                                [TagNumber] nvarchar(2147483647) NOT NULL, 
-                                                [Ind1] char, 
-                                                [Ind2] char, 
-                                                [ControlData] nvarchar(2147483647), 
-                                                FOREIGN KEY([RecordID]) REFERENCES Records([RecordID]) ON DELETE CASCADE ON UPDATE RESTRICT);
+                                                    [FieldID] integer PRIMARY KEY ASC AUTOINCREMENT NOT NULL, 
+                                                    [RecordID] nvarchar(2147483647) NOT NULL, 
+                                                    [TagNumber] nvarchar(2147483647) NOT NULL, 
+                                                    [Ind1] char, 
+                                                    [Ind2] char, 
+                                                    [ControlData] nvarchar(2147483647), 
+                                                    FOREIGN KEY([RecordID]) REFERENCES Records([RecordID]) ON DELETE CASCADE ON UPDATE RESTRICT);
 
-                                            CREATE TABLE [Records](
-                                                [RecordID] integer PRIMARY KEY ASC AUTOINCREMENT NOT NULL, 
-                                                [DateAdded] datetime NOT NULL, 
-                                                [DateChanged] datetime, 
-                                                [Author] nvarchar(2147483647), 
-                                                [Title] nvarchar(2147483647), 
-                                                [CopyrightDate] integer, 
-                                                [Barcode] nvarchar(2147483647), 
-                                                [Classification] nvarchar(2147483647), 
-                                                [MainEntry] nvarchar(2147483647));
+                                                CREATE TABLE [Records](
+                                                    [RecordID] integer PRIMARY KEY ASC AUTOINCREMENT NOT NULL, 
+                                                    [DateAdded] datetime NOT NULL, 
+                                                    [DateChanged] datetime, 
+                                                    [Author] nvarchar(2147483647), 
+                                                    [Title] nvarchar(2147483647), 
+                                                    [CopyrightDate] integer, 
+                                                    [Barcode] nvarchar(2147483647), 
+                                                    [Classification] nvarchar(2147483647), 
+                                                    [MainEntry] nvarchar(2147483647));
 
-                                            CREATE TABLE [Settings](
-                                                [RecordListAtTop] bool, 
-                                                [ClearDatabaseOnExit] bool, 
-                                                [CustomTag1] nvarchar(3), 
-                                                [CustomCode1] nvarchar(1), 
-                                                [CustomData1] nvarchar(2147483647), 
-                                                [CustomTag2] nvarchar(3), 
-                                                [CustomCode2] nvarchar(1), 
-                                                [CustomData2] nvarchar(2147483647), 
-                                                [CustomTag3] nvarchar(3), 
-                                                [CustomCode3] nvarchar(1), 
-                                                [CustomData3] nvarchar(2147483647), 
-                                                [CustomTag4] nvarchar(3), 
-                                                [CustomCode4] nvarchar(1), 
-                                                [CustomData4] nvarchar(2147483647), 
-                                                [CustomTag5] nvarchar(3), 
-                                                [CustomCode5] varchar(1), 
-                                                [CustomData5] nvarchar(2147483647));
+                                                CREATE TABLE [Settings](
+                                                    [RecordListAtTop] bool, 
+                                                    [ClearDatabaseOnExit] bool, 
+                                                    [ExportFormat] char(1), 
+                                                    [CustomTag1] nvarchar(3), 
+                                                    [CustomCode1] nvarchar(1), 
+                                                    [CustomData1] nvarchar(2147483647), 
+                                                    [CustomTag2] nvarchar(3), 
+                                                    [CustomCode2] nvarchar(1), 
+                                                    [CustomData2] nvarchar(2147483647), 
+                                                    [CustomTag3] nvarchar(3), 
+                                                    [CustomCode3] nvarchar(1), 
+                                                    [CustomData3] nvarchar(2147483647), 
+                                                    [CustomTag4] nvarchar(3), 
+                                                    [CustomCode4] nvarchar(1), 
+                                                    [CustomData4] nvarchar(2147483647), 
+                                                    [CustomTag5] nvarchar(3), 
+                                                    [CustomCode5] varchar(1), 
+                                                    [CustomData5] nvarchar(2147483647));
 
-                                            CREATE TABLE [Subfields](
-                                                [SubfieldID] integer PRIMARY KEY ASC AUTOINCREMENT NOT NULL, 
-                                                [FieldID] bigint NOT NULL, 
-                                                [Code] char NOT NULL, 
-                                                [Data] nvarchar(2147483647) NOT NULL, 
-                                                FOREIGN KEY([FieldID]) REFERENCES Fields([FieldID]) ON DELETE CASCADE ON UPDATE RESTRICT);
+                                                CREATE TABLE [Subfields](
+                                                    [SubfieldID] integer PRIMARY KEY ASC AUTOINCREMENT NOT NULL, 
+                                                    [FieldID] bigint NOT NULL, 
+                                                    [Code] char NOT NULL, 
+                                                    [Data] nvarchar(2147483647) NOT NULL, 
+                                                    FOREIGN KEY([FieldID]) REFERENCES Fields([FieldID]) ON DELETE CASCADE ON UPDATE RESTRICT);
 
-                                            CREATE INDEX [FieldID]
-                                            ON [Subfields](
-                                                [FieldID] ASC);
+                                                CREATE INDEX [FieldID]
+                                                ON [Subfields](
+                                                    [FieldID] ASC);
 
-                                            CREATE INDEX [RecordID]
-                                            ON [Fields](
-                                                [RecordID] ASC);";
+                                                CREATE INDEX [RecordID]
+                                                ON [Fields](
+                                                    [RecordID] ASC);";
 
                         command.ExecuteNonQuery();
                     }
@@ -653,11 +654,21 @@ namespace CSharp_MARC_Editor
             {
                 connection.Open();
 
-                string query = "UPDATE Settings SET RecordListAtTop = @RecordListAtTop, ClearDatabaseOnExit = @ClearDatabaseOnExit, CustomTag1 = @CustomTag1, CustomCode1 = @CustomCode1, CustomData1 = @CustomData1, CustomTag2 = @CustomTag2, CustomCode2 = @CustomCode2, CustomData2 = @CustomData2, CustomTag3 = @CustomTag3, CustomCode3 = @CustomCode3, CustomData3 = @CustomData3, CustomTag4 = @CustomTag4, CustomCode4 = @CustomCode4, CustomData4 = @CustomData4, CustomTag5 = @CustomTag5, CustomCode5 = @CustomCode5, CustomData5 = @CustomData5";
+                string query = "UPDATE Settings SET RecordListAtTop = @RecordListAtTop, ClearDatabaseOnExit = @ClearDatabaseOnExit, ExportFormat = @ExportFormat, CustomTag1 = @CustomTag1, CustomCode1 = @CustomCode1, CustomData1 = @CustomData1, CustomTag2 = @CustomTag2, CustomCode2 = @CustomCode2, CustomData2 = @CustomData2, CustomTag3 = @CustomTag3, CustomCode3 = @CustomCode3, CustomData3 = @CustomData3, CustomTag4 = @CustomTag4, CustomCode4 = @CustomCode4, CustomData4 = @CustomData4, CustomTag5 = @CustomTag5, CustomCode5 = @CustomCode5, CustomData5 = @CustomData5";
                 using (SQLiteCommand command = new SQLiteCommand(query, connection))
                 {
                     command.Parameters.Add("@RecordListAtTop", DbType.Boolean).Value = recordListAtTopToolStripMenuItem.Checked;
                     command.Parameters.Add("@ClearDatabaseOnExit", DbType.Boolean).Value = clearDatabaseOnExitToolStripMenuItem.Checked;
+
+                    if (mARC8ToolStripMenuItem.Checked)
+                        command.Parameters.Add("@ExportFormat", DbType.Boolean).Value = 'M';
+                    else if (uTF8ToolStripMenuItem.Checked)
+                        command.Parameters.Add("@ExportFormat", DbType.Boolean).Value = 'U';
+                    else if (mARCXMLToolStripMenuItem.Checked)
+                        command.Parameters.Add("@ExportFormat", DbType.Boolean).Value = 'X';
+                    else
+                        command.Parameters.Add("@ExportFormat", DbType.Boolean).Value = null;
+
                     command.Parameters.Add("@CustomTag1", DbType.String).Value = null;
                     command.Parameters.Add("@CustomCode1", DbType.String).Value = null;
                     command.Parameters.Add("@CustomData1", DbType.String).Value = null;
@@ -678,7 +689,7 @@ namespace CSharp_MARC_Editor
 
                     if (changes == 0)
                     {
-                        command.CommandText = "INSERT INTO Settings (RecordListAtTop, ClearDatabaseOnExit, CustomTag1, CustomCode1, CustomData1, CustomTag2, CustomCode2, CustomData2, CustomTag3, CustomCode3, CustomData3, CustomTag4, CustomCode4, CustomData4, CustomTag5, CustomCode5, CustomData5) VALUES (@RecordListAtTop, @ClearDatabaseOnExit, @CustomTag1, @CustomCode1, @CustomData1, @CustomTag2, @CustomCode2, @CustomData2, @CustomTag3, @CustomCode3, @CustomData3, @CustomTag4, @CustomCode4, @CustomData4, @CustomTag5, @CustomCode5, @CustomData5)";
+                        command.CommandText = "INSERT INTO Settings (RecordListAtTop, ClearDatabaseOnExit, ExportFormat, CustomTag1, CustomCode1, CustomData1, CustomTag2, CustomCode2, CustomData2, CustomTag3, CustomCode3, CustomData3, CustomTag4, CustomCode4, CustomData4, CustomTag5, CustomCode5, CustomData5) VALUES (@RecordListAtTop, @ClearDatabaseOnExit, @ExportFormat, @CustomTag1, @CustomCode1, @CustomData1, @CustomTag2, @CustomCode2, @CustomData2, @CustomTag3, @CustomCode3, @CustomData3, @CustomTag4, @CustomCode4, @CustomData4, @CustomTag5, @CustomCode5, @CustomData5)";
                         command.ExecuteNonQuery();
                     }
                 }
@@ -785,13 +796,34 @@ namespace CSharp_MARC_Editor
                                     clearDatabaseOnExitToolStripMenuItem_Click(sender, e);
                                 else
                                     clearDatabaseOnExitToolStripMenuItem.Checked = false;
+
+                                switch (reader["ExportFormat"].ToString())
+                                {
+                                    case "M":
+                                        uTF8ToolStripMenuItem.Checked = true;
+                                        mARC8ToolStripMenuItem.Checked = false;
+                                        mARCXMLToolStripMenuItem.Checked = false;
+                                        break;
+                                    case "U":
+                                        uTF8ToolStripMenuItem.Checked = false;
+                                        mARC8ToolStripMenuItem.Checked = true;
+                                        mARCXMLToolStripMenuItem.Checked = false;
+                                        break;
+                                    case "X":
+                                        uTF8ToolStripMenuItem.Checked = false;
+                                        mARC8ToolStripMenuItem.Checked = false;
+                                        mARCXMLToolStripMenuItem.Checked = true;
+                                        break;
+                                }
                             }
                             else
                             {
                                 reader.Close();
-                                command.CommandText = "INSERT INTO Settings (RecordListAtTop, ClearDatabaseOnExit) VALUES (@RecordListAtTop, @ClearDatabaseOnExit)";
+                                command.CommandText = "INSERT INTO Settings (RecordListAtTop, ClearDatabaseOnExit, ExportFormat) VALUES (@RecordListAtTop, @ClearDatabaseOnExit, @ExportFormat)";
                                 command.Parameters.Add("@RecordListAtTop", DbType.Boolean).Value = true;
                                 command.Parameters.Add("@ClearDatabaseOnExit", DbType.Boolean).Value = false;
+                                command.Parameters.Add("@ExportFormat", DbType.Boolean).Value = 'U';
+
                                 command.ExecuteNonQuery();
                             }
                         }
@@ -1084,9 +1116,26 @@ namespace CSharp_MARC_Editor
                     int i = 1;
                     int recordCounter = 1;
                     int fileCounter = 1;
+                    FileMARCWriter.RecordEncoding recordEncoding;
+
+                    if (mARC8ToolStripMenuItem.Checked)
+                        recordEncoding = FileMARCWriter.RecordEncoding.MARC8;
+                    else
+                        recordEncoding = FileMARCWriter.RecordEncoding.UTF8;
 
                     int max = marcDataSet.Tables["Records"].Rows.Count;
-                    FileMARCWriter marcWriter = new FileMARCWriter(e.Argument.ToString().Substring(0, e.Argument.ToString().LastIndexOf('.')) + "." + fileCounter + "." + e.Argument.ToString().Substring(e.Argument.ToString().LastIndexOf('.') + 1));
+
+                    FileMARCXMLWriter xmlWriter = null;
+                    FileMARCWriter marcWriter = null;
+                    string fileName = e.Argument.ToString();
+                    
+                    if (recordsPerFile > 0)
+                        fileName = e.Argument.ToString().Substring(0, e.Argument.ToString().LastIndexOf('.')) + "." + fileCounter + "." + e.Argument.ToString().Substring(e.Argument.ToString().LastIndexOf('.') + 1);
+                    
+                    if (mARCXMLToolStripMenuItem.Checked)
+                        xmlWriter = new FileMARCXMLWriter(fileName);
+                    else
+                        marcWriter = new FileMARCWriter(fileName, recordEncoding);
 
                     foreach (DataGridViewRow row in recordsDataGridView.Rows)
                     {
@@ -1120,7 +1169,10 @@ namespace CSharp_MARC_Editor
                             }
                         }
 
-                        marcWriter.Write(record);
+                        if (mARCXMLToolStripMenuItem.Checked)
+                            xmlWriter.Write(record);
+                        else
+                            marcWriter.Write(record);
                         i++;
                         recordCounter++;
                         exportingBackgroundWorker.ReportProgress(i / max);
@@ -1129,14 +1181,29 @@ namespace CSharp_MARC_Editor
                         {
                             recordCounter = 1;
                             fileCounter++;
-                            marcWriter.WriteEnd();
-                            marcWriter.Dispose();
-                            marcWriter = new FileMARCWriter(e.Argument.ToString().Substring(0, e.Argument.ToString().LastIndexOf('.')) + "." + fileCounter + "." + e.Argument.ToString().Substring(e.Argument.ToString().LastIndexOf('.')+1));
+
+                            if (mARCXMLToolStripMenuItem.Checked)
+                                marcWriter.WriteEnd();
+
+                            if (marcWriter != null)
+                                marcWriter.Dispose();
+
+                            if (xmlWriter != null)
+                                xmlWriter.Dispose();
+
+                            xmlWriter = new FileMARCXMLWriter(e.Argument.ToString().Substring(0, e.Argument.ToString().LastIndexOf('.')) + "." + fileCounter + "." + e.Argument.ToString().Substring(e.Argument.ToString().LastIndexOf('.') + 1));
+                            marcWriter = new FileMARCWriter(e.Argument.ToString().Substring(0, e.Argument.ToString().LastIndexOf('.')) + "." + fileCounter + "." + e.Argument.ToString().Substring(e.Argument.ToString().LastIndexOf('.') + 1), recordEncoding);
                         }
                     }
 
-                    marcWriter.WriteEnd();
-                    marcWriter.Dispose();
+                    if (marcWriter != null)
+                    {
+                        marcWriter.WriteEnd();
+                        marcWriter.Dispose();
+                    }
+
+                    if (xmlWriter != null)
+                        xmlWriter.Dispose();
                 }
             }
         }
@@ -1869,6 +1936,35 @@ namespace CSharp_MARC_Editor
                 clearDatabaseOnExitToolStripMenuItem.Checked = false;
             else
                 clearDatabaseOnExitToolStripMenuItem.Checked = true;
+
+            SaveOptions();
+        }
+
+        /// <summary>
+        /// Handles the Click event of the exportFormatToolStripMenuItem control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void exportFormatToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (sender == uTF8ToolStripMenuItem)
+            {
+                uTF8ToolStripMenuItem.Checked = true;
+                mARC8ToolStripMenuItem.Checked = false;
+                mARCXMLToolStripMenuItem.Checked = false;
+            }
+            else if (sender == mARC8ToolStripMenuItem)
+            {
+                uTF8ToolStripMenuItem.Checked = false;
+                mARC8ToolStripMenuItem.Checked = true;
+                mARCXMLToolStripMenuItem.Checked = false;
+            }
+            else if (sender == mARCXMLToolStripMenuItem)
+            {
+                uTF8ToolStripMenuItem.Checked = false;
+                mARC8ToolStripMenuItem.Checked = false;
+                mARCXMLToolStripMenuItem.Checked = true;
+            }
 
             SaveOptions();
         }

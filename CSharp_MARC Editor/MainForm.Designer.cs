@@ -94,6 +94,8 @@ namespace CSharp_MARC_Editor
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importRecordsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportRecordsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fullToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.splitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.printToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.allRecordsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.currentRecordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -107,6 +109,10 @@ namespace CSharp_MARC_Editor
             this.recordListAtTopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearDatabaseOnExitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.customFieldsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportFormatToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.uTF8ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mARC8ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mARCXMLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.databaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -114,8 +120,6 @@ namespace CSharp_MARC_Editor
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.exportingBackgroundWorker = new System.ComponentModel.BackgroundWorker();
-            this.fullToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.splitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -511,6 +515,22 @@ namespace CSharp_MARC_Editor
             this.exportRecordsToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
             this.exportRecordsToolStripMenuItem.Text = "Export Records";
             // 
+            // fullToolStripMenuItem
+            // 
+            this.fullToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("fullToolStripMenuItem.Image")));
+            this.fullToolStripMenuItem.Name = "fullToolStripMenuItem";
+            this.fullToolStripMenuItem.Size = new System.Drawing.Size(97, 22);
+            this.fullToolStripMenuItem.Text = "Full";
+            this.fullToolStripMenuItem.Click += new System.EventHandler(this.exportRecordsToolStripMenuItem_Click);
+            // 
+            // splitToolStripMenuItem
+            // 
+            this.splitToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("splitToolStripMenuItem.Image")));
+            this.splitToolStripMenuItem.Name = "splitToolStripMenuItem";
+            this.splitToolStripMenuItem.Size = new System.Drawing.Size(97, 22);
+            this.splitToolStripMenuItem.Text = "Split";
+            this.splitToolStripMenuItem.Click += new System.EventHandler(this.exportRecordsToolStripMenuItem_Click);
+            // 
             // printToolStripMenuItem
             // 
             this.printToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -585,7 +605,8 @@ namespace CSharp_MARC_Editor
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.recordListAtTopToolStripMenuItem,
             this.clearDatabaseOnExitToolStripMenuItem,
-            this.customFieldsToolStripMenuItem});
+            this.customFieldsToolStripMenuItem,
+            this.exportFormatToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.optionsToolStripMenuItem.Text = "Options";
@@ -611,6 +632,39 @@ namespace CSharp_MARC_Editor
             this.customFieldsToolStripMenuItem.Name = "customFieldsToolStripMenuItem";
             this.customFieldsToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.customFieldsToolStripMenuItem.Text = "Custom Fields";
+            // 
+            // exportFormatToolStripMenuItem
+            // 
+            this.exportFormatToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.uTF8ToolStripMenuItem,
+            this.mARC8ToolStripMenuItem,
+            this.mARCXMLToolStripMenuItem});
+            this.exportFormatToolStripMenuItem.Name = "exportFormatToolStripMenuItem";
+            this.exportFormatToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.exportFormatToolStripMenuItem.Text = "Export Format";
+            // 
+            // uTF8ToolStripMenuItem
+            // 
+            this.uTF8ToolStripMenuItem.Checked = true;
+            this.uTF8ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.uTF8ToolStripMenuItem.Name = "uTF8ToolStripMenuItem";
+            this.uTF8ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.uTF8ToolStripMenuItem.Text = "UTF8";
+            this.uTF8ToolStripMenuItem.Click += new System.EventHandler(this.exportFormatToolStripMenuItem_Click);
+            // 
+            // mARC8ToolStripMenuItem
+            // 
+            this.mARC8ToolStripMenuItem.Name = "mARC8ToolStripMenuItem";
+            this.mARC8ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.mARC8ToolStripMenuItem.Text = "MARC8";
+            this.mARC8ToolStripMenuItem.Click += new System.EventHandler(this.exportFormatToolStripMenuItem_Click);
+            // 
+            // mARCXMLToolStripMenuItem
+            // 
+            this.mARCXMLToolStripMenuItem.Name = "mARCXMLToolStripMenuItem";
+            this.mARCXMLToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.mARCXMLToolStripMenuItem.Text = "MARCXML";
+            this.mARCXMLToolStripMenuItem.Click += new System.EventHandler(this.exportFormatToolStripMenuItem_Click);
             // 
             // databaseToolStripMenuItem
             // 
@@ -662,22 +716,6 @@ namespace CSharp_MARC_Editor
             this.exportingBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.exportingBackgroundWorker_DoWork);
             this.exportingBackgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.exportingBackgroundWorker_ProgressChanged);
             this.exportingBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.exportingBackgroundWorker_RunWorkerCompleted);
-            // 
-            // fullToolStripMenuItem
-            // 
-            this.fullToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("fullToolStripMenuItem.Image")));
-            this.fullToolStripMenuItem.Name = "fullToolStripMenuItem";
-            this.fullToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.fullToolStripMenuItem.Text = "Full";
-            this.fullToolStripMenuItem.Click += new System.EventHandler(this.exportRecordsToolStripMenuItem_Click);
-            // 
-            // splitToolStripMenuItem
-            // 
-            this.splitToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("splitToolStripMenuItem.Image")));
-            this.splitToolStripMenuItem.Name = "splitToolStripMenuItem";
-            this.splitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.splitToolStripMenuItem.Text = "Split";
-            this.splitToolStripMenuItem.Click += new System.EventHandler(this.exportRecordsToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -772,6 +810,10 @@ namespace CSharp_MARC_Editor
         private System.Windows.Forms.ToolStripMenuItem customFieldsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fullToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem splitToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exportFormatToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem uTF8ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mARC8ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mARCXMLToolStripMenuItem;
 
     }
 }
