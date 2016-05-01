@@ -126,6 +126,8 @@ namespace CSharp_MARC_Editor
             this.Custom4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Custom5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ImportErrors = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.fromFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fromZ3950SRUToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -256,11 +258,13 @@ namespace CSharp_MARC_Editor
             // 
             // importRecordsToolStripMenuItem
             // 
+            this.importRecordsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fromFileToolStripMenuItem,
+            this.fromZ3950SRUToolStripMenuItem});
             this.importRecordsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("importRecordsToolStripMenuItem.Image")));
             this.importRecordsToolStripMenuItem.Name = "importRecordsToolStripMenuItem";
             this.importRecordsToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
             this.importRecordsToolStripMenuItem.Text = "Import Records";
-            this.importRecordsToolStripMenuItem.Click += new System.EventHandler(this.importToolStripMenuItem_Click);
             // 
             // exportRecordsToolStripMenuItem
             // 
@@ -276,7 +280,7 @@ namespace CSharp_MARC_Editor
             // 
             this.fullToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("fullToolStripMenuItem.Image")));
             this.fullToolStripMenuItem.Name = "fullToolStripMenuItem";
-            this.fullToolStripMenuItem.Size = new System.Drawing.Size(97, 22);
+            this.fullToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.fullToolStripMenuItem.Text = "Full";
             this.fullToolStripMenuItem.Click += new System.EventHandler(this.exportRecordsToolStripMenuItem_Click);
             // 
@@ -284,7 +288,7 @@ namespace CSharp_MARC_Editor
             // 
             this.splitToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("splitToolStripMenuItem.Image")));
             this.splitToolStripMenuItem.Name = "splitToolStripMenuItem";
-            this.splitToolStripMenuItem.Size = new System.Drawing.Size(97, 22);
+            this.splitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.splitToolStripMenuItem.Text = "Split";
             this.splitToolStripMenuItem.Click += new System.EventHandler(this.exportRecordsToolStripMenuItem_Click);
             // 
@@ -774,6 +778,22 @@ namespace CSharp_MARC_Editor
             this.ImportErrors.Name = "ImportErrors";
             this.ImportErrors.ReadOnly = true;
             // 
+            // fromFileToolStripMenuItem
+            // 
+            this.fromFileToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("fromFileToolStripMenuItem.Image")));
+            this.fromFileToolStripMenuItem.Name = "fromFileToolStripMenuItem";
+            this.fromFileToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.fromFileToolStripMenuItem.Text = "From File";
+            this.fromFileToolStripMenuItem.Click += new System.EventHandler(this.importToolStripMenuItem_Click);
+            // 
+            // fromZ3950SRUToolStripMenuItem
+            // 
+            this.fromZ3950SRUToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("fromZ3950SRUToolStripMenuItem.Image")));
+            this.fromZ3950SRUToolStripMenuItem.Name = "fromZ3950SRUToolStripMenuItem";
+            this.fromZ3950SRUToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.fromZ3950SRUToolStripMenuItem.Text = "From Z39.50/SRU";
+            this.fromZ3950SRUToolStripMenuItem.Click += new System.EventHandler(this.fromZ3950SRUToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -877,6 +897,8 @@ namespace CSharp_MARC_Editor
         private System.Windows.Forms.DataGridViewTextBoxColumn Custom4;
         private System.Windows.Forms.DataGridViewTextBoxColumn Custom5;
         private System.Windows.Forms.DataGridViewTextBoxColumn ImportErrors;
+        private System.Windows.Forms.ToolStripMenuItem fromFileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fromZ3950SRUToolStripMenuItem;
 
     }
 }

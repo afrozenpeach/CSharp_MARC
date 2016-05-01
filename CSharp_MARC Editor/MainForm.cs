@@ -38,6 +38,7 @@ using MARC;
 using System.Data.SQLite;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Collections;
 
 namespace CSharp_MARC_Editor
 {
@@ -894,7 +895,19 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="DoWorkEventArgs"/> instance containing the event data.</param>
         private void importingBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            marcRecords = new FileMARCReader(e.Argument.ToString());
+            IEnumerable recordEnumerator = null;
+            List<Record> importedSRU = new List<Record>();
+
+            if (e.Argument.GetType() == typeof(string))
+            {
+                marcRecords = new FileMARCReader(e.Argument.ToString());
+                recordEnumerator = marcRecords;
+            }
+            else
+            {
+                importedSRU.Add((Record)e.Argument);
+                recordEnumerator = importedSRU;
+            }
 
             int i = 0;
 
@@ -906,7 +919,7 @@ namespace CSharp_MARC_Editor
                     command.CommandText = "BEGIN";
                     command.ExecuteNonQuery();
 
-                    foreach (Record record in marcRecords)
+                    foreach (Record record in recordEnumerator)
                     {
                         i++;
                         
@@ -1033,6 +1046,23 @@ namespace CSharp_MARC_Editor
             recordsDataGridView.ResumeLayout();
             loading = false;
             this.Enabled = true;
+        }
+
+        /// <summary>
+        /// Handles the Click event of the fromZ3950SRUToolStripMenuItem control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void fromZ3950SRUToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (ImportSRU sru = new ImportSRU())
+            {
+                if (sru.ShowDialog() == DialogResult.OK)
+                {
+                    Record importedRecord = sru.SelectedRecord;
+                    importingBackgroundWorker.RunWorkerAsync(importedRecord);
+                }
+            }
         }
 
         #endregion

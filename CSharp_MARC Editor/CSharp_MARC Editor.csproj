@@ -70,6 +70,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AboutForm.cs">
@@ -96,6 +97,12 @@
     <Compile Include="FindReplaceForm.Designer.cs">
       <DependentUpon>FindReplaceForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ImportSRU.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ImportSRU.designer.cs">
+      <DependentUpon>ImportSRU.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -120,6 +127,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FindReplaceForm.resx">
       <DependentUpon>FindReplaceForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ImportSRU.resx">
+      <DependentUpon>ImportSRU.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
@@ -183,6 +193,8 @@
     <Content Include="Images\lgplv3-147x51.png" />
     <Content Include="Images\logo-header.png" />
     <Content Include="Images\matt.png" />
+    <Content Include="Images\network-receive.ico" />
+    <Content Include="Images\network-receive.png" />
     <Content Include="Images\printer.png" />
     <Content Include="Images\text-html.png" />
     <Content Include="Images\text-x-generic.png" />
