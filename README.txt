@@ -53,6 +53,12 @@
  * @license   http://www.gnu.org/licenses/gpl-3.0.html  GPL License 3
  */ 
 
+2016-04-30 Changes:
+
+Added export split records functionality
+Added regex find and replace
+Fixed issues with case-insensitive find and replace
+
 2016-04-28 Changes:
 
 First release of C# MARC Editor - a full featured MARC Editing suite
