@@ -367,6 +367,16 @@ namespace CSharp_MARC_Editor {
             
             private global::System.Data.DataColumn columnMainEntry;
             
+            private global::System.Data.DataColumn columnCustom1;
+            
+            private global::System.Data.DataColumn columnCustom2;
+            
+            private global::System.Data.DataColumn columnCustom3;
+            
+            private global::System.Data.DataColumn columnCustom4;
+            
+            private global::System.Data.DataColumn columnCustom5;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public RecordsDataTable() {
@@ -474,6 +484,46 @@ namespace CSharp_MARC_Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn Custom1Column {
+                get {
+                    return this.columnCustom1;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn Custom2Column {
+                get {
+                    return this.columnCustom2;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn Custom3Column {
+                get {
+                    return this.columnCustom3;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn Custom4Column {
+                get {
+                    return this.columnCustom4;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn Custom5Column {
+                get {
+                    return this.columnCustom5;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -509,7 +559,7 @@ namespace CSharp_MARC_Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public RecordsRow AddRecordsRow(int RecordID, string DateAdded, string DateChanged, string Author, string Title, int CopyrightDate, string Barcode, string Classification, string MainEntry) {
+            public RecordsRow AddRecordsRow(int RecordID, string DateAdded, string DateChanged, string Author, string Title, int CopyrightDate, string Barcode, string Classification, string MainEntry, string Custom1, string Custom2, string Custom3, string Custom4, string Custom5) {
                 RecordsRow rowRecordsRow = ((RecordsRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         RecordID,
@@ -520,7 +570,12 @@ namespace CSharp_MARC_Editor {
                         CopyrightDate,
                         Barcode,
                         Classification,
-                        MainEntry};
+                        MainEntry,
+                        Custom1,
+                        Custom2,
+                        Custom3,
+                        Custom4,
+                        Custom5};
                 rowRecordsRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowRecordsRow);
                 return rowRecordsRow;
@@ -552,6 +607,11 @@ namespace CSharp_MARC_Editor {
                 this.columnBarcode = base.Columns["Barcode"];
                 this.columnClassification = base.Columns["Classification"];
                 this.columnMainEntry = base.Columns["MainEntry"];
+                this.columnCustom1 = base.Columns["Custom1"];
+                this.columnCustom2 = base.Columns["Custom2"];
+                this.columnCustom3 = base.Columns["Custom3"];
+                this.columnCustom4 = base.Columns["Custom4"];
+                this.columnCustom5 = base.Columns["Custom5"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -575,6 +635,16 @@ namespace CSharp_MARC_Editor {
                 base.Columns.Add(this.columnClassification);
                 this.columnMainEntry = new global::System.Data.DataColumn("MainEntry", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnMainEntry);
+                this.columnCustom1 = new global::System.Data.DataColumn("Custom1", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCustom1);
+                this.columnCustom2 = new global::System.Data.DataColumn("Custom2", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCustom2);
+                this.columnCustom3 = new global::System.Data.DataColumn("Custom3", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCustom3);
+                this.columnCustom4 = new global::System.Data.DataColumn("Custom4", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCustom4);
+                this.columnCustom5 = new global::System.Data.DataColumn("Custom5", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCustom5);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1471,6 +1541,86 @@ namespace CSharp_MARC_Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string Custom1 {
+                get {
+                    try {
+                        return ((string)(this[this.tableRecords.Custom1Column]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Custom1\' in table \'Records\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableRecords.Custom1Column] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string Custom2 {
+                get {
+                    try {
+                        return ((string)(this[this.tableRecords.Custom2Column]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Custom2\' in table \'Records\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableRecords.Custom2Column] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string Custom3 {
+                get {
+                    try {
+                        return ((string)(this[this.tableRecords.Custom3Column]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Custom3\' in table \'Records\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableRecords.Custom3Column] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string Custom4 {
+                get {
+                    try {
+                        return ((string)(this[this.tableRecords.Custom4Column]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Custom4\' in table \'Records\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableRecords.Custom4Column] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string Custom5 {
+                get {
+                    try {
+                        return ((string)(this[this.tableRecords.Custom5Column]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Custom5\' in table \'Records\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableRecords.Custom5Column] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsRecordIDNull() {
                 return this.IsNull(this.tableRecords.RecordIDColumn);
             }
@@ -1575,6 +1725,66 @@ namespace CSharp_MARC_Editor {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetMainEntryNull() {
                 this[this.tableRecords.MainEntryColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsCustom1Null() {
+                return this.IsNull(this.tableRecords.Custom1Column);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetCustom1Null() {
+                this[this.tableRecords.Custom1Column] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsCustom2Null() {
+                return this.IsNull(this.tableRecords.Custom2Column);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetCustom2Null() {
+                this[this.tableRecords.Custom2Column] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsCustom3Null() {
+                return this.IsNull(this.tableRecords.Custom3Column);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetCustom3Null() {
+                this[this.tableRecords.Custom3Column] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsCustom4Null() {
+                return this.IsNull(this.tableRecords.Custom4Column);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetCustom4Null() {
+                this[this.tableRecords.Custom4Column] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsCustom5Null() {
+                return this.IsNull(this.tableRecords.Custom5Column);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetCustom5Null() {
+                this[this.tableRecords.Custom5Column] = global::System.Convert.DBNull;
             }
         }
         

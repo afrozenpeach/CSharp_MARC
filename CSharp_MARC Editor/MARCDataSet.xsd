@@ -24,6 +24,11 @@
               <xs:element name="Barcode" msprop:Generator_ColumnVarNameInTable="columnBarcode" msprop:Generator_ColumnPropNameInRow="Barcode" msprop:Generator_ColumnPropNameInTable="BarcodeColumn" msprop:Generator_UserColumnName="Barcode" type="xs:string" minOccurs="0" />
               <xs:element name="Classification" msprop:Generator_ColumnVarNameInTable="columnClassification" msprop:Generator_ColumnPropNameInRow="Classification" msprop:Generator_ColumnPropNameInTable="ClassificationColumn" msprop:Generator_UserColumnName="Classification" type="xs:string" minOccurs="0" />
               <xs:element name="MainEntry" msprop:Generator_ColumnVarNameInTable="columnMainEntry" msprop:Generator_ColumnPropNameInRow="MainEntry" msprop:Generator_ColumnPropNameInTable="MainEntryColumn" msprop:Generator_UserColumnName="MainEntry" type="xs:string" minOccurs="0" />
+              <xs:element name="Custom1" msprop:Generator_ColumnVarNameInTable="columnCustom1" msprop:Generator_ColumnPropNameInRow="Custom1" msprop:Generator_ColumnPropNameInTable="Custom1Column" msprop:Generator_UserColumnName="Custom1" type="xs:string" minOccurs="0" />
+              <xs:element name="Custom2" msprop:Generator_ColumnVarNameInTable="columnCustom2" msprop:Generator_ColumnPropNameInRow="Custom2" msprop:Generator_ColumnPropNameInTable="Custom2Column" msprop:Generator_UserColumnName="Custom2" type="xs:string" minOccurs="0" />
+              <xs:element name="Custom3" msprop:Generator_ColumnVarNameInTable="columnCustom3" msprop:Generator_ColumnPropNameInRow="Custom3" msprop:Generator_ColumnPropNameInTable="Custom3Column" msprop:Generator_UserColumnName="Custom3" type="xs:string" minOccurs="0" />
+              <xs:element name="Custom4" msprop:Generator_ColumnVarNameInTable="columnCustom4" msprop:Generator_ColumnPropNameInRow="Custom4" msprop:Generator_ColumnPropNameInTable="Custom4Column" msprop:Generator_UserColumnName="Custom4" type="xs:string" minOccurs="0" />
+              <xs:element name="Custom5" msprop:Generator_ColumnVarNameInTable="columnCustom5" msprop:Generator_ColumnPropNameInRow="Custom5" msprop:Generator_ColumnPropNameInTable="Custom5Column" msprop:Generator_UserColumnName="Custom5" type="xs:string" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

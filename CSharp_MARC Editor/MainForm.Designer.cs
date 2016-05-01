@@ -69,6 +69,11 @@ namespace CSharp_MARC_Editor
             this.barcodeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.classificationDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.mainEntryDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Custom1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Custom2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Custom3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Custom4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Custom5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.marcDataSet = new CSharp_MARC_Editor.MARCDataSet();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
@@ -177,7 +182,12 @@ namespace CSharp_MARC_Editor
             this.CopyrightDate,
             this.barcodeDataGridViewTextBoxColumn,
             this.classificationDataGridViewTextBoxColumn,
-            this.mainEntryDataGridViewTextBoxColumn});
+            this.mainEntryDataGridViewTextBoxColumn,
+            this.Custom1,
+            this.Custom2,
+            this.Custom3,
+            this.Custom4,
+            this.Custom5});
             this.recordsDataGridView.DataMember = "Records";
             this.recordsDataGridView.DataSource = this.marcDataSet;
             this.recordsDataGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
@@ -264,6 +274,41 @@ namespace CSharp_MARC_Editor
             this.mainEntryDataGridViewTextBoxColumn.HeaderText = "MainEntry";
             this.mainEntryDataGridViewTextBoxColumn.Name = "mainEntryDataGridViewTextBoxColumn";
             this.mainEntryDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // Custom1
+            // 
+            this.Custom1.DataPropertyName = "Custom1";
+            this.Custom1.HeaderText = "Custom1";
+            this.Custom1.Name = "Custom1";
+            this.Custom1.ReadOnly = true;
+            // 
+            // Custom2
+            // 
+            this.Custom2.DataPropertyName = "Custom2";
+            this.Custom2.HeaderText = "Custom2";
+            this.Custom2.Name = "Custom2";
+            this.Custom2.ReadOnly = true;
+            // 
+            // Custom3
+            // 
+            this.Custom3.DataPropertyName = "Custom3";
+            this.Custom3.HeaderText = "Custom3";
+            this.Custom3.Name = "Custom3";
+            this.Custom3.ReadOnly = true;
+            // 
+            // Custom4
+            // 
+            this.Custom4.DataPropertyName = "Custom4";
+            this.Custom4.HeaderText = "Custom4";
+            this.Custom4.Name = "Custom4";
+            this.Custom4.ReadOnly = true;
+            // 
+            // Custom5
+            // 
+            this.Custom5.DataPropertyName = "Custom5";
+            this.Custom5.HeaderText = "Custom5";
+            this.Custom5.Name = "Custom5";
+            this.Custom5.ReadOnly = true;
             // 
             // marcDataSet
             // 
@@ -629,9 +674,11 @@ namespace CSharp_MARC_Editor
             // 
             // customFieldsToolStripMenuItem
             // 
+            this.customFieldsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("customFieldsToolStripMenuItem.Image")));
             this.customFieldsToolStripMenuItem.Name = "customFieldsToolStripMenuItem";
             this.customFieldsToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.customFieldsToolStripMenuItem.Text = "Custom Fields";
+            this.customFieldsToolStripMenuItem.Click += new System.EventHandler(this.customFieldsToolStripMenuItem_Click);
             // 
             // exportFormatToolStripMenuItem
             // 
@@ -648,21 +695,21 @@ namespace CSharp_MARC_Editor
             this.uTF8ToolStripMenuItem.Checked = true;
             this.uTF8ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.uTF8ToolStripMenuItem.Name = "uTF8ToolStripMenuItem";
-            this.uTF8ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.uTF8ToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.uTF8ToolStripMenuItem.Text = "UTF8";
             this.uTF8ToolStripMenuItem.Click += new System.EventHandler(this.exportFormatToolStripMenuItem_Click);
             // 
             // mARC8ToolStripMenuItem
             // 
             this.mARC8ToolStripMenuItem.Name = "mARC8ToolStripMenuItem";
-            this.mARC8ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.mARC8ToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.mARC8ToolStripMenuItem.Text = "MARC8";
             this.mARC8ToolStripMenuItem.Click += new System.EventHandler(this.exportFormatToolStripMenuItem_Click);
             // 
             // mARCXMLToolStripMenuItem
             // 
             this.mARCXMLToolStripMenuItem.Name = "mARCXMLToolStripMenuItem";
-            this.mARCXMLToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.mARCXMLToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.mARCXMLToolStripMenuItem.Text = "MARCXML";
             this.mARCXMLToolStripMenuItem.Click += new System.EventHandler(this.exportFormatToolStripMenuItem_Click);
             // 
@@ -797,6 +844,14 @@ namespace CSharp_MARC_Editor
         private System.Windows.Forms.DataGridViewTextBoxColumn ind2DataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn controlDataDataGridViewTextBoxColumn;
         private System.Windows.Forms.ToolStripMenuItem createBlankRecordToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem clearDatabaseOnExitToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem customFieldsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fullToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem splitToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exportFormatToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem uTF8ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mARC8ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mARCXMLToolStripMenuItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn recordIDDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn dateAddedDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn dateChangedDataGridViewTextBoxColumn;
@@ -806,14 +861,11 @@ namespace CSharp_MARC_Editor
         private System.Windows.Forms.DataGridViewTextBoxColumn barcodeDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn classificationDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn mainEntryDataGridViewTextBoxColumn;
-        private System.Windows.Forms.ToolStripMenuItem clearDatabaseOnExitToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem customFieldsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem fullToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem splitToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem exportFormatToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem uTF8ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem mARC8ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem mARCXMLToolStripMenuItem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Custom1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Custom2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Custom3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Custom4;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Custom5;
 
     }
 }

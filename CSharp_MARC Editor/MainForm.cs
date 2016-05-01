@@ -54,6 +54,7 @@ namespace CSharp_MARC_Editor
         private bool loading = true;
         private bool reloadFields = false;
         private decimal recordsPerFile = 0;
+        private CustomFieldsForm customFieldsForm = new CustomFieldsForm();
 
         #endregion
 
@@ -384,7 +385,12 @@ namespace CSharp_MARC_Editor
                                                     [CopyrightDate] integer, 
                                                     [Barcode] nvarchar(2147483647), 
                                                     [Classification] nvarchar(2147483647), 
-                                                    [MainEntry] nvarchar(2147483647));
+                                                    [MainEntry] nvarchar(2147483647), 
+                                                    [Custom1] nvarchar(2147483647), 
+                                                    [Custom2] nvarchar(2147483647), 
+                                                    [Custom3] nvarchar(2147483647), 
+                                                    [Custom4] nvarchar(2147483647), 
+                                                    [Custom5] nvarchar(2147483647));
 
                                                 CREATE TABLE [Settings](
                                                     [RecordListAtTop] bool, 
@@ -464,7 +470,7 @@ namespace CSharp_MARC_Editor
                             updaterCommand.CommandText = "BEGIN;";
                             updaterCommand.ExecuteNonQuery();
 
-                            updaterCommand.CommandText = "UPDATE Records SET DateChanged = @DateChanged, Author = @Author, Title = @Title, CopyrightDate = @CopyrightDate, Barcode = @Barcode, Classification = @Classification, MainEntry = @MainEntry WHERE RecordID = @RecordID";
+                            updaterCommand.CommandText = "UPDATE Records SET DateChanged = @DateChanged, Author = @Author, Title = @Title, CopyrightDate = @CopyrightDate, Barcode = @Barcode, Classification = @Classification, MainEntry = @MainEntry, Custom1 = @Custom1, Custom2 = @Custom2, Custom3 = @Custom3, Custom4 = @Custom4, Custom5 = @Custom5 WHERE RecordID = @RecordID";
                             
                             updaterCommand.Parameters.Add("@Author", DbType.String);
                             updaterCommand.Parameters.Add("@Title", DbType.String);
@@ -474,6 +480,11 @@ namespace CSharp_MARC_Editor
                             updaterCommand.Parameters.Add("@MainEntry", DbType.String);
                             updaterCommand.Parameters.Add("@RecordID", DbType.Int32);
                             updaterCommand.Parameters.Add("@DateChanged", DbType.DateTime);
+                            updaterCommand.Parameters.Add("@Custom1", DbType.String);
+                            updaterCommand.Parameters.Add("@Custom2", DbType.String);
+                            updaterCommand.Parameters.Add("@Custom3", DbType.String);
+                            updaterCommand.Parameters.Add("@Custom4", DbType.String);
+                            updaterCommand.Parameters.Add("@Custom5", DbType.String);
 
                             using (SQLiteDataReader reader = readerCommand.ExecuteReader())
                             {
@@ -484,6 +495,11 @@ namespace CSharp_MARC_Editor
                                 string barcode = null;
                                 string classification = null;
                                 string mainEntry = null;
+                                string custom1 = null;
+                                string custom2 = null;
+                                string custom3 = null;
+                                string custom4 = null;
+                                string custom5 = null;
                                 int tempCopyrightDate = -1;
                                 int? copyrightDate = null;
                                 bool bc = false;
@@ -505,6 +521,11 @@ namespace CSharp_MARC_Editor
                                             updaterCommand.Parameters["@Classification"].Value = classification;
                                             updaterCommand.Parameters["@MainEntry"].Value = mainEntry;
                                             updaterCommand.Parameters["@RecordID"].Value = currentRecord;
+                                            updaterCommand.Parameters["@Custom1"].Value = custom1;
+                                            updaterCommand.Parameters["@Custom2"].Value = custom2;
+                                            updaterCommand.Parameters["@Custom3"].Value = custom3;
+                                            updaterCommand.Parameters["@Custom4"].Value = custom4;
+                                            updaterCommand.Parameters["@Custom5"].Value = custom5;
 
                                             updaterCommand.ExecuteNonQuery();
 
@@ -530,6 +551,11 @@ namespace CSharp_MARC_Editor
                                                         row.Cells[6].Value = barcode;
                                                         row.Cells[7].Value = classification;
                                                         row.Cells[8].Value = mainEntry;
+                                                        row.Cells[9].Value = custom1;
+                                                        row.Cells[10].Value = custom2;
+                                                        row.Cells[11].Value = custom3;
+                                                        row.Cells[12].Value = custom4;
+                                                        row.Cells[13].Value = custom5;
                                                         break;
                                                     }
                                                 }
@@ -543,6 +569,11 @@ namespace CSharp_MARC_Editor
                                         barcode = null;
                                         classification = null;
                                         mainEntry = null;
+                                        custom1 = null;
+                                        custom2 = null;
+                                        custom3 = null;
+                                        custom4 = null;
+                                        custom5 = null;
                                     }
 
                                     if (author == null && (string)reader["TagNumber"] == "100" && (string)reader["Code"] == "a")
@@ -631,6 +662,46 @@ namespace CSharp_MARC_Editor
                                             mainEntry = split[1];
                                         }
                                     }
+
+                                    if (custom1 == null && (string)reader["TagNumber"] == customFieldsForm.TagNumber1 && (string)reader["Code"] == customFieldsForm.Code1)
+                                    {
+                                        if (customFieldsForm.Data1 != "")
+                                            custom1 = Regex.Match((string)reader["Data"], customFieldsForm.Data1).Value;
+                                        else
+                                            custom1 = (string)reader["Data"];
+                                    }
+
+                                    if (custom2 == null && (string)reader["TagNumber"] == customFieldsForm.TagNumber2 && (string)reader["Code"] == customFieldsForm.Code2)
+                                    {
+                                        if (customFieldsForm.Data2 != "")
+                                            custom2 = Regex.Match((string)reader["Data"], customFieldsForm.Data2).Value;
+                                        else
+                                            custom2 = (string)reader["Data"];
+                                    }
+
+                                    if (custom3 == null && (string)reader["TagNumber"] == customFieldsForm.TagNumber3 && (string)reader["Code"] == customFieldsForm.Code3)
+                                    {
+                                        if (customFieldsForm.Data3 != "")
+                                            custom3 = Regex.Match((string)reader["Data"], customFieldsForm.Data3).Value;
+                                        else
+                                            custom3 = (string)reader["Data"];
+                                    }
+
+                                    if (custom4 == null && (string)reader["TagNumber"] == customFieldsForm.TagNumber4 && (string)reader["Code"] == customFieldsForm.Code4)
+                                    {
+                                        if (customFieldsForm.Data4 != "")
+                                            custom4 = Regex.Match((string)reader["Data"], customFieldsForm.Data4).Value;
+                                        else
+                                            custom4 = (string)reader["Data"];
+                                    }
+
+                                    if (custom5 == null && (string)reader["TagNumber"] == customFieldsForm.TagNumber5 && (string)reader["Code"] == customFieldsForm.Code5)
+                                    {
+                                        if (customFieldsForm.Data5 != "")
+                                            custom5 = Regex.Match((string)reader["Data"], customFieldsForm.Data5).Value;
+                                        else
+                                            custom5 = (string)reader["Data"];
+                                    }
                                 }
                             }
                             
@@ -669,21 +740,21 @@ namespace CSharp_MARC_Editor
                     else
                         command.Parameters.Add("@ExportFormat", DbType.Boolean).Value = null;
 
-                    command.Parameters.Add("@CustomTag1", DbType.String).Value = null;
-                    command.Parameters.Add("@CustomCode1", DbType.String).Value = null;
-                    command.Parameters.Add("@CustomData1", DbType.String).Value = null;
-                    command.Parameters.Add("@CustomTag2", DbType.String).Value = null;
-                    command.Parameters.Add("@CustomCode2", DbType.String).Value = null;
-                    command.Parameters.Add("@CustomData2", DbType.String).Value = null;
-                    command.Parameters.Add("@CustomTag3", DbType.String).Value = null;
-                    command.Parameters.Add("@CustomCode3", DbType.String).Value = null;
-                    command.Parameters.Add("@CustomData3", DbType.String).Value = null;
-                    command.Parameters.Add("@CustomTag4", DbType.String).Value = null;
-                    command.Parameters.Add("@CustomCode4", DbType.String).Value = null;
-                    command.Parameters.Add("@CustomData4", DbType.String).Value = null;
-                    command.Parameters.Add("@CustomTag5", DbType.String).Value = null;
-                    command.Parameters.Add("@CustomCode5", DbType.String).Value = null;
-                    command.Parameters.Add("@CustomData5", DbType.String).Value = null;
+                    command.Parameters.Add("@CustomTag1", DbType.String).Value = customFieldsForm.TagNumber1;
+                    command.Parameters.Add("@CustomCode1", DbType.String).Value = customFieldsForm.Code1;
+                    command.Parameters.Add("@CustomData1", DbType.String).Value = customFieldsForm.Data1;
+                    command.Parameters.Add("@CustomTag2", DbType.String).Value = customFieldsForm.TagNumber2;
+                    command.Parameters.Add("@CustomCode2", DbType.String).Value = customFieldsForm.Code2;
+                    command.Parameters.Add("@CustomData2", DbType.String).Value = customFieldsForm.Data2;
+                    command.Parameters.Add("@CustomTag3", DbType.String).Value = customFieldsForm.TagNumber3;
+                    command.Parameters.Add("@CustomCode3", DbType.String).Value = customFieldsForm.Code3;
+                    command.Parameters.Add("@CustomData3", DbType.String).Value = customFieldsForm.Data3;
+                    command.Parameters.Add("@CustomTag4", DbType.String).Value = customFieldsForm.TagNumber4;
+                    command.Parameters.Add("@CustomCode4", DbType.String).Value = customFieldsForm.Code4;
+                    command.Parameters.Add("@CustomData4", DbType.String).Value = customFieldsForm.Data4;
+                    command.Parameters.Add("@CustomTag5", DbType.String).Value = customFieldsForm.TagNumber5;
+                    command.Parameters.Add("@CustomCode5", DbType.String).Value = customFieldsForm.Code5;
+                    command.Parameters.Add("@CustomData5", DbType.String).Value = customFieldsForm.Data5;
 
                     int changes = command.ExecuteNonQuery();
 
@@ -815,14 +886,45 @@ namespace CSharp_MARC_Editor
                                         mARCXMLToolStripMenuItem.Checked = true;
                                         break;
                                 }
+
+                                customFieldsForm.TagNumber1 = reader["CustomTag1"].ToString();
+                                customFieldsForm.Code1 = reader["CustomCode1"].ToString();
+                                customFieldsForm.Data1 = reader["CustomData1"].ToString();
+                                customFieldsForm.TagNumber2 = reader["CustomTag2"].ToString();
+                                customFieldsForm.Code2 = reader["CustomCode2"].ToString();
+                                customFieldsForm.Data2 = reader["CustomData2"].ToString();
+                                customFieldsForm.TagNumber3 = reader["CustomTag3"].ToString();
+                                customFieldsForm.Code3 = reader["CustomCode3"].ToString();
+                                customFieldsForm.Data3 = reader["CustomData3"].ToString();
+                                customFieldsForm.TagNumber4 = reader["CustomTag4"].ToString();
+                                customFieldsForm.Code4 = reader["CustomCode4"].ToString();
+                                customFieldsForm.Data4 = reader["CustomData4"].ToString();
+                                customFieldsForm.TagNumber5 = reader["CustomTag5"].ToString();
+                                customFieldsForm.Code5 = reader["CustomCode5"].ToString();
+                                customFieldsForm.Data5 = reader["CustomData5"].ToString();
                             }
                             else
                             {
                                 reader.Close();
-                                command.CommandText = "INSERT INTO Settings (RecordListAtTop, ClearDatabaseOnExit, ExportFormat) VALUES (@RecordListAtTop, @ClearDatabaseOnExit, @ExportFormat)";
+                                command.CommandText = "INSERT INTO Settings (RecordListAtTop, ClearDatabaseOnExit, ExportFormat, CustomTag1, CustomCode1, CustomData1, CustomTag2, CustomCode2, CustomData2, CustomTag3, CustomCode3, CustomData3, CustomTag4, CustomCode4, CustomData4, CustomTag5, CustomCode5, CustomData5) VALUES (@RecordListAtTop, @ClearDatabaseOnExit, @ExportFormat, @CustomTag1, @CustomCode1, @CustomData1, @CustomTag2, @CustomCode2, @CustomData2, @CustomTag3, @CustomCode3, @CustomData3, @CustomTag4, @CustomCode4, @CustomData4, @CustomTag5, @CustomCode5, @CustomData5)";
                                 command.Parameters.Add("@RecordListAtTop", DbType.Boolean).Value = true;
                                 command.Parameters.Add("@ClearDatabaseOnExit", DbType.Boolean).Value = false;
                                 command.Parameters.Add("@ExportFormat", DbType.Boolean).Value = 'U';
+                                command.Parameters.Add("@CustomTag1", DbType.String).Value = customFieldsForm.TagNumber1;
+                                command.Parameters.Add("@CustomCode1", DbType.String).Value = customFieldsForm.Code1;
+                                command.Parameters.Add("@CustomData1", DbType.String).Value = customFieldsForm.Data1;
+                                command.Parameters.Add("@CustomTag2", DbType.String).Value = customFieldsForm.TagNumber2;
+                                command.Parameters.Add("@CustomCode2", DbType.String).Value = customFieldsForm.Code2;
+                                command.Parameters.Add("@CustomData2", DbType.String).Value = customFieldsForm.Data2;
+                                command.Parameters.Add("@CustomTag3", DbType.String).Value = customFieldsForm.TagNumber3;
+                                command.Parameters.Add("@CustomCode3", DbType.String).Value = customFieldsForm.Code3;
+                                command.Parameters.Add("@CustomData3", DbType.String).Value = customFieldsForm.Data3;
+                                command.Parameters.Add("@CustomTag4", DbType.String).Value = customFieldsForm.TagNumber4;
+                                command.Parameters.Add("@CustomCode4", DbType.String).Value = customFieldsForm.Code4;
+                                command.Parameters.Add("@CustomData4", DbType.String).Value = customFieldsForm.Data4;
+                                command.Parameters.Add("@CustomTag5", DbType.String).Value = customFieldsForm.TagNumber5;
+                                command.Parameters.Add("@CustomCode5", DbType.String).Value = customFieldsForm.Code5;
+                                command.Parameters.Add("@CustomData5", DbType.String).Value = customFieldsForm.Data5;
 
                                 command.ExecuteNonQuery();
                             }
@@ -1033,6 +1135,7 @@ namespace CSharp_MARC_Editor
         private void importingBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             marcDataSet.Tables["Records"].Rows.Clear();
+            RebuildRecordsPreviewInformation();
 
             using (SQLiteConnection connection = new SQLiteConnection(connectionString))
             {
@@ -1967,6 +2070,22 @@ namespace CSharp_MARC_Editor
             }
 
             SaveOptions();
+        }
+
+        /// <summary>
+        /// Handles the Click event of the customFieldsToolStripMenuItem control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
+        private void customFieldsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (customFieldsForm.ShowDialog() == DialogResult.OK)
+            {
+                SaveOptions();
+                RebuildRecordsPreviewInformation();
+            }
+            else
+                this.OnLoad(new EventArgs());
         }
 
         /// <summary>

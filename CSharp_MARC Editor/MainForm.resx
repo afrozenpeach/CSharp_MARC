@@ -126,6 +126,21 @@
   <metadata name="CopyrightDate.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
+  <metadata name="Custom1.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="Custom2.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="Custom3.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="Custom4.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="Custom5.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
   <metadata name="marcDataSet.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>387, 17</value>
   </metadata>
@@ -289,6 +304,17 @@
         vIUDvCXY39mxKwSiajUV9vMnkRoKIOxpYnilmIXXL5GAYENAIYGm7e6DCThz+hham0/w8dz0iH6+Bpfk
         IMEhgzSjC37t7GxbAlVdp0kMJp72IpVKIZfLolQq4Yajna4dYVCEBPwQzGiahnq9jmq1ylC5XIaiKI0r
         OGyQZrq6/WFdsu+bp3vt8Ln1f8HFe1GdQV9YR/bu//9js/0Bz2QhRYnfgwwAAAAASUVORK5CYII=
+</value>
+  </data>
+  <data name="customFieldsToolStripMenuItem.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
+        EwAACxMBAJqcGAAAAAd0SU1FB9ULBAoVG8bSK1QAAAEQSURBVDhPpZC7aoRgEIV9yqCtRUCxt7awF8HC
+        QuuAESxiY+2tSCViZWHt/Q1mdyY7JhvcuJKBD3GYc87ML2C5rvtuGAac5IXEWNg4W6i5yb8NxnGEvu+J
+        YRg2sI9M0wTrutLsrgEK0zSFLMuIPM/vKIri2IBTFUXZqKqK0ud5/tsAhZwcRRGIorjx1AacjIl4M36/
+        tnil/6c24ETeQFVVoqo+jw0w5eftLGaapjk2+H07IkkSyLIMmqZB27Y0+9CAXxtZlgXqugZd18E0TbAs
+        CzzPo9ldAxTzayNlWRJxHINt2+D7PgRBQLMPDXgDTEfwZqTrOgjDEJIkodldgzN1Z+A4zgc2znDVvN3k
+        /ylBuAAYSpocbbszwQAAAABJRU5ErkJggg==
 </value>
   </data>
   <data name="clearDatabaseToolStripMenuItem.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
