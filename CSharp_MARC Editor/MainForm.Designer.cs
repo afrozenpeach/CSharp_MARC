@@ -686,6 +686,7 @@ namespace CSharp_MARC_Editor
             this.uTF8ToolStripMenuItem,
             this.mARC8ToolStripMenuItem,
             this.mARCXMLToolStripMenuItem});
+            this.exportFormatToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("exportFormatToolStripMenuItem.Image")));
             this.exportFormatToolStripMenuItem.Name = "exportFormatToolStripMenuItem";
             this.exportFormatToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.exportFormatToolStripMenuItem.Text = "Export Format";

@@ -184,6 +184,7 @@
     <Content Include="Images\logo-header.png" />
     <Content Include="Images\matt.png" />
     <Content Include="Images\printer.png" />
+    <Content Include="Images\text-html.png" />
     <Content Include="Images\text-x-generic.png" />
     <Content Include="Images\view-refresh.png" />
     <Content Include="Images\x-office-address-book.png" />
