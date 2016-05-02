@@ -39,6 +39,7 @@ using System.Data.SQLite;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Collections;
+using System.Drawing.Printing;
 
 namespace CSharp_MARC_Editor
 {
@@ -56,6 +57,11 @@ namespace CSharp_MARC_Editor
         private bool reloadFields = false;
         private decimal recordsPerFile = 0;
         private CustomFieldsForm customFieldsForm = new CustomFieldsForm();
+        private List<string> linesToPrint;
+
+        private const char START_OF_HEADING = '\x01';
+        private const char NEW_PAGE = '\xFF';
+        private const char END_OF_FILE = '\x1A';
 
         #endregion
 
@@ -2085,6 +2091,175 @@ namespace CSharp_MARC_Editor
                     this.OnLoad(new EventArgs());
                     this.Enabled = true;
                 }
+            }
+        }
+
+        #endregion
+
+        #region Print Events
+
+        /// <summary>
+        /// Handles the Click event of the currentRecordToolStripMenuItem control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void currentRecordToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (printDialog.ShowDialog() == DialogResult.OK)
+            {
+                linesToPrint = new List<string>();
+                printDocument.PrinterSettings = printDialog.PrinterSettings;
+
+                printDocument.DefaultPageSettings.Margins.Left = 75;
+                printDocument.DefaultPageSettings.Margins.Top = 75;
+                printDocument.DefaultPageSettings.Margins.Right = 75;
+                printDocument.DefaultPageSettings.Margins.Bottom = 75;
+
+                linesToPrint.Add(START_OF_HEADING.ToString() + "Title: " + recordsDataGridView.SelectedCells[0].OwningRow.Cells[4].Value.ToString() + " -- Author: " + recordsDataGridView.SelectedCells[0].OwningRow.Cells[3].Value.ToString());
+
+                linesToPrint.AddRange(previewTextBox.Lines);
+
+                linesToPrint.Add(NEW_PAGE.ToString());
+                printDocument.Print();
+                
+                linesToPrint = null;
+            }
+        }
+
+        /// <summary>
+        /// Handles the Click event of the allRecordsToolStripMenuItem control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void allRecordsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (printDialog.ShowDialog() == DialogResult.OK)
+            {
+                linesToPrint = new List<string>();
+
+                foreach (DataGridViewRow row in recordsDataGridView.Rows)
+                {
+                    LoadPreview((int)row.Cells[0].Value);
+
+                    //For some reason the Print Dialog doesn't have a working collate button. It always acts as false. :psyduck:
+                    //I figure "true" is a better and more often used option
+                    printDocument.PrinterSettings.Collate = true;
+
+                    printDocument.DefaultPageSettings.Margins.Left = 75;
+                    printDocument.DefaultPageSettings.Margins.Top = 75;
+                    printDocument.DefaultPageSettings.Margins.Right = 75;
+                    printDocument.DefaultPageSettings.Margins.Bottom = 75;
+
+                    linesToPrint.Add(START_OF_HEADING.ToString() + "Title: " + row.Cells[4].Value.ToString() + " -- Author: " + row.Cells[3].Value.ToString());
+
+                    linesToPrint.AddRange(previewTextBox.Lines);
+
+                    linesToPrint.Add(NEW_PAGE.ToString());
+                }
+
+                printDocument.Print();
+                linesToPrint = null;
+                LoadPreview((int)recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value);
+            }
+        }
+
+        /// <summary>
+        /// Handles the Click event of the selectedRecordsToolStripMenuItem control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void selectedRecordsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (printDialog.ShowDialog() == DialogResult.OK)
+            {
+                linesToPrint = new List<string>();
+
+                foreach (DataGridViewRow row in recordsDataGridView.SelectedRows)
+                {
+                    LoadPreview((int)row.Cells[0].Value);
+
+                    //For some reason the Print Dialog doesn't have a working collate button. It always acts as false. :psyduck:
+                    //I figure "true" is a better and more often used option
+                    printDocument.PrinterSettings.Collate = true;
+
+                    printDocument.DefaultPageSettings.Margins.Left = 75;
+                    printDocument.DefaultPageSettings.Margins.Top = 75;
+                    printDocument.DefaultPageSettings.Margins.Right = 75;
+                    printDocument.DefaultPageSettings.Margins.Bottom = 75;
+
+                    linesToPrint.Add(START_OF_HEADING.ToString() + "Title: " + row.Cells[4].Value.ToString() + " -- Author: " + row.Cells[3].Value.ToString());
+
+                    linesToPrint.AddRange(previewTextBox.Lines);
+
+                    linesToPrint.Add(NEW_PAGE.ToString());
+                }
+
+                printDocument.Print();
+                linesToPrint = null;
+                LoadPreview((int)recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value);
+            }
+        }
+
+        /// <summary>
+        /// Handles the PrintPage event of the printDocument control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.Drawing.Printing.PrintPageEventArgs"/> instance containing the event data.</param>
+        private void printDocument_PrintPage(object sender, PrintPageEventArgs e)
+        {
+            float leftMargin = e.MarginBounds.Left;
+            float topMargin = e.MarginBounds.Top;
+            float yPos = topMargin;
+            Font headerFont = new Font("Courier New", 8, FontStyle.Bold);
+            Font printFont = new Font("Courier New", 10, FontStyle.Regular);
+            SizeF marginBoundsSize = new SizeF(e.MarginBounds.Size.Width, e.MarginBounds.Size.Height);
+            SizeF actualSize;
+            bool newPage = true;
+            string currentHeader = "";
+
+            while (yPos < topMargin + e.MarginBounds.Size.Height && linesToPrint.Count > 0)
+            {
+                string line = linesToPrint[0];
+
+                if (line.StartsWith(START_OF_HEADING.ToString()))
+                {
+                    currentHeader = line.Substring(1);
+                    linesToPrint.Remove(line);
+                    continue;
+                }
+                else if (line.StartsWith(NEW_PAGE.ToString()))
+                {
+                    currentHeader = string.Empty;
+                    linesToPrint.Remove(line);
+                    if (linesToPrint.Count > 0)
+                        e.HasMorePages = true;
+                    else
+                        e.HasMorePages = false;
+                    break;
+                }
+
+                if (newPage && currentHeader != string.Empty)
+                {
+                    e.Graphics.DrawString(currentHeader, headerFont, Brushes.Black, new RectangleF(15, 15, e.MarginBounds.Size.Width + 30, e.MarginBounds.Size.Height));
+                    newPage = false;
+                }
+
+                StringFormat format = StringFormat.GenericTypographic;
+                format.Alignment = StringAlignment.Near;
+                format.LineAlignment = StringAlignment.Near;
+                format.FormatFlags = StringFormatFlags.LineLimit;
+                format.Trimming = StringTrimming.Word;
+
+                actualSize = e.Graphics.MeasureString(line, printFont, marginBoundsSize, format);
+                e.Graphics.DrawString(line, printFont, Brushes.Black, new RectangleF(leftMargin, yPos, e.MarginBounds.Size.Width, e.MarginBounds.Size.Height), format);
+
+                yPos = yPos + actualSize.Height;
+
+                linesToPrint.Remove(line);
+                if (linesToPrint.Count > 0)
+                    e.HasMorePages = true;
+                else
+                    e.HasMorePages = false;
             }
         }
 

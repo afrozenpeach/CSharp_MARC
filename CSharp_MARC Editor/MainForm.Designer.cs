@@ -70,9 +70,12 @@ namespace CSharp_MARC_Editor
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importRecordsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fromFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fromZ3950SRUToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportRecordsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fullToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toCSVFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.printToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.allRecordsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.currentRecordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -97,20 +100,8 @@ namespace CSharp_MARC_Editor
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.exportingBackgroundWorker = new System.ComponentModel.BackgroundWorker();
+            this.csvExportBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.recordsDataGridView = new System.Windows.Forms.DataGridView();
-            this.marcDataSet = new CSharp_MARC_Editor.MARCDataSet();
-            this.subfieldsDataGridView = new System.Windows.Forms.DataGridView();
-            this.subfieldIDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.fieldIDDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.codeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.fieldsDataGridView = new System.Windows.Forms.DataGridView();
-            this.fieldIDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.recordIDDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tagNumberDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ind1DataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ind2DataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.controlDataDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.recordIDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dateAddedDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dateChangedDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -126,10 +117,21 @@ namespace CSharp_MARC_Editor
             this.Custom4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Custom5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ImportErrors = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.fromFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.fromZ3950SRUToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toCSVFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.csvExportBackgroundWorker = new System.ComponentModel.BackgroundWorker();
+            this.marcDataSet = new CSharp_MARC_Editor.MARCDataSet();
+            this.subfieldsDataGridView = new System.Windows.Forms.DataGridView();
+            this.subfieldIDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.fieldIDDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.codeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.fieldsDataGridView = new System.Windows.Forms.DataGridView();
+            this.fieldIDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.recordIDDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tagNumberDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ind1DataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ind2DataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.controlDataDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.printDialog = new System.Windows.Forms.PrintDialog();
+            this.printDocument = new System.Drawing.Printing.PrintDocument();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -208,7 +210,7 @@ namespace CSharp_MARC_Editor
             this.previewTextBox.Name = "previewTextBox";
             this.previewTextBox.ReadOnly = true;
             this.previewTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.previewTextBox.Size = new System.Drawing.Size(357, 420);
+            this.previewTextBox.Size = new System.Drawing.Size(357, 409);
             this.previewTextBox.TabIndex = 2;
             // 
             // saveFileDialog
@@ -268,6 +270,22 @@ namespace CSharp_MARC_Editor
             this.importRecordsToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
             this.importRecordsToolStripMenuItem.Text = "Import Records";
             // 
+            // fromFileToolStripMenuItem
+            // 
+            this.fromFileToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("fromFileToolStripMenuItem.Image")));
+            this.fromFileToolStripMenuItem.Name = "fromFileToolStripMenuItem";
+            this.fromFileToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.fromFileToolStripMenuItem.Text = "From File";
+            this.fromFileToolStripMenuItem.Click += new System.EventHandler(this.importToolStripMenuItem_Click);
+            // 
+            // fromZ3950SRUToolStripMenuItem
+            // 
+            this.fromZ3950SRUToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("fromZ3950SRUToolStripMenuItem.Image")));
+            this.fromZ3950SRUToolStripMenuItem.Name = "fromZ3950SRUToolStripMenuItem";
+            this.fromZ3950SRUToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.fromZ3950SRUToolStripMenuItem.Text = "From Z39.50/SRU";
+            this.fromZ3950SRUToolStripMenuItem.Click += new System.EventHandler(this.fromZ3950SRUToolStripMenuItem_Click);
+            // 
             // exportRecordsToolStripMenuItem
             // 
             this.exportRecordsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -283,7 +301,7 @@ namespace CSharp_MARC_Editor
             // 
             this.fullToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("fullToolStripMenuItem.Image")));
             this.fullToolStripMenuItem.Name = "fullToolStripMenuItem";
-            this.fullToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.fullToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.fullToolStripMenuItem.Text = "Full";
             this.fullToolStripMenuItem.Click += new System.EventHandler(this.exportRecordsToolStripMenuItem_Click);
             // 
@@ -291,9 +309,17 @@ namespace CSharp_MARC_Editor
             // 
             this.splitToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("splitToolStripMenuItem.Image")));
             this.splitToolStripMenuItem.Name = "splitToolStripMenuItem";
-            this.splitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.splitToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.splitToolStripMenuItem.Text = "Split";
             this.splitToolStripMenuItem.Click += new System.EventHandler(this.exportRecordsToolStripMenuItem_Click);
+            // 
+            // toCSVFileToolStripMenuItem
+            // 
+            this.toCSVFileToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("toCSVFileToolStripMenuItem.Image")));
+            this.toCSVFileToolStripMenuItem.Name = "toCSVFileToolStripMenuItem";
+            this.toCSVFileToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.toCSVFileToolStripMenuItem.Text = "To CSV File";
+            this.toCSVFileToolStripMenuItem.Click += new System.EventHandler(this.toCSVFileToolStripMenuItem_Click);
             // 
             // printToolStripMenuItem
             // 
@@ -312,6 +338,7 @@ namespace CSharp_MARC_Editor
             this.allRecordsToolStripMenuItem.Name = "allRecordsToolStripMenuItem";
             this.allRecordsToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.allRecordsToolStripMenuItem.Text = "All Records";
+            this.allRecordsToolStripMenuItem.Click += new System.EventHandler(this.allRecordsToolStripMenuItem_Click);
             // 
             // currentRecordToolStripMenuItem
             // 
@@ -319,6 +346,7 @@ namespace CSharp_MARC_Editor
             this.currentRecordToolStripMenuItem.Name = "currentRecordToolStripMenuItem";
             this.currentRecordToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.currentRecordToolStripMenuItem.Text = "Current Record";
+            this.currentRecordToolStripMenuItem.Click += new System.EventHandler(this.currentRecordToolStripMenuItem_Click);
             // 
             // selectedRecordsToolStripMenuItem
             // 
@@ -326,6 +354,7 @@ namespace CSharp_MARC_Editor
             this.selectedRecordsToolStripMenuItem.Name = "selectedRecordsToolStripMenuItem";
             this.selectedRecordsToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.selectedRecordsToolStripMenuItem.Text = "Selected Records";
+            this.selectedRecordsToolStripMenuItem.Click += new System.EventHandler(this.selectedRecordsToolStripMenuItem_Click);
             // 
             // toolStripSeparator
             // 
@@ -484,6 +513,14 @@ namespace CSharp_MARC_Editor
             this.exportingBackgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.exportingBackgroundWorker_ProgressChanged);
             this.exportingBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.exportingBackgroundWorker_RunWorkerCompleted);
             // 
+            // csvExportBackgroundWorker
+            // 
+            this.csvExportBackgroundWorker.WorkerReportsProgress = true;
+            this.csvExportBackgroundWorker.WorkerSupportsCancellation = true;
+            this.csvExportBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.csvExportBackgroundWorker_DoWork);
+            this.csvExportBackgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.csvExportBackgroundWorker_ProgressChanged);
+            this.csvExportBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.csvExportBackgroundWorker_RunWorkerCompleted);
+            // 
             // recordsDataGridView
             // 
             this.recordsDataGridView.AllowUserToAddRows = false;
@@ -513,7 +550,6 @@ namespace CSharp_MARC_Editor
             this.recordsDataGridView.DataSource = this.marcDataSet;
             this.recordsDataGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.recordsDataGridView.Location = new System.Drawing.Point(0, 0);
-            this.recordsDataGridView.MultiSelect = false;
             this.recordsDataGridView.Name = "recordsDataGridView";
             this.recordsDataGridView.ReadOnly = true;
             this.recordsDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
@@ -522,149 +558,6 @@ namespace CSharp_MARC_Editor
             this.recordsDataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.recordsDataGridView_CellClick);
             this.recordsDataGridView.SelectionChanged += new System.EventHandler(this.recordsDataGridView_SelectionChanged);
             this.recordsDataGridView.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.recordsDataGridView_UserDeletingRow);
-            // 
-            // marcDataSet
-            // 
-            this.marcDataSet.DataSetName = "MARCDataSet";
-            this.marcDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-            // 
-            // subfieldsDataGridView
-            // 
-            this.subfieldsDataGridView.AllowUserToResizeColumns = false;
-            this.subfieldsDataGridView.AllowUserToResizeRows = false;
-            this.subfieldsDataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.subfieldsDataGridView.AutoGenerateColumns = false;
-            this.subfieldsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.subfieldsDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.subfieldIDDataGridViewTextBoxColumn,
-            this.fieldIDDataGridViewTextBoxColumn1,
-            this.codeDataGridViewTextBoxColumn,
-            this.dataDataGridViewTextBoxColumn});
-            this.subfieldsDataGridView.DataMember = "Subfields";
-            this.subfieldsDataGridView.DataSource = this.marcDataSet;
-            this.subfieldsDataGridView.Location = new System.Drawing.Point(211, 3);
-            this.subfieldsDataGridView.MultiSelect = false;
-            this.subfieldsDataGridView.Name = "subfieldsDataGridView";
-            this.subfieldsDataGridView.Size = new System.Drawing.Size(407, 420);
-            this.subfieldsDataGridView.TabIndex = 1;
-            this.subfieldsDataGridView.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.subfieldsDataGridView_CellBeginEdit);
-            this.subfieldsDataGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.subfieldsDataGridView_CellEndEdit);
-            this.subfieldsDataGridView.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.subfieldsDataGridView_CellValidated);
-            this.subfieldsDataGridView.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.subfieldsDataGridView_CellValidating);
-            this.subfieldsDataGridView.RowValidating += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.subfieldsDataGridView_RowValidating);
-            this.subfieldsDataGridView.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.subfieldsDataGridView_UserDeletingRow);
-            // 
-            // subfieldIDDataGridViewTextBoxColumn
-            // 
-            this.subfieldIDDataGridViewTextBoxColumn.DataPropertyName = "SubfieldID";
-            this.subfieldIDDataGridViewTextBoxColumn.HeaderText = "SubfieldID";
-            this.subfieldIDDataGridViewTextBoxColumn.Name = "subfieldIDDataGridViewTextBoxColumn";
-            this.subfieldIDDataGridViewTextBoxColumn.Visible = false;
-            // 
-            // fieldIDDataGridViewTextBoxColumn1
-            // 
-            this.fieldIDDataGridViewTextBoxColumn1.DataPropertyName = "FieldID";
-            this.fieldIDDataGridViewTextBoxColumn1.HeaderText = "FieldID";
-            this.fieldIDDataGridViewTextBoxColumn1.Name = "fieldIDDataGridViewTextBoxColumn1";
-            this.fieldIDDataGridViewTextBoxColumn1.Visible = false;
-            // 
-            // codeDataGridViewTextBoxColumn
-            // 
-            this.codeDataGridViewTextBoxColumn.DataPropertyName = "Code";
-            this.codeDataGridViewTextBoxColumn.HeaderText = "Code";
-            this.codeDataGridViewTextBoxColumn.MaxInputLength = 1;
-            this.codeDataGridViewTextBoxColumn.MinimumWidth = 40;
-            this.codeDataGridViewTextBoxColumn.Name = "codeDataGridViewTextBoxColumn";
-            this.codeDataGridViewTextBoxColumn.Width = 40;
-            // 
-            // dataDataGridViewTextBoxColumn
-            // 
-            this.dataDataGridViewTextBoxColumn.DataPropertyName = "Data";
-            this.dataDataGridViewTextBoxColumn.HeaderText = "Data";
-            this.dataDataGridViewTextBoxColumn.MinimumWidth = 100;
-            this.dataDataGridViewTextBoxColumn.Name = "dataDataGridViewTextBoxColumn";
-            this.dataDataGridViewTextBoxColumn.Width = 300;
-            // 
-            // fieldsDataGridView
-            // 
-            this.fieldsDataGridView.AllowUserToResizeColumns = false;
-            this.fieldsDataGridView.AllowUserToResizeRows = false;
-            this.fieldsDataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.fieldsDataGridView.AutoGenerateColumns = false;
-            this.fieldsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.fieldsDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.fieldIDDataGridViewTextBoxColumn,
-            this.recordIDDataGridViewTextBoxColumn1,
-            this.tagNumberDataGridViewTextBoxColumn,
-            this.ind1DataGridViewTextBoxColumn,
-            this.ind2DataGridViewTextBoxColumn,
-            this.controlDataDataGridViewTextBoxColumn});
-            this.fieldsDataGridView.DataMember = "Fields";
-            this.fieldsDataGridView.DataSource = this.marcDataSet;
-            this.fieldsDataGridView.Location = new System.Drawing.Point(3, 3);
-            this.fieldsDataGridView.MultiSelect = false;
-            this.fieldsDataGridView.Name = "fieldsDataGridView";
-            this.fieldsDataGridView.Size = new System.Drawing.Size(202, 420);
-            this.fieldsDataGridView.TabIndex = 0;
-            this.fieldsDataGridView.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.fieldsDataGridView_CellBeginEdit);
-            this.fieldsDataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.fieldsDataGridView_CellClick);
-            this.fieldsDataGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.fieldsDataGridView_CellEndEdit);
-            this.fieldsDataGridView.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.fieldsDataGridView_CellValidated);
-            this.fieldsDataGridView.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.fieldsDataGridView_CellValidating);
-            this.fieldsDataGridView.RowValidating += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.fieldsDataGridView_RowValidating);
-            this.fieldsDataGridView.SelectionChanged += new System.EventHandler(this.fieldsDataGridView_SelectionChanged);
-            this.fieldsDataGridView.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.fieldsDataGridView_UserAddedRow);
-            this.fieldsDataGridView.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.fieldsDataGridView_UserDeletingRow);
-            // 
-            // fieldIDDataGridViewTextBoxColumn
-            // 
-            this.fieldIDDataGridViewTextBoxColumn.DataPropertyName = "FieldID";
-            this.fieldIDDataGridViewTextBoxColumn.HeaderText = "FieldID";
-            this.fieldIDDataGridViewTextBoxColumn.Name = "fieldIDDataGridViewTextBoxColumn";
-            this.fieldIDDataGridViewTextBoxColumn.Visible = false;
-            // 
-            // recordIDDataGridViewTextBoxColumn1
-            // 
-            this.recordIDDataGridViewTextBoxColumn1.DataPropertyName = "RecordID";
-            this.recordIDDataGridViewTextBoxColumn1.HeaderText = "RecordID";
-            this.recordIDDataGridViewTextBoxColumn1.Name = "recordIDDataGridViewTextBoxColumn1";
-            this.recordIDDataGridViewTextBoxColumn1.Visible = false;
-            // 
-            // tagNumberDataGridViewTextBoxColumn
-            // 
-            this.tagNumberDataGridViewTextBoxColumn.DataPropertyName = "TagNumber";
-            this.tagNumberDataGridViewTextBoxColumn.HeaderText = "Tag";
-            this.tagNumberDataGridViewTextBoxColumn.MaxInputLength = 3;
-            this.tagNumberDataGridViewTextBoxColumn.MinimumWidth = 45;
-            this.tagNumberDataGridViewTextBoxColumn.Name = "tagNumberDataGridViewTextBoxColumn";
-            this.tagNumberDataGridViewTextBoxColumn.Width = 45;
-            // 
-            // ind1DataGridViewTextBoxColumn
-            // 
-            this.ind1DataGridViewTextBoxColumn.DataPropertyName = "Ind1";
-            this.ind1DataGridViewTextBoxColumn.HeaderText = "Ind1";
-            this.ind1DataGridViewTextBoxColumn.MaxInputLength = 1;
-            this.ind1DataGridViewTextBoxColumn.MinimumWidth = 40;
-            this.ind1DataGridViewTextBoxColumn.Name = "ind1DataGridViewTextBoxColumn";
-            this.ind1DataGridViewTextBoxColumn.Width = 40;
-            // 
-            // ind2DataGridViewTextBoxColumn
-            // 
-            this.ind2DataGridViewTextBoxColumn.DataPropertyName = "Ind2";
-            this.ind2DataGridViewTextBoxColumn.HeaderText = "Ind2";
-            this.ind2DataGridViewTextBoxColumn.MaxInputLength = 1;
-            this.ind2DataGridViewTextBoxColumn.MinimumWidth = 40;
-            this.ind2DataGridViewTextBoxColumn.Name = "ind2DataGridViewTextBoxColumn";
-            this.ind2DataGridViewTextBoxColumn.Width = 40;
-            // 
-            // controlDataDataGridViewTextBoxColumn
-            // 
-            this.controlDataDataGridViewTextBoxColumn.DataPropertyName = "ControlData";
-            this.controlDataDataGridViewTextBoxColumn.HeaderText = "ControlData";
-            this.controlDataDataGridViewTextBoxColumn.Name = "controlDataDataGridViewTextBoxColumn";
-            this.controlDataDataGridViewTextBoxColumn.Visible = false;
             // 
             // recordIDDataGridViewTextBoxColumn
             // 
@@ -781,37 +674,156 @@ namespace CSharp_MARC_Editor
             this.ImportErrors.Name = "ImportErrors";
             this.ImportErrors.ReadOnly = true;
             // 
-            // fromFileToolStripMenuItem
+            // marcDataSet
             // 
-            this.fromFileToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("fromFileToolStripMenuItem.Image")));
-            this.fromFileToolStripMenuItem.Name = "fromFileToolStripMenuItem";
-            this.fromFileToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
-            this.fromFileToolStripMenuItem.Text = "From File";
-            this.fromFileToolStripMenuItem.Click += new System.EventHandler(this.importToolStripMenuItem_Click);
+            this.marcDataSet.DataSetName = "MARCDataSet";
+            this.marcDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
-            // fromZ3950SRUToolStripMenuItem
+            // subfieldsDataGridView
             // 
-            this.fromZ3950SRUToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("fromZ3950SRUToolStripMenuItem.Image")));
-            this.fromZ3950SRUToolStripMenuItem.Name = "fromZ3950SRUToolStripMenuItem";
-            this.fromZ3950SRUToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
-            this.fromZ3950SRUToolStripMenuItem.Text = "From Z39.50/SRU";
-            this.fromZ3950SRUToolStripMenuItem.Click += new System.EventHandler(this.fromZ3950SRUToolStripMenuItem_Click);
+            this.subfieldsDataGridView.AllowUserToResizeColumns = false;
+            this.subfieldsDataGridView.AllowUserToResizeRows = false;
+            this.subfieldsDataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.subfieldsDataGridView.AutoGenerateColumns = false;
+            this.subfieldsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.subfieldsDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.subfieldIDDataGridViewTextBoxColumn,
+            this.fieldIDDataGridViewTextBoxColumn1,
+            this.codeDataGridViewTextBoxColumn,
+            this.dataDataGridViewTextBoxColumn});
+            this.subfieldsDataGridView.DataMember = "Subfields";
+            this.subfieldsDataGridView.DataSource = this.marcDataSet;
+            this.subfieldsDataGridView.Location = new System.Drawing.Point(211, 3);
+            this.subfieldsDataGridView.MultiSelect = false;
+            this.subfieldsDataGridView.Name = "subfieldsDataGridView";
+            this.subfieldsDataGridView.Size = new System.Drawing.Size(407, 409);
+            this.subfieldsDataGridView.TabIndex = 1;
+            this.subfieldsDataGridView.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.subfieldsDataGridView_CellBeginEdit);
+            this.subfieldsDataGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.subfieldsDataGridView_CellEndEdit);
+            this.subfieldsDataGridView.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.subfieldsDataGridView_CellValidated);
+            this.subfieldsDataGridView.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.subfieldsDataGridView_CellValidating);
+            this.subfieldsDataGridView.RowValidating += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.subfieldsDataGridView_RowValidating);
+            this.subfieldsDataGridView.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.subfieldsDataGridView_UserDeletingRow);
             // 
-            // toCSVFileToolStripMenuItem
+            // subfieldIDDataGridViewTextBoxColumn
             // 
-            this.toCSVFileToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("toCSVFileToolStripMenuItem.Image")));
-            this.toCSVFileToolStripMenuItem.Name = "toCSVFileToolStripMenuItem";
-            this.toCSVFileToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.toCSVFileToolStripMenuItem.Text = "To CSV File";
-            this.toCSVFileToolStripMenuItem.Click += new System.EventHandler(this.toCSVFileToolStripMenuItem_Click);
+            this.subfieldIDDataGridViewTextBoxColumn.DataPropertyName = "SubfieldID";
+            this.subfieldIDDataGridViewTextBoxColumn.HeaderText = "SubfieldID";
+            this.subfieldIDDataGridViewTextBoxColumn.Name = "subfieldIDDataGridViewTextBoxColumn";
+            this.subfieldIDDataGridViewTextBoxColumn.Visible = false;
             // 
-            // csvExportBackgroundWorker
+            // fieldIDDataGridViewTextBoxColumn1
             // 
-            this.csvExportBackgroundWorker.WorkerReportsProgress = true;
-            this.csvExportBackgroundWorker.WorkerSupportsCancellation = true;
-            this.csvExportBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.csvExportBackgroundWorker_DoWork);
-            this.csvExportBackgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.csvExportBackgroundWorker_ProgressChanged);
-            this.csvExportBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.csvExportBackgroundWorker_RunWorkerCompleted);
+            this.fieldIDDataGridViewTextBoxColumn1.DataPropertyName = "FieldID";
+            this.fieldIDDataGridViewTextBoxColumn1.HeaderText = "FieldID";
+            this.fieldIDDataGridViewTextBoxColumn1.Name = "fieldIDDataGridViewTextBoxColumn1";
+            this.fieldIDDataGridViewTextBoxColumn1.Visible = false;
+            // 
+            // codeDataGridViewTextBoxColumn
+            // 
+            this.codeDataGridViewTextBoxColumn.DataPropertyName = "Code";
+            this.codeDataGridViewTextBoxColumn.HeaderText = "Code";
+            this.codeDataGridViewTextBoxColumn.MaxInputLength = 1;
+            this.codeDataGridViewTextBoxColumn.MinimumWidth = 40;
+            this.codeDataGridViewTextBoxColumn.Name = "codeDataGridViewTextBoxColumn";
+            this.codeDataGridViewTextBoxColumn.Width = 40;
+            // 
+            // dataDataGridViewTextBoxColumn
+            // 
+            this.dataDataGridViewTextBoxColumn.DataPropertyName = "Data";
+            this.dataDataGridViewTextBoxColumn.HeaderText = "Data";
+            this.dataDataGridViewTextBoxColumn.MinimumWidth = 100;
+            this.dataDataGridViewTextBoxColumn.Name = "dataDataGridViewTextBoxColumn";
+            this.dataDataGridViewTextBoxColumn.Width = 300;
+            // 
+            // fieldsDataGridView
+            // 
+            this.fieldsDataGridView.AllowUserToResizeColumns = false;
+            this.fieldsDataGridView.AllowUserToResizeRows = false;
+            this.fieldsDataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.fieldsDataGridView.AutoGenerateColumns = false;
+            this.fieldsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.fieldsDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.fieldIDDataGridViewTextBoxColumn,
+            this.recordIDDataGridViewTextBoxColumn1,
+            this.tagNumberDataGridViewTextBoxColumn,
+            this.ind1DataGridViewTextBoxColumn,
+            this.ind2DataGridViewTextBoxColumn,
+            this.controlDataDataGridViewTextBoxColumn});
+            this.fieldsDataGridView.DataMember = "Fields";
+            this.fieldsDataGridView.DataSource = this.marcDataSet;
+            this.fieldsDataGridView.Location = new System.Drawing.Point(3, 3);
+            this.fieldsDataGridView.MultiSelect = false;
+            this.fieldsDataGridView.Name = "fieldsDataGridView";
+            this.fieldsDataGridView.Size = new System.Drawing.Size(202, 409);
+            this.fieldsDataGridView.TabIndex = 0;
+            this.fieldsDataGridView.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.fieldsDataGridView_CellBeginEdit);
+            this.fieldsDataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.fieldsDataGridView_CellClick);
+            this.fieldsDataGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.fieldsDataGridView_CellEndEdit);
+            this.fieldsDataGridView.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.fieldsDataGridView_CellValidated);
+            this.fieldsDataGridView.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.fieldsDataGridView_CellValidating);
+            this.fieldsDataGridView.RowValidating += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.fieldsDataGridView_RowValidating);
+            this.fieldsDataGridView.SelectionChanged += new System.EventHandler(this.fieldsDataGridView_SelectionChanged);
+            this.fieldsDataGridView.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.fieldsDataGridView_UserAddedRow);
+            this.fieldsDataGridView.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.fieldsDataGridView_UserDeletingRow);
+            // 
+            // fieldIDDataGridViewTextBoxColumn
+            // 
+            this.fieldIDDataGridViewTextBoxColumn.DataPropertyName = "FieldID";
+            this.fieldIDDataGridViewTextBoxColumn.HeaderText = "FieldID";
+            this.fieldIDDataGridViewTextBoxColumn.Name = "fieldIDDataGridViewTextBoxColumn";
+            this.fieldIDDataGridViewTextBoxColumn.Visible = false;
+            // 
+            // recordIDDataGridViewTextBoxColumn1
+            // 
+            this.recordIDDataGridViewTextBoxColumn1.DataPropertyName = "RecordID";
+            this.recordIDDataGridViewTextBoxColumn1.HeaderText = "RecordID";
+            this.recordIDDataGridViewTextBoxColumn1.Name = "recordIDDataGridViewTextBoxColumn1";
+            this.recordIDDataGridViewTextBoxColumn1.Visible = false;
+            // 
+            // tagNumberDataGridViewTextBoxColumn
+            // 
+            this.tagNumberDataGridViewTextBoxColumn.DataPropertyName = "TagNumber";
+            this.tagNumberDataGridViewTextBoxColumn.HeaderText = "Tag";
+            this.tagNumberDataGridViewTextBoxColumn.MaxInputLength = 3;
+            this.tagNumberDataGridViewTextBoxColumn.MinimumWidth = 45;
+            this.tagNumberDataGridViewTextBoxColumn.Name = "tagNumberDataGridViewTextBoxColumn";
+            this.tagNumberDataGridViewTextBoxColumn.Width = 45;
+            // 
+            // ind1DataGridViewTextBoxColumn
+            // 
+            this.ind1DataGridViewTextBoxColumn.DataPropertyName = "Ind1";
+            this.ind1DataGridViewTextBoxColumn.HeaderText = "Ind1";
+            this.ind1DataGridViewTextBoxColumn.MaxInputLength = 1;
+            this.ind1DataGridViewTextBoxColumn.MinimumWidth = 40;
+            this.ind1DataGridViewTextBoxColumn.Name = "ind1DataGridViewTextBoxColumn";
+            this.ind1DataGridViewTextBoxColumn.Width = 40;
+            // 
+            // ind2DataGridViewTextBoxColumn
+            // 
+            this.ind2DataGridViewTextBoxColumn.DataPropertyName = "Ind2";
+            this.ind2DataGridViewTextBoxColumn.HeaderText = "Ind2";
+            this.ind2DataGridViewTextBoxColumn.MaxInputLength = 1;
+            this.ind2DataGridViewTextBoxColumn.MinimumWidth = 40;
+            this.ind2DataGridViewTextBoxColumn.Name = "ind2DataGridViewTextBoxColumn";
+            this.ind2DataGridViewTextBoxColumn.Width = 40;
+            // 
+            // controlDataDataGridViewTextBoxColumn
+            // 
+            this.controlDataDataGridViewTextBoxColumn.DataPropertyName = "ControlData";
+            this.controlDataDataGridViewTextBoxColumn.HeaderText = "ControlData";
+            this.controlDataDataGridViewTextBoxColumn.Name = "controlDataDataGridViewTextBoxColumn";
+            this.controlDataDataGridViewTextBoxColumn.Visible = false;
+            // 
+            // printDialog
+            // 
+            this.printDialog.UseEXDialog = true;
+            // 
+            // printDocument
+            // 
+            this.printDocument.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(this.printDocument_PrintPage);
             // 
             // MainForm
             // 
@@ -920,6 +932,8 @@ namespace CSharp_MARC_Editor
         private System.Windows.Forms.ToolStripMenuItem fromZ3950SRUToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toCSVFileToolStripMenuItem;
         private System.ComponentModel.BackgroundWorker csvExportBackgroundWorker;
+        private System.Windows.Forms.PrintDialog printDialog;
+        private System.Drawing.Printing.PrintDocument printDocument;
 
     }
 }
