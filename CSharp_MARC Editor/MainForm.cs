@@ -2108,8 +2108,8 @@ namespace CSharp_MARC_Editor
             if (printDialog.ShowDialog() == DialogResult.OK)
             {
                 linesToPrint = new List<string>();
-                printDocument.PrinterSettings = printDialog.PrinterSettings;
 
+                printDocument.PrinterSettings = printDialog.PrinterSettings;
                 printDocument.DefaultPageSettings.Margins.Left = 75;
                 printDocument.DefaultPageSettings.Margins.Top = 75;
                 printDocument.DefaultPageSettings.Margins.Right = 75;
@@ -2141,10 +2141,7 @@ namespace CSharp_MARC_Editor
                 {
                     LoadPreview((int)row.Cells[0].Value);
 
-                    //For some reason the Print Dialog doesn't have a working collate button. It always acts as false. :psyduck:
-                    //I figure "true" is a better and more often used option
-                    printDocument.PrinterSettings.Collate = true;
-
+                    printDocument.PrinterSettings = printDialog.PrinterSettings;
                     printDocument.DefaultPageSettings.Margins.Left = 75;
                     printDocument.DefaultPageSettings.Margins.Top = 75;
                     printDocument.DefaultPageSettings.Margins.Right = 75;
@@ -2177,11 +2174,8 @@ namespace CSharp_MARC_Editor
                 foreach (DataGridViewRow row in recordsDataGridView.SelectedRows)
                 {
                     LoadPreview((int)row.Cells[0].Value);
-
-                    //For some reason the Print Dialog doesn't have a working collate button. It always acts as false. :psyduck:
-                    //I figure "true" is a better and more often used option
-                    printDocument.PrinterSettings.Collate = true;
-
+                    
+                    printDocument.PrinterSettings = printDialog.PrinterSettings;
                     printDocument.DefaultPageSettings.Margins.Left = 75;
                     printDocument.DefaultPageSettings.Margins.Top = 75;
                     printDocument.DefaultPageSettings.Margins.Right = 75;
