@@ -52,6 +52,13 @@
  * @copyright 2016 Matt Schraeder
  * @license   http://www.gnu.org/licenses/gpl-3.0.html  GPL License 3
  */ 
+ 
+2016-05-01.1 Changes:
+
+Added support for exporting records into CSV
+Added Z39.50/SRU import support
+Added error reporting for issues importing records
+ 
 2016-05-01 Changes:
 
 Added support for MARC8, UTF8, and MARCXML exports
