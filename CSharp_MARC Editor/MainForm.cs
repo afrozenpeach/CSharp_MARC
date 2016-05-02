@@ -1193,8 +1193,10 @@ namespace CSharp_MARC_Editor
                             if (xmlWriter != null)
                                 xmlWriter.Dispose();
 
-                            xmlWriter = new FileMARCXMLWriter(e.Argument.ToString().Substring(0, e.Argument.ToString().LastIndexOf('.')) + "." + fileCounter + "." + e.Argument.ToString().Substring(e.Argument.ToString().LastIndexOf('.') + 1));
-                            marcWriter = new FileMARCWriter(e.Argument.ToString().Substring(0, e.Argument.ToString().LastIndexOf('.')) + "." + fileCounter + "." + e.Argument.ToString().Substring(e.Argument.ToString().LastIndexOf('.') + 1), recordEncoding);
+                            if (mARCXMLToolStripMenuItem.Checked)
+                                xmlWriter = new FileMARCXMLWriter(fileName);
+                            else
+                                marcWriter = new FileMARCWriter(fileName, recordEncoding);
                         }
                     }
 
@@ -1232,10 +1234,220 @@ namespace CSharp_MARC_Editor
             toolStripProgressBar.Enabled = false;
             progressToolStripStatusLabel.Visible = false;
             toolStripProgressBar.MarqueeAnimationSpeed = 0;
-            recordsPerFile = 0;
             loading = false;
             this.Enabled = true;
+        }
 
+        /// <summary>
+        /// Handles the Click event of the toCSVFileToolStripMenuItem control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void toCSVFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string saveFilters = saveFileDialog.Filter;
+            string saveDefaultExt = saveFileDialog.DefaultExt;
+
+            saveFileDialog.Filter = "CSV Files|*.csv";
+            saveFileDialog.DefaultExt = "*.csv";
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                if (sender == splitToolStripMenuItem)
+                {
+                    using (ExportSplitDialog splitDialog = new ExportSplitDialog())
+                    {
+                        if (splitDialog.ShowDialog() == DialogResult.OK)
+                            recordsPerFile = splitDialog.RecordsPerFile;
+                        else
+                            return;
+                    }
+                }
+
+                this.Enabled = false;
+                toolStripProgressBar.Style = ProgressBarStyle.Continuous;
+                toolStripProgressBar.Enabled = true;
+                toolStripProgressBar.Visible = true;
+                progressToolStripStatusLabel.Visible = true;
+                csvExportBackgroundWorker.RunWorkerAsync(saveFileDialog.FileName);
+            }
+
+            saveFileDialog.Filter = saveFilters;
+            saveFileDialog.DefaultExt = saveDefaultExt;
+        }
+
+        /// <summary>
+        /// Handles the DoWork event of the csvExportBackgroundWorker control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="DoWorkEventArgs"/> instance containing the event data.</param>
+        private void csvExportBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            Dictionary<string, string> columns = new Dictionary<string, string>();
+            
+            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            {
+                connection.Open();
+
+                using (SQLiteCommand command = new SQLiteCommand("PRAGMA table_info('Records')", connection))
+                {
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            columns.Add(reader["name"].ToString(), "");
+                        }
+                    }
+                }
+
+                using (SQLiteCommand command = new SQLiteCommand("PRAGMA table_info('Fields')", connection))
+                {
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            if (!reader["name"].ToString().Contains("ID"))
+                                columns.Add(reader["name"].ToString(), "");
+                        }
+                    }
+                }
+
+                using (SQLiteCommand command = new SQLiteCommand("SELECT DISTINCT TagNumber FROM Fields ORDER BY TagNumber", connection))
+                {
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            columns.Add(reader["TagNumber"].ToString(), "");
+                        }
+                    }
+                }
+            }
+
+            using (SQLiteCommand fieldsCommand = new SQLiteCommand("SELECT * FROM Fields WHERE RecordID = @RecordID ORDER BY FieldID", new SQLiteConnection(connectionString)))
+            {
+                fieldsCommand.Connection.Open();
+                fieldsCommand.Parameters.Add("@RecordID", DbType.Int32);
+
+                using (SQLiteCommand subfieldsCommand = new SQLiteCommand("SELECT * FROM Subfields WHERE FieldID = @FieldID ORDER BY SubfieldID", new SQLiteConnection(connectionString)))
+                {
+                    subfieldsCommand.Connection.Open();
+                    subfieldsCommand.Parameters.Add("@FieldID", DbType.Int32);
+
+                    int i = 0;
+                    int max = marcDataSet.Tables["Records"].Rows.Count;
+                    string fileName = e.Argument.ToString();
+
+                    using (StreamWriter writer = new StreamWriter(fileName))
+                    {
+                        string line = "";
+                        //Write header row
+                        foreach (KeyValuePair<string, string> keyValue in columns)
+                        {
+                            line += keyValue.Key + ",";
+                        }
+
+                        line = line.Substring(0, line.Length - 1);
+
+                        writer.WriteLine(line);
+
+                        foreach (DataGridViewRow row in recordsDataGridView.Rows)
+                        {
+                            Record record = new Record();
+                            fieldsCommand.Parameters["@RecordID"].Value = row.Cells[0].Value;
+                            
+                            columns["RecordID"] = row.Cells[0].Value.ToString();
+                            columns["DateAdded"] = row.Cells[1].Value.ToString();
+                            columns["DateChanged"] = row.Cells[2].Value.ToString();
+                            columns["Author"] = row.Cells[3].Value.ToString();
+                            columns["Title"] = row.Cells[4].Value.ToString();
+                            columns["CopyrightDate"] = row.Cells[5].Value.ToString();
+                            columns["Barcode"] = row.Cells[6].Value.ToString();
+                            columns["Classification"] = row.Cells[7].Value.ToString();
+                            columns["MainEntry"] = row.Cells[8].Value.ToString();
+                            columns["Custom1"] = row.Cells[9].Value.ToString();
+                            columns["Custom2"] = row.Cells[10].Value.ToString();
+                            columns["Custom3"] = row.Cells[11].Value.ToString();
+                            columns["Custom4"] = row.Cells[12].Value.ToString();
+                            columns["Custom5"] = row.Cells[13].Value.ToString();
+                            columns["ImportErrors"] = row.Cells[14].Value.ToString();
+
+                            using (SQLiteDataReader fieldsReader = fieldsCommand.ExecuteReader())
+                            {
+                                while (fieldsReader.Read())
+                                {
+                                    columns["TagNumber"] = fieldsReader["TagNumber"].ToString();
+
+                                    if (fieldsReader["TagNumber"].ToString().StartsWith("00"))
+                                    {
+                                        columns["ControlData"] = fieldsReader["ControlData"].ToString();
+                                    }
+                                    else
+                                    {
+                                        columns["Ind1"] = fieldsReader["Ind1"].ToString();
+                                        columns["Ind2"] = fieldsReader["Ind2"].ToString();
+
+                                        subfieldsCommand.Parameters["@FieldID"].Value = fieldsReader["FieldID"];
+
+                                        using (SQLiteDataReader subfieldReader = subfieldsCommand.ExecuteReader())
+                                        {
+                                            while (subfieldReader.Read())
+                                            {
+                                                columns[fieldsReader["TagNumber"].ToString()] += "$" + subfieldReader["Code"] + subfieldReader["Data"];
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            line = "";
+
+                            foreach (KeyValuePair<string, string> keyValue in columns)
+                            {
+                                line += "\"" + keyValue.Value.Replace("\"", "\"\"") + "\",";
+                            }
+
+                            line = line.Substring(0, line.Length - 1);
+                            writer.WriteLine(line);
+
+                            //Reset values
+                            foreach (string key in columns.Keys.ToList())
+                            {
+                                columns[key] = "";
+                            }
+
+                            i++;
+                            csvExportBackgroundWorker.ReportProgress(i / max);
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Handles the ProgressChanged event of the csvExportBackgroundWorker control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="ProgressChangedEventArgs"/> instance containing the event data.</param>
+        private void csvExportBackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            progressToolStripStatusLabel.Text = e.ProgressPercentage.ToString();
+        }
+
+        /// <summary>
+        /// Handles the RunWorkerCompleted event of the csvExportBackgroundWorker control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RunWorkerCompletedEventArgs"/> instance containing the event data.</param>
+        private void csvExportBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            progressToolStripStatusLabel.Text = "";
+            toolStripProgressBar.Visible = false;
+            toolStripProgressBar.Enabled = false;
+            progressToolStripStatusLabel.Visible = false;
+            toolStripProgressBar.MarqueeAnimationSpeed = 0;
+            loading = false;
+            this.Enabled = true;
         }
 
         #endregion

@@ -200,6 +200,7 @@
     <Content Include="Images\text-x-generic.png" />
     <Content Include="Images\view-refresh.png" />
     <Content Include="Images\x-office-address-book.png" />
+    <Content Include="Images\x-office-spreadsheet-template.png" />
     <Content Include="SQLite.Interop.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

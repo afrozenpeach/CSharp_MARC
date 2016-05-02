@@ -128,6 +128,8 @@ namespace CSharp_MARC_Editor
             this.ImportErrors = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.fromFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fromZ3950SRUToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toCSVFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.csvExportBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -270,7 +272,8 @@ namespace CSharp_MARC_Editor
             // 
             this.exportRecordsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fullToolStripMenuItem,
-            this.splitToolStripMenuItem});
+            this.splitToolStripMenuItem,
+            this.toCSVFileToolStripMenuItem});
             this.exportRecordsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("exportRecordsToolStripMenuItem.Image")));
             this.exportRecordsToolStripMenuItem.Name = "exportRecordsToolStripMenuItem";
             this.exportRecordsToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
@@ -794,6 +797,22 @@ namespace CSharp_MARC_Editor
             this.fromZ3950SRUToolStripMenuItem.Text = "From Z39.50/SRU";
             this.fromZ3950SRUToolStripMenuItem.Click += new System.EventHandler(this.fromZ3950SRUToolStripMenuItem_Click);
             // 
+            // toCSVFileToolStripMenuItem
+            // 
+            this.toCSVFileToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("toCSVFileToolStripMenuItem.Image")));
+            this.toCSVFileToolStripMenuItem.Name = "toCSVFileToolStripMenuItem";
+            this.toCSVFileToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.toCSVFileToolStripMenuItem.Text = "To CSV File";
+            this.toCSVFileToolStripMenuItem.Click += new System.EventHandler(this.toCSVFileToolStripMenuItem_Click);
+            // 
+            // csvExportBackgroundWorker
+            // 
+            this.csvExportBackgroundWorker.WorkerReportsProgress = true;
+            this.csvExportBackgroundWorker.WorkerSupportsCancellation = true;
+            this.csvExportBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.csvExportBackgroundWorker_DoWork);
+            this.csvExportBackgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.csvExportBackgroundWorker_ProgressChanged);
+            this.csvExportBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.csvExportBackgroundWorker_RunWorkerCompleted);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -899,6 +918,8 @@ namespace CSharp_MARC_Editor
         private System.Windows.Forms.DataGridViewTextBoxColumn ImportErrors;
         private System.Windows.Forms.ToolStripMenuItem fromFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fromZ3950SRUToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toCSVFileToolStripMenuItem;
+        private System.ComponentModel.BackgroundWorker csvExportBackgroundWorker;
 
     }
 }
