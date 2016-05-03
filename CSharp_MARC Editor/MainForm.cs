@@ -318,277 +318,376 @@ namespace CSharp_MARC_Editor
         /// </summary>
         private void RebuildRecordsPreviewInformation(int? recordID = null)
         {
+            Console.WriteLine("Start Rebuild: " + DateTime.Now.ToString());
+            string whereRecordID = "";
+
+            if (recordID != null)
+                whereRecordID = " AND RecordID = " + recordID;
+
             using (SQLiteConnection readerConnection = new SQLiteConnection(connectionString))
             {
                 readerConnection.Open();
 
-                using (SQLiteCommand readerCommand = new SQLiteCommand(readerConnection))
+                using (SQLiteCommand command = new SQLiteCommand(readerConnection))
                 {
-                    StringBuilder query = new StringBuilder("SELECT r.RecordID as RecordID, TagNumber, Code, Data, Author, Title, Barcode, Classification, MainEntry FROM Records r LEFT OUTER JOIN Fields f ON r.RecordID = f.RecordID LEFT OUTER JOIN Subfields s ON f.FieldID = s.FieldID");
+                    command.CommandText = "BEGIN";
+                    command.ExecuteNonQuery();
 
-                    if (recordID.HasValue)
+                    command.CommandText = "UPDATE Records SET Author = null, Title = null, CopyrightDate = null, Barcode = null, Classification = null, MainEntry = null, Custom1 = null, Custom2 = null, Custom3 = null, Custom4 = null, Custom5 = null";
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = @"UPDATE 
+                                                Records
+                                            SET Author = (SELECT Data
+                                                          FROM Subfields s
+                                                          LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                          WHERE f.RecordID = Records.RecordID AND f.TagNumber = '100' and s.Code = 'a' " + whereRecordID + ")";
+
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = @"UPDATE 
+                                                Records
+                                            SET Author = (SELECT Data
+                                                          FROM Subfields s
+                                                          LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                          WHERE f.RecordID = Records.RecordID AND f.TagNumber = '245' and s.Code = 'c' " + whereRecordID + @")
+                                            WHERE Author IS NULL";
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = @"UPDATE 
+                                                Records
+                                            SET Title = (SELECT Data
+                                                         FROM Subfields s
+                                                         LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                         WHERE f.RecordID = Records.RecordID AND f.TagNumber = '245' and s.Code = 'a' " + whereRecordID + ")";
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = @"UPDATE 
+                                                Records
+                                            SET Title = Title || ' ' || (SELECT Data
+                                                                         FROM Subfields s
+                                                                         LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                                         WHERE f.RecordID = Records.RecordID AND f.TagNumber = '245' and s.Code = 'b' " + whereRecordID + @")
+                                            WHERE (SELECT Data
+                                                   FROM Subfields s
+                                                   LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                   WHERE f.RecordID = Records.RecordID AND f.TagNumber = '245' and s.Code = 'b' " + whereRecordID + ") IS NOT NULL";
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = @"UPDATE 
+                                                Records
+                                            SET CopyrightDate = CAST(REGEXREPLACE((SELECT Data
+                                                                                   FROM Subfields s
+                                                                                   LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                                                   WHERE f.RecordID = Records.RecordID AND f.TagNumber = '260' and s.Code = 'c' " + whereRecordID + @"), '[^0-9]', '') as 'integer')";
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = @"UPDATE 
+                                                Records
+                                            SET CopyrightDate = CAST(REGEXREPLACE((SELECT Data
+                                                                                   FROM Subfields s
+                                                                                   LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                                                   WHERE f.RecordID = Records.RecordID AND f.TagNumber = '264' and s.Code = 'c' " + whereRecordID + @"), '[0-9]', '') as 'integer')
+                                            WHERE CopyrightDate IS NULL";
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = @"UPDATE 
+                                                Records
+                                            SET Barcode = (SELECT Data
+                                                           FROM Subfields s
+                                                           LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                           WHERE f.RecordID = Records.RecordID AND f.TagNumber = '852' and s.Code = 'p' " + whereRecordID + ")";
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = @"UPDATE 
+                                                Records
+                                            SET Barcode = (SELECT Data
+                                                           FROM Subfields s
+                                                           LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                           WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'i' " + whereRecordID + @")
+                                            WHERE Barcode IS NULL";
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = @"UPDATE 
+                                                Records
+                                            SET Barcode = (SELECT Data
+                                                           FROM Subfields s
+                                                           LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                           WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'g' " + whereRecordID + @")
+                                            WHERE Barcode IS NULL";
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = @"UPDATE 
+                                                Records
+                                            SET Barcode = (SELECT Data
+                                                           FROM Subfields s
+                                                           LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                           WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'b' " + whereRecordID + @")
+                                            WHERE Barcode IS NULL";
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = @"UPDATE 
+                                                Records
+                                            SET Classification = SPLITSUBSTRING((SELECT Data
+                                                                                 FROM Subfields s
+                                                                                 LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                                                 WHERE f.RecordID = Records.RecordID AND f.TagNumber = '852' and s.Code = 'h' " + whereRecordID + "), ' ', 0)";
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = @"UPDATE 
+                                                Records
+                                            SET Classification = SPLITSUBSTRING((SELECT Data
+                                                                                 FROM Subfields s
+                                                                                 LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                                                 WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'a' " + whereRecordID + @"), ' ', 0)
+                                                                 ||
+                                                                 SPLITSUBSTRING((SELECT Data
+                                                                                 FROM Subfields s
+                                                                                 LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                                                 WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'a' " + whereRecordID + @"), ' ', 1)
+                                            WHERE (Classification IS NULL OR Classification = '') AND SPLITCOUNT((SELECT Data
+                                                                                                                  FROM Subfields s
+                                                                                                                  LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                                                                                  WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'a' " + whereRecordID + "), ' ') > 2";
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = @"UPDATE 
+                                                Records
+                                            SET Classification = SPLITSUBSTRING((SELECT Data
+                                                                                 FROM Subfields s
+                                                                                 LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                                                 WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'a' " + whereRecordID + @"), ' ', 0)
+                                            WHERE (Classification IS NULL OR Classification = '')";
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = @"UPDATE 
+                                                Records
+                                            SET Classification = SPLITSUBSTRING((SELECT Data
+                                                                                 FROM Subfields s
+                                                                                 LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                                                 WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'b' " + whereRecordID + @"), ' ', 0)
+                                                                 ||
+                                                                 SPLITSUBSTRING((SELECT Data
+                                                                                 FROM Subfields s
+                                                                                 LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                                                 WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'c' " + whereRecordID + @"), ' ', 0)
+                                            WHERE (Classification IS NULL OR Classification = '') AND SPLITSUBSTRING((SELECT Data
+                                                                                                                      FROM Subfields s
+                                                                                                                      LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                                                                                      WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'b' " + whereRecordID + @"), ' ', 0) IS NOT NULL";
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = @"UPDATE 
+                                                Records
+                                            SET Classification = SPLITSUBSTRING((SELECT Data
+                                                                                 FROM Subfields s
+                                                                                 LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                                                 WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'c' " + whereRecordID + @"), ' ', 0)
+                                                                 ||
+                                                                 SPLITSUBSTRING((SELECT Data
+                                                                                 FROM Subfields s
+                                                                                 LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                                                 WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'c' " + whereRecordID + @"), ' ', 1)
+                                            WHERE (Classification IS NULL OR Classification = '') AND SPLITCOUNT((SELECT Data
+                                                                                                                  FROM Subfields s
+                                                                                                                  LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                                                                                  WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'c' " + whereRecordID + "), ' ') > 2";
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = @"UPDATE 
+                                                Records
+                                            SET Classification = SPLITSUBSTRING((SELECT Data
+                                                                                 FROM Subfields s
+                                                                                 LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                                                 WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'c' " + whereRecordID + @"), ' ', 0)
+                                            WHERE (Classification IS NULL OR Classification = '')";
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = @"UPDATE 
+                                                Records
+                                            SET MainEntry = SPLITSUBSTRING((SELECT Data
+                                                                            FROM Subfields s
+                                                                            LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                                            WHERE f.RecordID = Records.RecordID AND f.TagNumber = '852' and s.Code = 'h' " + whereRecordID + "), ' ', 1)";
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = @"UPDATE 
+                                                Records
+                                            SET MainEntry = SPLITSUBSTRING((SELECT Data
+                                                                            FROM Subfields s
+                                                                            LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                                            WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'a' " + whereRecordID + @"), ' ', 2)
+                                            WHERE (MainEntry IS NULL OR MainEntry = '') AND SPLITCOUNT((SELECT Data
+                                                                                                        FROM Subfields s
+                                                                                                        LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                                                                        WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'a' " + whereRecordID + "), ' ') > 2";
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = @"UPDATE 
+                                                Records
+                                            SET MainEntry = SPLITSUBSTRING((SELECT Data
+                                                                            FROM Subfields s
+                                                                            LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                                            WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'a' " + whereRecordID + @"), ' ', 1)
+                                            WHERE (MainEntry IS NULL OR MainEntry = '')";
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = @"UPDATE 
+                                                Records
+                                            SET MainEntry = SPLITSUBSTRING((SELECT Data
+                                                                            FROM Subfields s
+                                                                            LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                                            WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'c' " + whereRecordID + @"), ' ', 2)
+                                            WHERE (MainEntry IS NULL OR MainEntry = '') AND SPLITCOUNT((SELECT Data
+                                                                                                        FROM Subfields s
+                                                                                                        LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                                                                        WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'c' " + whereRecordID + "), ' ') > 2";
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = @"UPDATE 
+                                                Records
+                                            SET MainEntry = SPLITSUBSTRING((SELECT Data
+                                                                            FROM Subfields s
+                                                                            LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                                            WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'c' " + whereRecordID + @"), ' ', 1)
+                                            WHERE (MainEntry IS NULL OR MainEntry = '')";
+                    command.ExecuteNonQuery();
+
+                    if (customFieldsForm.Data1 != "")
                     {
-                        query.Append(" WHERE r.RecordID = @RecordID");
-                        readerCommand.Parameters.Add("@RecordID", DbType.Int32).Value = recordID;
+                        command.CommandText = @"UPDATE 
+                                                    Records
+                                                SET Custom1 = REGEXMATCH((SELECT Data
+                                                                          FROM Subfields s
+                                                                          LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                                          WHERE f.RecordID = Records.RecordID AND f.TagNumber = @TagNumber and s.Code = @Code " + whereRecordID + "), @Data)";
+                        command.Parameters.Add("@TagNumber", DbType.String).Value = customFieldsForm.TagNumber1;
+                        command.Parameters.Add("@Code", DbType.String).Value = customFieldsForm.Code1;
+                        command.Parameters.Add("@Data", DbType.String).Value = customFieldsForm.Data1;
+                        command.ExecuteNonQuery();
+                    }
+                    else
+                    {
+                        command.CommandText = @"UPDATE 
+                                                    Records
+                                                SET Custom1 = (SELECT Data
+                                                               FROM Subfields s
+                                                               LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                               WHERE f.RecordID = Records.RecordID AND f.TagNumber = @TagNumber and s.Code = @Code " + whereRecordID + ")";
+                        command.Parameters.Add("TagNumber", DbType.String).Value = customFieldsForm.TagNumber1;
+                        command.Parameters.Add("Code", DbType.String).Value = customFieldsForm.Code1;
+                        command.ExecuteNonQuery();
                     }
 
-                    query.Append(" UNION SELECT '-2' as RecordID, '', '', '', '', '', '', '', ''");
-                    query.Append(" ORDER BY RecordID, TagNumber, Code");
-
-                    readerCommand.CommandText = query.ToString();
-
-                    using (SQLiteConnection updaterConnection = new SQLiteConnection(connectionString))
+                    if (customFieldsForm.Data2 != "")
                     {
-                        updaterConnection.Open();
-
-                        using (SQLiteCommand updaterCommand = new SQLiteCommand(updaterConnection))
-                        {
-                            updaterCommand.CommandText = "BEGIN;";
-                            updaterCommand.ExecuteNonQuery();
-
-                            updaterCommand.CommandText = "UPDATE Records SET DateChanged = @DateChanged, Author = @Author, Title = @Title, CopyrightDate = @CopyrightDate, Barcode = @Barcode, Classification = @Classification, MainEntry = @MainEntry, Custom1 = @Custom1, Custom2 = @Custom2, Custom3 = @Custom3, Custom4 = @Custom4, Custom5 = @Custom5 WHERE RecordID = @RecordID";
-                            
-                            updaterCommand.Parameters.Add("@Author", DbType.String);
-                            updaterCommand.Parameters.Add("@Title", DbType.String);
-                            updaterCommand.Parameters.Add("@Barcode", DbType.String);
-                            updaterCommand.Parameters.Add("@CopyrightDate", DbType.Int32);
-                            updaterCommand.Parameters.Add("@Classification", DbType.String);
-                            updaterCommand.Parameters.Add("@MainEntry", DbType.String);
-                            updaterCommand.Parameters.Add("@RecordID", DbType.Int32);
-                            updaterCommand.Parameters.Add("@DateChanged", DbType.DateTime);
-                            updaterCommand.Parameters.Add("@Custom1", DbType.String);
-                            updaterCommand.Parameters.Add("@Custom2", DbType.String);
-                            updaterCommand.Parameters.Add("@Custom3", DbType.String);
-                            updaterCommand.Parameters.Add("@Custom4", DbType.String);
-                            updaterCommand.Parameters.Add("@Custom5", DbType.String);
-
-                            using (SQLiteDataReader reader = readerCommand.ExecuteReader())
-                            {
-                                int currentRecord = -1;
-
-                                string author = null;
-                                string title = null;
-                                string barcode = null;
-                                string classification = null;
-                                string mainEntry = null;
-                                string custom1 = null;
-                                string custom2 = null;
-                                string custom3 = null;
-                                string custom4 = null;
-                                string custom5 = null;
-                                int tempCopyrightDate = -1;
-                                int? copyrightDate = null;
-                                bool bc = false;
-
-                                while (reader.Read())
-                                {
-                                    if (currentRecord != Int32.Parse(reader["RecordID"].ToString()))
-                                    {
-                                        if (currentRecord >= 0)
-                                        {
-                                            updaterCommand.Parameters["@DateChanged"].Value = DateTime.Now;
-                                            updaterCommand.Parameters["@Author"].Value = author;
-                                            updaterCommand.Parameters["@Title"].Value = title;
-                                            if (copyrightDate.HasValue)
-                                                updaterCommand.Parameters["@CopyrightDate"].Value = copyrightDate;
-                                            else
-                                                updaterCommand.Parameters["@CopyrightDate"].Value = DBNull.Value;
-                                            updaterCommand.Parameters["@Barcode"].Value = barcode;
-                                            updaterCommand.Parameters["@Classification"].Value = classification;
-                                            updaterCommand.Parameters["@MainEntry"].Value = mainEntry;
-                                            updaterCommand.Parameters["@RecordID"].Value = currentRecord;
-                                            updaterCommand.Parameters["@Custom1"].Value = custom1;
-                                            updaterCommand.Parameters["@Custom2"].Value = custom2;
-                                            updaterCommand.Parameters["@Custom3"].Value = custom3;
-                                            updaterCommand.Parameters["@Custom4"].Value = custom4;
-                                            updaterCommand.Parameters["@Custom5"].Value = custom5;
-
-                                            updaterCommand.ExecuteNonQuery();
-
-                                            if (recordID != null)
-                                            {
-                                                foreach (DataGridViewRow row in recordsDataGridView.Rows)
-                                                {
-                                                    if (Int32.Parse(row.Cells[0].Value.ToString()) == recordID)
-                                                    {
-                                                        if (barcode == null)
-                                                            barcode = "";
-                                                        
-                                                        if (classification == null)
-                                                            classification = "";
-                                                        
-                                                        if (mainEntry == null)
-                                                            mainEntry = "";
-
-                                                        row.Cells[2].Value = updaterCommand.Parameters["@DateChanged"].Value.ToString();
-                                                        row.Cells[3].Value = author;
-                                                        row.Cells[4].Value = title;
-                                                        row.Cells[5].Value = copyrightDate;
-                                                        row.Cells[6].Value = barcode;
-                                                        row.Cells[7].Value = classification;
-                                                        row.Cells[8].Value = mainEntry;
-                                                        row.Cells[9].Value = custom1;
-                                                        row.Cells[10].Value = custom2;
-                                                        row.Cells[11].Value = custom3;
-                                                        row.Cells[12].Value = custom4;
-                                                        row.Cells[13].Value = custom5;
-                                                        break;
-                                                    }
-                                                }
-                                            }
-                                        }
-
-                                        currentRecord = Int32.Parse(reader["RecordID"].ToString());
-
-                                        author = null;
-                                        title = null;
-                                        barcode = null;
-                                        classification = null;
-                                        mainEntry = null;
-                                        custom1 = null;
-                                        custom2 = null;
-                                        custom3 = null;
-                                        custom4 = null;
-                                        custom5 = null;
-                                    }
-
-                                    if (author == null && (string)reader["TagNumber"] == "100" && (string)reader["Code"] == "a")
-                                        author = (string)reader["Data"];
-                                    else if (author == null && (string)reader["TagNumber"] == "245" && (string)reader["Code"] == "c")
-                                        author = (string)reader["Data"];
-
-                                    if (title == null && (string)reader["TagNumber"] == "245" && (string)reader["Code"] == "a")
-                                        title = (string)reader["Data"];
-                                    else if (title == null && (string)reader["TagNumber"] == "245" && (string)reader["Code"] == "b")
-                                        title += " " + (string)reader["Data"];
-
-                                    if (copyrightDate == null && (string)reader["TagNumber"] == "260" && (string)reader["Code"] == "c" && int.TryParse(Regex.Replace((string)reader["Data"], "[^0-9]", ""), out tempCopyrightDate))
-                                        copyrightDate = tempCopyrightDate;
-                                    else if (copyrightDate == null && (string)reader["TagNumber"] == "264" && (string)reader["Code"] == "c" && int.TryParse(Regex.Replace((string)reader["Data"], "[^0-9]", ""), out tempCopyrightDate))
-                                        copyrightDate = tempCopyrightDate;
-
-                                    if (barcode == null && (string)reader["TagNumber"] == "852" && (string)reader["Code"] == "p")
-                                        barcode = (string)reader["Data"];
-                                    else if (barcode == null && (string)reader["TagNumber"] == "949" && (string)reader["Code"] == "i")
-                                        barcode = (string)reader["Data"];
-                                    else if (barcode == null && (string)reader["TagNumber"] == "949" && (string)reader["Code"] == "g")
-                                        barcode = (string)reader["Data"];
-                                    else if (barcode == null && (string)reader["TagNumber"] == "949" && (string)reader["Code"] == "b")
-                                        barcode = (string)reader["Data"];
-
-                                    if (classification == null && (string)reader["TagNumber"] == "852" && (string)reader["Code"] == "h")
-                                    {
-                                        string[] split = ((string)reader["Data"]).Split(' ');
-                                        classification = split[0];
-
-                                        if (split.Length > 1)
-                                            mainEntry = split[1];
-                                    }
-                                    else if (classification == null && (string)reader["TagNumber"] == "949" && (string)reader["Code"] == "a")
-                                    {
-                                        string[] split = ((string)reader["Data"]).Split(' ');
-                                        if (split.Length > 2)
-                                        {
-                                            classification = split[0] + " " + split[1];
-                                            mainEntry = split[2];
-                                        }
-                                        else if (split.Length > 1)
-                                        {
-                                            classification = split[0];
-                                            mainEntry = split[1];
-                                        }
-                                        else
-                                            classification = split[0];
-                                    }
-                                    else if (classification == null && (string)reader["TagNumber"] == "949" && (string)reader["Code"] == "b")
-                                    {
-                                        classification = (string)reader["Data"];
-                                        bc = true;
-                                    }
-                                    else if (classification != null && (string)reader["TagNumber"] == "949" && (string)reader["Code"] == "c" && bc)
-                                    {
-                                        classification += " " + (string)reader["Data"];
-                                        bc = false;
-                                    }
-                                    else if (classification == null && (string)reader["TagNumber"] == "949" && (string)reader["Code"] == "c")
-                                    {
-                                        string[] split = ((string)reader["Data"]).Split(' ');
-                                        if (split.Length > 2)
-                                        {
-                                            classification = split[0] + " " + split[1];
-                                            mainEntry = split[2];
-                                        }
-                                        else if (split.Length > 1)
-                                        {
-                                            classification = split[0];
-                                            mainEntry = split[1];
-                                        }
-                                        else
-                                            classification = split[0];
-                                    }
-                                    else if (classification == null && (string)reader["TagNumber"] == "949" && (string)reader["Code"] == "c")
-                                    {
-                                        string[] split = ((string)reader["Data"]).Split(' ');
-                                        if (split.Length > 2)
-                                        {
-                                            classification = split[0] + " " + split[1];
-                                            mainEntry = split[2];
-                                        }
-                                        else if (split.Length > 1)
-                                        {
-                                            classification = split[0];
-                                            mainEntry = split[1];
-                                        }
-                                        else
-                                            classification = split[0];
-                                    }
-
-                                    if (custom1 == null && (string)reader["TagNumber"] == customFieldsForm.TagNumber1 && (string)reader["Code"] == customFieldsForm.Code1)
-                                    {
-                                        if (customFieldsForm.Data1 != "")
-                                            custom1 = Regex.Match((string)reader["Data"], customFieldsForm.Data1).Value;
-                                        else
-                                            custom1 = (string)reader["Data"];
-                                    }
-
-                                    if (custom2 == null && (string)reader["TagNumber"] == customFieldsForm.TagNumber2 && (string)reader["Code"] == customFieldsForm.Code2)
-                                    {
-                                        if (customFieldsForm.Data2 != "")
-                                            custom2 = Regex.Match((string)reader["Data"], customFieldsForm.Data2).Value;
-                                        else
-                                            custom2 = (string)reader["Data"];
-                                    }
-
-                                    if (custom3 == null && (string)reader["TagNumber"] == customFieldsForm.TagNumber3 && (string)reader["Code"] == customFieldsForm.Code3)
-                                    {
-                                        if (customFieldsForm.Data3 != "")
-                                            custom3 = Regex.Match((string)reader["Data"], customFieldsForm.Data3).Value;
-                                        else
-                                            custom3 = (string)reader["Data"];
-                                    }
-
-                                    if (custom4 == null && (string)reader["TagNumber"] == customFieldsForm.TagNumber4 && (string)reader["Code"] == customFieldsForm.Code4)
-                                    {
-                                        if (customFieldsForm.Data4 != "")
-                                            custom4 = Regex.Match((string)reader["Data"], customFieldsForm.Data4).Value;
-                                        else
-                                            custom4 = (string)reader["Data"];
-                                    }
-
-                                    if (custom5 == null && (string)reader["TagNumber"] == customFieldsForm.TagNumber5 && (string)reader["Code"] == customFieldsForm.Code5)
-                                    {
-                                        if (customFieldsForm.Data5 != "")
-                                            custom5 = Regex.Match((string)reader["Data"], customFieldsForm.Data5).Value;
-                                        else
-                                            custom5 = (string)reader["Data"];
-                                    }
-                                }
-                            }
-                            
-                            updaterCommand.CommandText = "END;";
-                            updaterCommand.ExecuteNonQuery();
-                        }
+                        command.CommandText = @"UPDATE 
+                                                    Records
+                                                SET Custom2 = REGEXMATCH((SELECT Data
+                                                                          FROM Subfields s
+                                                                          LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                                          WHERE f.RecordID = Records.RecordID AND f.TagNumber = @TagNumber and s.Code = @Code " + whereRecordID + "), @Data)";
+                        command.Parameters.Add("@TagNumber", DbType.String).Value = customFieldsForm.TagNumber2;
+                        command.Parameters.Add("@Code", DbType.String).Value = customFieldsForm.Code2;
+                        command.Parameters.Add("@Data", DbType.String).Value = customFieldsForm.Data2;
+                        command.ExecuteNonQuery();
                     }
+                    else
+                    {
+                        command.CommandText = @"UPDATE 
+                                                    Records
+                                                SET Custom2 = (SELECT Data
+                                                               FROM Subfields s
+                                                               LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                               WHERE f.RecordID = Records.RecordID AND f.TagNumber = @TagNumber and s.Code = @Code " + whereRecordID + ")";
+                        command.Parameters.Add("TagNumber", DbType.String).Value = customFieldsForm.TagNumber2;
+                        command.Parameters.Add("Code", DbType.String).Value = customFieldsForm.Code2;
+                        command.ExecuteNonQuery();
+                    }
+
+                    if (customFieldsForm.Data3 != "")
+                    {
+                        command.CommandText = @"UPDATE 
+                                                    Records
+                                                SET Custom3 = REGEXMATCH((SELECT Data
+                                                                          FROM Subfields s
+                                                                          LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                                          WHERE f.RecordID = Records.RecordID AND f.TagNumber = @TagNumber and s.Code = @Code " + whereRecordID + "), @Data)";
+                        command.Parameters.Add("@TagNumber", DbType.String).Value = customFieldsForm.TagNumber3;
+                        command.Parameters.Add("@Code", DbType.String).Value = customFieldsForm.Code3;
+                        command.Parameters.Add("@Data", DbType.String).Value = customFieldsForm.Data3;
+                        command.ExecuteNonQuery();
+                    }
+                    else
+                    {
+                        command.CommandText = @"UPDATE 
+                                                    Records
+                                                SET Custom3 = (SELECT Data
+                                                               FROM Subfields s
+                                                               LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                               WHERE f.RecordID = Records.RecordID AND f.TagNumber = @TagNumber and s.Code = @Code " + whereRecordID + ")";
+                        command.Parameters.Add("TagNumber", DbType.String).Value = customFieldsForm.TagNumber3;
+                        command.Parameters.Add("Code", DbType.String).Value = customFieldsForm.Code3;
+                        command.ExecuteNonQuery();
+                    }
+
+                    if (customFieldsForm.Data4 != "")
+                    {
+                        command.CommandText = @"UPDATE 
+                                                    Records
+                                                SET Custom4 = REGEXMATCH((SELECT Data
+                                                                          FROM Subfields s
+                                                                          LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                                          WHERE f.RecordID = Records.RecordID AND f.TagNumber = @TagNumber and s.Code = @Code " + whereRecordID + "), @Data)";
+                        command.Parameters.Add("@TagNumber", DbType.String).Value = customFieldsForm.TagNumber4;
+                        command.Parameters.Add("@Code", DbType.String).Value = customFieldsForm.Code4;
+                        command.Parameters.Add("@Data", DbType.String).Value = customFieldsForm.Data4;
+                        command.ExecuteNonQuery();
+                    }
+                    else
+                    {
+                        command.CommandText = @"UPDATE 
+                                                    Records
+                                                SET Custom4 = (SELECT Data
+                                                               FROM Subfields s
+                                                               LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                               WHERE f.RecordID = Records.RecordID AND f.TagNumber = @TagNumber and s.Code = @Code " + whereRecordID + ")";
+                        command.Parameters.Add("TagNumber", DbType.String).Value = customFieldsForm.TagNumber4;
+                        command.Parameters.Add("Code", DbType.String).Value = customFieldsForm.Code4;
+                        command.ExecuteNonQuery();
+                    }
+
+                    if (customFieldsForm.Data5 != "")
+                    {
+                        command.CommandText = @"UPDATE 
+                                                    Records
+                                                SET Custom5 = REGEXMATCH((SELECT Data
+                                                                          FROM Subfields s
+                                                                          LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                                          WHERE f.RecordID = Records.RecordID AND f.TagNumber = @TagNumber and s.Code = @Code " + whereRecordID + "), @Data)";
+                        command.Parameters.Add("@TagNumber", DbType.String).Value = customFieldsForm.TagNumber5;
+                        command.Parameters.Add("@Code", DbType.String).Value = customFieldsForm.Code5;
+                        command.Parameters.Add("@Data", DbType.String).Value = customFieldsForm.Data5;
+                        command.ExecuteNonQuery();
+                    }
+                    else
+                    {
+                        command.CommandText = @"UPDATE 
+                                                    Records
+                                                SET Custom5 = (SELECT Data
+                                                               FROM Subfields s
+                                                               LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                               WHERE f.RecordID = Records.RecordID AND f.TagNumber = @TagNumber and s.Code = @Code " + whereRecordID + ")";
+                        command.Parameters.Add("TagNumber", DbType.String).Value = customFieldsForm.TagNumber5;
+                        command.Parameters.Add("Code", DbType.String).Value = customFieldsForm.Code5;
+                        command.ExecuteNonQuery();
+                    }
+
+                    Console.WriteLine("Committing Rebuild: " + DateTime.Now.ToString());
+                    command.CommandText = "END;";
+                    command.ExecuteNonQuery();
+
+                    Console.WriteLine("Rebuild Finished: " + DateTime.Now.ToString());
                 }
             }
         }
@@ -680,6 +779,41 @@ namespace CSharp_MARC_Editor
             public override object Invoke(object[] args)
             {
                 return Regex.Replace(args[0].ToString(), args[1].ToString(), args[2].ToString().Replace("$", "$$"), RegexOptions.IgnoreCase);
+            }
+        }
+
+        [SQLiteFunction(Name = "SPLITSUBSTRING", Arguments = 3, FuncType = FunctionType.Scalar)]
+        class SPLITSUBSTRING : SQLiteFunction
+        {
+            public override object Invoke(object[] args)
+            {
+                string[] split = args[0].ToString().Split(args[1].ToString().ToCharArray());
+                int args2 = -1;
+                Int32.TryParse(args[2].ToString(), out args2);
+                if (args2 != -1 && args2 < split.Length)
+                    return split[args2];
+                else
+                    return null;
+            }
+        }
+
+        [SQLiteFunction(Name = "SPLITCOUNT", Arguments = 2, FuncType = FunctionType.Scalar)]
+        class SPLITCOUNT : SQLiteFunction
+        {
+            public override object Invoke(object[] args)
+            {
+                string[] split = args[0].ToString().Split(args[1].ToString().ToCharArray());
+                return split.Length;
+            }
+        }
+
+        [SQLiteFunction(Name = "REGEXMATCH", Arguments = 2, FuncType = FunctionType.Scalar)]
+        class REGEXMATCH : SQLiteFunction
+        {
+            public override object Invoke(object[] args)
+            {
+                string value = Regex.Match(args[0].ToString(), args[1].ToString()).Value;
+                return value;
             }
         }
 
@@ -887,6 +1021,7 @@ namespace CSharp_MARC_Editor
         {
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
+                Console.WriteLine("Start Import: " + DateTime.Now.ToString());
                 this.Enabled = false;
                 toolStripProgressBar.Style = ProgressBarStyle.Marquee;
                 toolStripProgressBar.MarqueeAnimationSpeed = 30;
@@ -990,11 +1125,14 @@ namespace CSharp_MARC_Editor
                     i = -2;
                     importingBackgroundWorker.ReportProgress(i);
 
+                    Console.WriteLine("Start Commit: " + DateTime.Now.ToString());
                     command.CommandText = "END";
                     command.ExecuteNonQuery();
                 }
 
                 i = -3;
+                Console.WriteLine("Start Rebuild: " + DateTime.Now.ToString());
+                importingBackgroundWorker.ReportProgress(i);
                 RebuildRecordsPreviewInformation();
 
                 i = -1;
@@ -1062,6 +1200,7 @@ namespace CSharp_MARC_Editor
             recordsDataGridView.ResumeLayout();
             loading = false;
             this.Enabled = true;
+            Console.WriteLine("End Import: " + DateTime.Now.ToString());
         }
 
         /// <summary>
@@ -2372,10 +2511,79 @@ namespace CSharp_MARC_Editor
             if (customFieldsForm.ShowDialog() == DialogResult.OK)
             {
                 SaveOptions();
+
+                this.Enabled = false;
+                toolStripProgressBar.Style = ProgressBarStyle.Marquee;
+                toolStripProgressBar.MarqueeAnimationSpeed = 30;
+                toolStripProgressBar.Enabled = true;
+                toolStripProgressBar.Visible = true;
+                progressToolStripStatusLabel.Visible = true;
+                recordsDataGridView.SuspendLayout();
+                recordsDataGridView.DataSource = null;
+                rebuildBackgroundWorker.RunWorkerAsync();
+
                 RebuildRecordsPreviewInformation();
             }
                 
             this.OnLoad(new EventArgs());
+        }
+
+        /// <summary>
+        /// Handles the DoWork event of the rebuildBackgroundWorker control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="DoWorkEventArgs"/> instance containing the event data.</param>
+        private void rebuildBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            RebuildRecordsPreviewInformation();
+        }
+
+        /// <summary>
+        /// Handles the ProgressChanged event of the rebuildBackgroundWorker control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="ProgressChangedEventArgs"/> instance containing the event data.</param>
+        private void rebuildBackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            progressToolStripStatusLabel.Text = e.ProgressPercentage.ToString();
+        }
+
+        /// <summary>
+        /// Handles the RunWorkerCompleted event of the rebuildBackgroundWorker control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RunWorkerCompletedEventArgs"/> instance containing the event data.</param>
+        private void rebuildBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            marcDataSet.Tables["Records"].Rows.Clear();
+
+            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            {
+                using (SQLiteCommand command = new SQLiteCommand("SELECT * FROM Records", connection))
+                {
+                    SQLiteDataAdapter recordsDataAdapter = new SQLiteDataAdapter(command);
+                    recordsDataAdapter.Fill(marcDataSet, "Records");
+                    SQLiteCommandBuilder commandBuilder = new SQLiteCommandBuilder(recordsDataAdapter);
+                    recordsDataAdapter.InsertCommand = commandBuilder.GetInsertCommand();
+                    recordsDataGridView.DataSource = marcDataSet.Tables["Records"];
+                }
+            }
+
+            if (recordsDataGridView.Rows.Count > 0)
+            {
+                DataGridViewCellEventArgs args = new DataGridViewCellEventArgs(0, 0);
+                recordsDataGridView_CellClick(this, args);
+            }
+
+            progressToolStripStatusLabel.Text = "";
+            toolStripProgressBar.Visible = false;
+            toolStripProgressBar.Enabled = false;
+            progressToolStripStatusLabel.Visible = false;
+            toolStripProgressBar.MarqueeAnimationSpeed = 0;
+            recordsDataGridView.DataSource = marcDataSet.Tables["Records"];
+            recordsDataGridView.ResumeLayout();
+            loading = false;
+            this.Enabled = true;
         }
 
         /// <summary>
@@ -2450,7 +2658,6 @@ namespace CSharp_MARC_Editor
         }
         
         #endregion
-
 
         #endregion
     }

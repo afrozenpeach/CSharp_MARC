@@ -132,6 +132,7 @@ namespace CSharp_MARC_Editor
             this.csvExportBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.printDialog = new System.Windows.Forms.PrintDialog();
             this.printDocument = new System.Drawing.Printing.PrintDocument();
+            this.rebuildBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -534,8 +535,8 @@ namespace CSharp_MARC_Editor
             // 
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.editToolStripMenuItem,
             this.optionsToolStripMenuItem,
+            this.editToolStripMenuItem,
             this.databaseToolStripMenuItem,
             this.helpToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
@@ -825,6 +826,13 @@ namespace CSharp_MARC_Editor
             // 
             this.printDocument.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(this.printDocument_PrintPage);
             // 
+            // rebuildBackgroundWorker
+            // 
+            this.rebuildBackgroundWorker.WorkerReportsProgress = true;
+            this.rebuildBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.rebuildBackgroundWorker_DoWork);
+            this.rebuildBackgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.rebuildBackgroundWorker_ProgressChanged);
+            this.rebuildBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.rebuildBackgroundWorker_RunWorkerCompleted);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -934,6 +942,7 @@ namespace CSharp_MARC_Editor
         private System.ComponentModel.BackgroundWorker csvExportBackgroundWorker;
         private System.Windows.Forms.PrintDialog printDialog;
         private System.Drawing.Printing.PrintDocument printDocument;
+        private System.ComponentModel.BackgroundWorker rebuildBackgroundWorker;
 
     }
 }
