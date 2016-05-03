@@ -53,6 +53,12 @@
  * @license   http://www.gnu.org/licenses/gpl-3.0.html  GPL License 3
  */ 
  
+2016-05-03 Changes:
+
+Sped up Rebuilding the records preview information
+Added print functionality
+Fixed x86/x64 support
+ 
 2016-05-01.1 Changes:
 
 Added support for exporting records into CSV
