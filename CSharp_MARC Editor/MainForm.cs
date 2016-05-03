@@ -812,8 +812,14 @@ namespace CSharp_MARC_Editor
         {
             public override object Invoke(object[] args)
             {
-                string value = Regex.Match(args[0].ToString(), args[1].ToString()).Value;
-                return value;
+                StringBuilder matches = new StringBuilder();
+                
+                foreach (Match match in Regex.Matches(args[0].ToString(), args[1].ToString()))
+                {
+                    matches.Append(match.Value);
+                }
+
+                return matches.ToString();
             }
         }
 
