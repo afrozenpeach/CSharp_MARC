@@ -59,11 +59,40 @@ namespace CSharp_MARC_Editor
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.splitContainer = new System.Windows.Forms.SplitContainer();
+            this.recordsDataGridView = new System.Windows.Forms.DataGridView();
+            this.recordIDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dateAddedDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dateChangedDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.authorDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.titleDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CopyrightDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.barcodeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.classificationDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.mainEntryDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Custom1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Custom2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Custom3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Custom4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Custom5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ImportErrors = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.marcDataSet = new CSharp_MARC_Editor.MARCDataSet();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.progressToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.helptextToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.previewTextBox = new System.Windows.Forms.TextBox();
+            this.subfieldsDataGridView = new System.Windows.Forms.DataGridView();
+            this.subfieldIDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.fieldIDDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.codeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.fieldsDataGridView = new System.Windows.Forms.DataGridView();
+            this.fieldIDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.recordIDDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tagNumberDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ind1DataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ind2DataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.controlDataDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.importingBackgroundWorker = new System.ComponentModel.BackgroundWorker();
@@ -101,48 +130,19 @@ namespace CSharp_MARC_Editor
             this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.exportingBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.csvExportBackgroundWorker = new System.ComponentModel.BackgroundWorker();
-            this.recordsDataGridView = new System.Windows.Forms.DataGridView();
-            this.recordIDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dateAddedDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dateChangedDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.authorDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.titleDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CopyrightDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.barcodeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.classificationDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.mainEntryDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Custom1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Custom2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Custom3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Custom4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Custom5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ImportErrors = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.marcDataSet = new CSharp_MARC_Editor.MARCDataSet();
-            this.subfieldsDataGridView = new System.Windows.Forms.DataGridView();
-            this.subfieldIDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.fieldIDDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.codeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.fieldsDataGridView = new System.Windows.Forms.DataGridView();
-            this.fieldIDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.recordIDDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tagNumberDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ind1DataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ind2DataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.controlDataDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.printDialog = new System.Windows.Forms.PrintDialog();
             this.printDocument = new System.Drawing.Printing.PrintDocument();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
             this.splitContainer.SuspendLayout();
-            this.statusStrip.SuspendLayout();
-            this.menuStrip.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.recordsDataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.marcDataSet)).BeginInit();
+            this.statusStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.subfieldsDataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fieldsDataGridView)).BeginInit();
+            this.menuStrip.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // splitContainer
@@ -170,6 +170,164 @@ namespace CSharp_MARC_Editor
             this.splitContainer.SplitterDistance = 150;
             this.splitContainer.SplitterWidth = 15;
             this.splitContainer.TabIndex = 1;
+            // 
+            // recordsDataGridView
+            // 
+            this.recordsDataGridView.AllowUserToAddRows = false;
+            this.recordsDataGridView.AllowUserToResizeRows = false;
+            this.recordsDataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.recordsDataGridView.AutoGenerateColumns = false;
+            this.recordsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.recordsDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.recordIDDataGridViewTextBoxColumn,
+            this.dateAddedDataGridViewTextBoxColumn,
+            this.dateChangedDataGridViewTextBoxColumn,
+            this.authorDataGridViewTextBoxColumn,
+            this.titleDataGridViewTextBoxColumn,
+            this.CopyrightDate,
+            this.barcodeDataGridViewTextBoxColumn,
+            this.classificationDataGridViewTextBoxColumn,
+            this.mainEntryDataGridViewTextBoxColumn,
+            this.Custom1,
+            this.Custom2,
+            this.Custom3,
+            this.Custom4,
+            this.Custom5,
+            this.ImportErrors});
+            this.recordsDataGridView.DataMember = "Records";
+            this.recordsDataGridView.DataSource = this.marcDataSet;
+            this.recordsDataGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.recordsDataGridView.Location = new System.Drawing.Point(0, 0);
+            this.recordsDataGridView.Name = "recordsDataGridView";
+            this.recordsDataGridView.ReadOnly = true;
+            this.recordsDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.recordsDataGridView.Size = new System.Drawing.Size(984, 150);
+            this.recordsDataGridView.TabIndex = 0;
+            this.recordsDataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.recordsDataGridView_CellClick);
+            this.recordsDataGridView.SelectionChanged += new System.EventHandler(this.recordsDataGridView_SelectionChanged);
+            this.recordsDataGridView.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.recordsDataGridView_UserDeletingRow);
+            // 
+            // recordIDDataGridViewTextBoxColumn
+            // 
+            this.recordIDDataGridViewTextBoxColumn.DataPropertyName = "RecordID";
+            this.recordIDDataGridViewTextBoxColumn.HeaderText = "ID";
+            this.recordIDDataGridViewTextBoxColumn.MinimumWidth = 50;
+            this.recordIDDataGridViewTextBoxColumn.Name = "recordIDDataGridViewTextBoxColumn";
+            this.recordIDDataGridViewTextBoxColumn.ReadOnly = true;
+            this.recordIDDataGridViewTextBoxColumn.Width = 50;
+            // 
+            // dateAddedDataGridViewTextBoxColumn
+            // 
+            this.dateAddedDataGridViewTextBoxColumn.DataPropertyName = "DateAdded";
+            this.dateAddedDataGridViewTextBoxColumn.HeaderText = "Date Added";
+            this.dateAddedDataGridViewTextBoxColumn.MinimumWidth = 125;
+            this.dateAddedDataGridViewTextBoxColumn.Name = "dateAddedDataGridViewTextBoxColumn";
+            this.dateAddedDataGridViewTextBoxColumn.ReadOnly = true;
+            this.dateAddedDataGridViewTextBoxColumn.Width = 125;
+            // 
+            // dateChangedDataGridViewTextBoxColumn
+            // 
+            this.dateChangedDataGridViewTextBoxColumn.DataPropertyName = "DateChanged";
+            this.dateChangedDataGridViewTextBoxColumn.HeaderText = "Date Changed";
+            this.dateChangedDataGridViewTextBoxColumn.MinimumWidth = 125;
+            this.dateChangedDataGridViewTextBoxColumn.Name = "dateChangedDataGridViewTextBoxColumn";
+            this.dateChangedDataGridViewTextBoxColumn.ReadOnly = true;
+            this.dateChangedDataGridViewTextBoxColumn.Width = 125;
+            // 
+            // authorDataGridViewTextBoxColumn
+            // 
+            this.authorDataGridViewTextBoxColumn.DataPropertyName = "Author";
+            this.authorDataGridViewTextBoxColumn.HeaderText = "Author";
+            this.authorDataGridViewTextBoxColumn.MinimumWidth = 20;
+            this.authorDataGridViewTextBoxColumn.Name = "authorDataGridViewTextBoxColumn";
+            this.authorDataGridViewTextBoxColumn.ReadOnly = true;
+            this.authorDataGridViewTextBoxColumn.Width = 200;
+            // 
+            // titleDataGridViewTextBoxColumn
+            // 
+            this.titleDataGridViewTextBoxColumn.DataPropertyName = "Title";
+            this.titleDataGridViewTextBoxColumn.HeaderText = "Title";
+            this.titleDataGridViewTextBoxColumn.MinimumWidth = 20;
+            this.titleDataGridViewTextBoxColumn.Name = "titleDataGridViewTextBoxColumn";
+            this.titleDataGridViewTextBoxColumn.ReadOnly = true;
+            this.titleDataGridViewTextBoxColumn.Width = 400;
+            // 
+            // CopyrightDate
+            // 
+            this.CopyrightDate.DataPropertyName = "CopyrightDate";
+            this.CopyrightDate.HeaderText = "CopyrightDate";
+            this.CopyrightDate.Name = "CopyrightDate";
+            this.CopyrightDate.ReadOnly = true;
+            // 
+            // barcodeDataGridViewTextBoxColumn
+            // 
+            this.barcodeDataGridViewTextBoxColumn.DataPropertyName = "Barcode";
+            this.barcodeDataGridViewTextBoxColumn.HeaderText = "Barcode";
+            this.barcodeDataGridViewTextBoxColumn.Name = "barcodeDataGridViewTextBoxColumn";
+            this.barcodeDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // classificationDataGridViewTextBoxColumn
+            // 
+            this.classificationDataGridViewTextBoxColumn.DataPropertyName = "Classification";
+            this.classificationDataGridViewTextBoxColumn.HeaderText = "Classification";
+            this.classificationDataGridViewTextBoxColumn.Name = "classificationDataGridViewTextBoxColumn";
+            this.classificationDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // mainEntryDataGridViewTextBoxColumn
+            // 
+            this.mainEntryDataGridViewTextBoxColumn.DataPropertyName = "MainEntry";
+            this.mainEntryDataGridViewTextBoxColumn.HeaderText = "MainEntry";
+            this.mainEntryDataGridViewTextBoxColumn.Name = "mainEntryDataGridViewTextBoxColumn";
+            this.mainEntryDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // Custom1
+            // 
+            this.Custom1.DataPropertyName = "Custom1";
+            this.Custom1.HeaderText = "Custom1";
+            this.Custom1.Name = "Custom1";
+            this.Custom1.ReadOnly = true;
+            // 
+            // Custom2
+            // 
+            this.Custom2.DataPropertyName = "Custom2";
+            this.Custom2.HeaderText = "Custom2";
+            this.Custom2.Name = "Custom2";
+            this.Custom2.ReadOnly = true;
+            // 
+            // Custom3
+            // 
+            this.Custom3.DataPropertyName = "Custom3";
+            this.Custom3.HeaderText = "Custom3";
+            this.Custom3.Name = "Custom3";
+            this.Custom3.ReadOnly = true;
+            // 
+            // Custom4
+            // 
+            this.Custom4.DataPropertyName = "Custom4";
+            this.Custom4.HeaderText = "Custom4";
+            this.Custom4.Name = "Custom4";
+            this.Custom4.ReadOnly = true;
+            // 
+            // Custom5
+            // 
+            this.Custom5.DataPropertyName = "Custom5";
+            this.Custom5.HeaderText = "Custom5";
+            this.Custom5.Name = "Custom5";
+            this.Custom5.ReadOnly = true;
+            // 
+            // ImportErrors
+            // 
+            this.ImportErrors.DataPropertyName = "ImportErrors";
+            this.ImportErrors.HeaderText = "ImportErrors";
+            this.ImportErrors.Name = "ImportErrors";
+            this.ImportErrors.ReadOnly = true;
+            // 
+            // marcDataSet
+            // 
+            this.marcDataSet.DataSetName = "MARCDataSet";
+            this.marcDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
             // statusStrip
             // 
@@ -210,8 +368,146 @@ namespace CSharp_MARC_Editor
             this.previewTextBox.Name = "previewTextBox";
             this.previewTextBox.ReadOnly = true;
             this.previewTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.previewTextBox.Size = new System.Drawing.Size(357, 409);
+            this.previewTextBox.Size = new System.Drawing.Size(357, 420);
             this.previewTextBox.TabIndex = 2;
+            // 
+            // subfieldsDataGridView
+            // 
+            this.subfieldsDataGridView.AllowUserToResizeColumns = false;
+            this.subfieldsDataGridView.AllowUserToResizeRows = false;
+            this.subfieldsDataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.subfieldsDataGridView.AutoGenerateColumns = false;
+            this.subfieldsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.subfieldsDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.subfieldIDDataGridViewTextBoxColumn,
+            this.fieldIDDataGridViewTextBoxColumn1,
+            this.codeDataGridViewTextBoxColumn,
+            this.dataDataGridViewTextBoxColumn});
+            this.subfieldsDataGridView.DataMember = "Subfields";
+            this.subfieldsDataGridView.DataSource = this.marcDataSet;
+            this.subfieldsDataGridView.Location = new System.Drawing.Point(211, 3);
+            this.subfieldsDataGridView.MultiSelect = false;
+            this.subfieldsDataGridView.Name = "subfieldsDataGridView";
+            this.subfieldsDataGridView.Size = new System.Drawing.Size(407, 420);
+            this.subfieldsDataGridView.TabIndex = 1;
+            this.subfieldsDataGridView.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.subfieldsDataGridView_CellBeginEdit);
+            this.subfieldsDataGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.subfieldsDataGridView_CellEndEdit);
+            this.subfieldsDataGridView.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.subfieldsDataGridView_CellValidated);
+            this.subfieldsDataGridView.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.subfieldsDataGridView_CellValidating);
+            this.subfieldsDataGridView.RowValidating += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.subfieldsDataGridView_RowValidating);
+            this.subfieldsDataGridView.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.subfieldsDataGridView_UserDeletingRow);
+            // 
+            // subfieldIDDataGridViewTextBoxColumn
+            // 
+            this.subfieldIDDataGridViewTextBoxColumn.DataPropertyName = "SubfieldID";
+            this.subfieldIDDataGridViewTextBoxColumn.HeaderText = "SubfieldID";
+            this.subfieldIDDataGridViewTextBoxColumn.Name = "subfieldIDDataGridViewTextBoxColumn";
+            this.subfieldIDDataGridViewTextBoxColumn.Visible = false;
+            // 
+            // fieldIDDataGridViewTextBoxColumn1
+            // 
+            this.fieldIDDataGridViewTextBoxColumn1.DataPropertyName = "FieldID";
+            this.fieldIDDataGridViewTextBoxColumn1.HeaderText = "FieldID";
+            this.fieldIDDataGridViewTextBoxColumn1.Name = "fieldIDDataGridViewTextBoxColumn1";
+            this.fieldIDDataGridViewTextBoxColumn1.Visible = false;
+            // 
+            // codeDataGridViewTextBoxColumn
+            // 
+            this.codeDataGridViewTextBoxColumn.DataPropertyName = "Code";
+            this.codeDataGridViewTextBoxColumn.HeaderText = "Code";
+            this.codeDataGridViewTextBoxColumn.MaxInputLength = 1;
+            this.codeDataGridViewTextBoxColumn.MinimumWidth = 40;
+            this.codeDataGridViewTextBoxColumn.Name = "codeDataGridViewTextBoxColumn";
+            this.codeDataGridViewTextBoxColumn.Width = 40;
+            // 
+            // dataDataGridViewTextBoxColumn
+            // 
+            this.dataDataGridViewTextBoxColumn.DataPropertyName = "Data";
+            this.dataDataGridViewTextBoxColumn.HeaderText = "Data";
+            this.dataDataGridViewTextBoxColumn.MinimumWidth = 100;
+            this.dataDataGridViewTextBoxColumn.Name = "dataDataGridViewTextBoxColumn";
+            this.dataDataGridViewTextBoxColumn.Width = 300;
+            // 
+            // fieldsDataGridView
+            // 
+            this.fieldsDataGridView.AllowUserToResizeColumns = false;
+            this.fieldsDataGridView.AllowUserToResizeRows = false;
+            this.fieldsDataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.fieldsDataGridView.AutoGenerateColumns = false;
+            this.fieldsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.fieldsDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.fieldIDDataGridViewTextBoxColumn,
+            this.recordIDDataGridViewTextBoxColumn1,
+            this.tagNumberDataGridViewTextBoxColumn,
+            this.ind1DataGridViewTextBoxColumn,
+            this.ind2DataGridViewTextBoxColumn,
+            this.controlDataDataGridViewTextBoxColumn});
+            this.fieldsDataGridView.DataMember = "Fields";
+            this.fieldsDataGridView.DataSource = this.marcDataSet;
+            this.fieldsDataGridView.Location = new System.Drawing.Point(3, 3);
+            this.fieldsDataGridView.MultiSelect = false;
+            this.fieldsDataGridView.Name = "fieldsDataGridView";
+            this.fieldsDataGridView.Size = new System.Drawing.Size(202, 420);
+            this.fieldsDataGridView.TabIndex = 0;
+            this.fieldsDataGridView.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.fieldsDataGridView_CellBeginEdit);
+            this.fieldsDataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.fieldsDataGridView_CellClick);
+            this.fieldsDataGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.fieldsDataGridView_CellEndEdit);
+            this.fieldsDataGridView.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.fieldsDataGridView_CellValidated);
+            this.fieldsDataGridView.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.fieldsDataGridView_CellValidating);
+            this.fieldsDataGridView.RowValidating += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.fieldsDataGridView_RowValidating);
+            this.fieldsDataGridView.SelectionChanged += new System.EventHandler(this.fieldsDataGridView_SelectionChanged);
+            this.fieldsDataGridView.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.fieldsDataGridView_UserAddedRow);
+            this.fieldsDataGridView.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.fieldsDataGridView_UserDeletingRow);
+            // 
+            // fieldIDDataGridViewTextBoxColumn
+            // 
+            this.fieldIDDataGridViewTextBoxColumn.DataPropertyName = "FieldID";
+            this.fieldIDDataGridViewTextBoxColumn.HeaderText = "FieldID";
+            this.fieldIDDataGridViewTextBoxColumn.Name = "fieldIDDataGridViewTextBoxColumn";
+            this.fieldIDDataGridViewTextBoxColumn.Visible = false;
+            // 
+            // recordIDDataGridViewTextBoxColumn1
+            // 
+            this.recordIDDataGridViewTextBoxColumn1.DataPropertyName = "RecordID";
+            this.recordIDDataGridViewTextBoxColumn1.HeaderText = "RecordID";
+            this.recordIDDataGridViewTextBoxColumn1.Name = "recordIDDataGridViewTextBoxColumn1";
+            this.recordIDDataGridViewTextBoxColumn1.Visible = false;
+            // 
+            // tagNumberDataGridViewTextBoxColumn
+            // 
+            this.tagNumberDataGridViewTextBoxColumn.DataPropertyName = "TagNumber";
+            this.tagNumberDataGridViewTextBoxColumn.HeaderText = "Tag";
+            this.tagNumberDataGridViewTextBoxColumn.MaxInputLength = 3;
+            this.tagNumberDataGridViewTextBoxColumn.MinimumWidth = 45;
+            this.tagNumberDataGridViewTextBoxColumn.Name = "tagNumberDataGridViewTextBoxColumn";
+            this.tagNumberDataGridViewTextBoxColumn.Width = 45;
+            // 
+            // ind1DataGridViewTextBoxColumn
+            // 
+            this.ind1DataGridViewTextBoxColumn.DataPropertyName = "Ind1";
+            this.ind1DataGridViewTextBoxColumn.HeaderText = "Ind1";
+            this.ind1DataGridViewTextBoxColumn.MaxInputLength = 1;
+            this.ind1DataGridViewTextBoxColumn.MinimumWidth = 40;
+            this.ind1DataGridViewTextBoxColumn.Name = "ind1DataGridViewTextBoxColumn";
+            this.ind1DataGridViewTextBoxColumn.Width = 40;
+            // 
+            // ind2DataGridViewTextBoxColumn
+            // 
+            this.ind2DataGridViewTextBoxColumn.DataPropertyName = "Ind2";
+            this.ind2DataGridViewTextBoxColumn.HeaderText = "Ind2";
+            this.ind2DataGridViewTextBoxColumn.MaxInputLength = 1;
+            this.ind2DataGridViewTextBoxColumn.MinimumWidth = 40;
+            this.ind2DataGridViewTextBoxColumn.Name = "ind2DataGridViewTextBoxColumn";
+            this.ind2DataGridViewTextBoxColumn.Width = 40;
+            // 
+            // controlDataDataGridViewTextBoxColumn
+            // 
+            this.controlDataDataGridViewTextBoxColumn.DataPropertyName = "ControlData";
+            this.controlDataDataGridViewTextBoxColumn.HeaderText = "ControlData";
+            this.controlDataDataGridViewTextBoxColumn.Name = "controlDataDataGridViewTextBoxColumn";
+            this.controlDataDataGridViewTextBoxColumn.Visible = false;
             // 
             // saveFileDialog
             // 
@@ -521,302 +817,6 @@ namespace CSharp_MARC_Editor
             this.csvExportBackgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.csvExportBackgroundWorker_ProgressChanged);
             this.csvExportBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.csvExportBackgroundWorker_RunWorkerCompleted);
             // 
-            // recordsDataGridView
-            // 
-            this.recordsDataGridView.AllowUserToAddRows = false;
-            this.recordsDataGridView.AllowUserToResizeRows = false;
-            this.recordsDataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.recordsDataGridView.AutoGenerateColumns = false;
-            this.recordsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.recordsDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.recordIDDataGridViewTextBoxColumn,
-            this.dateAddedDataGridViewTextBoxColumn,
-            this.dateChangedDataGridViewTextBoxColumn,
-            this.authorDataGridViewTextBoxColumn,
-            this.titleDataGridViewTextBoxColumn,
-            this.CopyrightDate,
-            this.barcodeDataGridViewTextBoxColumn,
-            this.classificationDataGridViewTextBoxColumn,
-            this.mainEntryDataGridViewTextBoxColumn,
-            this.Custom1,
-            this.Custom2,
-            this.Custom3,
-            this.Custom4,
-            this.Custom5,
-            this.ImportErrors});
-            this.recordsDataGridView.DataMember = "Records";
-            this.recordsDataGridView.DataSource = this.marcDataSet;
-            this.recordsDataGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.recordsDataGridView.Location = new System.Drawing.Point(0, 0);
-            this.recordsDataGridView.Name = "recordsDataGridView";
-            this.recordsDataGridView.ReadOnly = true;
-            this.recordsDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.recordsDataGridView.Size = new System.Drawing.Size(984, 150);
-            this.recordsDataGridView.TabIndex = 0;
-            this.recordsDataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.recordsDataGridView_CellClick);
-            this.recordsDataGridView.SelectionChanged += new System.EventHandler(this.recordsDataGridView_SelectionChanged);
-            this.recordsDataGridView.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.recordsDataGridView_UserDeletingRow);
-            // 
-            // recordIDDataGridViewTextBoxColumn
-            // 
-            this.recordIDDataGridViewTextBoxColumn.DataPropertyName = "RecordID";
-            this.recordIDDataGridViewTextBoxColumn.HeaderText = "ID";
-            this.recordIDDataGridViewTextBoxColumn.MinimumWidth = 50;
-            this.recordIDDataGridViewTextBoxColumn.Name = "recordIDDataGridViewTextBoxColumn";
-            this.recordIDDataGridViewTextBoxColumn.ReadOnly = true;
-            this.recordIDDataGridViewTextBoxColumn.Width = 50;
-            // 
-            // dateAddedDataGridViewTextBoxColumn
-            // 
-            this.dateAddedDataGridViewTextBoxColumn.DataPropertyName = "DateAdded";
-            this.dateAddedDataGridViewTextBoxColumn.HeaderText = "Date Added";
-            this.dateAddedDataGridViewTextBoxColumn.MinimumWidth = 125;
-            this.dateAddedDataGridViewTextBoxColumn.Name = "dateAddedDataGridViewTextBoxColumn";
-            this.dateAddedDataGridViewTextBoxColumn.ReadOnly = true;
-            this.dateAddedDataGridViewTextBoxColumn.Width = 125;
-            // 
-            // dateChangedDataGridViewTextBoxColumn
-            // 
-            this.dateChangedDataGridViewTextBoxColumn.DataPropertyName = "DateChanged";
-            this.dateChangedDataGridViewTextBoxColumn.HeaderText = "Date Changed";
-            this.dateChangedDataGridViewTextBoxColumn.MinimumWidth = 125;
-            this.dateChangedDataGridViewTextBoxColumn.Name = "dateChangedDataGridViewTextBoxColumn";
-            this.dateChangedDataGridViewTextBoxColumn.ReadOnly = true;
-            this.dateChangedDataGridViewTextBoxColumn.Width = 125;
-            // 
-            // authorDataGridViewTextBoxColumn
-            // 
-            this.authorDataGridViewTextBoxColumn.DataPropertyName = "Author";
-            this.authorDataGridViewTextBoxColumn.HeaderText = "Author";
-            this.authorDataGridViewTextBoxColumn.MinimumWidth = 20;
-            this.authorDataGridViewTextBoxColumn.Name = "authorDataGridViewTextBoxColumn";
-            this.authorDataGridViewTextBoxColumn.ReadOnly = true;
-            this.authorDataGridViewTextBoxColumn.Width = 200;
-            // 
-            // titleDataGridViewTextBoxColumn
-            // 
-            this.titleDataGridViewTextBoxColumn.DataPropertyName = "Title";
-            this.titleDataGridViewTextBoxColumn.HeaderText = "Title";
-            this.titleDataGridViewTextBoxColumn.MinimumWidth = 20;
-            this.titleDataGridViewTextBoxColumn.Name = "titleDataGridViewTextBoxColumn";
-            this.titleDataGridViewTextBoxColumn.ReadOnly = true;
-            this.titleDataGridViewTextBoxColumn.Width = 400;
-            // 
-            // CopyrightDate
-            // 
-            this.CopyrightDate.DataPropertyName = "CopyrightDate";
-            this.CopyrightDate.HeaderText = "CopyrightDate";
-            this.CopyrightDate.Name = "CopyrightDate";
-            this.CopyrightDate.ReadOnly = true;
-            // 
-            // barcodeDataGridViewTextBoxColumn
-            // 
-            this.barcodeDataGridViewTextBoxColumn.DataPropertyName = "Barcode";
-            this.barcodeDataGridViewTextBoxColumn.HeaderText = "Barcode";
-            this.barcodeDataGridViewTextBoxColumn.Name = "barcodeDataGridViewTextBoxColumn";
-            this.barcodeDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // classificationDataGridViewTextBoxColumn
-            // 
-            this.classificationDataGridViewTextBoxColumn.DataPropertyName = "Classification";
-            this.classificationDataGridViewTextBoxColumn.HeaderText = "Classification";
-            this.classificationDataGridViewTextBoxColumn.Name = "classificationDataGridViewTextBoxColumn";
-            this.classificationDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // mainEntryDataGridViewTextBoxColumn
-            // 
-            this.mainEntryDataGridViewTextBoxColumn.DataPropertyName = "MainEntry";
-            this.mainEntryDataGridViewTextBoxColumn.HeaderText = "MainEntry";
-            this.mainEntryDataGridViewTextBoxColumn.Name = "mainEntryDataGridViewTextBoxColumn";
-            this.mainEntryDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // Custom1
-            // 
-            this.Custom1.DataPropertyName = "Custom1";
-            this.Custom1.HeaderText = "Custom1";
-            this.Custom1.Name = "Custom1";
-            this.Custom1.ReadOnly = true;
-            // 
-            // Custom2
-            // 
-            this.Custom2.DataPropertyName = "Custom2";
-            this.Custom2.HeaderText = "Custom2";
-            this.Custom2.Name = "Custom2";
-            this.Custom2.ReadOnly = true;
-            // 
-            // Custom3
-            // 
-            this.Custom3.DataPropertyName = "Custom3";
-            this.Custom3.HeaderText = "Custom3";
-            this.Custom3.Name = "Custom3";
-            this.Custom3.ReadOnly = true;
-            // 
-            // Custom4
-            // 
-            this.Custom4.DataPropertyName = "Custom4";
-            this.Custom4.HeaderText = "Custom4";
-            this.Custom4.Name = "Custom4";
-            this.Custom4.ReadOnly = true;
-            // 
-            // Custom5
-            // 
-            this.Custom5.DataPropertyName = "Custom5";
-            this.Custom5.HeaderText = "Custom5";
-            this.Custom5.Name = "Custom5";
-            this.Custom5.ReadOnly = true;
-            // 
-            // ImportErrors
-            // 
-            this.ImportErrors.DataPropertyName = "ImportErrors";
-            this.ImportErrors.HeaderText = "ImportErrors";
-            this.ImportErrors.Name = "ImportErrors";
-            this.ImportErrors.ReadOnly = true;
-            // 
-            // marcDataSet
-            // 
-            this.marcDataSet.DataSetName = "MARCDataSet";
-            this.marcDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-            // 
-            // subfieldsDataGridView
-            // 
-            this.subfieldsDataGridView.AllowUserToResizeColumns = false;
-            this.subfieldsDataGridView.AllowUserToResizeRows = false;
-            this.subfieldsDataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.subfieldsDataGridView.AutoGenerateColumns = false;
-            this.subfieldsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.subfieldsDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.subfieldIDDataGridViewTextBoxColumn,
-            this.fieldIDDataGridViewTextBoxColumn1,
-            this.codeDataGridViewTextBoxColumn,
-            this.dataDataGridViewTextBoxColumn});
-            this.subfieldsDataGridView.DataMember = "Subfields";
-            this.subfieldsDataGridView.DataSource = this.marcDataSet;
-            this.subfieldsDataGridView.Location = new System.Drawing.Point(211, 3);
-            this.subfieldsDataGridView.MultiSelect = false;
-            this.subfieldsDataGridView.Name = "subfieldsDataGridView";
-            this.subfieldsDataGridView.Size = new System.Drawing.Size(407, 409);
-            this.subfieldsDataGridView.TabIndex = 1;
-            this.subfieldsDataGridView.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.subfieldsDataGridView_CellBeginEdit);
-            this.subfieldsDataGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.subfieldsDataGridView_CellEndEdit);
-            this.subfieldsDataGridView.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.subfieldsDataGridView_CellValidated);
-            this.subfieldsDataGridView.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.subfieldsDataGridView_CellValidating);
-            this.subfieldsDataGridView.RowValidating += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.subfieldsDataGridView_RowValidating);
-            this.subfieldsDataGridView.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.subfieldsDataGridView_UserDeletingRow);
-            // 
-            // subfieldIDDataGridViewTextBoxColumn
-            // 
-            this.subfieldIDDataGridViewTextBoxColumn.DataPropertyName = "SubfieldID";
-            this.subfieldIDDataGridViewTextBoxColumn.HeaderText = "SubfieldID";
-            this.subfieldIDDataGridViewTextBoxColumn.Name = "subfieldIDDataGridViewTextBoxColumn";
-            this.subfieldIDDataGridViewTextBoxColumn.Visible = false;
-            // 
-            // fieldIDDataGridViewTextBoxColumn1
-            // 
-            this.fieldIDDataGridViewTextBoxColumn1.DataPropertyName = "FieldID";
-            this.fieldIDDataGridViewTextBoxColumn1.HeaderText = "FieldID";
-            this.fieldIDDataGridViewTextBoxColumn1.Name = "fieldIDDataGridViewTextBoxColumn1";
-            this.fieldIDDataGridViewTextBoxColumn1.Visible = false;
-            // 
-            // codeDataGridViewTextBoxColumn
-            // 
-            this.codeDataGridViewTextBoxColumn.DataPropertyName = "Code";
-            this.codeDataGridViewTextBoxColumn.HeaderText = "Code";
-            this.codeDataGridViewTextBoxColumn.MaxInputLength = 1;
-            this.codeDataGridViewTextBoxColumn.MinimumWidth = 40;
-            this.codeDataGridViewTextBoxColumn.Name = "codeDataGridViewTextBoxColumn";
-            this.codeDataGridViewTextBoxColumn.Width = 40;
-            // 
-            // dataDataGridViewTextBoxColumn
-            // 
-            this.dataDataGridViewTextBoxColumn.DataPropertyName = "Data";
-            this.dataDataGridViewTextBoxColumn.HeaderText = "Data";
-            this.dataDataGridViewTextBoxColumn.MinimumWidth = 100;
-            this.dataDataGridViewTextBoxColumn.Name = "dataDataGridViewTextBoxColumn";
-            this.dataDataGridViewTextBoxColumn.Width = 300;
-            // 
-            // fieldsDataGridView
-            // 
-            this.fieldsDataGridView.AllowUserToResizeColumns = false;
-            this.fieldsDataGridView.AllowUserToResizeRows = false;
-            this.fieldsDataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.fieldsDataGridView.AutoGenerateColumns = false;
-            this.fieldsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.fieldsDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.fieldIDDataGridViewTextBoxColumn,
-            this.recordIDDataGridViewTextBoxColumn1,
-            this.tagNumberDataGridViewTextBoxColumn,
-            this.ind1DataGridViewTextBoxColumn,
-            this.ind2DataGridViewTextBoxColumn,
-            this.controlDataDataGridViewTextBoxColumn});
-            this.fieldsDataGridView.DataMember = "Fields";
-            this.fieldsDataGridView.DataSource = this.marcDataSet;
-            this.fieldsDataGridView.Location = new System.Drawing.Point(3, 3);
-            this.fieldsDataGridView.MultiSelect = false;
-            this.fieldsDataGridView.Name = "fieldsDataGridView";
-            this.fieldsDataGridView.Size = new System.Drawing.Size(202, 409);
-            this.fieldsDataGridView.TabIndex = 0;
-            this.fieldsDataGridView.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.fieldsDataGridView_CellBeginEdit);
-            this.fieldsDataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.fieldsDataGridView_CellClick);
-            this.fieldsDataGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.fieldsDataGridView_CellEndEdit);
-            this.fieldsDataGridView.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.fieldsDataGridView_CellValidated);
-            this.fieldsDataGridView.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.fieldsDataGridView_CellValidating);
-            this.fieldsDataGridView.RowValidating += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.fieldsDataGridView_RowValidating);
-            this.fieldsDataGridView.SelectionChanged += new System.EventHandler(this.fieldsDataGridView_SelectionChanged);
-            this.fieldsDataGridView.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.fieldsDataGridView_UserAddedRow);
-            this.fieldsDataGridView.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.fieldsDataGridView_UserDeletingRow);
-            // 
-            // fieldIDDataGridViewTextBoxColumn
-            // 
-            this.fieldIDDataGridViewTextBoxColumn.DataPropertyName = "FieldID";
-            this.fieldIDDataGridViewTextBoxColumn.HeaderText = "FieldID";
-            this.fieldIDDataGridViewTextBoxColumn.Name = "fieldIDDataGridViewTextBoxColumn";
-            this.fieldIDDataGridViewTextBoxColumn.Visible = false;
-            // 
-            // recordIDDataGridViewTextBoxColumn1
-            // 
-            this.recordIDDataGridViewTextBoxColumn1.DataPropertyName = "RecordID";
-            this.recordIDDataGridViewTextBoxColumn1.HeaderText = "RecordID";
-            this.recordIDDataGridViewTextBoxColumn1.Name = "recordIDDataGridViewTextBoxColumn1";
-            this.recordIDDataGridViewTextBoxColumn1.Visible = false;
-            // 
-            // tagNumberDataGridViewTextBoxColumn
-            // 
-            this.tagNumberDataGridViewTextBoxColumn.DataPropertyName = "TagNumber";
-            this.tagNumberDataGridViewTextBoxColumn.HeaderText = "Tag";
-            this.tagNumberDataGridViewTextBoxColumn.MaxInputLength = 3;
-            this.tagNumberDataGridViewTextBoxColumn.MinimumWidth = 45;
-            this.tagNumberDataGridViewTextBoxColumn.Name = "tagNumberDataGridViewTextBoxColumn";
-            this.tagNumberDataGridViewTextBoxColumn.Width = 45;
-            // 
-            // ind1DataGridViewTextBoxColumn
-            // 
-            this.ind1DataGridViewTextBoxColumn.DataPropertyName = "Ind1";
-            this.ind1DataGridViewTextBoxColumn.HeaderText = "Ind1";
-            this.ind1DataGridViewTextBoxColumn.MaxInputLength = 1;
-            this.ind1DataGridViewTextBoxColumn.MinimumWidth = 40;
-            this.ind1DataGridViewTextBoxColumn.Name = "ind1DataGridViewTextBoxColumn";
-            this.ind1DataGridViewTextBoxColumn.Width = 40;
-            // 
-            // ind2DataGridViewTextBoxColumn
-            // 
-            this.ind2DataGridViewTextBoxColumn.DataPropertyName = "Ind2";
-            this.ind2DataGridViewTextBoxColumn.HeaderText = "Ind2";
-            this.ind2DataGridViewTextBoxColumn.MaxInputLength = 1;
-            this.ind2DataGridViewTextBoxColumn.MinimumWidth = 40;
-            this.ind2DataGridViewTextBoxColumn.Name = "ind2DataGridViewTextBoxColumn";
-            this.ind2DataGridViewTextBoxColumn.Width = 40;
-            // 
-            // controlDataDataGridViewTextBoxColumn
-            // 
-            this.controlDataDataGridViewTextBoxColumn.DataPropertyName = "ControlData";
-            this.controlDataDataGridViewTextBoxColumn.HeaderText = "ControlData";
-            this.controlDataDataGridViewTextBoxColumn.Name = "controlDataDataGridViewTextBoxColumn";
-            this.controlDataDataGridViewTextBoxColumn.Visible = false;
-            // 
             // printDialog
             // 
             this.printDialog.UseEXDialog = true;
@@ -844,15 +844,15 @@ namespace CSharp_MARC_Editor
             this.splitContainer.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
             this.splitContainer.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.recordsDataGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.marcDataSet)).EndInit();
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.subfieldsDataGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fieldsDataGridView)).EndInit();
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.recordsDataGridView)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.marcDataSet)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.subfieldsDataGridView)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.fieldsDataGridView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

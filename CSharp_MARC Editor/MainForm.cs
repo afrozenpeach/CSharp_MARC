@@ -52,6 +52,7 @@ namespace CSharp_MARC_Editor
 
         private string reloadingDB = "Reloading Database...";
         private string committingTransaction = "Committing Transaction...";
+        private string rebuildingPreview = "Rebuilding Records Previews...";
         private bool startEdit = false;
         private bool loading = true;
         private bool reloadFields = false;
@@ -491,11 +492,13 @@ namespace CSharp_MARC_Editor
                                             classification = split[0] + " " + split[1];
                                             mainEntry = split[2];
                                         }
-                                        else
+                                        else if (split.Length > 1)
                                         {
                                             classification = split[0];
                                             mainEntry = split[1];
                                         }
+                                        else
+                                            classification = split[0];
                                     }
                                     else if (classification == null && (string)reader["TagNumber"] == "949" && (string)reader["Code"] == "b")
                                     {
@@ -531,11 +534,13 @@ namespace CSharp_MARC_Editor
                                             classification = split[0] + " " + split[1];
                                             mainEntry = split[2];
                                         }
-                                        else
+                                        else if (split.Length > 1)
                                         {
                                             classification = split[0];
                                             mainEntry = split[1];
                                         }
+                                        else
+                                            classification = split[0];
                                     }
 
                                     if (custom1 == null && (string)reader["TagNumber"] == customFieldsForm.TagNumber1 && (string)reader["Code"] == customFieldsForm.Code1)
@@ -989,6 +994,9 @@ namespace CSharp_MARC_Editor
                     command.ExecuteNonQuery();
                 }
 
+                i = -3;
+                RebuildRecordsPreviewInformation();
+
                 i = -1;
                 importingBackgroundWorker.ReportProgress(i);
             }
@@ -1009,6 +1017,9 @@ namespace CSharp_MARC_Editor
                 case -2:
                     progressToolStripStatusLabel.Text = committingTransaction;
                     break;
+                case -3:
+                    progressToolStripStatusLabel.Text = rebuildingPreview;
+                    break;
                 default:
                     progressToolStripStatusLabel.Text = e.ProgressPercentage.ToString();
                     break;
@@ -1023,7 +1034,6 @@ namespace CSharp_MARC_Editor
         private void importingBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             marcDataSet.Tables["Records"].Rows.Clear();
-            RebuildRecordsPreviewInformation();
 
             using (SQLiteConnection connection = new SQLiteConnection(connectionString))
             {
@@ -2364,8 +2374,8 @@ namespace CSharp_MARC_Editor
                 SaveOptions();
                 RebuildRecordsPreviewInformation();
             }
-            else
-                this.OnLoad(new EventArgs());
+                
+            this.OnLoad(new EventArgs());
         }
 
         /// <summary>
@@ -2440,6 +2450,7 @@ namespace CSharp_MARC_Editor
         }
         
         #endregion
+
 
         #endregion
     }
