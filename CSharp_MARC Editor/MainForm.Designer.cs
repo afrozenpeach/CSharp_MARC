@@ -133,6 +133,7 @@ namespace CSharp_MARC_Editor
             this.printDialog = new System.Windows.Forms.PrintDialog();
             this.printDocument = new System.Drawing.Printing.PrintDocument();
             this.rebuildBackgroundWorker = new System.ComponentModel.BackgroundWorker();
+            this.loadingBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -833,6 +834,11 @@ namespace CSharp_MARC_Editor
             this.rebuildBackgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.rebuildBackgroundWorker_ProgressChanged);
             this.rebuildBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.rebuildBackgroundWorker_RunWorkerCompleted);
             // 
+            // loadingBackgroundWorker
+            // 
+            this.loadingBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.loadingBackgroundWorker_DoWork);
+            this.loadingBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.loadingBackgroundWorker_RunWorkerCompleted);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -943,6 +949,7 @@ namespace CSharp_MARC_Editor
         private System.Windows.Forms.PrintDialog printDialog;
         private System.Drawing.Printing.PrintDocument printDocument;
         private System.ComponentModel.BackgroundWorker rebuildBackgroundWorker;
+        private System.ComponentModel.BackgroundWorker loadingBackgroundWorker;
 
     }
 }

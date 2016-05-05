@@ -59,6 +59,7 @@ namespace CSharp_MARC_Editor
         private decimal recordsPerFile = 0;
         private CustomFieldsForm customFieldsForm = new CustomFieldsForm();
         private List<string> linesToPrint;
+        private Exception errorLoading = null;
 
         private const char START_OF_HEADING = '\x01';
         private const char NEW_PAGE = '\xFF';
@@ -1151,6 +1152,8 @@ namespace CSharp_MARC_Editor
 
         #region Form Events
 
+        #region Loading
+
         /// <summary>
         /// Handles the Load event of the MainForm control.
         /// </summary>
@@ -1158,14 +1161,32 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void MainForm_Load(object sender, EventArgs e)
         {
+            loading = true;
+            this.Enabled = false;
+            toolStripProgressBar.Style = ProgressBarStyle.Marquee;
+            toolStripProgressBar.MarqueeAnimationSpeed = 30;
+            toolStripProgressBar.Enabled = true;
+            toolStripProgressBar.Visible = true;
+            progressToolStripStatusLabel.Visible = true;
+            recordsDataGridView.SuspendLayout();
+            fieldsDataGridView.SuspendLayout();
+            subfieldsDataGridView.SuspendLayout();
+            recordsDataGridView.DataSource = null;
+            fieldsDataGridView.DataSource = null;
+            subfieldsDataGridView.DataSource = null;
+            progressToolStripStatusLabel.Text = "Loading database..";
+            loadingBackgroundWorker.RunWorkerAsync();
+        }
+
+        /// <summary>
+        /// Handles the DoWork event of the loadingBackgroundWorker control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="DoWorkEventArgs"/> instance containing the event data.</param>
+        private void loadingBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
             try
             {
-                loading = true;
-
-                recordsDataGridView.DataSource = null;
-                fieldsDataGridView.DataSource = null;
-                subfieldsDataGridView.DataSource = null;
-
                 marcDataSet.Tables["Records"].Rows.Clear();
                 marcDataSet.Tables["Fields"].Rows.Clear();
                 marcDataSet.Tables["Subfields"].Rows.Clear();
@@ -1179,123 +1200,156 @@ namespace CSharp_MARC_Editor
                     {
                         SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter(command);
                         dataAdapter.Fill(marcDataSet, "Records");
-                        recordsDataGridView.DataSource = marcDataSet.Tables["Records"];
                     }
 
                     using (SQLiteCommand command = new SQLiteCommand("SELECT * FROM Fields WHERE 1 = 0", connection))
                     {
                         SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter(command);
                         dataAdapter.Fill(marcDataSet, "Fields");
-                        fieldsDataGridView.DataSource = marcDataSet.Tables["Fields"];
                     }
 
                     using (SQLiteCommand command = new SQLiteCommand("SELECT * FROM Subfields WHERE 1 = 0", connection))
                     {
                         SQLiteDataAdapter recordsDataAdapter = new SQLiteDataAdapter(command);
                         recordsDataAdapter.Fill(marcDataSet, "Subfields");
-                        subfieldsDataGridView.DataSource = marcDataSet.Tables["Subfields"];
-                    }
-
-                    using (SQLiteCommand command = new SQLiteCommand("SELECT * FROM Settings LIMIT 1", connection))
-                    {
-                        using (SQLiteDataReader reader = command.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                if (reader["RecordListAtTop"] != DBNull.Value && !(bool)reader["RecordListAtTop"] && recordListAtTopToolStripMenuItem.Checked)
-                                    recordListAtTopToolStripMenuItem_Click(sender, e);
-                                else
-                                    recordListAtTopToolStripMenuItem.Checked = true;
-
-                                if (reader["ClearDatabaseOnExit"] != DBNull.Value && (bool)reader["ClearDatabaseOnExit"] && !clearDatabaseOnExitToolStripMenuItem.Checked)
-                                    clearDatabaseOnExitToolStripMenuItem_Click(sender, e);
-                                else
-                                    clearDatabaseOnExitToolStripMenuItem.Checked = false;
-
-                                switch (reader["ExportFormat"].ToString())
-                                {
-                                    case "M":
-                                        uTF8ToolStripMenuItem.Checked = true;
-                                        mARC8ToolStripMenuItem.Checked = false;
-                                        mARCXMLToolStripMenuItem.Checked = false;
-                                        break;
-                                    case "U":
-                                        uTF8ToolStripMenuItem.Checked = false;
-                                        mARC8ToolStripMenuItem.Checked = true;
-                                        mARCXMLToolStripMenuItem.Checked = false;
-                                        break;
-                                    case "X":
-                                        uTF8ToolStripMenuItem.Checked = false;
-                                        mARC8ToolStripMenuItem.Checked = false;
-                                        mARCXMLToolStripMenuItem.Checked = true;
-                                        break;
-                                }
-
-                                customFieldsForm.TagNumber1 = reader["CustomTag1"].ToString();
-                                customFieldsForm.Code1 = reader["CustomCode1"].ToString();
-                                customFieldsForm.Data1 = reader["CustomData1"].ToString();
-                                customFieldsForm.TagNumber2 = reader["CustomTag2"].ToString();
-                                customFieldsForm.Code2 = reader["CustomCode2"].ToString();
-                                customFieldsForm.Data2 = reader["CustomData2"].ToString();
-                                customFieldsForm.TagNumber3 = reader["CustomTag3"].ToString();
-                                customFieldsForm.Code3 = reader["CustomCode3"].ToString();
-                                customFieldsForm.Data3 = reader["CustomData3"].ToString();
-                                customFieldsForm.TagNumber4 = reader["CustomTag4"].ToString();
-                                customFieldsForm.Code4 = reader["CustomCode4"].ToString();
-                                customFieldsForm.Data4 = reader["CustomData4"].ToString();
-                                customFieldsForm.TagNumber5 = reader["CustomTag5"].ToString();
-                                customFieldsForm.Code5 = reader["CustomCode5"].ToString();
-                                customFieldsForm.Data5 = reader["CustomData5"].ToString();
-                            }
-                            else
-                            {
-                                reader.Close();
-                                command.CommandText = "INSERT INTO Settings (RecordListAtTop, ClearDatabaseOnExit, ExportFormat, CustomTag1, CustomCode1, CustomData1, CustomTag2, CustomCode2, CustomData2, CustomTag3, CustomCode3, CustomData3, CustomTag4, CustomCode4, CustomData4, CustomTag5, CustomCode5, CustomData5) VALUES (@RecordListAtTop, @ClearDatabaseOnExit, @ExportFormat, @CustomTag1, @CustomCode1, @CustomData1, @CustomTag2, @CustomCode2, @CustomData2, @CustomTag3, @CustomCode3, @CustomData3, @CustomTag4, @CustomCode4, @CustomData4, @CustomTag5, @CustomCode5, @CustomData5)";
-                                command.Parameters.Add("@RecordListAtTop", DbType.Boolean).Value = true;
-                                command.Parameters.Add("@ClearDatabaseOnExit", DbType.Boolean).Value = false;
-                                command.Parameters.Add("@ExportFormat", DbType.Boolean).Value = 'U';
-                                command.Parameters.Add("@CustomTag1", DbType.String).Value = customFieldsForm.TagNumber1;
-                                command.Parameters.Add("@CustomCode1", DbType.String).Value = customFieldsForm.Code1;
-                                command.Parameters.Add("@CustomData1", DbType.String).Value = customFieldsForm.Data1;
-                                command.Parameters.Add("@CustomTag2", DbType.String).Value = customFieldsForm.TagNumber2;
-                                command.Parameters.Add("@CustomCode2", DbType.String).Value = customFieldsForm.Code2;
-                                command.Parameters.Add("@CustomData2", DbType.String).Value = customFieldsForm.Data2;
-                                command.Parameters.Add("@CustomTag3", DbType.String).Value = customFieldsForm.TagNumber3;
-                                command.Parameters.Add("@CustomCode3", DbType.String).Value = customFieldsForm.Code3;
-                                command.Parameters.Add("@CustomData3", DbType.String).Value = customFieldsForm.Data3;
-                                command.Parameters.Add("@CustomTag4", DbType.String).Value = customFieldsForm.TagNumber4;
-                                command.Parameters.Add("@CustomCode4", DbType.String).Value = customFieldsForm.Code4;
-                                command.Parameters.Add("@CustomData4", DbType.String).Value = customFieldsForm.Data4;
-                                command.Parameters.Add("@CustomTag5", DbType.String).Value = customFieldsForm.TagNumber5;
-                                command.Parameters.Add("@CustomCode5", DbType.String).Value = customFieldsForm.Code5;
-                                command.Parameters.Add("@CustomData5", DbType.String).Value = customFieldsForm.Data5;
-
-                                command.ExecuteNonQuery();
-                            }
-                        }
                     }
                 }
-
-                if (recordsDataGridView.Rows.Count > 0)
-                {
-                    DataGridViewCellEventArgs args = new DataGridViewCellEventArgs(0, 0);
-                    recordsDataGridView_CellClick(this, args);
-                }
-
-                loading = false;
             }
             catch (Exception ex)
             {
-                if (MessageBox.Show("Error loading database. " + ex.Message + Environment.NewLine + Environment.NewLine + "If you continue to see this message, it may be necessary to reset the database. Doing so will permanently delete all records from the database." + Environment.NewLine + Environment.NewLine + "Do you want to reset the database?", "Error loading database.", MessageBoxButtons.YesNo, MessageBoxIcon.Error, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+                errorLoading = ex;
+            }
+        }
+
+        /// <summary>
+        /// Handles the RunWorkerCompleted event of the loadingBackgroundWorker control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RunWorkerCompletedEventArgs"/> instance containing the event data.</param>
+        private void loadingBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (errorLoading != null)
+            {
+                if (MessageBox.Show("Error loading database: " + errorLoading.GetType().ToString() + " - " + errorLoading.Message + Environment.NewLine + Environment.NewLine + "If you continue to see this message, it may be necessary to reset the database. Doing so will permanently delete all records from the database." + Environment.NewLine + Environment.NewLine + "Do you want to reset the database?", "Error loading database.", MessageBoxButtons.YesNo, MessageBoxIcon.Error, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
                 {
                     ResetDatabase(true);
+                    loadingBackgroundWorker.RunWorkerAsync();
+                    return;
                 }
                 else
                 {
-                    this.Close();
+                    Application.Exit();
+                    return;
                 }
             }
+
+            progressToolStripStatusLabel.Text = "";
+            toolStripProgressBar.Visible = false;
+            toolStripProgressBar.Enabled = false;
+            progressToolStripStatusLabel.Visible = false;
+            toolStripProgressBar.MarqueeAnimationSpeed = 0;
+            recordsDataGridView.DataSource = marcDataSet.Tables["Records"];
+            fieldsDataGridView.DataSource = marcDataSet.Tables["Fields"];
+            subfieldsDataGridView.DataSource = marcDataSet.Tables["Subfields"];
+            recordsDataGridView.ResumeLayout();
+            fieldsDataGridView.ResumeLayout();
+            subfieldsDataGridView.ResumeLayout();
+
+            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            {
+                connection.Open();
+
+                using (SQLiteCommand command = new SQLiteCommand("SELECT * FROM Settings LIMIT 1", connection))
+                {
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            if (reader["RecordListAtTop"] != DBNull.Value && !(bool)reader["RecordListAtTop"] && recordListAtTopToolStripMenuItem.Checked)
+                                recordListAtTopToolStripMenuItem_Click(sender, e);
+                            else
+                                recordListAtTopToolStripMenuItem.Checked = true;
+
+                            if (reader["ClearDatabaseOnExit"] != DBNull.Value && (bool)reader["ClearDatabaseOnExit"] && !clearDatabaseOnExitToolStripMenuItem.Checked)
+                                clearDatabaseOnExitToolStripMenuItem_Click(sender, e);
+                            else
+                                clearDatabaseOnExitToolStripMenuItem.Checked = false;
+
+                            switch (reader["ExportFormat"].ToString())
+                            {
+                                case "M":
+                                    uTF8ToolStripMenuItem.Checked = true;
+                                    mARC8ToolStripMenuItem.Checked = false;
+                                    mARCXMLToolStripMenuItem.Checked = false;
+                                    break;
+                                case "U":
+                                    uTF8ToolStripMenuItem.Checked = false;
+                                    mARC8ToolStripMenuItem.Checked = true;
+                                    mARCXMLToolStripMenuItem.Checked = false;
+                                    break;
+                                case "X":
+                                    uTF8ToolStripMenuItem.Checked = false;
+                                    mARC8ToolStripMenuItem.Checked = false;
+                                    mARCXMLToolStripMenuItem.Checked = true;
+                                    break;
+                            }
+
+                            customFieldsForm.TagNumber1 = reader["CustomTag1"].ToString();
+                            customFieldsForm.Code1 = reader["CustomCode1"].ToString();
+                            customFieldsForm.Data1 = reader["CustomData1"].ToString();
+                            customFieldsForm.TagNumber2 = reader["CustomTag2"].ToString();
+                            customFieldsForm.Code2 = reader["CustomCode2"].ToString();
+                            customFieldsForm.Data2 = reader["CustomData2"].ToString();
+                            customFieldsForm.TagNumber3 = reader["CustomTag3"].ToString();
+                            customFieldsForm.Code3 = reader["CustomCode3"].ToString();
+                            customFieldsForm.Data3 = reader["CustomData3"].ToString();
+                            customFieldsForm.TagNumber4 = reader["CustomTag4"].ToString();
+                            customFieldsForm.Code4 = reader["CustomCode4"].ToString();
+                            customFieldsForm.Data4 = reader["CustomData4"].ToString();
+                            customFieldsForm.TagNumber5 = reader["CustomTag5"].ToString();
+                            customFieldsForm.Code5 = reader["CustomCode5"].ToString();
+                            customFieldsForm.Data5 = reader["CustomData5"].ToString();
+                        }
+                        else
+                        {
+                            reader.Close();
+                            command.CommandText = "INSERT INTO Settings (RecordListAtTop, ClearDatabaseOnExit, ExportFormat, CustomTag1, CustomCode1, CustomData1, CustomTag2, CustomCode2, CustomData2, CustomTag3, CustomCode3, CustomData3, CustomTag4, CustomCode4, CustomData4, CustomTag5, CustomCode5, CustomData5) VALUES (@RecordListAtTop, @ClearDatabaseOnExit, @ExportFormat, @CustomTag1, @CustomCode1, @CustomData1, @CustomTag2, @CustomCode2, @CustomData2, @CustomTag3, @CustomCode3, @CustomData3, @CustomTag4, @CustomCode4, @CustomData4, @CustomTag5, @CustomCode5, @CustomData5)";
+                            command.Parameters.Add("@RecordListAtTop", DbType.Boolean).Value = true;
+                            command.Parameters.Add("@ClearDatabaseOnExit", DbType.Boolean).Value = false;
+                            command.Parameters.Add("@ExportFormat", DbType.Boolean).Value = 'U';
+                            command.Parameters.Add("@CustomTag1", DbType.String).Value = customFieldsForm.TagNumber1;
+                            command.Parameters.Add("@CustomCode1", DbType.String).Value = customFieldsForm.Code1;
+                            command.Parameters.Add("@CustomData1", DbType.String).Value = customFieldsForm.Data1;
+                            command.Parameters.Add("@CustomTag2", DbType.String).Value = customFieldsForm.TagNumber2;
+                            command.Parameters.Add("@CustomCode2", DbType.String).Value = customFieldsForm.Code2;
+                            command.Parameters.Add("@CustomData2", DbType.String).Value = customFieldsForm.Data2;
+                            command.Parameters.Add("@CustomTag3", DbType.String).Value = customFieldsForm.TagNumber3;
+                            command.Parameters.Add("@CustomCode3", DbType.String).Value = customFieldsForm.Code3;
+                            command.Parameters.Add("@CustomData3", DbType.String).Value = customFieldsForm.Data3;
+                            command.Parameters.Add("@CustomTag4", DbType.String).Value = customFieldsForm.TagNumber4;
+                            command.Parameters.Add("@CustomCode4", DbType.String).Value = customFieldsForm.Code4;
+                            command.Parameters.Add("@CustomData4", DbType.String).Value = customFieldsForm.Data4;
+                            command.Parameters.Add("@CustomTag5", DbType.String).Value = customFieldsForm.TagNumber5;
+                            command.Parameters.Add("@CustomCode5", DbType.String).Value = customFieldsForm.Code5;
+                            command.Parameters.Add("@CustomData5", DbType.String).Value = customFieldsForm.Data5;
+
+                            command.ExecuteNonQuery();
+                        }
+                    }
+                }
+            }
+
+            if (recordsDataGridView.Rows.Count > 0)
+            {
+                DataGridViewCellEventArgs args = new DataGridViewCellEventArgs(0, 0);
+                recordsDataGridView_CellClick(this, args);
+            }
+
+            loading = false;
+            this.Enabled = true;
         }
+
+        #endregion 
 
         #region Loading Records
 
@@ -2859,8 +2913,6 @@ namespace CSharp_MARC_Editor
         {
             if (customFieldsForm.ShowDialog() == DialogResult.OK)
             {
-                SaveOptions();
-
                 this.Enabled = false;
                 toolStripProgressBar.Style = ProgressBarStyle.Marquee;
                 toolStripProgressBar.MarqueeAnimationSpeed = 30;
@@ -2869,6 +2921,7 @@ namespace CSharp_MARC_Editor
                 progressToolStripStatusLabel.Visible = true;
                 recordsDataGridView.SuspendLayout();
                 recordsDataGridView.DataSource = null;
+                SaveOptions();
                 rebuildBackgroundWorker.RunWorkerAsync();
             }
                 
