@@ -2931,8 +2931,6 @@ namespace CSharp_MARC_Editor
                 recordsDataGridView.DataSource = null;
                 SaveOptions();
                 rebuildBackgroundWorker.RunWorkerAsync(true);
-
-                this.OnLoad(new EventArgs());
             }
         }
 
@@ -2968,35 +2966,7 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="RunWorkerCompletedEventArgs"/> instance containing the event data.</param>
         private void rebuildBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            marcDataSet.Tables["Records"].Rows.Clear();
-
-            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
-            {
-                using (SQLiteCommand command = new SQLiteCommand("SELECT * FROM Records", connection))
-                {
-                    SQLiteDataAdapter recordsDataAdapter = new SQLiteDataAdapter(command);
-                    recordsDataAdapter.Fill(marcDataSet, "Records");
-                    SQLiteCommandBuilder commandBuilder = new SQLiteCommandBuilder(recordsDataAdapter);
-                    recordsDataAdapter.InsertCommand = commandBuilder.GetInsertCommand();
-                    recordsDataGridView.DataSource = marcDataSet.Tables["Records"];
-                }
-            }
-
-            if (recordsDataGridView.Rows.Count > 0)
-            {
-                DataGridViewCellEventArgs args = new DataGridViewCellEventArgs(0, 0);
-                recordsDataGridView_CellClick(this, args);
-            }
-
-            progressToolStripStatusLabel.Text = "";
-            toolStripProgressBar.Visible = false;
-            toolStripProgressBar.Enabled = false;
-            progressToolStripStatusLabel.Visible = false;
-            toolStripProgressBar.MarqueeAnimationSpeed = 0;
-            recordsDataGridView.DataSource = marcDataSet.Tables["Records"];
-            recordsDataGridView.ResumeLayout();
-            loading = false;
-            this.Enabled = true;
+            this.OnLoad(new EventArgs());
         }
 
         /// <summary>
