@@ -621,7 +621,7 @@ namespace CSharp_MARC_Editor
         /// Rebuilds the records preview information.
         /// This consists of the Author, Title, Barcode, Classification, and MainEntry fields
         /// </summary>
-        private void RebuildRecordsPreviewInformation(int? recordID = null)
+        private void RebuildRecordsPreviewInformation(int? recordID = null, bool customOnly = false)
         {
             string whereRecordID = "";
 
@@ -634,40 +634,45 @@ namespace CSharp_MARC_Editor
 
                 using (SQLiteCommand command = new SQLiteCommand(readerConnection))
                 {
-                    command.CommandText = "UPDATE Records SET Author = null, Title = null, CopyrightDate = null, Barcode = null, Classification = null, MainEntry = null, Custom1 = null, Custom2 = null, Custom3 = null, Custom4 = null, Custom5 = null";
+                    if (customOnly)
+                        command.CommandText = "UPDATE Records SET Custom1 = null, Custom2 = null, Custom3 = null, Custom4 = null, Custom5 = null";
+                    else
+                        command.CommandText = "UPDATE Records SET Author = null, Title = null, CopyrightDate = null, Barcode = null, Classification = null, MainEntry = null, Custom1 = null, Custom2 = null, Custom3 = null, Custom4 = null, Custom5 = null";
                     
                     if (recordID != null)
                         command.CommandText += " WHERE RecordID = " + recordID;
 
                     command.ExecuteNonQuery();
 
-                    command.CommandText = @"UPDATE 
+                    if (!customOnly)
+                    {
+                        command.CommandText = @"UPDATE 
                                                 Records
                                             SET Author = (SELECT DATA
                                                           FROM Fields f
                                                           LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
                                                           WHERE f.RecordID = Records.RecordID AND f.TagNumber = '100' and s.Code = 'a' " + whereRecordID + ")";
 
-                    command.ExecuteNonQuery();
+                        command.ExecuteNonQuery();
 
-                    command.CommandText = @"UPDATE 
+                        command.CommandText = @"UPDATE 
                                                 Records
                                             SET Author = (SELECT Data
                                                           FROM Fields f
                                                           LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
                                                           WHERE f.RecordID = Records.RecordID AND f.TagNumber = '245' and s.Code = 'c' " + whereRecordID + @")
                                             WHERE Author IS NULL";
-                    command.ExecuteNonQuery();
+                        command.ExecuteNonQuery();
 
-                    command.CommandText = @"UPDATE 
+                        command.CommandText = @"UPDATE 
                                                 Records
                                             SET Title = (SELECT Data
                                                          FROM Fields f
                                                          LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
                                                          WHERE f.RecordID = Records.RecordID AND f.TagNumber = '245' and s.Code = 'a' " + whereRecordID + ")";
-                    command.ExecuteNonQuery();
+                        command.ExecuteNonQuery();
 
-                    command.CommandText = @"UPDATE 
+                        command.CommandText = @"UPDATE 
                                                 Records
                                             SET Title = Title || ' ' || (SELECT Data
                                                                          FROM Fields f
@@ -677,69 +682,69 @@ namespace CSharp_MARC_Editor
                                                    FROM Fields f
                                                    LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
                                                    WHERE f.RecordID = Records.RecordID AND f.TagNumber = '245' and s.Code = 'b' " + whereRecordID + ") IS NOT NULL";
-                    command.ExecuteNonQuery();
+                        command.ExecuteNonQuery();
 
-                    command.CommandText = @"UPDATE 
+                        command.CommandText = @"UPDATE 
                                                 Records
                                             SET CopyrightDate = CAST(REGEXREPLACE((SELECT Data
                                                                                    FROM Fields f
                                                                                    LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
                                                                                    WHERE f.RecordID = Records.RecordID AND f.TagNumber = '260' and s.Code = 'c' " + whereRecordID + @"), '[^0-9]', '') as 'integer')";
-                    command.ExecuteNonQuery();
+                        command.ExecuteNonQuery();
 
-                    command.CommandText = @"UPDATE 
+                        command.CommandText = @"UPDATE 
                                                 Records
                                             SET CopyrightDate = CAST(REGEXREPLACE((SELECT Data
                                                                                    FROM Fields f
                                                                                    LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
                                                                                    WHERE f.RecordID = Records.RecordID AND f.TagNumber = '264' and s.Code = 'c' " + whereRecordID + @"), '[0-9]', '') as 'integer')
                                             WHERE CopyrightDate IS NULL";
-                    command.ExecuteNonQuery();
+                        command.ExecuteNonQuery();
 
-                    command.CommandText = @"UPDATE 
+                        command.CommandText = @"UPDATE 
                                                 Records
                                             SET Barcode = (SELECT Data
                                                            FROM Fields f
                                                            LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
                                                            WHERE f.RecordID = Records.RecordID AND f.TagNumber = '852' and s.Code = 'p' " + whereRecordID + ")";
-                    command.ExecuteNonQuery();
+                        command.ExecuteNonQuery();
 
-                    command.CommandText = @"UPDATE 
+                        command.CommandText = @"UPDATE 
                                                 Records
                                             SET Barcode = (SELECT Data
                                                            FROM Fields f
                                                            LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
                                                            WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'i' " + whereRecordID + @")
                                             WHERE Barcode IS NULL";
-                    command.ExecuteNonQuery();
+                        command.ExecuteNonQuery();
 
-                    command.CommandText = @"UPDATE 
+                        command.CommandText = @"UPDATE 
                                                 Records
                                             SET Barcode = (SELECT Data
                                                            FROM Fields f
                                                            LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
                                                            WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'g' " + whereRecordID + @")
                                             WHERE Barcode IS NULL";
-                    command.ExecuteNonQuery();
+                        command.ExecuteNonQuery();
 
-                    command.CommandText = @"UPDATE 
+                        command.CommandText = @"UPDATE 
                                                 Records
                                             SET Barcode = (SELECT Data
                                                            FROM Fields f
                                                            LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
                                                            WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'b' " + whereRecordID + @")
                                             WHERE Barcode IS NULL";
-                    command.ExecuteNonQuery();
+                        command.ExecuteNonQuery();
 
-                    command.CommandText = @"UPDATE 
+                        command.CommandText = @"UPDATE 
                                                 Records
                                             SET Classification = SPLITSUBSTRING((SELECT Data
                                                                                  FROM Fields f
                                                                                  LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
                                                                                  WHERE f.RecordID = Records.RecordID AND f.TagNumber = '852' and s.Code = 'h' " + whereRecordID + "), ' ', 0)";
-                    command.ExecuteNonQuery();
+                        command.ExecuteNonQuery();
 
-                    command.CommandText = @"UPDATE 
+                        command.CommandText = @"UPDATE 
                                                 Records
                                             SET Classification = SPLITSUBSTRING((SELECT Data
                                                                                  FROM Fields f
@@ -758,18 +763,18 @@ namespace CSharp_MARC_Editor
                                                                                                        FROM Fields f
                                                                                                        LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
                                                                                                        WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' AND s.Code = 'i') > 0";
-                    command.ExecuteNonQuery();
+                        command.ExecuteNonQuery();
 
-                    command.CommandText = @"UPDATE 
+                        command.CommandText = @"UPDATE 
                                                 Records
                                             SET Classification = SPLITSUBSTRING((SELECT Data
                                                                                  FROM Fields f
                                                                                  LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
                                                                                  WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'a' " + whereRecordID + @"), ' ', 0)
                                             WHERE (Classification IS NULL OR Classification = '')";
-                    command.ExecuteNonQuery();
+                        command.ExecuteNonQuery();
 
-                    command.CommandText = @"UPDATE 
+                        command.CommandText = @"UPDATE 
                                                 Records
                                             SET Classification = SPLITSUBSTRING((SELECT Data
                                                                                  FROM Fields f
@@ -784,9 +789,9 @@ namespace CSharp_MARC_Editor
                                                                                                                       FROM Fields f
                                                                                                                       LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
                                                                                                                       WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'b' " + whereRecordID + @"), ' ', 0) IS NOT NULL";
-                    command.ExecuteNonQuery();
+                        command.ExecuteNonQuery();
 
-                    command.CommandText = @"UPDATE 
+                        command.CommandText = @"UPDATE 
                                                 Records
                                             SET Classification = SPLITSUBSTRING((SELECT Data
                                                                                  FROM Fields f
@@ -801,26 +806,26 @@ namespace CSharp_MARC_Editor
                                                                                                                   FROM Fields f
                                                                                                                   LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
                                                                                                                   WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'c' " + whereRecordID + "), ' ') > 2";
-                    command.ExecuteNonQuery();
+                        command.ExecuteNonQuery();
 
-                    command.CommandText = @"UPDATE 
+                        command.CommandText = @"UPDATE 
                                                 Records
                                             SET Classification = SPLITSUBSTRING((SELECT Data
                                                                                  FROM Fields f
                                                                                  LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
                                                                                  WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'c' " + whereRecordID + @"), ' ', 0)
                                             WHERE (Classification IS NULL OR Classification = '')";
-                    command.ExecuteNonQuery();
+                        command.ExecuteNonQuery();
 
-                    command.CommandText = @"UPDATE 
+                        command.CommandText = @"UPDATE 
                                                 Records
                                             SET MainEntry = SPLITSUBSTRING((SELECT Data
                                                                             FROM Fields f
                                                                             LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
                                                                             WHERE f.RecordID = Records.RecordID AND f.TagNumber = '852' and s.Code = 'h' " + whereRecordID + "), ' ', 1)";
-                    command.ExecuteNonQuery();
+                        command.ExecuteNonQuery();
 
-                    command.CommandText = @"UPDATE 
+                        command.CommandText = @"UPDATE 
                                                 Records
                                             SET MainEntry = SPLITSUBSTRING((SELECT Data
                                                                             FROM Fields f
@@ -830,18 +835,18 @@ namespace CSharp_MARC_Editor
                                                                                                         FROM Fields f
                                                                                                         LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
                                                                                                         WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'a' " + whereRecordID + "), ' ') > 2";
-                    command.ExecuteNonQuery();
+                        command.ExecuteNonQuery();
 
-                    command.CommandText = @"UPDATE 
+                        command.CommandText = @"UPDATE 
                                                 Records
                                             SET MainEntry = SPLITSUBSTRING((SELECT Data
                                                                             FROM Fields f
                                                                             LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
                                                                             WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'a' " + whereRecordID + @"), ' ', 1)
                                             WHERE (MainEntry IS NULL OR MainEntry = '')";
-                    command.ExecuteNonQuery();
+                        command.ExecuteNonQuery();
 
-                    command.CommandText = @"UPDATE 
+                        command.CommandText = @"UPDATE 
                                                 Records
                                             SET MainEntry = SPLITSUBSTRING((SELECT Data
                                                                             FROM Fields f
@@ -851,16 +856,17 @@ namespace CSharp_MARC_Editor
                                                                                                         FROM Fields f
                                                                                                         LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
                                                                                                         WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'c' " + whereRecordID + "), ' ') > 2";
-                    command.ExecuteNonQuery();
+                        command.ExecuteNonQuery();
 
-                    command.CommandText = @"UPDATE 
+                        command.CommandText = @"UPDATE 
                                                 Records
                                             SET MainEntry = SPLITSUBSTRING((SELECT Data
                                                                             FROM Fields f
                                                                             LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
                                                                             WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'c' " + whereRecordID + @"), ' ', 1)
                                             WHERE (MainEntry IS NULL OR MainEntry = '')";
-                    command.ExecuteNonQuery();
+                        command.ExecuteNonQuery();
+                    }
 
                     if (customFieldsForm.TagNumber1 != "")
                     {
@@ -2864,8 +2870,6 @@ namespace CSharp_MARC_Editor
                 recordsDataGridView.SuspendLayout();
                 recordsDataGridView.DataSource = null;
                 rebuildBackgroundWorker.RunWorkerAsync();
-
-                RebuildRecordsPreviewInformation();
             }
                 
             this.OnLoad(new EventArgs());
@@ -2878,7 +2882,7 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="DoWorkEventArgs"/> instance containing the event data.</param>
         private void rebuildBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            RebuildRecordsPreviewInformation();
+            RebuildRecordsPreviewInformation(null, true);
         }
 
         /// <summary>
