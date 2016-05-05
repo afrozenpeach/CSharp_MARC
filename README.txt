@@ -53,6 +53,11 @@
  * @license   http://www.gnu.org/licenses/gpl-3.0.html  GPL License 3
  */ 
  
+2016-05-04 Changes:
+
+Speed up importing
+Speed up rebuilding records preview information after changing custom fields
+ 
 2016-05-03 Changes:
 
 Sped up Rebuilding the records preview information
