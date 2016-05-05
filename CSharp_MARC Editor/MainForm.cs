@@ -1018,6 +1018,96 @@ namespace CSharp_MARC_Editor
         }
 
         /// <summary>
+        /// Loads the options.
+        /// </summary>
+        private void LoadOptions()
+        {
+            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            {
+                connection.Open();
+
+                using (SQLiteCommand command = new SQLiteCommand("SELECT * FROM Settings LIMIT 1", connection))
+                {
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            if (reader["RecordListAtTop"] != DBNull.Value && !(bool)reader["RecordListAtTop"] && recordListAtTopToolStripMenuItem.Checked)
+                                recordListAtTopToolStripMenuItem_Click(this, new EventArgs());
+                            else
+                                recordListAtTopToolStripMenuItem.Checked = true;
+
+                            if (reader["ClearDatabaseOnExit"] != DBNull.Value && (bool)reader["ClearDatabaseOnExit"] && !clearDatabaseOnExitToolStripMenuItem.Checked)
+                                clearDatabaseOnExitToolStripMenuItem_Click(this, new EventArgs());
+                            else
+                                clearDatabaseOnExitToolStripMenuItem.Checked = false;
+
+                            switch (reader["ExportFormat"].ToString())
+                            {
+                                case "M":
+                                    uTF8ToolStripMenuItem.Checked = true;
+                                    mARC8ToolStripMenuItem.Checked = false;
+                                    mARCXMLToolStripMenuItem.Checked = false;
+                                    break;
+                                case "U":
+                                    uTF8ToolStripMenuItem.Checked = false;
+                                    mARC8ToolStripMenuItem.Checked = true;
+                                    mARCXMLToolStripMenuItem.Checked = false;
+                                    break;
+                                case "X":
+                                    uTF8ToolStripMenuItem.Checked = false;
+                                    mARC8ToolStripMenuItem.Checked = false;
+                                    mARCXMLToolStripMenuItem.Checked = true;
+                                    break;
+                            }
+
+                            customFieldsForm.TagNumber1 = reader["CustomTag1"].ToString();
+                            customFieldsForm.Code1 = reader["CustomCode1"].ToString();
+                            customFieldsForm.Data1 = reader["CustomData1"].ToString();
+                            customFieldsForm.TagNumber2 = reader["CustomTag2"].ToString();
+                            customFieldsForm.Code2 = reader["CustomCode2"].ToString();
+                            customFieldsForm.Data2 = reader["CustomData2"].ToString();
+                            customFieldsForm.TagNumber3 = reader["CustomTag3"].ToString();
+                            customFieldsForm.Code3 = reader["CustomCode3"].ToString();
+                            customFieldsForm.Data3 = reader["CustomData3"].ToString();
+                            customFieldsForm.TagNumber4 = reader["CustomTag4"].ToString();
+                            customFieldsForm.Code4 = reader["CustomCode4"].ToString();
+                            customFieldsForm.Data4 = reader["CustomData4"].ToString();
+                            customFieldsForm.TagNumber5 = reader["CustomTag5"].ToString();
+                            customFieldsForm.Code5 = reader["CustomCode5"].ToString();
+                            customFieldsForm.Data5 = reader["CustomData5"].ToString();
+                        }
+                        else
+                        {
+                            reader.Close();
+                            command.CommandText = "INSERT INTO Settings (RecordListAtTop, ClearDatabaseOnExit, ExportFormat, CustomTag1, CustomCode1, CustomData1, CustomTag2, CustomCode2, CustomData2, CustomTag3, CustomCode3, CustomData3, CustomTag4, CustomCode4, CustomData4, CustomTag5, CustomCode5, CustomData5) VALUES (@RecordListAtTop, @ClearDatabaseOnExit, @ExportFormat, @CustomTag1, @CustomCode1, @CustomData1, @CustomTag2, @CustomCode2, @CustomData2, @CustomTag3, @CustomCode3, @CustomData3, @CustomTag4, @CustomCode4, @CustomData4, @CustomTag5, @CustomCode5, @CustomData5)";
+                            command.Parameters.Add("@RecordListAtTop", DbType.Boolean).Value = true;
+                            command.Parameters.Add("@ClearDatabaseOnExit", DbType.Boolean).Value = false;
+                            command.Parameters.Add("@ExportFormat", DbType.Boolean).Value = 'U';
+                            command.Parameters.Add("@CustomTag1", DbType.String).Value = customFieldsForm.TagNumber1;
+                            command.Parameters.Add("@CustomCode1", DbType.String).Value = customFieldsForm.Code1;
+                            command.Parameters.Add("@CustomData1", DbType.String).Value = customFieldsForm.Data1;
+                            command.Parameters.Add("@CustomTag2", DbType.String).Value = customFieldsForm.TagNumber2;
+                            command.Parameters.Add("@CustomCode2", DbType.String).Value = customFieldsForm.Code2;
+                            command.Parameters.Add("@CustomData2", DbType.String).Value = customFieldsForm.Data2;
+                            command.Parameters.Add("@CustomTag3", DbType.String).Value = customFieldsForm.TagNumber3;
+                            command.Parameters.Add("@CustomCode3", DbType.String).Value = customFieldsForm.Code3;
+                            command.Parameters.Add("@CustomData3", DbType.String).Value = customFieldsForm.Data3;
+                            command.Parameters.Add("@CustomTag4", DbType.String).Value = customFieldsForm.TagNumber4;
+                            command.Parameters.Add("@CustomCode4", DbType.String).Value = customFieldsForm.Code4;
+                            command.Parameters.Add("@CustomData4", DbType.String).Value = customFieldsForm.Data4;
+                            command.Parameters.Add("@CustomTag5", DbType.String).Value = customFieldsForm.TagNumber5;
+                            command.Parameters.Add("@CustomCode5", DbType.String).Value = customFieldsForm.Code5;
+                            command.Parameters.Add("@CustomData5", DbType.String).Value = customFieldsForm.Data5;
+
+                            command.ExecuteNonQuery();
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Saves the options.
         /// </summary>
         private void SaveOptions()
@@ -1255,89 +1345,7 @@ namespace CSharp_MARC_Editor
             fieldsDataGridView.ResumeLayout();
             subfieldsDataGridView.ResumeLayout();
 
-            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
-            {
-                connection.Open();
-
-                using (SQLiteCommand command = new SQLiteCommand("SELECT * FROM Settings LIMIT 1", connection))
-                {
-                    using (SQLiteDataReader reader = command.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            if (reader["RecordListAtTop"] != DBNull.Value && !(bool)reader["RecordListAtTop"] && recordListAtTopToolStripMenuItem.Checked)
-                                recordListAtTopToolStripMenuItem_Click(sender, e);
-                            else
-                                recordListAtTopToolStripMenuItem.Checked = true;
-
-                            if (reader["ClearDatabaseOnExit"] != DBNull.Value && (bool)reader["ClearDatabaseOnExit"] && !clearDatabaseOnExitToolStripMenuItem.Checked)
-                                clearDatabaseOnExitToolStripMenuItem_Click(sender, e);
-                            else
-                                clearDatabaseOnExitToolStripMenuItem.Checked = false;
-
-                            switch (reader["ExportFormat"].ToString())
-                            {
-                                case "M":
-                                    uTF8ToolStripMenuItem.Checked = true;
-                                    mARC8ToolStripMenuItem.Checked = false;
-                                    mARCXMLToolStripMenuItem.Checked = false;
-                                    break;
-                                case "U":
-                                    uTF8ToolStripMenuItem.Checked = false;
-                                    mARC8ToolStripMenuItem.Checked = true;
-                                    mARCXMLToolStripMenuItem.Checked = false;
-                                    break;
-                                case "X":
-                                    uTF8ToolStripMenuItem.Checked = false;
-                                    mARC8ToolStripMenuItem.Checked = false;
-                                    mARCXMLToolStripMenuItem.Checked = true;
-                                    break;
-                            }
-
-                            customFieldsForm.TagNumber1 = reader["CustomTag1"].ToString();
-                            customFieldsForm.Code1 = reader["CustomCode1"].ToString();
-                            customFieldsForm.Data1 = reader["CustomData1"].ToString();
-                            customFieldsForm.TagNumber2 = reader["CustomTag2"].ToString();
-                            customFieldsForm.Code2 = reader["CustomCode2"].ToString();
-                            customFieldsForm.Data2 = reader["CustomData2"].ToString();
-                            customFieldsForm.TagNumber3 = reader["CustomTag3"].ToString();
-                            customFieldsForm.Code3 = reader["CustomCode3"].ToString();
-                            customFieldsForm.Data3 = reader["CustomData3"].ToString();
-                            customFieldsForm.TagNumber4 = reader["CustomTag4"].ToString();
-                            customFieldsForm.Code4 = reader["CustomCode4"].ToString();
-                            customFieldsForm.Data4 = reader["CustomData4"].ToString();
-                            customFieldsForm.TagNumber5 = reader["CustomTag5"].ToString();
-                            customFieldsForm.Code5 = reader["CustomCode5"].ToString();
-                            customFieldsForm.Data5 = reader["CustomData5"].ToString();
-                        }
-                        else
-                        {
-                            reader.Close();
-                            command.CommandText = "INSERT INTO Settings (RecordListAtTop, ClearDatabaseOnExit, ExportFormat, CustomTag1, CustomCode1, CustomData1, CustomTag2, CustomCode2, CustomData2, CustomTag3, CustomCode3, CustomData3, CustomTag4, CustomCode4, CustomData4, CustomTag5, CustomCode5, CustomData5) VALUES (@RecordListAtTop, @ClearDatabaseOnExit, @ExportFormat, @CustomTag1, @CustomCode1, @CustomData1, @CustomTag2, @CustomCode2, @CustomData2, @CustomTag3, @CustomCode3, @CustomData3, @CustomTag4, @CustomCode4, @CustomData4, @CustomTag5, @CustomCode5, @CustomData5)";
-                            command.Parameters.Add("@RecordListAtTop", DbType.Boolean).Value = true;
-                            command.Parameters.Add("@ClearDatabaseOnExit", DbType.Boolean).Value = false;
-                            command.Parameters.Add("@ExportFormat", DbType.Boolean).Value = 'U';
-                            command.Parameters.Add("@CustomTag1", DbType.String).Value = customFieldsForm.TagNumber1;
-                            command.Parameters.Add("@CustomCode1", DbType.String).Value = customFieldsForm.Code1;
-                            command.Parameters.Add("@CustomData1", DbType.String).Value = customFieldsForm.Data1;
-                            command.Parameters.Add("@CustomTag2", DbType.String).Value = customFieldsForm.TagNumber2;
-                            command.Parameters.Add("@CustomCode2", DbType.String).Value = customFieldsForm.Code2;
-                            command.Parameters.Add("@CustomData2", DbType.String).Value = customFieldsForm.Data2;
-                            command.Parameters.Add("@CustomTag3", DbType.String).Value = customFieldsForm.TagNumber3;
-                            command.Parameters.Add("@CustomCode3", DbType.String).Value = customFieldsForm.Code3;
-                            command.Parameters.Add("@CustomData3", DbType.String).Value = customFieldsForm.Data3;
-                            command.Parameters.Add("@CustomTag4", DbType.String).Value = customFieldsForm.TagNumber4;
-                            command.Parameters.Add("@CustomCode4", DbType.String).Value = customFieldsForm.Code4;
-                            command.Parameters.Add("@CustomData4", DbType.String).Value = customFieldsForm.Data4;
-                            command.Parameters.Add("@CustomTag5", DbType.String).Value = customFieldsForm.TagNumber5;
-                            command.Parameters.Add("@CustomCode5", DbType.String).Value = customFieldsForm.Code5;
-                            command.Parameters.Add("@CustomData5", DbType.String).Value = customFieldsForm.Data5;
-
-                            command.ExecuteNonQuery();
-                        }
-                    }
-                }
-            }
+            LoadOptions();
 
             if (recordsDataGridView.Rows.Count > 0)
             {
@@ -2922,10 +2930,10 @@ namespace CSharp_MARC_Editor
                 recordsDataGridView.SuspendLayout();
                 recordsDataGridView.DataSource = null;
                 SaveOptions();
-                rebuildBackgroundWorker.RunWorkerAsync();
+                rebuildBackgroundWorker.RunWorkerAsync(true);
+
+                this.OnLoad(new EventArgs());
             }
-                
-            this.OnLoad(new EventArgs());
         }
 
         /// <summary>
@@ -2935,7 +2943,12 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="DoWorkEventArgs"/> instance containing the event data.</param>
         private void rebuildBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            RebuildRecordsPreviewInformation(null, true);
+            bool customOnly = false;
+            
+            if (e.Argument != null && e.Argument.GetType() == typeof(bool))
+                customOnly = (bool)e.Argument;
+
+            RebuildRecordsPreviewInformation(null, customOnly);
         }
 
         /// <summary>
