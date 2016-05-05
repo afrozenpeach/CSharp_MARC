@@ -111,9 +111,6 @@ namespace CSharp_MARC_Editor
             this.selectedRecordsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.createBlankRecordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.findAndReplaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.recordListAtTopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearDatabaseOnExitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -122,6 +119,9 @@ namespace CSharp_MARC_Editor
             this.uTF8ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mARC8ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mARCXMLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.createBlankRecordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.findAndReplaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.databaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -665,31 +665,6 @@ namespace CSharp_MARC_Editor
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
-            // editToolStripMenuItem
-            // 
-            this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.createBlankRecordToolStripMenuItem,
-            this.findAndReplaceToolStripMenuItem});
-            this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
-            this.editToolStripMenuItem.Text = "Edit";
-            // 
-            // createBlankRecordToolStripMenuItem
-            // 
-            this.createBlankRecordToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("createBlankRecordToolStripMenuItem.Image")));
-            this.createBlankRecordToolStripMenuItem.Name = "createBlankRecordToolStripMenuItem";
-            this.createBlankRecordToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.createBlankRecordToolStripMenuItem.Text = "Create Blank Record";
-            this.createBlankRecordToolStripMenuItem.Click += new System.EventHandler(this.createBlankRecordToolStripMenuItem_Click);
-            // 
-            // findAndReplaceToolStripMenuItem
-            // 
-            this.findAndReplaceToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("findAndReplaceToolStripMenuItem.Image")));
-            this.findAndReplaceToolStripMenuItem.Name = "findAndReplaceToolStripMenuItem";
-            this.findAndReplaceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.findAndReplaceToolStripMenuItem.Text = "Find and Replace";
-            this.findAndReplaceToolStripMenuItem.Click += new System.EventHandler(this.findAndReplaceToolStripMenuItem_Click);
-            // 
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -758,6 +733,31 @@ namespace CSharp_MARC_Editor
             this.mARCXMLToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.mARCXMLToolStripMenuItem.Text = "MARCXML";
             this.mARCXMLToolStripMenuItem.Click += new System.EventHandler(this.exportFormatToolStripMenuItem_Click);
+            // 
+            // editToolStripMenuItem
+            // 
+            this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.createBlankRecordToolStripMenuItem,
+            this.findAndReplaceToolStripMenuItem});
+            this.editToolStripMenuItem.Name = "editToolStripMenuItem";
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
+            this.editToolStripMenuItem.Text = "Edit";
+            // 
+            // createBlankRecordToolStripMenuItem
+            // 
+            this.createBlankRecordToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("createBlankRecordToolStripMenuItem.Image")));
+            this.createBlankRecordToolStripMenuItem.Name = "createBlankRecordToolStripMenuItem";
+            this.createBlankRecordToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.createBlankRecordToolStripMenuItem.Text = "Create Blank Record";
+            this.createBlankRecordToolStripMenuItem.Click += new System.EventHandler(this.createBlankRecordToolStripMenuItem_Click);
+            // 
+            // findAndReplaceToolStripMenuItem
+            // 
+            this.findAndReplaceToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("findAndReplaceToolStripMenuItem.Image")));
+            this.findAndReplaceToolStripMenuItem.Name = "findAndReplaceToolStripMenuItem";
+            this.findAndReplaceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.findAndReplaceToolStripMenuItem.Text = "Find and Replace";
+            this.findAndReplaceToolStripMenuItem.Click += new System.EventHandler(this.findAndReplaceToolStripMenuItem_Click);
             // 
             // databaseToolStripMenuItem
             // 
