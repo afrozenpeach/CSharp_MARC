@@ -50,9 +50,17 @@ namespace CSharp_MARC_Editor
 		/// <summary>
 		/// Gets the selected record.
 		/// </summary>
-		public Record SelectedRecord
+		public List<Record> SelectedRecords
 		{
-			get { return (Record)searchResultsDataGridView.SelectedRows[0].Tag; }
+			get 
+            {
+                List<Record> selectedRecords = new List<Record>();
+                
+                foreach (DataGridViewRow row in searchResultsDataGridView.SelectedRows)
+                    selectedRecords.Add((Record)row.Tag);
+
+                return selectedRecords;
+            }
 		}
 
 		#endregion

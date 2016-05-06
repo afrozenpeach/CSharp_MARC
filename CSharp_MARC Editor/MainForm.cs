@@ -1666,7 +1666,7 @@ namespace CSharp_MARC_Editor
         private void importingBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             IEnumerable recordEnumerator = null;
-            List<Record> importedSRU = new List<Record>();
+            List<Record> importedSRU;
 
             if (e.Argument.GetType() == typeof(string))
             {
@@ -1675,7 +1675,7 @@ namespace CSharp_MARC_Editor
             }
             else
             {
-                importedSRU.Add((Record)e.Argument);
+                importedSRU = (List<Record>)e.Argument;
                 recordEnumerator = importedSRU;
             }
 
@@ -1866,8 +1866,7 @@ namespace CSharp_MARC_Editor
             {
                 if (sru.ShowDialog() == DialogResult.OK)
                 {
-                    Record importedRecord = sru.SelectedRecord;
-                    importingBackgroundWorker.RunWorkerAsync(importedRecord);
+                    importingBackgroundWorker.RunWorkerAsync(sru.SelectedRecords);
                 }
             }
         }

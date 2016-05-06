@@ -73,10 +73,10 @@ namespace CSharp_MARC_Editor
             this.isbnTextBox = new System.Windows.Forms.TextBox();
             this.isbnLabel = new System.Windows.Forms.Label();
             this.importGroupBox = new System.Windows.Forms.GroupBox();
+            this.cancelButton = new System.Windows.Forms.Button();
             this.importRichTextBox = new System.Windows.Forms.RichTextBox();
             this.importButton = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.cancelButton = new System.Windows.Forms.Button();
             this.searchGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.searchResultsDataGridView)).BeginInit();
             this.importGroupBox.SuspendLayout();
@@ -126,7 +126,6 @@ namespace CSharp_MARC_Editor
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.searchResultsDataGridView.DefaultCellStyle = dataGridViewCellStyle1;
             this.searchResultsDataGridView.Location = new System.Drawing.Point(6, 126);
-            this.searchResultsDataGridView.MultiSelect = false;
             this.searchResultsDataGridView.Name = "searchResultsDataGridView";
             this.searchResultsDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.searchResultsDataGridView.Size = new System.Drawing.Size(423, 346);
@@ -255,6 +254,16 @@ namespace CSharp_MARC_Editor
             this.importGroupBox.TabStop = false;
             this.importGroupBox.Text = "Import Preview";
             // 
+            // cancelButton
+            // 
+            this.cancelButton.Location = new System.Drawing.Point(201, 449);
+            this.cancelButton.Name = "cancelButton";
+            this.cancelButton.Size = new System.Drawing.Size(75, 23);
+            this.cancelButton.TabIndex = 13;
+            this.cancelButton.Text = "Cancel";
+            this.cancelButton.UseVisualStyleBackColor = true;
+            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
+            // 
             // importRichTextBox
             // 
             this.importRichTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -282,16 +291,6 @@ namespace CSharp_MARC_Editor
             // openFileDialog
             // 
             this.openFileDialog.Filter = "MARC Files|*.mrc;*.usm;*.001;*.xml;";
-            // 
-            // cancelButton
-            // 
-            this.cancelButton.Location = new System.Drawing.Point(201, 449);
-            this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(75, 23);
-            this.cancelButton.TabIndex = 13;
-            this.cancelButton.Text = "Cancel";
-            this.cancelButton.UseVisualStyleBackColor = true;
-            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
             // ImportSRU
             // 
