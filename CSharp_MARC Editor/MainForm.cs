@@ -1303,7 +1303,7 @@ namespace CSharp_MARC_Editor
         /// <param name="row">The row.</param>
         private void ReloadRecordRow(DataGridViewRow row)
         {
-            if (startEdit)
+            if (startEdit || rebuildingID != null)
             {
                 using (SQLiteConnection connection = new SQLiteConnection(connectionString))
                 {
@@ -2305,10 +2305,9 @@ namespace CSharp_MARC_Editor
                             command.Parameters.Add("@FieldID", DbType.String).Value = fieldsDataGridView.Rows[e.RowIndex].Cells[0].Value.ToString();
 
                             command.ExecuteNonQuery();
+                            reloadFields = true;
                         }
                     }
-
-                    RebuildRecordsPreviewInformation(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()), e.FormattedValue.ToString());
                 }
             }
             catch (Exception ex)
@@ -2364,6 +2363,7 @@ namespace CSharp_MARC_Editor
                                 command.Parameters.Add("@SubfieldID", DbType.String).Value = subfieldsDataGridView.Rows[e.RowIndex].Cells[0].Value.ToString();
 
                                 command.ExecuteNonQuery();
+                                reloadFields = true;
                             }
                         }
                     }
@@ -2454,18 +2454,21 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="DataGridViewCellEventArgs"/> instance containing the event data.</param>
         private void fieldsDataGridView_CellValidated(object sender, DataGridViewCellEventArgs e)
         {
-            fieldsDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].ErrorText = "";
             startEdit = false;
+            fieldsDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].ErrorText = "";
 
-            this.Enabled = false;
-            toolStripProgressBar.Style = ProgressBarStyle.Marquee;
-            toolStripProgressBar.MarqueeAnimationSpeed = 30;
-            toolStripProgressBar.Enabled = true;
-            toolStripProgressBar.Visible = true;
-            progressToolStripStatusLabel.Visible = true;
+            if (reloadFields && recordsDataGridView.SelectedCells.Count > 0)
+            {
+                this.Enabled = false;
+                toolStripProgressBar.Style = ProgressBarStyle.Marquee;
+                toolStripProgressBar.MarqueeAnimationSpeed = 30;
+                toolStripProgressBar.Enabled = true;
+                toolStripProgressBar.Visible = true;
+                progressToolStripStatusLabel.Visible = true;
 
-            object[] parameters = {Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()), fieldsDataGridView.SelectedCells[0].OwningRow.Cells[2].Value.ToString()};
-            rebuildBackgroundWorker.RunWorkerAsync(parameters);            
+                object[] parameters = { Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()), fieldsDataGridView.SelectedCells[0].OwningRow.Cells[2].Value.ToString() };
+                rebuildBackgroundWorker.RunWorkerAsync(parameters);
+            }
         }
 
         /// <summary>
@@ -2478,9 +2481,7 @@ namespace CSharp_MARC_Editor
             startEdit = false;
             subfieldsDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].ErrorText = "";
 
-            startEdit = false;
-
-            if (reloadFields && !subfieldsDataGridView.Rows[e.RowIndex].Cells[2].Visible && recordsDataGridView.SelectedCells.Count > 0)
+            if (reloadFields && recordsDataGridView.SelectedCells.Count > 0)
             {
                 this.Enabled = false;
                 toolStripProgressBar.Style = ProgressBarStyle.Marquee;
@@ -3067,7 +3068,7 @@ namespace CSharp_MARC_Editor
         #endregion
 
         #region Selecting cells
-
+        
         /// <summary>
         /// Handles the SelectionChanged event of the recordsDataGridView control.
         /// </summary>
@@ -3210,7 +3211,7 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="ProgressChangedEventArgs"/> instance containing the event data.</param>
         private void rebuildBackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            progressToolStripStatusLabel.Text = e.ProgressPercentage.ToString();
+            progressToolStripStatusLabel.Text = rebuildingPreview;
         }
 
         /// <summary>
@@ -3225,6 +3226,7 @@ namespace CSharp_MARC_Editor
             else
                 ReloadRecordRow(recordsDataGridView.SelectedCells[0].OwningRow);
 
+            rebuildingID = null;
             progressToolStripStatusLabel.Text = "";
             toolStripProgressBar.Visible = false;
             toolStripProgressBar.Enabled = false;

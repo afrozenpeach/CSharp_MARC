@@ -456,7 +456,7 @@ namespace CSharp_MARC_Editor
             this.fieldsDataGridView.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.fieldsDataGridView_CellBeginEdit);
             this.fieldsDataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.fieldsDataGridView_CellClick);
             this.fieldsDataGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.fieldsDataGridView_CellEndEdit);
-            this.fieldsDataGridView.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.recordsDataGridView_CellClick);
+            this.fieldsDataGridView.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.fieldsDataGridView_CellValidated);
             this.fieldsDataGridView.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.fieldsDataGridView_CellValidating);
             this.fieldsDataGridView.RowValidating += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.fieldsDataGridView_RowValidating);
             this.fieldsDataGridView.SelectionChanged += new System.EventHandler(this.fieldsDataGridView_SelectionChanged);
