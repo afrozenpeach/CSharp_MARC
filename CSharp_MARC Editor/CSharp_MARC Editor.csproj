@@ -146,7 +146,9 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.config" />
-    <None Include="MARC.db" />
+    <None Include="MARC.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="MARCDataSet.xsc">
       <DependentUpon>MARCDataSet.xsd</DependentUpon>
     </None>

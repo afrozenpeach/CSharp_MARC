@@ -622,7 +622,7 @@ namespace CSharp_MARC_Editor
         /// Rebuilds the records preview information.
         /// This consists of the Author, Title, Barcode, Classification, and MainEntry fields
         /// </summary>
-        private void RebuildRecordsPreviewInformation(int? recordID = null, bool customOnly = false)
+        private void RebuildRecordsPreviewInformation(int? recordID = null, string tagNumber = null)
         {
             string whereRecordID = "";
 
@@ -635,48 +635,63 @@ namespace CSharp_MARC_Editor
 
                 using (SQLiteCommand command = new SQLiteCommand(readerConnection))
                 {
-                    if (customOnly)
-                        command.CommandText = "UPDATE Records SET Custom1 = null, Custom2 = null, Custom3 = null, Custom4 = null, Custom5 = null";
-                    else
-                        command.CommandText = "UPDATE Records SET Author = null, Title = null, CopyrightDate = null, Barcode = null, Classification = null, MainEntry = null, Custom1 = null, Custom2 = null, Custom3 = null, Custom4 = null, Custom5 = null";
+                    switch (tagNumber)
+                    {
+                        case "customOnly":
+                            command.CommandText = "UPDATE Records SET Custom1 = null, Custom2 = null, Custom3 = null, Custom4 = null, Custom5 = null";
+                            break;
+                        case "100":
+                            break;
+                        case "245":
+                            break;
+                        default:
+                            command.CommandText = "UPDATE Records SET Author = null, Title = null, CopyrightDate = null, Barcode = null, Classification = null, MainEntry = null, Custom1 = null, Custom2 = null, Custom3 = null, Custom4 = null, Custom5 = null";
+                            break;
+                    }                        
                     
                     if (recordID != null)
                         command.CommandText += " WHERE RecordID = " + recordID;
 
                     command.ExecuteNonQuery();
 
-                    if (!customOnly)
+                    if (tagNumber == null || tagNumber == "100" || tagNumber == "245")
                     {
                         command.CommandText = @"INSERT INTO TempUpdates
-                                                  SELECT Data,f.RecordID
+                                                  SELECT f.RecordID, Data
                                                   FROM Subfields
                                                   LEFT OUTER JOIN Fields f on f.FieldID = Subfields.FieldID
-                                                  WHERE f.TagNumber = '100' and Code = 'a'" + whereRecordID + @");
+                                                  WHERE f.TagNumber = '100' and Code = 'a'" + whereRecordID + @";
 
                                                 UPDATE Records
                                                 SET Author = (SELECT Data FROM TempUpdates
                                                               WHERE TempUpdates.RecordID = Records.RecordID)
-                                                WHERE RecordID IN (SELECT RecordID FROM TempUpdates); ";
+                                                WHERE RecordID IN (SELECT RecordID FROM TempUpdates); 
 
+                                                DELETE FROM TempUpdates;";
                         command.ExecuteNonQuery();
 
                         command.CommandText = @"INSERT INTO TempUpdates
-                                                  SELECT Data,f.RecordID
+                                                  SELECT f.RecordID, Data
                                                   FROM Subfields
                                                   LEFT OUTER JOIN Fields f on f.FieldID = Subfields.FieldID
-                                                  WHERE f.TagNumber = '245' and Code = 'c'" + whereRecordID + @");
+                                                  WHERE f.TagNumber = '245' and Code = 'c'" + whereRecordID + @";
 
                                                 UPDATE Records
                                                 SET Author = (SELECT Data FROM TempUpdates
                                                               WHERE TempUpdates.RecordID = Records.RecordID)
-                                                WHERE Author IS NULL AND RecordID IN (SELECT RecordID FROM TempUpdates); ";
-                        command.ExecuteNonQuery();
+                                                WHERE Author IS NULL AND RecordID IN (SELECT RecordID FROM TempUpdates); 
 
+                                                DELETE FROM TempUpdates;";
+                        command.ExecuteNonQuery();
+                    }
+
+                    if (tagNumber == null || tagNumber == "245")
+                    {
                         command.CommandText = @"INSERT INTO TempUpdates
-                                                  SELECT Data,f.RecordID
+                                                  SELECT f.RecordID, Data
                                                   FROM Subfields
                                                   LEFT OUTER JOIN Fields f on f.FieldID = Subfields.FieldID
-                                                  WHERE f.TagNumber = '245' and Code = 'a'" + whereRecordID + @");
+                                                  WHERE f.TagNumber = '245' and Code = 'a'" + whereRecordID + @";
 
                                                 UPDATE Records
                                                 SET Title = (SELECT Data FROM TempUpdates
@@ -687,10 +702,10 @@ namespace CSharp_MARC_Editor
                         command.ExecuteNonQuery();
 
                         command.CommandText = @"INSERT INTO TempUpdates
-                                                  SELECT Data,f.RecordID
+                                                  SELECT f.RecordID, Data
                                                   FROM Subfields
                                                   LEFT OUTER JOIN Fields f on f.FieldID = Subfields.FieldID
-                                                  WHERE f.TagNumber = '245' and Code = 'b'" + whereRecordID + @");
+                                                  WHERE f.TagNumber = '245' and Code = 'b'" + whereRecordID + @";
 
                                                 UPDATE Records
                                                 SET Title = Title || ' ' || (SELECT Data FROM TempUpdates
@@ -699,12 +714,15 @@ namespace CSharp_MARC_Editor
 
                                                 DELETE FROM TempUpdates;";
                         command.ExecuteNonQuery();
+                    }
 
+                    if (tagNumber == null || tagNumber == "260")
+                    {
                         command.CommandText = @"INSERT INTO TempUpdates
-                                                  SELECT Data,f.RecordID
+                                                  SELECT f.RecordID, Data
                                                   FROM Subfields
                                                   LEFT OUTER JOIN Fields f on f.FieldID = Subfields.FieldID
-                                                  WHERE f.TagNumber = '260' and Code = 'c'" + whereRecordID + @");
+                                                  WHERE f.TagNumber = '260' and Code = 'c'" + whereRecordID + @";
 
                                                 UPDATE Records
                                                 SET CopyrightDate = (SELECT CAST(SUBSTR(REGEXREPLACE(Data, '[^0-9]', ''), 0, 4) as 'integer') FROM TempUpdates
@@ -713,12 +731,15 @@ namespace CSharp_MARC_Editor
 
                                                 DELETE FROM TempUpdates;";
                         command.ExecuteNonQuery();
+                    }
 
+                    if (tagNumber == null || tagNumber == "264")
+                    {
                         command.CommandText = @"INSERT INTO TempUpdates
-                                                  SELECT Data,f.RecordID
+                                                  SELECT f.RecordID, Data
                                                   FROM Subfields
                                                   LEFT OUTER JOIN Fields f on f.FieldID = Subfields.FieldID
-                                                  WHERE f.TagNumber = '264' and Code = 'c'" + whereRecordID + @");
+                                                  WHERE f.TagNumber = '264' and Code = 'c'" + whereRecordID + @";
 
                                                 UPDATE Records
                                                 SET CopyrightDate = (SELECT CAST(SUBSTR(REGEXREPLACE(Data, '[^0-9]', ''), 0, 4) as 'integer') FROM TempUpdates
@@ -727,26 +748,32 @@ namespace CSharp_MARC_Editor
 
                                                 DELETE FROM TempUpdates;";
                         command.ExecuteNonQuery();
+                    }
 
+                    if (tagNumber == null || tagNumber == "852")
+                    {
                         command.CommandText = @"INSERT INTO TempUpdates
-                                                  SELECT Data,f.RecordID
+                                                  SELECT f.RecordID, Data
                                                   FROM Subfields
                                                   LEFT OUTER JOIN Fields f on f.FieldID = Subfields.FieldID
-                                                  WHERE f.TagNumber = '852' and Code = 'p'" + whereRecordID + @");
+                                                  WHERE f.TagNumber = '852' and Code = 'p'" + whereRecordID + @";
 
                                                 UPDATE Records
                                                 SET Barcode = (SELECT Data FROM TempUpdates
                                                                WHERE TempUpdates.RecordID = Records.RecordID)
                                                 WHERE RecordID IN (SELECT RecordID FROM TempUpdates); 
 
-                                                DELETE FROM TempUpdates;"; 
+                                                DELETE FROM TempUpdates;";
                         command.ExecuteNonQuery();
+                    }
 
+                    if (tagNumber == null || tagNumber == "949")
+                    {
                         command.CommandText = @"INSERT INTO TempUpdates
-                                                  SELECT Data,f.RecordID
+                                                  SELECT f.RecordID, Data
                                                   FROM Subfields
                                                   LEFT OUTER JOIN Fields f on f.FieldID = Subfields.FieldID
-                                                  WHERE f.TagNumber = '949' and Code = 'i'" + whereRecordID + @");
+                                                  WHERE f.TagNumber = '949' and Code = 'i'" + whereRecordID + @";
 
                                                 UPDATE Records
                                                 SET Barcode = (SELECT Data FROM TempUpdates
@@ -757,10 +784,10 @@ namespace CSharp_MARC_Editor
                         command.ExecuteNonQuery();
 
                         command.CommandText = @"INSERT INTO TempUpdates
-                                                  SELECT Data,f.RecordID
+                                                  SELECT f.RecordID, Data
                                                   FROM Subfields
                                                   LEFT OUTER JOIN Fields f on f.FieldID = Subfields.FieldID
-                                                  WHERE f.TagNumber = '949' and Code = 'g'" + whereRecordID + @");
+                                                  WHERE f.TagNumber = '949' and Code = 'g'" + whereRecordID + @";
 
                                                 UPDATE Records
                                                 SET Barcode = (SELECT Data FROM TempUpdates
@@ -771,24 +798,27 @@ namespace CSharp_MARC_Editor
                         command.ExecuteNonQuery();
 
                         command.CommandText = @"INSERT INTO TempUpdates
-                                                  SELECT Data,f.RecordID
+                                                  SELECT f.RecordID, Data
                                                   FROM Subfields
                                                   LEFT OUTER JOIN Fields f on f.FieldID = Subfields.FieldID
-                                                  WHERE f.TagNumber = '949' and Code = 'b'" + whereRecordID + @");
+                                                  WHERE f.TagNumber = '949' and Code = 'b'" + whereRecordID + @";
 
                                                 UPDATE Records
                                                 SET Barcode = (SELECT Data FROM TempUpdates
                                                                WHERE TempUpdates.RecordID = Records.RecordID)
                                                 WHERE Barcode IS NULL AND RecordID IN (SELECT RecordID FROM TempUpdates); 
 
-                                                DELETE FROM TempUpdates;"; 
+                                                DELETE FROM TempUpdates;";
                         command.ExecuteNonQuery();
+                    }
 
+                    if (tagNumber == null || tagNumber == "852")
+                    {
                         command.CommandText = @"INSERT INTO TempUpdates
-                                                  SELECT Data,f.RecordID
+                                                  SELECT f.RecordID, Data
                                                   FROM Subfields
                                                   LEFT OUTER JOIN Fields f on f.FieldID = Subfields.FieldID
-                                                  WHERE f.TagNumber = '852' and Code = 'h'" + whereRecordID + @");
+                                                  WHERE f.TagNumber = '852' and Code = 'h'" + whereRecordID + @";
 
                                                 UPDATE Records
                                                 SET Classification = (SELECT SPLITSUBSTRING(Data, ' ', 0) FROM TempUpdates
@@ -797,141 +827,172 @@ namespace CSharp_MARC_Editor
 
                                                 DELETE FROM TempUpdates;";
                         command.ExecuteNonQuery();
-                        //left off here
-                        command.CommandText = @"UPDATE 
-                                                Records
-                                            SET Classification = SPLITSUBSTRING((SELECT Data
-                                                                                 FROM Fields f
-                                                                                 LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
-                                                                                 WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'a' " + whereRecordID + @"), ' ', 0)
-                                                                 ||
-                                                                 SPLITSUBSTRING((SELECT Data
-                                                                                 FROM Fields f
-                                                                                 LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
-                                                                                 WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'a' " + whereRecordID + @"), ' ', 1)
-                                            WHERE (Classification IS NULL OR Classification = '') AND SPLITCOUNT((SELECT Data
-                                                                                                                  FROM Fields f
-                                                                                                                  LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
-                                                                                                                  WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'a' " + whereRecordID + @"), ' ') > 2
-                                                                                                  AND (SELECT COUNT(*) 
-                                                                                                       FROM Fields f
-                                                                                                       LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
-                                                                                                       WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' AND s.Code = 'i') > 0";
+                    }
+
+                    if (tagNumber == null || tagNumber == "949")
+                    {
+                        command.CommandText = @"INSERT INTO TempUpdates
+                                                  SELECT f.RecordID, Data
+                                                  FROM Subfields
+                                                  LEFT OUTER JOIN Fields f on f.FieldID = Subfields.FieldID
+                                                  WHERE f.TagNumber = '949' and Code = 'a'" + whereRecordID + @")
+                                                        AND (SELECT COUNT(*) 
+                                                             FROM Fields f2
+                                                             LEFT OUTER JOIN Subfields s2 ON s2.FieldID = f2.FieldID
+                                                             WHERE f2.TagNumber = '949' AND s2.Code = 'i'" + whereRecordID + @") > 0;
+
+                                                UPDATE Records
+                                                SET Classification = (SELECT SPLITSUBSTRING(Data, ' ', 0) || ' ' || SPLITSUBSTRING(Data, ' ', 1) FROM TempUpdates
+                                                                      WHERE TempUpdates.RecordID = Records.RecordID)
+                                                WHERE Classification IS NULL AND RecordID IN (SELECT RecordID FROM TempUpdates); 
+
+                                                DELETE FROM TempUpdates;";
                         command.ExecuteNonQuery();
 
-                        command.CommandText = @"UPDATE 
-                                                Records
-                                            SET Classification = SPLITSUBSTRING((SELECT Data
-                                                                                 FROM Fields f
-                                                                                 LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
-                                                                                 WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'a' " + whereRecordID + @"), ' ', 0)
-                                            WHERE (Classification IS NULL OR Classification = '')";
+                        command.CommandText = @"INSERT INTO TempUpdates
+                                                  SELECT f.RecordID, Data
+                                                  FROM Subfields
+                                                  LEFT OUTER JOIN Fields f on f.FieldID = Subfields.FieldID
+                                                  WHERE f.TagNumber = '949' and Code = 'a'" + whereRecordID + @";
+
+                                                UPDATE Records
+                                                SET Classification = (SELECT SPLITSUBSTRING(Data, ' ', 0) FROM TempUpdates
+                                                                      WHERE TempUpdates.RecordID = Records.RecordID)
+                                                WHERE Classification IS NULL AND RecordID IN (SELECT RecordID FROM TempUpdates); 
+
+                                                DELETE FROM TempUpdates;"; 
                         command.ExecuteNonQuery();
 
-                        command.CommandText = @"UPDATE 
-                                                Records
-                                            SET Classification = SPLITSUBSTRING((SELECT Data
-                                                                                 FROM Fields f
-                                                                                 LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
-                                                                                 WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'b' " + whereRecordID + @"), ' ', 0)
-                                                                 ||
-                                                                 SPLITSUBSTRING((SELECT Data
-                                                                                 FROM Fields f
-                                                                                 LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
-                                                                                 WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'c' " + whereRecordID + @"), ' ', 0)
-                                            WHERE (Classification IS NULL OR Classification = '') AND SPLITSUBSTRING((SELECT Data
-                                                                                                                      FROM Fields f
-                                                                                                                      LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
-                                                                                                                      WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'b' " + whereRecordID + @"), ' ', 0) IS NOT NULL";
+                        command.CommandText = @"INSERT INTO TempUpdates
+                                                  SELECT SPLITSUBSTRING(s.Data, ' ', 0) || ' ' || SPLITSUBSTRING(s2.Data, ' ', 0), f.RecordID
+                                                  FROM Subfields s
+                                                  LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                  LEFT OUTER JOIN Subfields s2 on f.FieldID = s2.FieldID
+                                                  WHERE f.TagNumber = '949' and s.Code = 'b' and s2.Code = 'c'" + whereRecordID + @";
+
+                                                UPDATE Records
+                                                SET Classification = (SELECT Data FROM TempUpdates
+                                                                      WHERE TempUpdates.RecordID = Records.RecordID)
+                                                WHERE Classification IS NULL AND RecordID IN (SELECT RecordID FROM TempUpdates); 
+
+                                                DELETE FROM TempUpdates;";
                         command.ExecuteNonQuery();
 
-                        command.CommandText = @"UPDATE 
-                                                Records
-                                            SET Classification = SPLITSUBSTRING((SELECT Data
-                                                                                 FROM Fields f
-                                                                                 LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
-                                                                                 WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'c' " + whereRecordID + @"), ' ', 0)
-                                                                 ||
-                                                                 SPLITSUBSTRING((SELECT Data
-                                                                                 FROM Fields f
-                                                                                 LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
-                                                                                 WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'c' " + whereRecordID + @"), ' ', 1)
-                                            WHERE (Classification IS NULL OR Classification = '') AND SPLITCOUNT((SELECT Data
-                                                                                                                  FROM Fields f
-                                                                                                                  LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
-                                                                                                                  WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'c' " + whereRecordID + "), ' ') > 2";
+                        command.CommandText = @"INSERT INTO TempUpdates
+                                                  SELECT Data, f.RecordID
+                                                  FROM Subfields s
+                                                  LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                  WHERE f.TagNumber = '949' and s.Code = 'c' and SPLITCOUNT(s.Data, ' ', " + whereRecordID + @";
+
+                                                UPDATE Records
+                                                SET Classification = (SELECT SPLITSUBSTRING(Data, ' ', 0) || ' ' || SPLITSUBSTRING(Data, ' ', 1) FROM TempUpdates
+                                                                      WHERE TempUpdates.RecordID = Records.RecordID)
+                                                WHERE Classification IS NULL AND RecordID IN (SELECT RecordID FROM TempUpdates); 
+
+                                                DELETE FROM TempUpdates;"; 
                         command.ExecuteNonQuery();
 
-                        command.CommandText = @"UPDATE 
-                                                Records
-                                            SET Classification = SPLITSUBSTRING((SELECT Data
-                                                                                 FROM Fields f
-                                                                                 LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
-                                                                                 WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'c' " + whereRecordID + @"), ' ', 0)
-                                            WHERE (Classification IS NULL OR Classification = '')";
+                        command.CommandText = @"INSERT INTO TempUpdates
+                                                  SELECT Data, f.RecordID
+                                                  FROM Subfields s
+                                                  LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                  WHERE f.TagNumber = '949' and s.Code = 'c' " + whereRecordID + @";
+
+                                                UPDATE Records
+                                                SET Classification = (SELECT SPLITSUBSTRING(Data, ' ', 0) FROM TempUpdates
+                                                                      WHERE TempUpdates.RecordID = Records.RecordID)
+                                                WHERE Classification IS NULL AND RecordID IN (SELECT RecordID FROM TempUpdates); 
+
+                                                DELETE FROM TempUpdates;"; 
                         command.ExecuteNonQuery();
 
-                        command.CommandText = @"UPDATE 
-                                                Records
-                                            SET MainEntry = SPLITSUBSTRING((SELECT Data
-                                                                            FROM Fields f
-                                                                            LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
-                                                                            WHERE f.RecordID = Records.RecordID AND f.TagNumber = '852' and s.Code = 'h' " + whereRecordID + "), ' ', 1)";
+                        command.CommandText = @"INSERT INTO TempUpdates
+                                                  SELECT Data, f.RecordID
+                                                  FROM Subfields s
+                                                  LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                  WHERE f.TagNumber = '949' and s.Code = 'h' " + whereRecordID + @";
+
+                                                UPDATE Records
+                                                SET MainEntry = (SELECT SPLITSUBSTRING(Data, ' ', 1) FROM TempUpdates
+                                                                      WHERE TempUpdates.RecordID = Records.RecordID)
+                                                WHERE RecordID IN (SELECT RecordID FROM TempUpdates); 
+
+                                                DELETE FROM TempUpdates;"; 
                         command.ExecuteNonQuery();
 
-                        command.CommandText = @"UPDATE 
-                                                Records
-                                            SET MainEntry = SPLITSUBSTRING((SELECT Data
-                                                                            FROM Fields f
-                                                                            LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
-                                                                            WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'a' " + whereRecordID + @"), ' ', 2)
-                                            WHERE (MainEntry IS NULL OR MainEntry = '') AND SPLITCOUNT((SELECT Data
-                                                                                                        FROM Fields f
-                                                                                                        LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
-                                                                                                        WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'a' " + whereRecordID + "), ' ') > 2";
+                        command.CommandText = @"INSERT INTO TempUpdates
+                                                  SELECT Data, f.RecordID
+                                                  FROM Subfields s
+                                                  LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                  WHERE f.TagNumber = '949' and s.Code = 'a' AND SPLITCOUNT(s.Data, ' ') > 2" + whereRecordID + @";
+
+                                                UPDATE Records
+                                                SET MainEntry = (SELECT SPLITSUBSTRING(Data, ' ', 2) FROM TempUpdates
+                                                                      WHERE TempUpdates.RecordID = Records.RecordID)
+                                                WHERE MainEntry IS NULL AND RecordID IN (SELECT RecordID FROM TempUpdates); 
+
+                                                DELETE FROM TempUpdates;"; 
                         command.ExecuteNonQuery();
 
-                        command.CommandText = @"UPDATE 
-                                                Records
-                                            SET MainEntry = SPLITSUBSTRING((SELECT Data
-                                                                            FROM Fields f
-                                                                            LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
-                                                                            WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'a' " + whereRecordID + @"), ' ', 1)
-                                            WHERE (MainEntry IS NULL OR MainEntry = '')";
+                        command.CommandText = @"INSERT INTO TempUpdates
+                                                  SELECT Data, f.RecordID
+                                                  FROM Subfields s
+                                                  LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                  WHERE f.TagNumber = '949' and s.Code = 'a'" + whereRecordID + @";
+
+                                                UPDATE Records
+                                                SET MainEntry = (SELECT SPLITSUBSTRING(Data, ' ', 1) FROM TempUpdates
+                                                                      WHERE TempUpdates.RecordID = Records.RecordID)
+                                                WHERE MainEntry IS NULL AND RecordID IN (SELECT RecordID FROM TempUpdates); 
+
+                                                DELETE FROM TempUpdates;";
                         command.ExecuteNonQuery();
 
-                        command.CommandText = @"UPDATE 
-                                                Records
-                                            SET MainEntry = SPLITSUBSTRING((SELECT Data
-                                                                            FROM Fields f
-                                                                            LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
-                                                                            WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'c' " + whereRecordID + @"), ' ', 2)
-                                            WHERE (MainEntry IS NULL OR MainEntry = '') AND SPLITCOUNT((SELECT Data
-                                                                                                        FROM Fields f
-                                                                                                        LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
-                                                                                                        WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'c' " + whereRecordID + "), ' ') > 2";
+                        command.CommandText = @"INSERT INTO TempUpdates
+                                                  SELECT Data, f.RecordID
+                                                  FROM Subfields s
+                                                  LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                  WHERE f.TagNumber = '949' and s.Code = 'c' AND SPLITCOUNT(s.Data, ' ') > 2" + whereRecordID + @";
+
+                                                UPDATE Records
+                                                SET MainEntry = (SELECT SPLITSUBSTRING(Data, ' ', 2) FROM TempUpdates
+                                                                      WHERE TempUpdates.RecordID = Records.RecordID)
+                                                WHERE MainEntry IS NULL AND RecordID IN (SELECT RecordID FROM TempUpdates); 
+
+                                                DELETE FROM TempUpdates;"; 
                         command.ExecuteNonQuery();
 
-                        command.CommandText = @"UPDATE 
-                                                Records
-                                            SET MainEntry = SPLITSUBSTRING((SELECT Data
-                                                                            FROM Fields f
-                                                                            LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
-                                                                            WHERE f.RecordID = Records.RecordID AND f.TagNumber = '949' and s.Code = 'c' " + whereRecordID + @"), ' ', 1)
-                                            WHERE (MainEntry IS NULL OR MainEntry = '')";
+                        command.CommandText = @"INSERT INTO TempUpdates
+                                                  SELECT Data, f.RecordID
+                                                  FROM Subfields s
+                                                  LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                  WHERE f.TagNumber = '949' and s.Code = 'c'" + whereRecordID + @";
+
+                                                UPDATE Records
+                                                SET MainEntry = (SELECT SPLITSUBSTRING(Data, ' ', 1) FROM TempUpdates
+                                                                      WHERE TempUpdates.RecordID = Records.RecordID)
+                                                WHERE MainEntry IS NULL AND RecordID IN (SELECT RecordID FROM TempUpdates); 
+
+                                                DELETE FROM TempUpdates;";
                         command.ExecuteNonQuery();
                     }
 
-                    if (customFieldsForm.TagNumber1 != "")
+                    if (customFieldsForm.TagNumber1 != "" && (tagNumber == "customOnly" || tagNumber == customFieldsForm.TagNumber1))
                     {
                         if (customFieldsForm.Data1 != "")
                         {
-                            command.CommandText = @"UPDATE 
-                                                        Records
-                                                    SET Custom1 = REGEXMATCH((SELECT Data
-                                                                              FROM Fields f
-                                                                              LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
-                                                                              WHERE f.RecordID = Records.RecordID AND f.TagNumber = @TagNumber and s.Code = @Code " + whereRecordID + "), @Data)";
+                            command.CommandText = @"INSERT INTO TempUpdates
+                                                      SELECT Data, f.RecordID
+                                                      FROM Subfields s
+                                                      LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                      WHERE f.TagNumber = @TagNumber and s.Code = @Code" + whereRecordID + @";
+
+                                                    UPDATE Records
+                                                    SET Custom1 = (SELECT REGEXMATCH(Data, @Data) FROM TempUpdates
+                                                                          WHERE TempUpdates.RecordID = Records.RecordID)
+                                                    WHERE RecordID IN (SELECT RecordID FROM TempUpdates); 
+
+                                                    DELETE FROM TempUpdates;"; 
                             command.Parameters.Add("@TagNumber", DbType.String).Value = customFieldsForm.TagNumber1;
                             command.Parameters.Add("@Code", DbType.String).Value = customFieldsForm.Code1;
                             command.Parameters.Add("@Data", DbType.String).Value = customFieldsForm.Data1;
@@ -939,28 +1000,40 @@ namespace CSharp_MARC_Editor
                         }
                         else
                         {
-                            command.CommandText = @"UPDATE 
-                                                        Records
-                                                    SET Custom1 = (SELECT Data
-                                                                   FROM Fields f
-                                                                   LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
-                                                                   WHERE f.RecordID = Records.RecordID AND f.TagNumber = @TagNumber and s.Code = @Code " + whereRecordID + ")";
+                            command.CommandText = @"INSERT INTO TempUpdates
+                                                      SELECT Data, f.RecordID
+                                                      FROM Subfields s
+                                                      LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                      WHERE f.TagNumber = @TagNumber and s.Code = @Code" + whereRecordID + @";
+
+                                                    UPDATE Records
+                                                    SET Custom1 = (SELECT Data FROM TempUpdates
+                                                                        WHERE TempUpdates.RecordID = Records.RecordID)
+                                                    WHERE RecordID IN (SELECT RecordID FROM TempUpdates); 
+
+                                                    DELETE FROM TempUpdates;"; 
                             command.Parameters.Add("TagNumber", DbType.String).Value = customFieldsForm.TagNumber1;
                             command.Parameters.Add("Code", DbType.String).Value = customFieldsForm.Code1;
                             command.ExecuteNonQuery();
                         }
                     }
 
-                    if (customFieldsForm.TagNumber2 != "")
+                    if (customFieldsForm.TagNumber2 != "" && (tagNumber == "customOnly" || tagNumber == customFieldsForm.TagNumber2))
                     {
                         if (customFieldsForm.Data2 != "")
                         {
-                            command.CommandText = @"UPDATE 
-                                                        Records
-                                                    SET Custom2 = REGEXMATCH((SELECT Data
-                                                                              FROM Fields f
-                                                                              LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
-                                                                              WHERE f.RecordID = Records.RecordID AND f.TagNumber = @TagNumber and s.Code = @Code " + whereRecordID + "), @Data)";
+                            command.CommandText = @"INSERT INTO TempUpdates
+                                                      SELECT Data, f.RecordID
+                                                      FROM Subfields s
+                                                      LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                      WHERE f.TagNumber = @TagNumber and s.Code = @Code" + whereRecordID + @";
+
+                                                    UPDATE Records
+                                                    SET Custom2 = (SELECT REGEXMATCH(Data, @Data) FROM TempUpdates
+                                                                          WHERE TempUpdates.RecordID = Records.RecordID)
+                                                    WHERE RecordID IN (SELECT RecordID FROM TempUpdates); 
+
+                                                    DELETE FROM TempUpdates;"; 
                             command.Parameters.Add("@TagNumber", DbType.String).Value = customFieldsForm.TagNumber2;
                             command.Parameters.Add("@Code", DbType.String).Value = customFieldsForm.Code2;
                             command.Parameters.Add("@Data", DbType.String).Value = customFieldsForm.Data2;
@@ -968,28 +1041,40 @@ namespace CSharp_MARC_Editor
                         }
                         else
                         {
-                            command.CommandText = @"UPDATE 
-                                                        Records
-                                                    SET Custom2 = (SELECT Data
-                                                                   FROM Fields f
-                                                                   LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
-                                                                   WHERE f.RecordID = Records.RecordID AND f.TagNumber = @TagNumber and s.Code = @Code " + whereRecordID + ")";
+                            command.CommandText = @"INSERT INTO TempUpdates
+                                                      SELECT Data, f.RecordID
+                                                      FROM Subfields s
+                                                      LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                      WHERE f.TagNumber = @TagNumber and s.Code = @Code" + whereRecordID + @";
+
+                                                    UPDATE Records
+                                                    SET Custom2 = (SELECT Data FROM TempUpdates
+                                                                        WHERE TempUpdates.RecordID = Records.RecordID)
+                                                    WHERE RecordID IN (SELECT RecordID FROM TempUpdates); 
+
+                                                    DELETE FROM TempUpdates;"; 
                             command.Parameters.Add("TagNumber", DbType.String).Value = customFieldsForm.TagNumber2;
                             command.Parameters.Add("Code", DbType.String).Value = customFieldsForm.Code2;
                             command.ExecuteNonQuery();
                         }
                     }
 
-                    if (customFieldsForm.TagNumber3 != "")
+                    if (customFieldsForm.TagNumber3 != "" && (tagNumber == "customOnly" || tagNumber == customFieldsForm.TagNumber3))
                     {
                         if (customFieldsForm.Data3 != "")
                         {
-                            command.CommandText = @"UPDATE 
-                                                        Records
-                                                    SET Custom3 = REGEXMATCH((SELECT Data
-                                                                              FROM Fields f
-                                                                              LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
-                                                                              WHERE f.RecordID = Records.RecordID AND f.TagNumber = @TagNumber and s.Code = @Code " + whereRecordID + "), @Data)";
+                            command.CommandText = @"INSERT INTO TempUpdates
+                                                      SELECT Data, f.RecordID
+                                                      FROM Subfields s
+                                                      LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                      WHERE f.TagNumber = @TagNumber and s.Code = @Code" + whereRecordID + @";
+
+                                                    UPDATE Records
+                                                    SET Custom3 = (SELECT REGEXMATCH(Data, @Data) FROM TempUpdates
+                                                                          WHERE TempUpdates.RecordID = Records.RecordID)
+                                                    WHERE RecordID IN (SELECT RecordID FROM TempUpdates); 
+
+                                                    DELETE FROM TempUpdates;"; 
                             command.Parameters.Add("@TagNumber", DbType.String).Value = customFieldsForm.TagNumber3;
                             command.Parameters.Add("@Code", DbType.String).Value = customFieldsForm.Code3;
                             command.Parameters.Add("@Data", DbType.String).Value = customFieldsForm.Data3;
@@ -997,28 +1082,40 @@ namespace CSharp_MARC_Editor
                         }
                         else
                         {
-                            command.CommandText = @"UPDATE 
-                                                        Records
-                                                    SET Custom3 = (SELECT Data
-                                                                   FROM Fields f
-                                                                   LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
-                                                                   WHERE f.RecordID = Records.RecordID AND f.TagNumber = @TagNumber and s.Code = @Code " + whereRecordID + ")";
+                            command.CommandText = @"INSERT INTO TempUpdates
+                                                      SELECT Data, f.RecordID
+                                                      FROM Subfields s
+                                                      LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                      WHERE f.TagNumber = @TagNumber and s.Code = @Code" + whereRecordID + @";
+
+                                                    UPDATE Records
+                                                    SET Custom3 = (SELECT Data FROM TempUpdates
+                                                                        WHERE TempUpdates.RecordID = Records.RecordID)
+                                                    WHERE RecordID IN (SELECT RecordID FROM TempUpdates); 
+
+                                                    DELETE FROM TempUpdates;"; 
                             command.Parameters.Add("TagNumber", DbType.String).Value = customFieldsForm.TagNumber3;
                             command.Parameters.Add("Code", DbType.String).Value = customFieldsForm.Code3;
                             command.ExecuteNonQuery();
                         }
                     }
 
-                    if (customFieldsForm.TagNumber4 != "")
+                    if (customFieldsForm.TagNumber4 != "" && (tagNumber == "customOnly" || tagNumber == customFieldsForm.TagNumber4))
                     {
                         if (customFieldsForm.Data4 != "")
                         {
-                            command.CommandText = @"UPDATE 
-                                                        Records
-                                                    SET Custom4 = REGEXMATCH((SELECT Data
-                                                                              FROM Fields f
-                                                                              LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
-                                                                              WHERE f.RecordID = Records.RecordID AND f.TagNumber = @TagNumber and s.Code = @Code " + whereRecordID + "), @Data)";
+                            command.CommandText = @"INSERT INTO TempUpdates
+                                                      SELECT Data, f.RecordID
+                                                      FROM Subfields s
+                                                      LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                      WHERE f.TagNumber = @TagNumber and s.Code = @Code" + whereRecordID + @";
+
+                                                    UPDATE Records
+                                                    SET Custom4 = (SELECT REGEXMATCH(Data, @Data) FROM TempUpdates
+                                                                          WHERE TempUpdates.RecordID = Records.RecordID)
+                                                    WHERE RecordID IN (SELECT RecordID FROM TempUpdates); 
+
+                                                    DELETE FROM TempUpdates;"; 
                             command.Parameters.Add("@TagNumber", DbType.String).Value = customFieldsForm.TagNumber4;
                             command.Parameters.Add("@Code", DbType.String).Value = customFieldsForm.Code4;
                             command.Parameters.Add("@Data", DbType.String).Value = customFieldsForm.Data4;
@@ -1026,28 +1123,40 @@ namespace CSharp_MARC_Editor
                         }
                         else
                         {
-                            command.CommandText = @"UPDATE 
-                                                        Records
-                                                    SET Custom4 = (SELECT Data
-                                                                   FROM Fields f
-                                                                   LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
-                                                                   WHERE f.RecordID = Records.RecordID AND f.TagNumber = @TagNumber and s.Code = @Code " + whereRecordID + ")";
+                            command.CommandText = @"INSERT INTO TempUpdates
+                                                      SELECT Data, f.RecordID
+                                                      FROM Subfields s
+                                                      LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                      WHERE f.TagNumber = @TagNumber and s.Code = @Code" + whereRecordID + @";
+
+                                                    UPDATE Records
+                                                    SET Custom4 = (SELECT Data FROM TempUpdates
+                                                                        WHERE TempUpdates.RecordID = Records.RecordID)
+                                                    WHERE RecordID IN (SELECT RecordID FROM TempUpdates); 
+
+                                                    DELETE FROM TempUpdates;"; 
                             command.Parameters.Add("TagNumber", DbType.String).Value = customFieldsForm.TagNumber4;
                             command.Parameters.Add("Code", DbType.String).Value = customFieldsForm.Code4;
                             command.ExecuteNonQuery();
                         }
                     }
 
-                    if (customFieldsForm.TagNumber5 != "")
+                    if (customFieldsForm.TagNumber5 != "" && (tagNumber == "customOnly" || tagNumber == customFieldsForm.TagNumber5))
                     {
                         if (customFieldsForm.Data5 != "")
                         {
-                            command.CommandText = @"UPDATE 
-                                                        Records
-                                                    SET Custom5 = REGEXMATCH((SELECT Data
-                                                                              FROM Fields f
-                                                                              LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
-                                                                              WHERE f.RecordID = Records.RecordID AND f.TagNumber = @TagNumber and s.Code = @Code " + whereRecordID + "), @Data)";
+                            command.CommandText = @"INSERT INTO TempUpdates
+                                                      SELECT Data, f.RecordID
+                                                      FROM Subfields s
+                                                      LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                      WHERE f.TagNumber = @TagNumber and s.Code = @Code" + whereRecordID + @");
+
+                                                    UPDATE Records
+                                                    SET Custom5 = (SELECT REGEXMATCH(Data, @Data) FROM TempUpdates
+                                                                          WHERE TempUpdates.RecordID = Records.RecordID)
+                                                    WHERE RecordID IN (SELECT RecordID FROM TempUpdates); 
+
+                                                    DELETE FROM TempUpdates;"; 
                             command.Parameters.Add("@TagNumber", DbType.String).Value = customFieldsForm.TagNumber5;
                             command.Parameters.Add("@Code", DbType.String).Value = customFieldsForm.Code5;
                             command.Parameters.Add("@Data", DbType.String).Value = customFieldsForm.Data5;
@@ -1055,12 +1164,18 @@ namespace CSharp_MARC_Editor
                         }
                         else
                         {
-                            command.CommandText = @"UPDATE 
-                                                        Records
-                                                    SET Custom5 = (prag Data
-                                                                   FROM Fields f
-                                                                   LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID
-                                                                   WHERE f.RecordID = Records.RecordID AND f.TagNumber = @TagNumber and s.Code = @Code " + whereRecordID + ")";
+                            command.CommandText = @"INSERT INTO TempUpdates
+                                                      SELECT Data, f.RecordID
+                                                      FROM Subfields s
+                                                      LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                      WHERE f.TagNumber = @TagNumber and s.Code = @Code" + whereRecordID + @");
+
+                                                    UPDATE Records
+                                                    SET Custom5 = (SELECT Data FROM TempUpdates
+                                                                        WHERE TempUpdates.RecordID = Records.RecordID)
+                                                    WHERE RecordID IN (SELECT RecordID FROM TempUpdates); 
+
+                                                    DELETE FROM TempUpdates;"; 
                             command.Parameters.Add("TagNumber", DbType.String).Value = customFieldsForm.TagNumber5;
                             command.Parameters.Add("Code", DbType.String).Value = customFieldsForm.Code5;
                             command.ExecuteNonQuery();
@@ -2994,12 +3109,13 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="DoWorkEventArgs"/> instance containing the event data.</param>
         private void rebuildBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
+            rebuildBackgroundWorker.ReportProgress(0);
             bool customOnly = false;
             
             if (e.Argument != null && e.Argument.GetType() == typeof(bool))
                 customOnly = (bool)e.Argument;
 
-            RebuildRecordsPreviewInformation(null, customOnly);
+            RebuildRecordsPreviewInformation(null, "customOnly");
         }
 
         /// <summary>
