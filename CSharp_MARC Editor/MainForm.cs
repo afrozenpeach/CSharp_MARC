@@ -411,7 +411,8 @@ namespace CSharp_MARC_Editor
             }
 
             LoadPreview(recordID);
-            splitContainer.Panel2.Enabled = true;
+            fieldsDataGridView.Enabled = true;
+            subfieldsDataGridView.Enabled = true;
         }
 
         /// <summary>
@@ -1641,12 +1642,16 @@ namespace CSharp_MARC_Editor
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 Console.WriteLine("Start Import: " + DateTime.Now.ToString());
-                this.Enabled = false;
+                recordsDataGridView.Enabled = false;
+                subfieldsDataGridView.Enabled = false;
+                fieldsDataGridView.Enabled = false;
+                menuStrip.Enabled = false;
                 toolStripProgressBar.Style = ProgressBarStyle.Marquee;
                 toolStripProgressBar.MarqueeAnimationSpeed = 30;
                 toolStripProgressBar.Enabled = true;
                 toolStripProgressBar.Visible = true;
                 progressToolStripStatusLabel.Visible = true;
+                cancelButtonToolStripStatusLabel.Visible = true;
                 recordsDataGridView.SuspendLayout();
                 recordsDataGridView.DataSource = null;
                 importingBackgroundWorker.RunWorkerAsync(openFileDialog.FileName);
@@ -1686,6 +1691,12 @@ namespace CSharp_MARC_Editor
 
                     foreach (Record record in recordEnumerator)
                     {
+                        if (importingBackgroundWorker.CancellationPending)
+                        {
+                            e.Cancel = true;
+                            cancelButtonToolStripStatusLabel.Visible = false;
+                            break;
+                        }
                         DataRow newRow = GetRecordRow(record);
 
                         command.CommandText = "INSERT INTO Records (DateAdded, DateChanged, Author, Title, CopyrightDate, Barcode, Classification, MainEntry, Custom1, Custom2, Custom3, Custom4, Custom5, ImportErrors) VALUES (@DateAdded, @DateChanged, @Author, @Title, @CopyrightDate, @Barcode, @Classification, @MainEntry, @Custom1, @Custom2, @Custom3, @Custom4, @CUstom5, @ImportErrors)";
@@ -1792,6 +1803,16 @@ namespace CSharp_MARC_Editor
         }
 
         /// <summary>
+        /// Handles the Click event of the cancelButtonToolStripStatusLabel control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void cancelButtonToolStripStatusLabel_Click(object sender, EventArgs e)
+        {
+            importingBackgroundWorker.CancelAsync();
+        }
+
+        /// <summary>
         /// Handles the RunWorkerCompleted event of the loadingBackgroundWorker control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
@@ -1822,11 +1843,15 @@ namespace CSharp_MARC_Editor
             toolStripProgressBar.Visible = false;
             toolStripProgressBar.Enabled = false;
             progressToolStripStatusLabel.Visible = false;
+            cancelButtonToolStripStatusLabel.Visible = false;
             toolStripProgressBar.MarqueeAnimationSpeed = 0;
             recordsDataGridView.DataSource = marcDataSet.Tables["Records"];
             recordsDataGridView.ResumeLayout();
             loading = false;
-            this.Enabled = true;
+            recordsDataGridView.Enabled = true;
+            subfieldsDataGridView.Enabled = true;
+            fieldsDataGridView.Enabled = true;
+            menuStrip.Enabled = true;
             Console.WriteLine("End Import: " + DateTime.Now.ToString());
         }
 

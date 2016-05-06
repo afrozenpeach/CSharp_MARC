@@ -134,6 +134,7 @@ namespace CSharp_MARC_Editor
             this.printDocument = new System.Drawing.Printing.PrintDocument();
             this.rebuildBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.loadingBackgroundWorker = new System.ComponentModel.BackgroundWorker();
+            this.cancelButtonToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -167,7 +168,6 @@ namespace CSharp_MARC_Editor
             this.splitContainer.Panel2.Controls.Add(this.previewTextBox);
             this.splitContainer.Panel2.Controls.Add(this.subfieldsDataGridView);
             this.splitContainer.Panel2.Controls.Add(this.fieldsDataGridView);
-            this.splitContainer.Panel2.Enabled = false;
             this.splitContainer.Size = new System.Drawing.Size(984, 613);
             this.splitContainer.SplitterDistance = 150;
             this.splitContainer.SplitterWidth = 15;
@@ -336,7 +336,8 @@ namespace CSharp_MARC_Editor
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripProgressBar,
             this.progressToolStripStatusLabel,
-            this.helptextToolStripStatusLabel});
+            this.helptextToolStripStatusLabel,
+            this.cancelButtonToolStripStatusLabel});
             this.statusStrip.Location = new System.Drawing.Point(0, 426);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Size = new System.Drawing.Size(984, 22);
@@ -388,6 +389,7 @@ namespace CSharp_MARC_Editor
             this.dataDataGridViewTextBoxColumn});
             this.subfieldsDataGridView.DataMember = "Subfields";
             this.subfieldsDataGridView.DataSource = this.marcDataSet;
+            this.subfieldsDataGridView.Enabled = false;
             this.subfieldsDataGridView.Location = new System.Drawing.Point(211, 3);
             this.subfieldsDataGridView.MultiSelect = false;
             this.subfieldsDataGridView.Name = "subfieldsDataGridView";
@@ -448,6 +450,7 @@ namespace CSharp_MARC_Editor
             this.controlDataDataGridViewTextBoxColumn});
             this.fieldsDataGridView.DataMember = "Fields";
             this.fieldsDataGridView.DataSource = this.marcDataSet;
+            this.fieldsDataGridView.Enabled = false;
             this.fieldsDataGridView.Location = new System.Drawing.Point(3, 3);
             this.fieldsDataGridView.MultiSelect = false;
             this.fieldsDataGridView.Name = "fieldsDataGridView";
@@ -839,6 +842,15 @@ namespace CSharp_MARC_Editor
             this.loadingBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.loadingBackgroundWorker_DoWork);
             this.loadingBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.loadingBackgroundWorker_RunWorkerCompleted);
             // 
+            // cancelButtonToolStripStatusLabel
+            // 
+            this.cancelButtonToolStripStatusLabel.BackColor = System.Drawing.Color.LightSalmon;
+            this.cancelButtonToolStripStatusLabel.Name = "cancelButtonToolStripStatusLabel";
+            this.cancelButtonToolStripStatusLabel.Size = new System.Drawing.Size(43, 17);
+            this.cancelButtonToolStripStatusLabel.Text = "Cancel";
+            this.cancelButtonToolStripStatusLabel.Visible = false;
+            this.cancelButtonToolStripStatusLabel.Click += new System.EventHandler(this.cancelButtonToolStripStatusLabel_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -950,6 +962,7 @@ namespace CSharp_MARC_Editor
         private System.Drawing.Printing.PrintDocument printDocument;
         private System.ComponentModel.BackgroundWorker rebuildBackgroundWorker;
         private System.ComponentModel.BackgroundWorker loadingBackgroundWorker;
+        private System.Windows.Forms.ToolStripStatusLabel cancelButtonToolStripStatusLabel;
 
     }
 }
