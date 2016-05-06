@@ -53,6 +53,11 @@
  * @license   http://www.gnu.org/licenses/gpl-3.0.html  GPL License 3
  */ 
  
+2016-05-05 Changes:
+
+More rebuilding improvements
+Fix issue with not showing changes made to fields in the records preview grid
+
 2016-05-04 Changes:
 
 Speed up importing

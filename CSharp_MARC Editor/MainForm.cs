@@ -641,13 +641,34 @@ namespace CSharp_MARC_Editor
                             command.CommandText = "UPDATE Records SET Custom1 = null, Custom2 = null, Custom3 = null, Custom4 = null, Custom5 = null";
                             break;
                         case "100":
-                            break;
                         case "245":
+                            command.CommandText = "UPDATE Records SET Author = null, Title = null";
+                            break;
+                        case "260":
+                            command.CommandText = "UPDATE Records SET CopyrightDate = null";
+                            break;
+                        case "264":
+                            command.CommandText = "UPDATE Records SET CopyrightDate = null";
+                            break;
+                        case "852":
+                        case "949":
+                            command.CommandText = "UPDATE Records SET Classification = null, MainEntry = null, Barcode = null";
                             break;
                         default:
-                            command.CommandText = "UPDATE Records SET Author = null, Title = null, CopyrightDate = null, Barcode = null, Classification = null, MainEntry = null, Custom1 = null, Custom2 = null, Custom3 = null, Custom4 = null, Custom5 = null";
+                            if (customFieldsForm.TagNumber1 == tagNumber)
+                                command.CommandText = "UPDATE Records SET Custom1 = null";
+                            else if (customFieldsForm.TagNumber2 == tagNumber)
+                                command.CommandText = "UPDATE Records SET Custom2 = null";
+                            else if (customFieldsForm.TagNumber3 == tagNumber)
+                                command.CommandText = "UPDATE Records SET Custom3 = null";
+                            else if (customFieldsForm.TagNumber4 == tagNumber)
+                                command.CommandText = "UPDATE Records SET Custom4 = null";
+                            else if (customFieldsForm.TagNumber5 == tagNumber)
+                                command.CommandText = "UPDATE Records SET Custom5 = null";
+                            else
+                                command.CommandText = "UPDATE Records SET Author = null, Title = null, CopyrightDate = null, Barcode = null, Classification = null, MainEntry = null, Custom1 = null, Custom2 = null, Custom3 = null, Custom4 = null, Custom5 = null";
                             break;
-                    }                        
+                    }
                     
                     if (recordID != null)
                         command.CommandText += " WHERE RecordID = " + recordID;
@@ -683,10 +704,7 @@ namespace CSharp_MARC_Editor
 
                                                 DELETE FROM TempUpdates;";
                         command.ExecuteNonQuery();
-                    }
 
-                    if (tagNumber == null || tagNumber == "245")
-                    {
                         command.CommandText = @"INSERT INTO TempUpdates
                                                   SELECT f.RecordID, Data
                                                   FROM Subfields
@@ -1269,6 +1287,44 @@ namespace CSharp_MARC_Editor
                             command.Parameters.Add("@CustomData5", DbType.String).Value = customFieldsForm.Data5;
 
                             command.ExecuteNonQuery();
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Reloads the record row.
+        /// </summary>
+        /// <param name="row">The row.</param>
+        private void ReloadRecordRow(DataGridViewRow row)
+        {
+            if (startEdit)
+            {
+                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                {
+                    connection.Open();
+
+                    using (SQLiteCommand command = new SQLiteCommand("SELECT * FROM Records WHERE RecordID = @RecordID", connection))
+                    {
+                        command.Parameters.Add("@RecordID", DbType.Int32).Value = row.Cells[0].Value;
+                        using (SQLiteDataReader reader = command.ExecuteReader())
+                        {
+                            reader.Read();
+                            row.Cells[0].Value = reader[0];
+                            row.Cells[1].Value = reader[1];
+                            row.Cells[2].Value = reader[2];
+                            row.Cells[3].Value = reader[3];
+                            row.Cells[4].Value = reader[4];
+                            row.Cells[5].Value = reader[5];
+                            row.Cells[6].Value = reader[6];
+                            row.Cells[7].Value = reader[7];
+                            row.Cells[8].Value = reader[8];
+                            row.Cells[9].Value = reader[9];
+                            row.Cells[10].Value = reader[10];
+                            row.Cells[11].Value = reader[11];
+                            row.Cells[12].Value = reader[12];
+                            row.Cells[13].Value = reader[13];
                         }
                     }
                 }
@@ -2248,7 +2304,7 @@ namespace CSharp_MARC_Editor
                         }
                     }
 
-                    RebuildRecordsPreviewInformation(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()));
+                    RebuildRecordsPreviewInformation(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()), e.FormattedValue.ToString());
                 }
             }
             catch (Exception ex)
@@ -2337,7 +2393,7 @@ namespace CSharp_MARC_Editor
                         }
                     }
 
-                    RebuildRecordsPreviewInformation(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()));
+                    RebuildRecordsPreviewInformation(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()), fieldsDataGridView.SelectedCells[0].OwningRow.Cells[2].Value.ToString());
                 }
             }
             catch (Exception ex)
@@ -2412,6 +2468,9 @@ namespace CSharp_MARC_Editor
                 reloadFields = false;
                 recordsDataGridView_CellClick(sender, new DataGridViewCellEventArgs(recordsDataGridView.SelectedCells[0].ColumnIndex, recordsDataGridView.SelectedCells[0].RowIndex));
             }
+
+            if (recordsDataGridView.SelectedCells.Count > 0)
+                ReloadRecordRow(recordsDataGridView.SelectedCells[0].OwningRow);
 
             startEdit = false;
             subfieldsDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].ErrorText = "";
