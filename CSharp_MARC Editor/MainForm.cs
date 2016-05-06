@@ -2520,10 +2520,8 @@ namespace CSharp_MARC_Editor
                 using (SQLiteCommand command = new SQLiteCommand(query, connection))
                 {
                     command.ExecuteNonQuery();
-                    int recordID = (int)connection.LastInsertRowId;
 
                     this.OnLoad(new EventArgs());
-                    recordsDataGridView.Rows[recordsDataGridView.Rows.Count - 1].Cells[0].Selected = true;
                 }
             }
         }
