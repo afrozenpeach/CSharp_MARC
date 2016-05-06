@@ -886,7 +886,7 @@ namespace CSharp_MARC_Editor
                         command.ExecuteNonQuery();
 
                         command.CommandText = @"INSERT INTO TempUpdates
-                                                  SELECT SPLITSUBSTRING(s.Data, ' ', 0) || ' ' || SPLITSUBSTRING(s2.Data, ' ', 0), f.RecordID
+                                                  SELECT f.RecordID, SPLITSUBSTRING(s.Data, ' ', 0) || ' ' || SPLITSUBSTRING(s2.Data, ' ', 0)
                                                   FROM Subfields s
                                                   LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
                                                   LEFT OUTER JOIN Subfields s2 on f.FieldID = s2.FieldID
@@ -901,7 +901,7 @@ namespace CSharp_MARC_Editor
                         command.ExecuteNonQuery();
 
                         command.CommandText = @"INSERT INTO TempUpdates
-                                                  SELECT Data, f.RecordID
+                                                  SELECT f.RecordID, Data
                                                   FROM Subfields s
                                                   LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
                                                   WHERE f.TagNumber = '949' and s.Code = 'c' and SPLITCOUNT(s.Data, ' ', " + whereRecordID + @";
@@ -915,7 +915,7 @@ namespace CSharp_MARC_Editor
                         command.ExecuteNonQuery();
 
                         command.CommandText = @"INSERT INTO TempUpdates
-                                                  SELECT Data, f.RecordID
+                                                  SELECT f.RecordID, Data
                                                   FROM Subfields s
                                                   LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
                                                   WHERE f.TagNumber = '949' and s.Code = 'c' " + whereRecordID + @";
@@ -929,7 +929,7 @@ namespace CSharp_MARC_Editor
                         command.ExecuteNonQuery();
 
                         command.CommandText = @"INSERT INTO TempUpdates
-                                                  SELECT Data, f.RecordID
+                                                  SELECT f.RecordID, Data
                                                   FROM Subfields s
                                                   LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
                                                   WHERE f.TagNumber = '949' and s.Code = 'h' " + whereRecordID + @";
@@ -943,7 +943,7 @@ namespace CSharp_MARC_Editor
                         command.ExecuteNonQuery();
 
                         command.CommandText = @"INSERT INTO TempUpdates
-                                                  SELECT Data, f.RecordID
+                                                  SELECT f.RecordID, Data
                                                   FROM Subfields s
                                                   LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
                                                   WHERE f.TagNumber = '949' and s.Code = 'a' AND SPLITCOUNT(s.Data, ' ') > 2" + whereRecordID + @";
@@ -957,7 +957,7 @@ namespace CSharp_MARC_Editor
                         command.ExecuteNonQuery();
 
                         command.CommandText = @"INSERT INTO TempUpdates
-                                                  SELECT Data, f.RecordID
+                                                  SELECT f.RecordID, Data
                                                   FROM Subfields s
                                                   LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
                                                   WHERE f.TagNumber = '949' and s.Code = 'a'" + whereRecordID + @";
@@ -971,7 +971,7 @@ namespace CSharp_MARC_Editor
                         command.ExecuteNonQuery();
 
                         command.CommandText = @"INSERT INTO TempUpdates
-                                                  SELECT Data, f.RecordID
+                                                  SELECT f.RecordID, Data
                                                   FROM Subfields s
                                                   LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
                                                   WHERE f.TagNumber = '949' and s.Code = 'c' AND SPLITCOUNT(s.Data, ' ') > 2" + whereRecordID + @";
@@ -985,7 +985,7 @@ namespace CSharp_MARC_Editor
                         command.ExecuteNonQuery();
 
                         command.CommandText = @"INSERT INTO TempUpdates
-                                                  SELECT Data, f.RecordID
+                                                  SELECT f.RecordID, Data
                                                   FROM Subfields s
                                                   LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
                                                   WHERE f.TagNumber = '949' and s.Code = 'c'" + whereRecordID + @";
@@ -1004,17 +1004,17 @@ namespace CSharp_MARC_Editor
                         if (customFieldsForm.Data1 != "")
                         {
                             command.CommandText = @"INSERT INTO TempUpdates
-                                                      SELECT Data, f.RecordID
+                                                      SELECT f.RecordID, REGEXMATCH(Data, @Data)
                                                       FROM Subfields s
                                                       LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
                                                       WHERE f.TagNumber = @TagNumber and s.Code = @Code" + whereRecordID + @";
 
                                                     UPDATE Records
-                                                    SET Custom1 = (SELECT REGEXMATCH(Data, @Data) FROM TempUpdates
+                                                    SET Custom1 = (SELECT Data FROM TempUpdates
                                                                           WHERE TempUpdates.RecordID = Records.RecordID)
                                                     WHERE RecordID IN (SELECT RecordID FROM TempUpdates); 
 
-                                                    DELETE FROM TempUpdates;"; 
+                                                    DELETE FROM TempUpdates;";
                             command.Parameters.Add("@TagNumber", DbType.String).Value = customFieldsForm.TagNumber1;
                             command.Parameters.Add("@Code", DbType.String).Value = customFieldsForm.Code1;
                             command.Parameters.Add("@Data", DbType.String).Value = customFieldsForm.Data1;
@@ -1023,7 +1023,7 @@ namespace CSharp_MARC_Editor
                         else
                         {
                             command.CommandText = @"INSERT INTO TempUpdates
-                                                      SELECT Data, f.RecordID
+                                                      SELECT f.RecordID, Data
                                                       FROM Subfields s
                                                       LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
                                                       WHERE f.TagNumber = @TagNumber and s.Code = @Code" + whereRecordID + @";
@@ -1045,13 +1045,13 @@ namespace CSharp_MARC_Editor
                         if (customFieldsForm.Data2 != "")
                         {
                             command.CommandText = @"INSERT INTO TempUpdates
-                                                      SELECT Data, f.RecordID
+                                                      SELECT f.RecordID, REGEXMATCH(Data, @Data)
                                                       FROM Subfields s
                                                       LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
                                                       WHERE f.TagNumber = @TagNumber and s.Code = @Code" + whereRecordID + @";
 
                                                     UPDATE Records
-                                                    SET Custom2 = (SELECT REGEXMATCH(Data, @Data) FROM TempUpdates
+                                                    SET Custom2 = (SELECT Data FROM TempUpdates
                                                                           WHERE TempUpdates.RecordID = Records.RecordID)
                                                     WHERE RecordID IN (SELECT RecordID FROM TempUpdates); 
 
@@ -1064,7 +1064,7 @@ namespace CSharp_MARC_Editor
                         else
                         {
                             command.CommandText = @"INSERT INTO TempUpdates
-                                                      SELECT Data, f.RecordID
+                                                      SELECT f.RecordID, Data
                                                       FROM Subfields s
                                                       LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
                                                       WHERE f.TagNumber = @TagNumber and s.Code = @Code" + whereRecordID + @";
@@ -1086,13 +1086,13 @@ namespace CSharp_MARC_Editor
                         if (customFieldsForm.Data3 != "")
                         {
                             command.CommandText = @"INSERT INTO TempUpdates
-                                                      SELECT Data, f.RecordID
+                                                      SELECT f.RecordID, REGEXMATCH(Data, @Data)
                                                       FROM Subfields s
                                                       LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
                                                       WHERE f.TagNumber = @TagNumber and s.Code = @Code" + whereRecordID + @";
 
                                                     UPDATE Records
-                                                    SET Custom3 = (SELECT REGEXMATCH(Data, @Data) FROM TempUpdates
+                                                    SET Custom3 = (SELECT Data FROM TempUpdates
                                                                           WHERE TempUpdates.RecordID = Records.RecordID)
                                                     WHERE RecordID IN (SELECT RecordID FROM TempUpdates); 
 
@@ -1105,7 +1105,7 @@ namespace CSharp_MARC_Editor
                         else
                         {
                             command.CommandText = @"INSERT INTO TempUpdates
-                                                      SELECT Data, f.RecordID
+                                                      SELECT f.RecordID, Data
                                                       FROM Subfields s
                                                       LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
                                                       WHERE f.TagNumber = @TagNumber and s.Code = @Code" + whereRecordID + @";
@@ -1127,13 +1127,13 @@ namespace CSharp_MARC_Editor
                         if (customFieldsForm.Data4 != "")
                         {
                             command.CommandText = @"INSERT INTO TempUpdates
-                                                      SELECT Data, f.RecordID
+                                                      SELECT f.RecordID, REGEXMATCH(Data, @Data)
                                                       FROM Subfields s
                                                       LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
                                                       WHERE f.TagNumber = @TagNumber and s.Code = @Code" + whereRecordID + @";
 
                                                     UPDATE Records
-                                                    SET Custom4 = (SELECT REGEXMATCH(Data, @Data) FROM TempUpdates
+                                                    SET Custom4 = (SELECT Data FROM TempUpdates
                                                                           WHERE TempUpdates.RecordID = Records.RecordID)
                                                     WHERE RecordID IN (SELECT RecordID FROM TempUpdates); 
 
@@ -1146,7 +1146,7 @@ namespace CSharp_MARC_Editor
                         else
                         {
                             command.CommandText = @"INSERT INTO TempUpdates
-                                                      SELECT Data, f.RecordID
+                                                      SELECT f.RecordID, Data
                                                       FROM Subfields s
                                                       LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
                                                       WHERE f.TagNumber = @TagNumber and s.Code = @Code" + whereRecordID + @";
@@ -1168,13 +1168,13 @@ namespace CSharp_MARC_Editor
                         if (customFieldsForm.Data5 != "")
                         {
                             command.CommandText = @"INSERT INTO TempUpdates
-                                                      SELECT Data, f.RecordID
+                                                      SELECT f.RecordID, REGEXMATCH(Data, @Data)
                                                       FROM Subfields s
                                                       LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
-                                                      WHERE f.TagNumber = @TagNumber and s.Code = @Code" + whereRecordID + @");
+                                                      WHERE f.TagNumber = @TagNumber and s.Code = @Code" + whereRecordID + @";
 
                                                     UPDATE Records
-                                                    SET Custom5 = (SELECT REGEXMATCH(Data, @Data) FROM TempUpdates
+                                                    SET Custom5 = (SELECT Data FROM TempUpdates
                                                                           WHERE TempUpdates.RecordID = Records.RecordID)
                                                     WHERE RecordID IN (SELECT RecordID FROM TempUpdates); 
 
@@ -1187,10 +1187,10 @@ namespace CSharp_MARC_Editor
                         else
                         {
                             command.CommandText = @"INSERT INTO TempUpdates
-                                                      SELECT Data, f.RecordID
+                                                      SELECT f.RecordID, Data
                                                       FROM Subfields s
                                                       LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
-                                                      WHERE f.TagNumber = @TagNumber and s.Code = @Code" + whereRecordID + @");
+                                                      WHERE f.TagNumber = @TagNumber and s.Code = @Code" + whereRecordID + @";
 
                                                     UPDATE Records
                                                     SET Custom5 = (SELECT Data FROM TempUpdates
@@ -1509,7 +1509,6 @@ namespace CSharp_MARC_Editor
                 marcDataSet.Tables["Fields"].Rows.Clear();
                 marcDataSet.Tables["Subfields"].Rows.Clear();
 
-                //MessageBox.Show((Convert.ToDateTime("4/19/2016 7:09:06 PM") - Convert.ToDateTime("4/19/2016 6:13:04 PM")).TotalSeconds.ToString());
                 using (SQLiteConnection connection = new SQLiteConnection(connectionString))
                 {
                     connection.Open();
