@@ -60,6 +60,7 @@ namespace CSharp_MARC_Editor
         private CustomFieldsForm customFieldsForm = new CustomFieldsForm();
         private List<string> linesToPrint;
         private Exception errorLoading = null;
+        int? rebuildingID = null;
 
         private const char START_OF_HEADING = '\x01';
         private const char NEW_PAGE = '\xFF';
@@ -665,15 +666,18 @@ namespace CSharp_MARC_Editor
                                 command.CommandText = "UPDATE Records SET Custom4 = null";
                             else if (customFieldsForm.TagNumber5 == tagNumber)
                                 command.CommandText = "UPDATE Records SET Custom5 = null";
-                            else
+                            else if (tagNumber == null)
                                 command.CommandText = "UPDATE Records SET Author = null, Title = null, CopyrightDate = null, Barcode = null, Classification = null, MainEntry = null, Custom1 = null, Custom2 = null, Custom3 = null, Custom4 = null, Custom5 = null";
                             break;
                     }
-                    
-                    if (recordID != null)
-                        command.CommandText += " WHERE RecordID = " + recordID;
 
-                    command.ExecuteNonQuery();
+                    if (command.CommandText != null)
+                    {
+                        if (recordID != null)
+                            command.CommandText += " WHERE RecordID = " + recordID;
+
+                        command.ExecuteNonQuery();
+                    }
 
                     if (tagNumber == null || tagNumber == "100" || tagNumber == "245")
                     {
@@ -1592,7 +1596,7 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="DataGridViewCellEventArgs"/> instance containing the event data.</param>
         private void recordsDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0)
+            if (e.RowIndex >= 0 && recordsDataGridView.Rows.Count > 0)
             {
                 DataGridViewRow rowClicked = recordsDataGridView.Rows[e.RowIndex];
                 if (!rowClicked.IsNewRow)
@@ -2324,7 +2328,7 @@ namespace CSharp_MARC_Editor
         private void subfieldsDataGridView_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
         {
             try
-            {
+            {                
                 if (!subfieldsDataGridView.Rows[e.RowIndex].IsNewRow && startEdit)
                 {
                     if (subfieldsDataGridView.Rows[e.RowIndex].Cells[2].Visible)
@@ -2392,8 +2396,6 @@ namespace CSharp_MARC_Editor
                             }
                         }
                     }
-
-                    RebuildRecordsPreviewInformation(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()), fieldsDataGridView.SelectedCells[0].OwningRow.Cells[2].Value.ToString());
                 }
             }
             catch (Exception ex)
@@ -2452,8 +2454,18 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="DataGridViewCellEventArgs"/> instance containing the event data.</param>
         private void fieldsDataGridView_CellValidated(object sender, DataGridViewCellEventArgs e)
         {
-            startEdit = false;
             fieldsDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].ErrorText = "";
+            startEdit = false;
+
+            this.Enabled = false;
+            toolStripProgressBar.Style = ProgressBarStyle.Marquee;
+            toolStripProgressBar.MarqueeAnimationSpeed = 30;
+            toolStripProgressBar.Enabled = true;
+            toolStripProgressBar.Visible = true;
+            progressToolStripStatusLabel.Visible = true;
+
+            object[] parameters = {Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()), fieldsDataGridView.SelectedCells[0].OwningRow.Cells[2].Value.ToString()};
+            rebuildBackgroundWorker.RunWorkerAsync(parameters);            
         }
 
         /// <summary>
@@ -2463,17 +2475,23 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="DataGridViewCellEventArgs"/> instance containing the event data.</param>
         private void subfieldsDataGridView_CellValidated(object sender, DataGridViewCellEventArgs e)
         {
-            if (reloadFields && !subfieldsDataGridView.Rows[e.RowIndex].Cells[2].Visible)
-            {
-                reloadFields = false;
-                recordsDataGridView_CellClick(sender, new DataGridViewCellEventArgs(recordsDataGridView.SelectedCells[0].ColumnIndex, recordsDataGridView.SelectedCells[0].RowIndex));
-            }
-
-            if (recordsDataGridView.SelectedCells.Count > 0)
-                ReloadRecordRow(recordsDataGridView.SelectedCells[0].OwningRow);
-
             startEdit = false;
             subfieldsDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].ErrorText = "";
+
+            startEdit = false;
+
+            if (reloadFields && !subfieldsDataGridView.Rows[e.RowIndex].Cells[2].Visible && recordsDataGridView.SelectedCells.Count > 0)
+            {
+                this.Enabled = false;
+                toolStripProgressBar.Style = ProgressBarStyle.Marquee;
+                toolStripProgressBar.MarqueeAnimationSpeed = 30;
+                toolStripProgressBar.Enabled = true;
+                toolStripProgressBar.Visible = true;
+                progressToolStripStatusLabel.Visible = true;
+                object[] parameters = { Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()), fieldsDataGridView.SelectedCells[0].OwningRow.Cells[2].Value.ToString() };
+                rebuildBackgroundWorker.RunWorkerAsync(parameters);
+                reloadFields = false;
+            }
         }
 
         /// <summary>
@@ -2485,7 +2503,9 @@ namespace CSharp_MARC_Editor
         {
             startEdit = false;
             fieldsDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].ErrorText = "";
-            LoadPreview(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()));
+            
+            if (recordsDataGridView.SelectedCells.Count > 0)
+                LoadPreview(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()));
         }
 
         /// <summary>
@@ -2497,7 +2517,9 @@ namespace CSharp_MARC_Editor
         {
             startEdit = false;
             subfieldsDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].ErrorText = "";
-            LoadPreview(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()));
+            
+            if (recordsDataGridView.SelectedCells.Count > 0)
+                LoadPreview(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()));
         }
 
         #endregion
@@ -3155,7 +3177,8 @@ namespace CSharp_MARC_Editor
                 recordsDataGridView.SuspendLayout();
                 recordsDataGridView.DataSource = null;
                 SaveOptions();
-                rebuildBackgroundWorker.RunWorkerAsync(true);
+                object[] parameters = { null, "customOnly" };
+                rebuildBackgroundWorker.RunWorkerAsync(parameters);
             }
         }
 
@@ -3167,12 +3190,17 @@ namespace CSharp_MARC_Editor
         private void rebuildBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             rebuildBackgroundWorker.ReportProgress(0);
-            bool customOnly = false;
-            
-            if (e.Argument != null && e.Argument.GetType() == typeof(bool))
-                customOnly = (bool)e.Argument;
+            string rebuildField = null;
+            int? rebuildRecord = null;
 
-            RebuildRecordsPreviewInformation(null, "customOnly");
+            if (e.Argument != null)
+            {
+                rebuildRecord = (int?)((object[])e.Argument)[0];
+                rebuildField = ((object[])e.Argument)[1].ToString();
+                rebuildingID = rebuildRecord;
+            }
+
+            RebuildRecordsPreviewInformation(rebuildRecord, rebuildField);
         }
 
         /// <summary>
@@ -3192,7 +3220,18 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="RunWorkerCompletedEventArgs"/> instance containing the event data.</param>
         private void rebuildBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            this.OnLoad(new EventArgs());
+            if (rebuildingID == null)
+                this.OnLoad(new EventArgs());
+            else
+                ReloadRecordRow(recordsDataGridView.SelectedCells[0].OwningRow);
+
+            progressToolStripStatusLabel.Text = "";
+            toolStripProgressBar.Visible = false;
+            toolStripProgressBar.Enabled = false;
+            progressToolStripStatusLabel.Visible = false;
+            toolStripProgressBar.MarqueeAnimationSpeed = 0;
+            loading = false;
+            this.Enabled = true;
         }
 
         /// <summary>
