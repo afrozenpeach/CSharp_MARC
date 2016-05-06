@@ -40,6 +40,7 @@ using System.Xml;
 using System.Collections;
 using System.Net;
 using System.Xml.Linq;
+using System.Diagnostics;
 
 namespace CSharp_MARC_Editor
 {
@@ -185,12 +186,11 @@ namespace CSharp_MARC_Editor
 				DisableImport();
 
 				//The default ZING SRW namespace
-				XNamespace zingSRW = "http://www.loc.gov/zing/srw/";
+                XNamespace zingSRW = namespaceTextBox.Text;
 
 				//Build the SRU query.
 				//The address, version, and operation will always be the same
-				string sruServer = "http://lx2.loc.gov:210/lcdb";
-				string sruPrefix = "?version=1.1&operation=searchRetrieve&query=";
+				string sruServer = serverTextBox.Text;
 
 				string sruQuery = string.Empty;
 
@@ -217,7 +217,7 @@ namespace CSharp_MARC_Editor
 					try
 					{
 						//This actually queries the server. No more ZOOM. No more VB wrapping C++. It's that easy.
-						XDocument results = XDocument.Load(sruServer + sruPrefix + sruQuery + sruPostfix);
+						XDocument results = XDocument.Load(sruServer + sruQuery + sruPostfix);
 
 						//The actual search results that we want to search for are 3 levels down.
 						//<zs:searchRetrieveResponse><zs:records><zs:record>Actual result information is here</zs:record></zs:records></zs:searchRetrieveResponse>
@@ -381,6 +381,19 @@ namespace CSharp_MARC_Editor
         {
             this.DialogResult = DialogResult.Cancel;
             Close();
+        }
+
+        /// <summary>
+        /// Handles the HelpButtonClicked event of the ImportSRU control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="CancelEventArgs"/> instance containing the event data.</param>
+        private void ImportSRU_HelpButtonClicked(object sender, CancelEventArgs e)
+        {
+            if (MessageBox.Show("The Search/Retrieval via URL standard is used instead of using the standard Z39.50 interface." + Environment.NewLine + Environment.NewLine + "Would you like more information on the SRU standard?", "SRU: Search and Retrieval via URL", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+            {
+                Process.Start("http://www.loc.gov/standards/sru/index.html");                
+            }
         }
 
 		#endregion

@@ -77,9 +77,15 @@ namespace CSharp_MARC_Editor
             this.importRichTextBox = new System.Windows.Forms.RichTextBox();
             this.importButton = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.serverGroupBox = new System.Windows.Forms.GroupBox();
+            this.serverTextBox = new System.Windows.Forms.TextBox();
+            this.namespaceTextBox = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.searchGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.searchResultsDataGridView)).BeginInit();
             this.importGroupBox.SuspendLayout();
+            this.serverGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // searchGroupBox
@@ -97,12 +103,12 @@ namespace CSharp_MARC_Editor
             this.searchGroupBox.Controls.Add(this.lccnLabel);
             this.searchGroupBox.Controls.Add(this.isbnTextBox);
             this.searchGroupBox.Controls.Add(this.isbnLabel);
-            this.searchGroupBox.Location = new System.Drawing.Point(12, 12);
+            this.searchGroupBox.Location = new System.Drawing.Point(12, 89);
             this.searchGroupBox.Name = "searchGroupBox";
-            this.searchGroupBox.Size = new System.Drawing.Size(435, 478);
+            this.searchGroupBox.Size = new System.Drawing.Size(471, 401);
             this.searchGroupBox.TabIndex = 0;
             this.searchGroupBox.TabStop = false;
-            this.searchGroupBox.Text = "Search / Load";
+            this.searchGroupBox.Text = "Search";
             // 
             // searchResultsDataGridView
             // 
@@ -128,7 +134,7 @@ namespace CSharp_MARC_Editor
             this.searchResultsDataGridView.Location = new System.Drawing.Point(6, 126);
             this.searchResultsDataGridView.Name = "searchResultsDataGridView";
             this.searchResultsDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.searchResultsDataGridView.Size = new System.Drawing.Size(423, 346);
+            this.searchResultsDataGridView.Size = new System.Drawing.Size(459, 269);
             this.searchResultsDataGridView.TabIndex = 8;
             this.searchResultsDataGridView.SelectionChanged += new System.EventHandler(this.searchResultsDataGridView_SelectionChanged);
             // 
@@ -146,7 +152,7 @@ namespace CSharp_MARC_Editor
             // 
             // resetButton
             // 
-            this.resetButton.Location = new System.Drawing.Point(273, 97);
+            this.resetButton.Location = new System.Drawing.Point(309, 97);
             this.resetButton.Name = "resetButton";
             this.resetButton.Size = new System.Drawing.Size(75, 23);
             this.resetButton.TabIndex = 6;
@@ -156,7 +162,7 @@ namespace CSharp_MARC_Editor
             // 
             // searchButton
             // 
-            this.searchButton.Location = new System.Drawing.Point(354, 97);
+            this.searchButton.Location = new System.Drawing.Point(390, 97);
             this.searchButton.Name = "searchButton";
             this.searchButton.Size = new System.Drawing.Size(75, 23);
             this.searchButton.TabIndex = 7;
@@ -170,7 +176,7 @@ namespace CSharp_MARC_Editor
             | System.Windows.Forms.AnchorStyles.Right)));
             this.authorTextBox.Location = new System.Drawing.Point(59, 71);
             this.authorTextBox.Name = "authorTextBox";
-            this.authorTextBox.Size = new System.Drawing.Size(370, 20);
+            this.authorTextBox.Size = new System.Drawing.Size(406, 20);
             this.authorTextBox.TabIndex = 4;
             this.authorTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.searchFieldTextBox_KeyPress);
             // 
@@ -189,7 +195,7 @@ namespace CSharp_MARC_Editor
             | System.Windows.Forms.AnchorStyles.Right)));
             this.titleTextBox.Location = new System.Drawing.Point(59, 45);
             this.titleTextBox.Name = "titleTextBox";
-            this.titleTextBox.Size = new System.Drawing.Size(370, 20);
+            this.titleTextBox.Size = new System.Drawing.Size(406, 20);
             this.titleTextBox.TabIndex = 3;
             this.titleTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.searchFieldTextBox_KeyPress);
             // 
@@ -247,9 +253,9 @@ namespace CSharp_MARC_Editor
             this.importGroupBox.Controls.Add(this.importRichTextBox);
             this.importGroupBox.Controls.Add(this.importButton);
             this.importGroupBox.Enabled = false;
-            this.importGroupBox.Location = new System.Drawing.Point(453, 12);
+            this.importGroupBox.Location = new System.Drawing.Point(495, 12);
             this.importGroupBox.Name = "importGroupBox";
-            this.importGroupBox.Size = new System.Drawing.Size(396, 478);
+            this.importGroupBox.Size = new System.Drawing.Size(426, 478);
             this.importGroupBox.TabIndex = 1;
             this.importGroupBox.TabStop = false;
             this.importGroupBox.Text = "Import Preview";
@@ -273,14 +279,14 @@ namespace CSharp_MARC_Editor
             this.importRichTextBox.Location = new System.Drawing.Point(6, 19);
             this.importRichTextBox.Name = "importRichTextBox";
             this.importRichTextBox.ReadOnly = true;
-            this.importRichTextBox.Size = new System.Drawing.Size(384, 424);
+            this.importRichTextBox.Size = new System.Drawing.Size(414, 424);
             this.importRichTextBox.TabIndex = 9;
             this.importRichTextBox.Text = "";
             // 
             // importButton
             // 
             this.importButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.importButton.Location = new System.Drawing.Point(120, 449);
+            this.importButton.Location = new System.Drawing.Point(150, 449);
             this.importButton.Name = "importButton";
             this.importButton.Size = new System.Drawing.Size(75, 23);
             this.importButton.TabIndex = 12;
@@ -292,24 +298,80 @@ namespace CSharp_MARC_Editor
             // 
             this.openFileDialog.Filter = "MARC Files|*.mrc;*.usm;*.001;*.xml;";
             // 
+            // serverGroupBox
+            // 
+            this.serverGroupBox.Controls.Add(this.label2);
+            this.serverGroupBox.Controls.Add(this.label1);
+            this.serverGroupBox.Controls.Add(this.namespaceTextBox);
+            this.serverGroupBox.Controls.Add(this.serverTextBox);
+            this.serverGroupBox.Location = new System.Drawing.Point(12, 12);
+            this.serverGroupBox.Name = "serverGroupBox";
+            this.serverGroupBox.Size = new System.Drawing.Size(477, 71);
+            this.serverGroupBox.TabIndex = 2;
+            this.serverGroupBox.TabStop = false;
+            this.serverGroupBox.Text = "Server Information";
+            // 
+            // serverTextBox
+            // 
+            this.serverTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.serverTextBox.Location = new System.Drawing.Point(79, 19);
+            this.serverTextBox.Name = "serverTextBox";
+            this.serverTextBox.Size = new System.Drawing.Size(392, 20);
+            this.serverTextBox.TabIndex = 0;
+            this.serverTextBox.Text = "http://lx2.loc.gov:210/lcdb?version=1.1&operation=searchRetrieve&query=";
+            // 
+            // namespaceTextBox
+            // 
+            this.namespaceTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.namespaceTextBox.Location = new System.Drawing.Point(79, 45);
+            this.namespaceTextBox.Name = "namespaceTextBox";
+            this.namespaceTextBox.Size = new System.Drawing.Size(392, 20);
+            this.namespaceTextBox.TabIndex = 1;
+            this.namespaceTextBox.Text = "http://www.loc.gov/zing/srw/";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(7, 22);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(66, 13);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "Server URL:";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 48);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(67, 13);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "Namespace:";
+            // 
             // ImportSRU
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(861, 502);
+            this.ClientSize = new System.Drawing.Size(933, 502);
+            this.Controls.Add(this.serverGroupBox);
             this.Controls.Add(this.importGroupBox);
             this.Controls.Add(this.searchGroupBox);
+            this.HelpButton = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(877, 373);
             this.Name = "ImportSRU";
             this.Text = "Import MARC Records";
+            this.HelpButtonClicked += new System.ComponentModel.CancelEventHandler(this.ImportSRU_HelpButtonClicked);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ImportMARC_FormClosing);
             this.searchGroupBox.ResumeLayout(false);
             this.searchGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.searchResultsDataGridView)).EndInit();
             this.importGroupBox.ResumeLayout(false);
+            this.serverGroupBox.ResumeLayout(false);
+            this.serverGroupBox.PerformLayout();
             this.ResumeLayout(false);
 
 		}
@@ -335,6 +397,11 @@ namespace CSharp_MARC_Editor
         private System.Windows.Forms.RichTextBox importRichTextBox;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.Button cancelButton;
+        private System.Windows.Forms.GroupBox serverGroupBox;
+        private System.Windows.Forms.TextBox serverTextBox;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox namespaceTextBox;
 
 	}
 }
