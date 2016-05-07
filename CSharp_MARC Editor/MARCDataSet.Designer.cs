@@ -569,7 +569,7 @@ namespace CSharp_MARC_Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public RecordsRow AddRecordsRow(int RecordID, string DateAdded, string DateChanged, string Author, string Title, int CopyrightDate, string Barcode, string Classification, string MainEntry, string Custom1, string Custom2, string Custom3, string Custom4, string Custom5, string ImportErrors) {
+            public RecordsRow AddRecordsRow(int RecordID, System.DateTime DateAdded, System.DateTime DateChanged, string Author, string Title, int CopyrightDate, string Barcode, string Classification, string MainEntry, string Custom1, string Custom2, string Custom3, string Custom4, string Custom5, string ImportErrors) {
                 RecordsRow rowRecordsRow = ((RecordsRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         RecordID,
@@ -631,9 +631,9 @@ namespace CSharp_MARC_Editor {
             private void InitClass() {
                 this.columnRecordID = new global::System.Data.DataColumn("RecordID", typeof(int), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnRecordID);
-                this.columnDateAdded = new global::System.Data.DataColumn("DateAdded", typeof(string), null, global::System.Data.MappingType.Element);
+                this.columnDateAdded = new global::System.Data.DataColumn("DateAdded", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnDateAdded);
-                this.columnDateChanged = new global::System.Data.DataColumn("DateChanged", typeof(string), null, global::System.Data.MappingType.Element);
+                this.columnDateChanged = new global::System.Data.DataColumn("DateChanged", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnDateChanged);
                 this.columnAuthor = new global::System.Data.DataColumn("Author", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnAuthor);
@@ -1427,10 +1427,10 @@ namespace CSharp_MARC_Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string DateAdded {
+            public System.DateTime DateAdded {
                 get {
                     try {
-                        return ((string)(this[this.tableRecords.DateAddedColumn]));
+                        return ((global::System.DateTime)(this[this.tableRecords.DateAddedColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
                         throw new global::System.Data.StrongTypingException("The value for column \'DateAdded\' in table \'Records\' is DBNull.", e);
@@ -1443,10 +1443,10 @@ namespace CSharp_MARC_Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string DateChanged {
+            public System.DateTime DateChanged {
                 get {
                     try {
-                        return ((string)(this[this.tableRecords.DateChangedColumn]));
+                        return ((global::System.DateTime)(this[this.tableRecords.DateChangedColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
                         throw new global::System.Data.StrongTypingException("The value for column \'DateChanged\' in table \'Records\' is DBNull.", e);

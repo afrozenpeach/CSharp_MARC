@@ -60,21 +60,6 @@ namespace CSharp_MARC_Editor
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.recordsDataGridView = new System.Windows.Forms.DataGridView();
-            this.recordIDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dateAddedDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dateChangedDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.authorDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.titleDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CopyrightDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.barcodeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.classificationDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.mainEntryDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Custom1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Custom2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Custom3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Custom4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Custom5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ImportErrors = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.marcDataSet = new CSharp_MARC_Editor.MARCDataSet();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
@@ -135,6 +120,21 @@ namespace CSharp_MARC_Editor
             this.rebuildBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.loadingBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.cancelButtonToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.recordIDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dateAddedDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dateChangedDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.authorDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.titleDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CopyrightDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.barcodeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.classificationDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.mainEntryDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Custom1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Custom2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Custom3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Custom4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Custom5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ImportErrors = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -210,121 +210,6 @@ namespace CSharp_MARC_Editor
             this.recordsDataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.recordsDataGridView_CellClick);
             this.recordsDataGridView.SelectionChanged += new System.EventHandler(this.recordsDataGridView_SelectionChanged);
             this.recordsDataGridView.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.recordsDataGridView_UserDeletingRow);
-            // 
-            // recordIDDataGridViewTextBoxColumn
-            // 
-            this.recordIDDataGridViewTextBoxColumn.DataPropertyName = "RecordID";
-            this.recordIDDataGridViewTextBoxColumn.HeaderText = "ID";
-            this.recordIDDataGridViewTextBoxColumn.MinimumWidth = 50;
-            this.recordIDDataGridViewTextBoxColumn.Name = "recordIDDataGridViewTextBoxColumn";
-            this.recordIDDataGridViewTextBoxColumn.ReadOnly = true;
-            this.recordIDDataGridViewTextBoxColumn.Width = 50;
-            // 
-            // dateAddedDataGridViewTextBoxColumn
-            // 
-            this.dateAddedDataGridViewTextBoxColumn.DataPropertyName = "DateAdded";
-            this.dateAddedDataGridViewTextBoxColumn.HeaderText = "Date Added";
-            this.dateAddedDataGridViewTextBoxColumn.MinimumWidth = 125;
-            this.dateAddedDataGridViewTextBoxColumn.Name = "dateAddedDataGridViewTextBoxColumn";
-            this.dateAddedDataGridViewTextBoxColumn.ReadOnly = true;
-            this.dateAddedDataGridViewTextBoxColumn.Width = 125;
-            // 
-            // dateChangedDataGridViewTextBoxColumn
-            // 
-            this.dateChangedDataGridViewTextBoxColumn.DataPropertyName = "DateChanged";
-            this.dateChangedDataGridViewTextBoxColumn.HeaderText = "Date Changed";
-            this.dateChangedDataGridViewTextBoxColumn.MinimumWidth = 125;
-            this.dateChangedDataGridViewTextBoxColumn.Name = "dateChangedDataGridViewTextBoxColumn";
-            this.dateChangedDataGridViewTextBoxColumn.ReadOnly = true;
-            this.dateChangedDataGridViewTextBoxColumn.Width = 125;
-            // 
-            // authorDataGridViewTextBoxColumn
-            // 
-            this.authorDataGridViewTextBoxColumn.DataPropertyName = "Author";
-            this.authorDataGridViewTextBoxColumn.HeaderText = "Author";
-            this.authorDataGridViewTextBoxColumn.MinimumWidth = 20;
-            this.authorDataGridViewTextBoxColumn.Name = "authorDataGridViewTextBoxColumn";
-            this.authorDataGridViewTextBoxColumn.ReadOnly = true;
-            this.authorDataGridViewTextBoxColumn.Width = 200;
-            // 
-            // titleDataGridViewTextBoxColumn
-            // 
-            this.titleDataGridViewTextBoxColumn.DataPropertyName = "Title";
-            this.titleDataGridViewTextBoxColumn.HeaderText = "Title";
-            this.titleDataGridViewTextBoxColumn.MinimumWidth = 20;
-            this.titleDataGridViewTextBoxColumn.Name = "titleDataGridViewTextBoxColumn";
-            this.titleDataGridViewTextBoxColumn.ReadOnly = true;
-            this.titleDataGridViewTextBoxColumn.Width = 400;
-            // 
-            // CopyrightDate
-            // 
-            this.CopyrightDate.DataPropertyName = "CopyrightDate";
-            this.CopyrightDate.HeaderText = "CopyrightDate";
-            this.CopyrightDate.Name = "CopyrightDate";
-            this.CopyrightDate.ReadOnly = true;
-            // 
-            // barcodeDataGridViewTextBoxColumn
-            // 
-            this.barcodeDataGridViewTextBoxColumn.DataPropertyName = "Barcode";
-            this.barcodeDataGridViewTextBoxColumn.HeaderText = "Barcode";
-            this.barcodeDataGridViewTextBoxColumn.Name = "barcodeDataGridViewTextBoxColumn";
-            this.barcodeDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // classificationDataGridViewTextBoxColumn
-            // 
-            this.classificationDataGridViewTextBoxColumn.DataPropertyName = "Classification";
-            this.classificationDataGridViewTextBoxColumn.HeaderText = "Classification";
-            this.classificationDataGridViewTextBoxColumn.Name = "classificationDataGridViewTextBoxColumn";
-            this.classificationDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // mainEntryDataGridViewTextBoxColumn
-            // 
-            this.mainEntryDataGridViewTextBoxColumn.DataPropertyName = "MainEntry";
-            this.mainEntryDataGridViewTextBoxColumn.HeaderText = "MainEntry";
-            this.mainEntryDataGridViewTextBoxColumn.Name = "mainEntryDataGridViewTextBoxColumn";
-            this.mainEntryDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // Custom1
-            // 
-            this.Custom1.DataPropertyName = "Custom1";
-            this.Custom1.HeaderText = "Custom1";
-            this.Custom1.Name = "Custom1";
-            this.Custom1.ReadOnly = true;
-            // 
-            // Custom2
-            // 
-            this.Custom2.DataPropertyName = "Custom2";
-            this.Custom2.HeaderText = "Custom2";
-            this.Custom2.Name = "Custom2";
-            this.Custom2.ReadOnly = true;
-            // 
-            // Custom3
-            // 
-            this.Custom3.DataPropertyName = "Custom3";
-            this.Custom3.HeaderText = "Custom3";
-            this.Custom3.Name = "Custom3";
-            this.Custom3.ReadOnly = true;
-            // 
-            // Custom4
-            // 
-            this.Custom4.DataPropertyName = "Custom4";
-            this.Custom4.HeaderText = "Custom4";
-            this.Custom4.Name = "Custom4";
-            this.Custom4.ReadOnly = true;
-            // 
-            // Custom5
-            // 
-            this.Custom5.DataPropertyName = "Custom5";
-            this.Custom5.HeaderText = "Custom5";
-            this.Custom5.Name = "Custom5";
-            this.Custom5.ReadOnly = true;
-            // 
-            // ImportErrors
-            // 
-            this.ImportErrors.DataPropertyName = "ImportErrors";
-            this.ImportErrors.HeaderText = "ImportErrors";
-            this.ImportErrors.Name = "ImportErrors";
-            this.ImportErrors.ReadOnly = true;
             // 
             // marcDataSet
             // 
@@ -851,6 +736,121 @@ namespace CSharp_MARC_Editor
             this.cancelButtonToolStripStatusLabel.Visible = false;
             this.cancelButtonToolStripStatusLabel.Click += new System.EventHandler(this.cancelButtonToolStripStatusLabel_Click);
             // 
+            // recordIDDataGridViewTextBoxColumn
+            // 
+            this.recordIDDataGridViewTextBoxColumn.DataPropertyName = "RecordID";
+            this.recordIDDataGridViewTextBoxColumn.HeaderText = "ID";
+            this.recordIDDataGridViewTextBoxColumn.MinimumWidth = 50;
+            this.recordIDDataGridViewTextBoxColumn.Name = "recordIDDataGridViewTextBoxColumn";
+            this.recordIDDataGridViewTextBoxColumn.ReadOnly = true;
+            this.recordIDDataGridViewTextBoxColumn.Width = 50;
+            // 
+            // dateAddedDataGridViewTextBoxColumn
+            // 
+            this.dateAddedDataGridViewTextBoxColumn.DataPropertyName = "DateAdded";
+            this.dateAddedDataGridViewTextBoxColumn.HeaderText = "Date Added";
+            this.dateAddedDataGridViewTextBoxColumn.MinimumWidth = 140;
+            this.dateAddedDataGridViewTextBoxColumn.Name = "dateAddedDataGridViewTextBoxColumn";
+            this.dateAddedDataGridViewTextBoxColumn.ReadOnly = true;
+            this.dateAddedDataGridViewTextBoxColumn.Width = 140;
+            // 
+            // dateChangedDataGridViewTextBoxColumn
+            // 
+            this.dateChangedDataGridViewTextBoxColumn.DataPropertyName = "DateChanged";
+            this.dateChangedDataGridViewTextBoxColumn.HeaderText = "Date Changed";
+            this.dateChangedDataGridViewTextBoxColumn.MinimumWidth = 140;
+            this.dateChangedDataGridViewTextBoxColumn.Name = "dateChangedDataGridViewTextBoxColumn";
+            this.dateChangedDataGridViewTextBoxColumn.ReadOnly = true;
+            this.dateChangedDataGridViewTextBoxColumn.Width = 140;
+            // 
+            // authorDataGridViewTextBoxColumn
+            // 
+            this.authorDataGridViewTextBoxColumn.DataPropertyName = "Author";
+            this.authorDataGridViewTextBoxColumn.HeaderText = "Author";
+            this.authorDataGridViewTextBoxColumn.MinimumWidth = 20;
+            this.authorDataGridViewTextBoxColumn.Name = "authorDataGridViewTextBoxColumn";
+            this.authorDataGridViewTextBoxColumn.ReadOnly = true;
+            this.authorDataGridViewTextBoxColumn.Width = 200;
+            // 
+            // titleDataGridViewTextBoxColumn
+            // 
+            this.titleDataGridViewTextBoxColumn.DataPropertyName = "Title";
+            this.titleDataGridViewTextBoxColumn.HeaderText = "Title";
+            this.titleDataGridViewTextBoxColumn.MinimumWidth = 20;
+            this.titleDataGridViewTextBoxColumn.Name = "titleDataGridViewTextBoxColumn";
+            this.titleDataGridViewTextBoxColumn.ReadOnly = true;
+            this.titleDataGridViewTextBoxColumn.Width = 400;
+            // 
+            // CopyrightDate
+            // 
+            this.CopyrightDate.DataPropertyName = "CopyrightDate";
+            this.CopyrightDate.HeaderText = "CopyrightDate";
+            this.CopyrightDate.Name = "CopyrightDate";
+            this.CopyrightDate.ReadOnly = true;
+            // 
+            // barcodeDataGridViewTextBoxColumn
+            // 
+            this.barcodeDataGridViewTextBoxColumn.DataPropertyName = "Barcode";
+            this.barcodeDataGridViewTextBoxColumn.HeaderText = "Barcode";
+            this.barcodeDataGridViewTextBoxColumn.Name = "barcodeDataGridViewTextBoxColumn";
+            this.barcodeDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // classificationDataGridViewTextBoxColumn
+            // 
+            this.classificationDataGridViewTextBoxColumn.DataPropertyName = "Classification";
+            this.classificationDataGridViewTextBoxColumn.HeaderText = "Classification";
+            this.classificationDataGridViewTextBoxColumn.Name = "classificationDataGridViewTextBoxColumn";
+            this.classificationDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // mainEntryDataGridViewTextBoxColumn
+            // 
+            this.mainEntryDataGridViewTextBoxColumn.DataPropertyName = "MainEntry";
+            this.mainEntryDataGridViewTextBoxColumn.HeaderText = "MainEntry";
+            this.mainEntryDataGridViewTextBoxColumn.Name = "mainEntryDataGridViewTextBoxColumn";
+            this.mainEntryDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // Custom1
+            // 
+            this.Custom1.DataPropertyName = "Custom1";
+            this.Custom1.HeaderText = "Custom1";
+            this.Custom1.Name = "Custom1";
+            this.Custom1.ReadOnly = true;
+            // 
+            // Custom2
+            // 
+            this.Custom2.DataPropertyName = "Custom2";
+            this.Custom2.HeaderText = "Custom2";
+            this.Custom2.Name = "Custom2";
+            this.Custom2.ReadOnly = true;
+            // 
+            // Custom3
+            // 
+            this.Custom3.DataPropertyName = "Custom3";
+            this.Custom3.HeaderText = "Custom3";
+            this.Custom3.Name = "Custom3";
+            this.Custom3.ReadOnly = true;
+            // 
+            // Custom4
+            // 
+            this.Custom4.DataPropertyName = "Custom4";
+            this.Custom4.HeaderText = "Custom4";
+            this.Custom4.Name = "Custom4";
+            this.Custom4.ReadOnly = true;
+            // 
+            // Custom5
+            // 
+            this.Custom5.DataPropertyName = "Custom5";
+            this.Custom5.HeaderText = "Custom5";
+            this.Custom5.Name = "Custom5";
+            this.Custom5.ReadOnly = true;
+            // 
+            // ImportErrors
+            // 
+            this.ImportErrors.DataPropertyName = "ImportErrors";
+            this.ImportErrors.HeaderText = "ImportErrors";
+            this.ImportErrors.Name = "ImportErrors";
+            this.ImportErrors.ReadOnly = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -939,6 +939,15 @@ namespace CSharp_MARC_Editor
         private System.Windows.Forms.ToolStripMenuItem uTF8ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem mARC8ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem mARCXMLToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fromFileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fromZ3950SRUToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toCSVFileToolStripMenuItem;
+        private System.ComponentModel.BackgroundWorker csvExportBackgroundWorker;
+        private System.Windows.Forms.PrintDialog printDialog;
+        private System.Drawing.Printing.PrintDocument printDocument;
+        private System.ComponentModel.BackgroundWorker rebuildBackgroundWorker;
+        private System.ComponentModel.BackgroundWorker loadingBackgroundWorker;
+        private System.Windows.Forms.ToolStripStatusLabel cancelButtonToolStripStatusLabel;
         private System.Windows.Forms.DataGridViewTextBoxColumn recordIDDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn dateAddedDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn dateChangedDataGridViewTextBoxColumn;
@@ -954,15 +963,6 @@ namespace CSharp_MARC_Editor
         private System.Windows.Forms.DataGridViewTextBoxColumn Custom4;
         private System.Windows.Forms.DataGridViewTextBoxColumn Custom5;
         private System.Windows.Forms.DataGridViewTextBoxColumn ImportErrors;
-        private System.Windows.Forms.ToolStripMenuItem fromFileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem fromZ3950SRUToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem toCSVFileToolStripMenuItem;
-        private System.ComponentModel.BackgroundWorker csvExportBackgroundWorker;
-        private System.Windows.Forms.PrintDialog printDialog;
-        private System.Drawing.Printing.PrintDocument printDocument;
-        private System.ComponentModel.BackgroundWorker rebuildBackgroundWorker;
-        private System.ComponentModel.BackgroundWorker loadingBackgroundWorker;
-        private System.Windows.Forms.ToolStripStatusLabel cancelButtonToolStripStatusLabel;
 
     }
 }

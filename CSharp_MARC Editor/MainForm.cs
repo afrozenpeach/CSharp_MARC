@@ -87,6 +87,7 @@ namespace CSharp_MARC_Editor
         {
             DataRow row = marcDataSet.Tables["Records"].NewRow();
 
+            string dateChanged = null;
             string author = null;
             string title = null;
             string copyright = null;
@@ -98,7 +99,8 @@ namespace CSharp_MARC_Editor
             string custom3 = null;
             string custom4 = null;
             string custom5 = null;
-            
+
+            ControlField field005 = null;
             Subfield subfield100a = null;
             Subfield subfield245a = null;
             Subfield subfield245b = null;
@@ -117,6 +119,18 @@ namespace CSharp_MARC_Editor
             Subfield subfieldCustom3 = null;
             Subfield subfieldCustom4 = null;
             Subfield subfieldCustom5 = null;
+
+            field005 = (ControlField)record["005"];
+            if (field005 != null && field005.Data.Length >= 14)
+            {
+                dateChanged = field005.Data.Substring(0, 4) + "/" + field005.Data.Substring(4, 2) + "/" + field005.Data.Substring(6, 2) + " " + field005.Data.Substring(8, 2) + ":" + field005.Data.Substring(10, 2) + ":" + field005.Data.Substring(12);
+                DateTime dateTimeChanged = new DateTime();
+
+                if (DateTime.TryParse(dateChanged, out dateTimeChanged))
+                    dateChanged = dateTimeChanged.ToString();
+                else
+                    dateChanged = null;
+            }
 
             DataField datafield = (DataField)record["100"];
             if (datafield != null)
@@ -337,6 +351,9 @@ namespace CSharp_MARC_Editor
                 }
             }
 
+            if (dateChanged != null)
+                row["DateChanged"] = dateChanged;
+
             if (author != null)
                 row["Author"] = author;
             
@@ -444,7 +461,7 @@ namespace CSharp_MARC_Editor
         /// Loads the preview.
         /// </summary>
         /// <param name="recordID">The record identifier.</param>
-        private void LoadPreview(int recordID)
+        private void LoadPreview(int recordID, bool recordsTableReload = false)
         {
             Record record = new Record();
 
@@ -504,6 +521,64 @@ namespace CSharp_MARC_Editor
             }
 
             previewTextBox.Text = record.ToString();
+
+            if (recordsTableReload == true)
+            {
+                DataRow newRow = GetRecordRow(record);
+                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                {
+                    connection.Open();
+
+                    using (SQLiteCommand command = new SQLiteCommand(connection))
+                    {
+                        command.CommandText = "UPDATE Records SET DateChanged = @DateChanged, Author = @Author, Title = @Title, CopyrightDate = @CopyrightDate, Barcode = @Barcode, Classification = @Classification, MainEntry = @MainEntry, Custom1 = @Custom1, Custom2 = @Custom2, Custom3 = @Custom3, Custom4 = @Custom4, Custom5 = @Custom5, ImportErrors = @ImportErrors WHERE RecordID = @RecordID";
+
+                        command.Parameters.Add("@DateChanged", DbType.DateTime).Value = newRow["DateChanged"];
+                        command.Parameters.Add("@Author", DbType.String).Value = newRow["Author"];
+                        command.Parameters.Add("@Title", DbType.String).Value = newRow["Title"];
+                        command.Parameters.Add("@CopyrightDate", DbType.String).Value = newRow["CopyrightDate"];
+                        command.Parameters.Add("@Barcode", DbType.String).Value = newRow["Barcode"];
+                        command.Parameters.Add("@Classification", DbType.String).Value = newRow["Classification"];
+                        command.Parameters.Add("@MainEntry", DbType.String).Value = newRow["MainEntry"];
+                        command.Parameters.Add("@Custom1", DbType.String).Value = newRow["Custom1"];
+                        command.Parameters.Add("@Custom2", DbType.String).Value = newRow["Custom2"];
+                        command.Parameters.Add("@Custom3", DbType.String).Value = newRow["Custom3"];
+                        command.Parameters.Add("@Custom4", DbType.String).Value = newRow["Custom4"];
+                        command.Parameters.Add("@Custom5", DbType.String).Value = newRow["Custom5"];
+                        
+                        string errors = "";
+                        foreach (string error in record.Warnings)
+                            errors += error + Environment.NewLine;
+
+                        if (errors.Length > 1)
+                            errors = errors.Substring(0, errors.Length - 1);
+
+                        command.Parameters.Add("@ImportErrors", DbType.String).Value = errors;
+                        command.Parameters.Add("@RecordID", DbType.Int32).Value = recordID;
+                        command.ExecuteNonQuery();
+
+                        foreach (DataGridViewRow row in recordsDataGridView.Rows)
+                        {
+                            if (Int32.Parse(row.Cells[0].Value.ToString()) == recordID)
+                            {
+                                row.Cells[2].Value = newRow["DateChanged"];
+                                row.Cells[3].Value = newRow["Author"];
+                                row.Cells[4].Value = newRow["Title"];
+                                row.Cells[5].Value = newRow["CopyrightDate"];
+                                row.Cells[6].Value = newRow["Barcode"];
+                                row.Cells[7].Value = newRow["Classification"];
+                                row.Cells[8].Value = newRow["MainEntry"];
+                                row.Cells[9].Value = newRow["Custom1"];
+                                row.Cells[10].Value = newRow["Custom2"];
+                                row.Cells[11].Value = newRow["Custom3"];
+                                row.Cells[12].Value = newRow["Custom4"];
+                                row.Cells[13].Value = newRow["Custom5"];
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -532,7 +607,7 @@ namespace CSharp_MARC_Editor
         {
             if (force || MessageBox.Show("This will permanently delete all records and reset the customizable options to their defaults." + Environment.NewLine + Environment.NewLine + "Are you sure you want to reset the database?", "Are you sure you want to reset the database?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
             {
-                this.Enabled = false;
+                DisableForm();
 
                 GC.Collect();
                 GC.WaitForFullGCComplete();
@@ -621,7 +696,7 @@ namespace CSharp_MARC_Editor
                 }
 
                 this.OnLoad(new EventArgs());
-                this.Enabled = true;
+                EnableForm();
             }
         }
 
@@ -631,6 +706,7 @@ namespace CSharp_MARC_Editor
         /// </summary>
         private void RebuildRecordsPreviewInformation(int? recordID = null, string tagNumber = null)
         {
+            Console.WriteLine("Begin rebuild: " + DateTime.Now.ToString());
             string whereRecordID = "";
 
             if (recordID != null)
@@ -1211,6 +1287,8 @@ namespace CSharp_MARC_Editor
                     }
                 }
             }
+
+            Console.WriteLine("End rebuild: " + DateTime.Now.ToString());
         }
 
         /// <summary>
@@ -1395,6 +1473,30 @@ namespace CSharp_MARC_Editor
             }
         }
 
+        /// <summary>
+        /// Enables the form.
+        /// </summary>
+        private void EnableForm()
+        {
+            menuStrip.Enabled = true;
+            recordsDataGridView.Enabled = true;
+            fieldsDataGridView.Enabled = true;
+            subfieldsDataGridView.Enabled = true;
+        }
+
+        /// <summary>
+        /// Disables the form.
+        /// </summary>
+        private void DisableForm()
+        {
+            menuStrip.Enabled = false;
+            recordsDataGridView.Enabled = false;
+            fieldsDataGridView.Enabled = false;
+            subfieldsDataGridView.Enabled = false;
+        }
+
+        #region SQLite Addon functions
+
         [SQLiteFunction(Name = "REGEXP", Arguments = 2, FuncType = FunctionType.Scalar)]
         class REGEXP : SQLiteFunction
         {
@@ -1474,6 +1576,8 @@ namespace CSharp_MARC_Editor
 
         #endregion
 
+        #endregion
+
         #region Form Events
 
         #region Loading
@@ -1486,7 +1590,7 @@ namespace CSharp_MARC_Editor
         private void MainForm_Load(object sender, EventArgs e)
         {
             loading = true;
-            this.Enabled = false;
+            DisableForm();
             toolStripProgressBar.Style = ProgressBarStyle.Marquee;
             toolStripProgressBar.MarqueeAnimationSpeed = 30;
             toolStripProgressBar.Enabled = true;
@@ -1587,7 +1691,7 @@ namespace CSharp_MARC_Editor
             }
 
             loading = false;
-            this.Enabled = true;
+            EnableForm();
         }
 
         #endregion 
@@ -1707,7 +1811,7 @@ namespace CSharp_MARC_Editor
                         command.CommandText = "INSERT INTO Records (DateAdded, DateChanged, Author, Title, CopyrightDate, Barcode, Classification, MainEntry, Custom1, Custom2, Custom3, Custom4, Custom5, ImportErrors) VALUES (@DateAdded, @DateChanged, @Author, @Title, @CopyrightDate, @Barcode, @Classification, @MainEntry, @Custom1, @Custom2, @Custom3, @Custom4, @CUstom5, @ImportErrors)";
 
                         command.Parameters.Add("@DateAdded", DbType.DateTime).Value = DateTime.Now;
-                        command.Parameters.Add("@DateChanged", DbType.DateTime).Value = DBNull.Value;
+                        command.Parameters.Add("@DateChanged", DbType.DateTime).Value = DateTime.Parse(newRow["DateChanged"].ToString());
                         command.Parameters.Add("@Author", DbType.String).Value = newRow["Author"];
                         command.Parameters.Add("@Title", DbType.String).Value = newRow["Title"];
                         command.Parameters.Add("@CopyrightDate", DbType.String).Value = newRow["CopyrightDate"];
@@ -1900,7 +2004,7 @@ namespace CSharp_MARC_Editor
                     }
                 }
 
-                this.Enabled = false;
+                DisableForm();
                 toolStripProgressBar.Style = ProgressBarStyle.Continuous;
                 toolStripProgressBar.Enabled = true;
                 toolStripProgressBar.Visible = true;
@@ -2051,7 +2155,7 @@ namespace CSharp_MARC_Editor
             progressToolStripStatusLabel.Visible = false;
             toolStripProgressBar.MarqueeAnimationSpeed = 0;
             loading = false;
-            this.Enabled = true;
+            EnableForm();
         }
 
         /// <summary>
@@ -2080,7 +2184,7 @@ namespace CSharp_MARC_Editor
                     }
                 }
 
-                this.Enabled = false;
+                DisableForm();
                 toolStripProgressBar.Style = ProgressBarStyle.Continuous;
                 toolStripProgressBar.Enabled = true;
                 toolStripProgressBar.Visible = true;
@@ -2269,7 +2373,7 @@ namespace CSharp_MARC_Editor
             progressToolStripStatusLabel.Visible = false;
             toolStripProgressBar.MarqueeAnimationSpeed = 0;
             loading = false;
-            this.Enabled = true;
+            EnableForm();
         }
 
         #endregion
@@ -2391,7 +2495,6 @@ namespace CSharp_MARC_Editor
                                 command.Parameters.Add("@SubfieldID", DbType.String).Value = subfieldsDataGridView.Rows[e.RowIndex].Cells[0].Value.ToString();
 
                                 command.ExecuteNonQuery();
-                                reloadFields = true;
                             }
                         }
                     }
@@ -2420,10 +2523,23 @@ namespace CSharp_MARC_Editor
                                 command.Parameters.Add("@FieldID", DbType.String).Value = subfieldsDataGridView.Rows[e.RowIndex].Cells[1].Value.ToString();
 
                                 command.ExecuteNonQuery();
-                                reloadFields = true;
                             }
                         }
                     }
+
+                    using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                    {
+                        connection.Open();
+
+                        using (SQLiteCommand command = new SQLiteCommand("UPDATE Fields SET ControlData = @Data WHERE FieldID IN (SELECT FieldID FROM Fields WHERE RecordID = (SELECT RecordID FROM Fields WHERE FieldID = @FieldID) AND TagNumber = '005')", connection))
+                        {
+                            command.Parameters.Add("@Data", DbType.String).Value = DateTime.Now.ToString("yyyyMMddHHmmss.f");
+                            command.Parameters.Add("@FieldID", DbType.Int32).Value = subfieldsDataGridView.Rows[e.RowIndex].Cells[1].Value.ToString();
+                            command.ExecuteNonQuery();
+                        }
+                    }
+
+                    reloadFields = true;
                 }
             }
             catch (Exception ex)
@@ -2484,19 +2600,6 @@ namespace CSharp_MARC_Editor
         {
             startEdit = false;
             fieldsDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].ErrorText = "";
-
-            if (reloadFields && recordsDataGridView.SelectedCells.Count > 0)
-            {
-                this.Enabled = false;
-                toolStripProgressBar.Style = ProgressBarStyle.Marquee;
-                toolStripProgressBar.MarqueeAnimationSpeed = 30;
-                toolStripProgressBar.Enabled = true;
-                toolStripProgressBar.Visible = true;
-                progressToolStripStatusLabel.Visible = true;
-
-                object[] parameters = { Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()), fieldsDataGridView.SelectedCells[0].OwningRow.Cells[2].Value.ToString() };
-                rebuildBackgroundWorker.RunWorkerAsync(parameters);
-            }
         }
 
         /// <summary>
@@ -2508,19 +2611,6 @@ namespace CSharp_MARC_Editor
         {
             startEdit = false;
             subfieldsDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].ErrorText = "";
-
-            if (reloadFields && recordsDataGridView.SelectedCells.Count > 0)
-            {
-                this.Enabled = false;
-                toolStripProgressBar.Style = ProgressBarStyle.Marquee;
-                toolStripProgressBar.MarqueeAnimationSpeed = 30;
-                toolStripProgressBar.Enabled = true;
-                toolStripProgressBar.Visible = true;
-                progressToolStripStatusLabel.Visible = true;
-                object[] parameters = { Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()), fieldsDataGridView.SelectedCells[0].OwningRow.Cells[2].Value.ToString() };
-                rebuildBackgroundWorker.RunWorkerAsync(parameters);
-                reloadFields = false;
-            }
         }
 
         /// <summary>
@@ -2534,7 +2624,9 @@ namespace CSharp_MARC_Editor
             fieldsDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].ErrorText = "";
             
             if (recordsDataGridView.SelectedCells.Count > 0)
-                LoadPreview(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()));
+                LoadPreview(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()), reloadFields);
+
+            reloadFields = false;
         }
 
         /// <summary>
@@ -2546,9 +2638,11 @@ namespace CSharp_MARC_Editor
         {
             startEdit = false;
             subfieldsDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].ErrorText = "";
-            
+
             if (recordsDataGridView.SelectedCells.Count > 0)
-                LoadPreview(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()));
+                LoadPreview(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()), reloadFields);
+
+            reloadFields = false;
         }
 
         #endregion
@@ -2769,7 +2863,7 @@ namespace CSharp_MARC_Editor
             {
                 if (form.ShowDialog() == DialogResult.OK)
                 {
-                    this.Enabled = false;
+                    DisableForm();
 
                     using (SQLiteConnection connection = new SQLiteConnection(connectionString))
                     {
@@ -2925,7 +3019,7 @@ namespace CSharp_MARC_Editor
                     RebuildRecordsPreviewInformation();
 
                     this.OnLoad(new EventArgs());
-                    this.Enabled = true;
+                    EnableForm();
                 }
             }
         }
@@ -3197,7 +3291,7 @@ namespace CSharp_MARC_Editor
         {
             if (customFieldsForm.ShowDialog() == DialogResult.OK)
             {
-                this.Enabled = false;
+                DisableForm();
                 toolStripProgressBar.Style = ProgressBarStyle.Marquee;
                 toolStripProgressBar.MarqueeAnimationSpeed = 30;
                 toolStripProgressBar.Enabled = true;
@@ -3261,7 +3355,7 @@ namespace CSharp_MARC_Editor
             progressToolStripStatusLabel.Visible = false;
             toolStripProgressBar.MarqueeAnimationSpeed = 0;
             loading = false;
-            this.Enabled = true;
+            EnableForm();
         }
 
         /// <summary>
@@ -3273,7 +3367,7 @@ namespace CSharp_MARC_Editor
         {
             if (MessageBox.Show("This will permanently delete all records from the MARC database." + Environment.NewLine + Environment.NewLine + "Are you sure you want to delete all records?", "Delete all records?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
             {
-                this.Enabled = false;
+                DisableForm();
 
                 using (SQLiteConnection connection = new SQLiteConnection(connectionString))
                 {
@@ -3287,7 +3381,7 @@ namespace CSharp_MARC_Editor
                 }
 
                 this.OnLoad(new EventArgs());
-                this.Enabled = true;
+                EnableForm();
             }
         }
 
