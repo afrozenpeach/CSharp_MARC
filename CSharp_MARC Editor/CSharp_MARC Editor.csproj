@@ -195,12 +195,15 @@
     <Content Include="Images\matt.png" />
     <Content Include="Images\network-receive.ico" />
     <Content Include="Images\network-receive.png" />
+    <Content Include="Images\network-wireless-encrypted.png" />
     <Content Include="Images\printer.png" />
+    <Content Include="Images\system-software-update.png" />
     <Content Include="Images\text-html.png" />
     <Content Include="Images\text-x-generic.png" />
     <Content Include="Images\view-refresh.png" />
     <Content Include="Images\x-office-address-book.png" />
     <Content Include="Images\x-office-spreadsheet-template.png" />
+    <Content Include="Images\x-office-spreadsheet.png" />
     <Content Include="x64\SQLite.Interop.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

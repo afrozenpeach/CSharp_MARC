@@ -3038,6 +3038,36 @@ namespace CSharp_MARC_Editor
             }
         }
 
+        /// <summary>
+        /// Handles the Click event of the validateRecordsToolStripMenuItem control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void validateRecordsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("This feature is not yet implemented, but is coming soon.", "Coming Soon!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        /// <summary>
+        /// Handles the Click event of the convertToRDAToolStripMenuItem control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void convertToRDAToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("This feature is not yet implemented, but is coming soon.", "Coming Soon!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        /// <summary>
+        /// Handles the Click event of the reportsToolStripMenuItem control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void reportsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("This feature is not yet implemented, but is coming soon.", "Coming Soon!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
         #endregion
 
         #region Print Events
