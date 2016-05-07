@@ -2560,16 +2560,22 @@ namespace CSharp_MARC_Editor
         {
             if (!loading && fieldsDataGridView.Rows[e.RowIndex].Cells[0].Value.ToString() != "")
             {
+                string tagNumber = fieldsDataGridView.Rows[e.RowIndex].Cells[2].Value.ToString();
                 switch (e.ColumnIndex)
                 {
                     case 2:
+                        if (tagNumber == "005")
+                        {
+                            MessageBox.Show("The 005 field is updated automatically when changes are made.", "Field 005 is locked.", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            startEdit = false;
+                            e.Cancel = true;
+                        }
                         break;
                     case 3:
                     case 4:
-                        string tagNumber = fieldsDataGridView.Rows[e.RowIndex].Cells[2].Value.ToString();
                         if (tagNumber.StartsWith("00") || tagNumber == "")
                         {
-                            MessageBox.Show("Cannot edit indicators on control fields.");
+                            MessageBox.Show("Control Fields do not have indicators.", "Indicators are locked.", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             startEdit = false;
                             e.Cancel = true;
                         }
@@ -2587,6 +2593,14 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="DataGridViewCellCancelEventArgs"/> instance containing the event data.</param>
         private void subfieldsDataGridView_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
         {
+            if (fieldsDataGridView.SelectedCells[0].OwningRow.Cells[2].Value.ToString() == "005")
+            {
+                MessageBox.Show("The 005 field is updated automatically when changes are made.", "Field 005 is locked.", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                startEdit = false;
+                e.Cancel = true;
+                return;
+            }
+
             if (!loading && subfieldsDataGridView.Rows[e.RowIndex].Cells[0].Value.ToString() != "")
                 startEdit = true;
         }
