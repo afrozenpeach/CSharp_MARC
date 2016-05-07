@@ -601,7 +601,7 @@ namespace CSharp_MARC_Editor
 
                                                 CREATE TABLE [TempUpdates](
                                                     [RecordID] integer, 
-                                                    [Data] nvarchar(2147483647));
+                                                    [Data] nvarchar);
 
                                                 CREATE INDEX [FieldID]
                                                 ON [Subfields](
@@ -609,7 +609,12 @@ namespace CSharp_MARC_Editor
 
                                                 CREATE INDEX [RecordID]
                                                 ON [Fields](
-                                                    [RecordID] ASC);";
+                                                    [RecordID] ASC);
+
+                                                CREATE INDEX [RecordID_Data]
+                                                ON [TempUpdates](
+                                                    [RecordID], 
+                                                    [Data]);";
 
                         command.ExecuteNonQuery();
                     }
