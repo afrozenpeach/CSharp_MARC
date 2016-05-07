@@ -52,11 +52,23 @@
  * @copyright 2016 Matt Schraeder
  * @license   http://www.gnu.org/licenses/gpl-3.0.html  GPL License 3
  */ 
+
+2016-05-07 Changes:
+
+Added placeholder menu options for future features
+005 field now loads in the DateChanged column of the records preview information
+005 field now updates automatically when other fields/subfields are edited
+005 field is no longer editable by hand
+Added support for custom SRU servers
+Added support for importing multiple records at once from SRU
+Added support for cancelling imports
+Several fixes involving rebuilding the records preview information 
+Several speed improvements for loading and editing large datasets
  
 2016-05-05 Changes:
 
 More rebuilding improvements
-Fix issue with not showing changes made to fields in the records preview grid
+Fix issue with not showing changes made to fields in the records preview information
 
 2016-05-04 Changes:
 
