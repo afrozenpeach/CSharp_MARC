@@ -3058,16 +3058,6 @@ namespace CSharp_MARC_Editor
             MessageBox.Show("This feature is not yet implemented, but is coming soon.", "Coming Soon!", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        /// <summary>
-        /// Handles the Click event of the reportsToolStripMenuItem control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        private void reportsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("This feature is not yet implemented, but is coming soon.", "Coming Soon!", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
         #endregion
 
         #region Print Events
@@ -3255,6 +3245,40 @@ namespace CSharp_MARC_Editor
         {
             if (!loading && fieldsDataGridView.SelectedCells.Count > 0)
                 fieldsDataGridView_CellClick(sender, new DataGridViewCellEventArgs(fieldsDataGridView.SelectedCells[0].ColumnIndex, fieldsDataGridView.SelectedCells[0].RowIndex));
+        }
+
+        #endregion
+
+        #region Reports
+
+        /// <summary>
+        /// Handles the Click event of the recordSummaryToolStripMenuItem control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void recordSummaryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (ReportForm form = new ReportForm())
+            {
+                form.Report = "CSharp_MARC_Editor.Reports.RecordsReport.rdlc";
+                form.DataSources.Add(new Microsoft.Reporting.WinForms.ReportDataSource("RecordsReportTable", marcDataSet.Tables["Records"]));
+                form.ShowDialog();
+            }
+        }
+
+        /// <summary>
+        /// Handles the Click event of the copyrightDateToolStripMenuItem control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void copyrightDateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (ReportForm form = new ReportForm())
+            {
+                form.Report = "CSharp_MARC_Editor.Reports.CopyrightDateReport.rdlc";
+                form.DataSources.Add(new Microsoft.Reporting.WinForms.ReportDataSource("CopyrightDateDataTable", marcDataSet.Tables["Records"]));
+                form.ShowDialog();
+            }
         }
 
         #endregion

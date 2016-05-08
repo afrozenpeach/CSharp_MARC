@@ -403,18 +403,18 @@
   </data>
   <data name="reportsToolStripMenuItem.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
-        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
+        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
+        np7OwimZ7C/Y937VfR9hXQAAAABJRU5ErkJggg==
 </value>
   </data>
   <data name="validateRecordsToolStripMenuItem.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
