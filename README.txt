@@ -53,6 +53,12 @@
  * @license   http://www.gnu.org/licenses/gpl-3.0.html  GPL License 3
  */ 
 
+2016-05-07.1 Changes:
+
+Setup click-once application installer
+Add copyright date, copyright date by decade, and records reporting functionality
+Placeholders for future RDA Conversion and Validation features
+
 2016-05-07 Changes:
 
 Added placeholder menu options for future features
