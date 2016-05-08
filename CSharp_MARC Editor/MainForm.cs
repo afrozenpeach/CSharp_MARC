@@ -694,9 +694,6 @@ namespace CSharp_MARC_Editor
                         command.ExecuteNonQuery();
                     }
                 }
-
-                this.OnLoad(new EventArgs());
-                EnableForm();
             }
         }
 
@@ -1665,8 +1662,6 @@ namespace CSharp_MARC_Editor
                 if (MessageBox.Show("Error loading database: " + errorLoading.GetType().ToString() + " - " + errorLoading.Message + Environment.NewLine + Environment.NewLine + "If you continue to see this message, it may be necessary to reset the database. Doing so will permanently delete all records from the database." + Environment.NewLine + Environment.NewLine + "Do you want to reset the database?", "Error loading database.", MessageBoxButtons.YesNo, MessageBoxIcon.Error, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
                 {
                     ResetDatabase(true);
-                    loadingBackgroundWorker.RunWorkerAsync();
-                    return;
                 }
                 else
                 {
@@ -3490,7 +3485,11 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void resetDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            DisableForm();
             ResetDatabase();
+
+            this.OnLoad(new EventArgs());
+            EnableForm();
         }
 
         /// <summary>

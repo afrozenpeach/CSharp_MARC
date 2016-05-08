@@ -126,8 +126,10 @@ namespace CSharp_MARC_Editor
             this.databaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.convertToRDAToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reportsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.recordSummaryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.classificationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyrightDateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyrightDateByDecadeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.recordSummaryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.validateRecordsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.clearDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -141,8 +143,6 @@ namespace CSharp_MARC_Editor
             this.printDocument = new System.Drawing.Printing.PrintDocument();
             this.rebuildBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.loadingBackgroundWorker = new System.ComponentModel.BackgroundWorker();
-            this.classificationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.copyrightDateByDecadeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -813,12 +813,12 @@ namespace CSharp_MARC_Editor
             this.reportsToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.reportsToolStripMenuItem.Text = "Reports";
             // 
-            // recordSummaryToolStripMenuItem
+            // classificationsToolStripMenuItem
             // 
-            this.recordSummaryToolStripMenuItem.Name = "recordSummaryToolStripMenuItem";
-            this.recordSummaryToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
-            this.recordSummaryToolStripMenuItem.Text = "Record Summary";
-            this.recordSummaryToolStripMenuItem.Click += new System.EventHandler(this.recordSummaryToolStripMenuItem_Click);
+            this.classificationsToolStripMenuItem.Name = "classificationsToolStripMenuItem";
+            this.classificationsToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.classificationsToolStripMenuItem.Text = "Classifications";
+            this.classificationsToolStripMenuItem.Click += new System.EventHandler(this.classificationsToolStripMenuItem_Click);
             // 
             // copyrightDateToolStripMenuItem
             // 
@@ -826,6 +826,20 @@ namespace CSharp_MARC_Editor
             this.copyrightDateToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
             this.copyrightDateToolStripMenuItem.Text = "Copyright Date";
             this.copyrightDateToolStripMenuItem.Click += new System.EventHandler(this.copyrightDateToolStripMenuItem_Click);
+            // 
+            // copyrightDateByDecadeToolStripMenuItem
+            // 
+            this.copyrightDateByDecadeToolStripMenuItem.Name = "copyrightDateByDecadeToolStripMenuItem";
+            this.copyrightDateByDecadeToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.copyrightDateByDecadeToolStripMenuItem.Text = "Copyright Date by Decade";
+            this.copyrightDateByDecadeToolStripMenuItem.Click += new System.EventHandler(this.copyrightDateByDecadeToolStripMenuItem_Click);
+            // 
+            // recordSummaryToolStripMenuItem
+            // 
+            this.recordSummaryToolStripMenuItem.Name = "recordSummaryToolStripMenuItem";
+            this.recordSummaryToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.recordSummaryToolStripMenuItem.Text = "Record Summary";
+            this.recordSummaryToolStripMenuItem.Click += new System.EventHandler(this.recordSummaryToolStripMenuItem_Click);
             // 
             // validateRecordsToolStripMenuItem
             // 
@@ -867,7 +881,7 @@ namespace CSharp_MARC_Editor
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
@@ -909,20 +923,6 @@ namespace CSharp_MARC_Editor
             // 
             this.loadingBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.loadingBackgroundWorker_DoWork);
             this.loadingBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.loadingBackgroundWorker_RunWorkerCompleted);
-            // 
-            // classificationsToolStripMenuItem
-            // 
-            this.classificationsToolStripMenuItem.Name = "classificationsToolStripMenuItem";
-            this.classificationsToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
-            this.classificationsToolStripMenuItem.Text = "Classifications";
-            this.classificationsToolStripMenuItem.Click += new System.EventHandler(this.classificationsToolStripMenuItem_Click);
-            // 
-            // copyrightDateByDecadeToolStripMenuItem
-            // 
-            this.copyrightDateByDecadeToolStripMenuItem.Name = "copyrightDateByDecadeToolStripMenuItem";
-            this.copyrightDateByDecadeToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
-            this.copyrightDateByDecadeToolStripMenuItem.Text = "Copyright Date by Decade";
-            this.copyrightDateByDecadeToolStripMenuItem.Click += new System.EventHandler(this.copyrightDateByDecadeToolStripMenuItem_Click);
             // 
             // MainForm
             // 
