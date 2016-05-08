@@ -3296,6 +3296,16 @@ namespace CSharp_MARC_Editor
             }
         }
 
+        private void copyrightDateByDecadeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (ReportForm form = new ReportForm())
+            {
+                form.Report = "CSharp_MARC_Editor.Reports.CopyrightDateDecadesReport.rdlc";
+                form.DataSources.Add(new Microsoft.Reporting.WinForms.ReportDataSource("CopyrightDateDataTable", marcDataSet.Tables["Records"]));
+                form.ShowDialog();
+            }
+        }
+
         #endregion
 
         #region Misc Events

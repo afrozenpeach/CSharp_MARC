@@ -158,6 +158,7 @@
       <DependentUpon>ReportForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\ClassificationReport.rdlc" />
+    <EmbeddedResource Include="Reports\CopyrightDateDecadesReport.rdlc" />
     <EmbeddedResource Include="Reports\RecordsReport.rdlc" />
     <EmbeddedResource Include="Reports\CopyrightDateReport.rdlc" />
     <None Include="app.config" />

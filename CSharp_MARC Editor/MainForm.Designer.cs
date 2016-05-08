@@ -142,6 +142,7 @@ namespace CSharp_MARC_Editor
             this.rebuildBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.loadingBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.classificationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyrightDateByDecadeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -805,6 +806,7 @@ namespace CSharp_MARC_Editor
             this.reportsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.classificationsToolStripMenuItem,
             this.copyrightDateToolStripMenuItem,
+            this.copyrightDateByDecadeToolStripMenuItem,
             this.recordSummaryToolStripMenuItem});
             this.reportsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("reportsToolStripMenuItem.Image")));
             this.reportsToolStripMenuItem.Name = "reportsToolStripMenuItem";
@@ -814,14 +816,14 @@ namespace CSharp_MARC_Editor
             // recordSummaryToolStripMenuItem
             // 
             this.recordSummaryToolStripMenuItem.Name = "recordSummaryToolStripMenuItem";
-            this.recordSummaryToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.recordSummaryToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
             this.recordSummaryToolStripMenuItem.Text = "Record Summary";
             this.recordSummaryToolStripMenuItem.Click += new System.EventHandler(this.recordSummaryToolStripMenuItem_Click);
             // 
             // copyrightDateToolStripMenuItem
             // 
             this.copyrightDateToolStripMenuItem.Name = "copyrightDateToolStripMenuItem";
-            this.copyrightDateToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.copyrightDateToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
             this.copyrightDateToolStripMenuItem.Text = "Copyright Date";
             this.copyrightDateToolStripMenuItem.Click += new System.EventHandler(this.copyrightDateToolStripMenuItem_Click);
             // 
@@ -865,7 +867,7 @@ namespace CSharp_MARC_Editor
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
@@ -911,9 +913,16 @@ namespace CSharp_MARC_Editor
             // classificationsToolStripMenuItem
             // 
             this.classificationsToolStripMenuItem.Name = "classificationsToolStripMenuItem";
-            this.classificationsToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.classificationsToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
             this.classificationsToolStripMenuItem.Text = "Classifications";
             this.classificationsToolStripMenuItem.Click += new System.EventHandler(this.classificationsToolStripMenuItem_Click);
+            // 
+            // copyrightDateByDecadeToolStripMenuItem
+            // 
+            this.copyrightDateByDecadeToolStripMenuItem.Name = "copyrightDateByDecadeToolStripMenuItem";
+            this.copyrightDateByDecadeToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.copyrightDateByDecadeToolStripMenuItem.Text = "Copyright Date by Decade";
+            this.copyrightDateByDecadeToolStripMenuItem.Click += new System.EventHandler(this.copyrightDateByDecadeToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -1034,6 +1043,7 @@ namespace CSharp_MARC_Editor
         internal MARCDataSet marcDataSet;
         private System.Windows.Forms.ToolStripMenuItem copyrightDateToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem classificationsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem copyrightDateByDecadeToolStripMenuItem;
 
     }
 }
