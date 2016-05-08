@@ -1589,6 +1589,11 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void MainForm_Load(object sender, EventArgs e)
         {
+            if (!File.Exists("MARC.db"))
+            {
+                ResetDatabase(true);
+            }
+
             loading = true;
             DisableForm();
             toolStripProgressBar.Style = ProgressBarStyle.Marquee;
