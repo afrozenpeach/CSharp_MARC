@@ -102,7 +102,7 @@
               <Width>0.65625in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.65625in</Width>
+              <Width>1.20833in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>1in</Width>
@@ -936,7 +936,7 @@
         </TablixRowHierarchy>
         <DataSetName>RecordsDataTable</DataSetName>
         <Height>0.5in</Height>
-        <Width>10.39583in</Width>
+        <Width>9.94791in</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -947,7 +947,7 @@
     <Height>2in</Height>
     <Style />
   </Body>
-  <Width>12.3125in</Width>
+  <Width>9.94791in</Width>
   <Page>
     <PageHeight>8.5in</PageHeight>
     <PageWidth>11in</PageWidth>

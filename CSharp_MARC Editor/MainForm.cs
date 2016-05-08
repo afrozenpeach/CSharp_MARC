@@ -3261,7 +3261,7 @@ namespace CSharp_MARC_Editor
             using (ReportForm form = new ReportForm())
             {
                 form.Report = "CSharp_MARC_Editor.Reports.RecordsReport.rdlc";
-                form.DataSources.Add(new Microsoft.Reporting.WinForms.ReportDataSource("RecordsReportTable", marcDataSet.Tables["Records"]));
+                form.DataSources.Add(new Microsoft.Reporting.WinForms.ReportDataSource("RecordsDataTable", marcDataSet.Tables["Records"]));
                 form.ShowDialog();
             }
         }
