@@ -3281,6 +3281,21 @@ namespace CSharp_MARC_Editor
             }
         }
 
+        /// <summary>
+        /// Handles the Click event of the classificationsToolStripMenuItem control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void classificationsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (ReportForm form = new ReportForm())
+            {
+                form.Report = "CSharp_MARC_Editor.Reports.ClassificationReport.rdlc";
+                form.DataSources.Add(new Microsoft.Reporting.WinForms.ReportDataSource("ClassificationDataTable", marcDataSet.Tables["Records"]));
+                form.ShowDialog();
+            }
+        }
+
         #endregion
 
         #region Misc Events

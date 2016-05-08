@@ -141,6 +141,7 @@ namespace CSharp_MARC_Editor
             this.printDocument = new System.Drawing.Printing.PrintDocument();
             this.rebuildBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.loadingBackgroundWorker = new System.ComponentModel.BackgroundWorker();
+            this.classificationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -802,8 +803,9 @@ namespace CSharp_MARC_Editor
             // reportsToolStripMenuItem
             // 
             this.reportsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.recordSummaryToolStripMenuItem,
-            this.copyrightDateToolStripMenuItem});
+            this.classificationsToolStripMenuItem,
+            this.copyrightDateToolStripMenuItem,
+            this.recordSummaryToolStripMenuItem});
             this.reportsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("reportsToolStripMenuItem.Image")));
             this.reportsToolStripMenuItem.Name = "reportsToolStripMenuItem";
             this.reportsToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
@@ -905,6 +907,13 @@ namespace CSharp_MARC_Editor
             // 
             this.loadingBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.loadingBackgroundWorker_DoWork);
             this.loadingBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.loadingBackgroundWorker_RunWorkerCompleted);
+            // 
+            // classificationsToolStripMenuItem
+            // 
+            this.classificationsToolStripMenuItem.Name = "classificationsToolStripMenuItem";
+            this.classificationsToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.classificationsToolStripMenuItem.Text = "Classifications";
+            this.classificationsToolStripMenuItem.Click += new System.EventHandler(this.classificationsToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -1024,6 +1033,7 @@ namespace CSharp_MARC_Editor
         private System.Windows.Forms.ToolStripMenuItem recordSummaryToolStripMenuItem;
         internal MARCDataSet marcDataSet;
         private System.Windows.Forms.ToolStripMenuItem copyrightDateToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem classificationsToolStripMenuItem;
 
     }
 }
