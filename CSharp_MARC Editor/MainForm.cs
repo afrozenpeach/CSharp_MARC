@@ -1811,7 +1811,11 @@ namespace CSharp_MARC_Editor
                         command.CommandText = "INSERT INTO Records (DateAdded, DateChanged, Author, Title, CopyrightDate, Barcode, Classification, MainEntry, Custom1, Custom2, Custom3, Custom4, Custom5, ImportErrors) VALUES (@DateAdded, @DateChanged, @Author, @Title, @CopyrightDate, @Barcode, @Classification, @MainEntry, @Custom1, @Custom2, @Custom3, @Custom4, @CUstom5, @ImportErrors)";
 
                         command.Parameters.Add("@DateAdded", DbType.DateTime).Value = DateTime.Now;
-                        command.Parameters.Add("@DateChanged", DbType.DateTime).Value = DateTime.Parse(newRow["DateChanged"].ToString());
+                        DateTime changed = new DateTime();
+                        if (DateTime.TryParse(newRow["DateChanged"].ToString(), out changed))
+                            command.Parameters.Add("@DateChanged", DbType.DateTime).Value = changed;
+                        else
+                            command.Parameters.Add("@DateChanged", DbType.DateTime).Value = null;
                         command.Parameters.Add("@Author", DbType.String).Value = newRow["Author"];
                         command.Parameters.Add("@Title", DbType.String).Value = newRow["Title"];
                         command.Parameters.Add("@CopyrightDate", DbType.String).Value = newRow["CopyrightDate"];
