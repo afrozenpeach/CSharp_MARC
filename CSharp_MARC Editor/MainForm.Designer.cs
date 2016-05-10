@@ -143,6 +143,7 @@ namespace CSharp_MARC_Editor
             this.printDocument = new System.Drawing.Printing.PrintDocument();
             this.rebuildBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.loadingBackgroundWorker = new System.ComponentModel.BackgroundWorker();
+            this.rdaConversionBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -924,6 +925,13 @@ namespace CSharp_MARC_Editor
             this.loadingBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.loadingBackgroundWorker_DoWork);
             this.loadingBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.loadingBackgroundWorker_RunWorkerCompleted);
             // 
+            // rdaConversionBackgroundWorker
+            // 
+            this.rdaConversionBackgroundWorker.WorkerReportsProgress = true;
+            this.rdaConversionBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.rdaConversionBackgroundWorker_DoWork);
+            this.rdaConversionBackgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.rdaConversionBackgroundWorker_ProgressChanged);
+            this.rdaConversionBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.rdaConversionBackgroundWorker_RunWorkerCompleted);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1044,6 +1052,7 @@ namespace CSharp_MARC_Editor
         private System.Windows.Forms.ToolStripMenuItem copyrightDateToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem classificationsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem copyrightDateByDecadeToolStripMenuItem;
+        private System.ComponentModel.BackgroundWorker rdaConversionBackgroundWorker;
 
     }
 }

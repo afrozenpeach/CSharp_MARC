@@ -3059,7 +3059,320 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void convertToRDAToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("This feature is not yet implemented, but is coming soon.", "Coming Soon!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            if (MessageBox.Show("This will attempt to convert AACR2 records to RDA records by making assumptions based on the data in the record. It is not intended to be a complete RDA conversion solution, and records should be verified after conversion." + Environment.NewLine + Environment.NewLine + "Are you sure you want to begin the conversion?", "Convert Database to RDA", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+            {
+                DisableForm();
+                toolStripProgressBar.Style = ProgressBarStyle.Marquee;
+                toolStripProgressBar.MarqueeAnimationSpeed = 30;
+                toolStripProgressBar.Enabled = true;
+                toolStripProgressBar.Visible = true;
+                progressToolStripStatusLabel.Visible = true;
+                recordsDataGridView.SuspendLayout();
+                recordsDataGridView.DataSource = null;
+                rdaConversionBackgroundWorker.RunWorkerAsync();
+            }
+        }
+
+        /// <summary>
+        /// Handles the DoWork event of the rdaConversionBackgroundWorker control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="DoWorkEventArgs"/> instance containing the event data.</param>
+        private void rdaConversionBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            {
+                connection.Open();
+
+                using (SQLiteCommand command = new SQLiteCommand(connection))
+                {
+                    rdaConversionBackgroundWorker.ReportProgress(100);
+                    command.CommandText = @"INSERT INTO TempUpdates
+                                                SELECT s.SubfieldID, REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(s.Data, ' (ca.)', 'approximately'), 'ca.', 'approximately'), 'b.', 'born'), 'd.', 'died'), 'fl.', 'flourished')
+                                                FROM Subfields s
+                                                LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                WHERE f.TagNumber = @TagNumber and s.Code = @Code and (s.Data LIKE '% ca\.%' ESCAPE '\' or s.Data LIKE '%b\.' ESCAPE '\');
+
+                                            UPDATE Subfields
+                                            SET Data = (SELECT Data FROM TempUpdates WHERE TempUpdates.RecordID = Subfields.SubfieldID)
+                                            WHERE SubfieldID IN (SELECT RecordID FROM TempUpdates); 
+
+                                            DELETE FROM TempUpdates;";
+                    command.Parameters.Add("TagNumber", DbType.String).Value = "100";
+                    command.Parameters.Add("Code", DbType.String).Value = "d";
+                    command.ExecuteNonQuery();
+
+                    rdaConversionBackgroundWorker.ReportProgress(245);
+                    command.CommandText = @"INSERT INTO TempUpdates
+                                                SELECT s.SubfieldID, REPLACE(REPLACE(s.Data, '... [et al.]', '[and others]'), '[et al.]', '[and others]')
+                                                FROM Subfields s
+                                                LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                WHERE f.TagNumber = @TagNumber and s.Code = @Code and s.Data LIKE '% et al\.%' ESCAPE '\';
+
+                                            UPDATE Subfields
+                                            SET Data = (SELECT Data FROM TempUpdates WHERE TempUpdates.RecordID = Subfields.SubfieldID)
+                                            WHERE SubfieldID IN (SELECT RecordID FROM TempUpdates); 
+
+                                            DELETE FROM TempUpdates;";
+                    command.Parameters.Add("TagNumber", DbType.String).Value = "245";
+                    command.Parameters.Add("Code", DbType.String).Value = "c";
+                    command.ExecuteNonQuery();
+
+                    rdaConversionBackgroundWorker.ReportProgress(250);
+                    command.CommandText = @"INSERT INTO TempUpdates
+                                                SELECT s.SubfieldID, REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Data, 'ed.', 'edition'), '1st', 'first'), '2nd', 'second'), '3rd', 'third'), '4th', 'fourth'), '5th', 'fifth'), '6th', 'sixth'), '7th', 'seventh'), '8th', 'eighth'), '9th', 'ninth'), '10th', 'tenth'), '12th', 'twelvth'), '13th', 'thirteenth'), '14th', 'fourteenth'), '15th', 'fifteenth'), '16th', 'sixteenth'), '17th', 'seventeenth'), '18th', 'eighteenth'), '19th', 'nineteenth'), '20th', 'twentieth')
+                                                FROM Subfields s
+                                                LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                WHERE f.TagNumber = @TagNumber and s.Code = @Code;
+
+                                            INSERT INTO TempUpdates
+                                                SELECT s.SubfieldID, REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Data, 'Rev.', 'Revised'), 'rev.', 'revised'), 'pbk', 'paperback'), 'ill.', 'illustrated'), 'la edition', 'Primera edición'), 'Edicion en espanol', 'Edición en espanol'), 'izd.', 'izdája'), '2d', 'second'), '3d', 'third'), 'edition.,', 'edition,'), ' Second ', ' second '), 'edition. of:', 'edition of:')
+                                                FROM Subfields s
+                                                LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                WHERE f.TagNumber = @TagNumber and s.Code = @Code;
+
+                                            UPDATE Subfields
+                                            SET Data = (SELECT Data FROM TempUpdates WHERE TempUpdates.RecordID = Subfields.SubfieldID)
+                                            WHERE SubfieldID IN (SELECT RecordID FROM TempUpdates); 
+
+                                            DELETE FROM TempUpdates;";
+                    command.Parameters.Add("TagNumber", DbType.String).Value = "250";
+                    command.Parameters.Add("Code", DbType.String).Value = "a";
+                    command.ExecuteNonQuery();
+                    
+                    rdaConversionBackgroundWorker.ReportProgress(260);
+                    command.CommandText = @"INSERT INTO TempUpdates
+                                                SELECT s.SubfieldID, REPLACE(Data, 'c1', '©1'), 'c2', '©2')
+                                                FROM Subfields s
+                                                LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                WHERE f.TagNumber = @TagNumber and s.Code = @Code;
+
+                                            UPDATE Subfields
+                                            SET Data = (SELECT Data FROM TempUpdates WHERE TempUpdates.RecordID = Subfields.SubfieldID)
+                                            WHERE SubfieldID IN (SELECT RecordID FROM TempUpdates); 
+
+                                            DELETE FROM TempUpdates;";
+                    command.Parameters.Add("TagNumber", DbType.String).Value = "260";
+                    command.Parameters.Add("Code", DbType.String).Value = "c";
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = @"INSERT INTO TempUpdates
+                                                SELECT s.SubfieldID, REPLACE(Data || ', ©' || SUBSTR(s2.Data, 11, 4), '.,', ',')
+                                                FROM Subfields s
+                                                LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                LEFT OUTER JOIN Fields f2 on f2.RecordID = f.RecordID and f.TagNumber = '008'
+                                                LEFT OUTER JOIN Subfields s2 on f2.FieldID = s2.FieldID
+                                                WHERE f.TagNumber = @TagNumber and s.Code = @Code and SUBSTR(s2.Data, 11, 4) != '    ';
+
+                                            UPDATE Subfields
+                                            SET Data = (SELECT Data FROM TempUpdates WHERE TempUpdates.RecordID = Subfields.SubfieldID)
+                                            WHERE SubfieldID IN (SELECT RecordID FROM TempUpdates); 
+
+                                            DELETE FROM TempUpdates;";
+                    command.Parameters.Add("TagNumber", DbType.String).Value = "260";
+                    command.Parameters.Add("Code", DbType.String).Value = "c";
+                    command.ExecuteNonQuery();
+
+                    rdaConversionBackgroundWorker.ReportProgress(300);
+                    command.CommandText = @"INSERT INTO TempUpdates
+                                                SELECT s.SubfieldID, REPLACE(REPLACE(REPLACE(REPLACE(Data, 'p.', 'pages'), 'v.', 'volumes'), '[', ''), ']', ' unnumbered')
+                                                FROM Subfields s
+                                                LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                WHERE f.TagNumber = @TagNumber and s.Code = @Code and (s.Data LIKE '%p\.%' ESCAPE '\' or s.Data LIKE '%v\.%' ESCAPE '\')
+
+                                            UPDATE Subfields
+                                            SET Data = (SELECT Data FROM TempUpdates WHERE TempUpdates.RecordID = Subfields.SubfieldID)
+                                            WHERE SubfieldID IN (SELECT RecordID FROM TempUpdates); 
+
+                                            DELETE FROM TempUpdates;";
+                    command.Parameters.Add("TagNumber", DbType.String).Value = "300";
+                    command.Parameters.Add("Code", DbType.String).Value = "a";
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = @"INSERT INTO TempUpdates
+                                                SELECT s.SubfieldID, REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Data, 'col.', 'color'), 'ill.', 'illustrations'), 'facsims', 'facsimiles'), 'geneal. tables', 'genealogical tables'), 'ports.', 'portraits')
+                                                FROM Subfields s
+                                                LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                WHERE f.TagNumber = @TagNumber and s.Code = @Code and (s.Data LIKE '%col\.%' ESCAPE '\' or s.Data LIKE '%ill\.%' ESCAPE '\')
+
+                                            UPDATE Subfields
+                                            SET Data = (SELECT Data FROM TempUpdates WHERE TempUpdates.RecordID = Subfields.SubfieldID)
+                                            WHERE SubfieldID IN (SELECT RecordID FROM TempUpdates); 
+
+                                            DELETE FROM TempUpdates;";
+                    command.Parameters.Add("TagNumber", DbType.String).Value = "300";
+                    command.Parameters.Add("Code", DbType.String).Value = "b";
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = @"INSERT INTO TempUpdates
+                                                SELECT s.SubfieldID, REPLACE(REPLACE(REPLACE(Data, 'CD', 'compact disc'), 'DVD', 'videodisc'), 'CD-ROM', 'computer disc')
+                                                FROM Subfields s
+                                                LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                WHERE f.TagNumber = @TagNumber and s.Code = @Code and (s.Data like '%CD%' or s.Data like '%DVD%');
+
+                                            UPDATE Subfields
+                                            SET Data = (SELECT Data FROM TempUpdates WHERE TempUpdates.RecordID = Subfields.SubfieldID)
+                                            WHERE SubfieldID IN (SELECT RecordID FROM TempUpdates); 
+
+                                            DELETE FROM TempUpdates;";
+                    command.Parameters.Add("TagNumber", DbType.String).Value = "300";
+                    command.Parameters.Add("Code", DbType.String).Value = "c";
+                    command.ExecuteNonQuery();
+
+                    rdaConversionBackgroundWorker.ReportProgress(336);
+                    command.CommandText = @"INSERT INTO TempUpdates
+                                                SELECT RecordID, ''
+                                                FROM Fields
+                                                WHERE TagNumber = '008' and (SUBSTR(ControlData, 18, 4) like '%a%' or SUBSTR(ControlData, 18, 4) like '%b% or 'SUBSTR(ControlData, 18, 4) like '%o%' or SUBSTR(ControlData, 18, 4) like '%f%')
+
+                                            INSERT INTO Fields (RecordID, TagNumber, Ind2, Ind2)
+                                                SELECT RecordID, '336', ' ', ' '
+                                                FROM TempUpdates t
+                                                LEFT OUTER JOIN Fields f ON f.RecordID = t.RecordID and f.TagNumber = '336';
+                                                WHERE f.FieldID IS NULL
+
+                                            INSERT INTO Subfields (FieldID, Code, Data)
+                                                SELECT FieldID, 'a', 'still image'
+                                                FROM Fields f
+                                                LEFT OUTER JOIN Subfields s on s.FieldID = f.FieldID and s.Code = 'a'
+                                                WHERE s.FieldID IS NULL
+
+                                            INSERT INTO Subfields (FieldID, Code, Data)
+                                                SELECT FieldID, '2', 'rdacontent'
+                                                FROM Fields f
+                                                LEFT OUTER JOIN Subfields s on s.FieldID = f.FieldID and s.Code = '2'
+                                                WHERE s.FieldID IS NULL
+
+                                            DELETE FROM TempUpdates;";
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = @"INSERT INTO TempUpdates
+                                                SELECT RecordID, SUBSTR(ControlData, 0, 1)
+                                                FROM Fields
+                                                WHERE TagNumber = '007'
+
+                                            INSERT INTO TempUpdates
+                                                SELECT RecordID, ' '
+                                                FROM Fields f
+                                                LEFT OUTER JOIN Fields f2 ON f.RecordID = f2.RecordID AND f2.TagNumber = '007'
+                                                WHERE f2.RecordID IS NULL
+
+                                            INSERT INTO Fields (RecordID, TagNumber, Ind2, Ind2)
+                                                SELECT RecordID, '337', ' ', ' '
+                                                FROM TempUpdates;
+
+                                            INSERT INTO Subfields (FieldID, Code, Data)
+                                                SELECT FieldID, 'a',
+                                                    CASE t.Data
+                                                        WHEN 's' THEN 'audio'
+                                                        WHEN 'c' THEN 'computer'
+                                                        WHEN 'h' THEN 'microform'
+                                                        WHEN 'g' THEN 'projected'
+                                                        WHEN 'm' THEN 'projected'
+                                                        WHEN 't' THEN 'unmediated'
+                                                        WHEN 'k' THEN 'unmediated'
+                                                        WHEN ' ' THEN 'unmediated'
+                                                        WHEN 'v' THEN 'video'
+                                                        WHEN 'z' THEN 'unspecified'
+                                                        ELSE 'other'
+                                                    END
+                                                FROM Fields f
+                                                LEFT OUTER JOIN TempUpdates t on t.RecordID = f.RecordID
+                                                LEFT OUTER JOIN Subfields s on s.FieldID = f.FieldID and s.Code = 'a'
+                                                WHERE s.FieldID is null
+
+                                            INSERT INTO Subfields (FieldID, Code, Data)
+                                                SELECT FieldID, 'b',
+                                                    CASE t.Data
+                                                        WHEN 's' THEN 's'
+                                                        WHEN 'c' THEN 'c'
+                                                        WHEN 'h' THEN 'h'
+                                                        WHEN 'p' THEN 'p
+                                                        WHEN 'g' THEN 'g'
+                                                        WHEN 'm' THEN 'g'
+                                                        WHEN 't' THEN 'n'
+                                                        WHEN 'k' THEN 'n'
+                                                        WHEN ' ' THEN 'n'
+                                                        WHEN 'v' THEN 'v'
+                                                        WHEN 'z' THEN 'z'
+                                                        ELSE 'x'
+                                                    END
+                                                FROM Fields f
+                                                LEFT OUTER JOIN TempUpdates t on t.RecordID = f.RecordID
+                                                LEFT OUTER JOIN Subfields s on s.FieldID = f.FieldID and s.Code = 'b'
+                                                WHERE s.FieldID is null
+
+                                            INSERT INTO Subfields (FieldID, Code, Data)
+                                                SELECT FieldID, '2', 'rdamedia'
+                                                FROM Fields f
+                                                LEFT OUTER JOIN Subfields s on s.FieldID = f.FieldID and s.Code = '2'
+                                                WHERE s.FieldID is null
+
+                                            DELETE FROM TempUpdates;";
+                    command.ExecuteNonQuery();
+
+                    rdaConversionBackgroundWorker.ReportProgress(338);
+                    command.CommandText = @"INSERT INTO TempUpdates
+                                                SELECT RecordID, ''
+                                                FROM Fields f 
+                                                WHERE TagNumber = @TagNumber and 
+
+                                            INSERT INTO Fields (RecordID, TagNumber, Ind2, Ind2)
+                                                SELECT RecordID, '336', ' ', ' '
+                                                FROM TempUpdates;
+
+                                            INSERT INTO Subfields (FieldID, Code, Data)
+                                                SELECT FieldID, 'a', 'still image'
+                                                FROM Fields f
+                                                LEFT OUTER JOIN Subfields s on s.FieldID = f.FieldID and s.Code = 'a'
+                                                WHERE s.FieldID is null
+
+                                            INSERT INTO Subfields (FieldID, Code, Data)
+                                                SELECT FieldID, '2', 'rdacontent'
+                                                FROM Fields f
+                                                LEFT OUTER JOIN Subfields s on s.FieldID = f.FieldID and s.Code = '2'
+                                                WHERE s.FieldID is null
+
+                                            DELETE FROM TempUpdates;";
+                    command.ExecuteNonQuery();
+                    
+                    rdaConversionBackgroundWorker.ReportProgress(-1);
+
+                    RebuildRecordsPreviewInformation();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Handles the ProgressChanged event of the rdaConversionBackgroundWorker control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="ProgressChangedEventArgs"/> instance containing the event data.</param>
+        private void rdaConversionBackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            if (e.ProgressPercentage == -1)
+                progressToolStripStatusLabel.Text = rebuildingPreview;
+            else
+                progressToolStripStatusLabel.Text = "Converting tag #" + e.ProgressPercentage.ToString().PadLeft(3, '0') + "...";
+        }
+
+        /// <summary>
+        /// Handles the RunWorkerCompleted event of the rdaConversionBackgroundWorker control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RunWorkerCompletedEventArgs"/> instance containing the event data.</param>
+        private void rdaConversionBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            progressToolStripStatusLabel.Text = "";
+            toolStripProgressBar.Visible = false;
+            toolStripProgressBar.Enabled = false;
+            progressToolStripStatusLabel.Visible = false;
+            cancelButtonToolStripStatusLabel.Visible = false;
+            toolStripProgressBar.MarqueeAnimationSpeed = 0;
+            recordsDataGridView.DataSource = marcDataSet.Tables["Records"];
+            recordsDataGridView.ResumeLayout();
+            loading = false;
+            EnableForm();
         }
 
         #endregion
