@@ -3335,6 +3335,22 @@ namespace CSharp_MARC_Editor
 
                                             DELETE FROM TempUpdates;";
                     command.ExecuteNonQuery();
+
+                    rdaConversionBackgroundWorker.ReportProgress(600);
+                    command.CommandText = @"INSERT INTO TempUpdates
+                                                SELECT s.SubfieldID, REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(s.Data, ' (ca.)', 'approximately'), 'ca.', 'approximately'), 'b.', 'born'), 'd.', 'died'), 'fl.', 'flourished')
+                                                FROM Subfields s
+                                                LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                WHERE f.TagNumber = @TagNumber and s.Code = @Code and (s.Data LIKE '% ca\.%' ESCAPE '\' or s.Data LIKE '%b\.' ESCAPE '\' or s.Data LIKE '%d\.' ESCAPE '\' or s.Data LIKE '%fl\.' ESCAPE '\');
+
+                                            UPDATE Subfields
+                                            SET Data = (SELECT Data FROM TempUpdates WHERE TempUpdates.RecordID = Subfields.SubfieldID)
+                                            WHERE SubfieldID IN (SELECT RecordID FROM TempUpdates); 
+
+                                            DELETE FROM TempUpdates;";
+                    command.Parameters.Add("TagNumber", DbType.String).Value = "600";
+                    command.Parameters.Add("Code", DbType.String).Value = "d";
+                    command.ExecuteNonQuery();
                     
                     rdaConversionBackgroundWorker.ReportProgress(-1);
 
