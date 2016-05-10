@@ -5,3 +5,5 @@ CSharp_MARC Tests/bin/
 CSharp_MARC Tests/obj/
 CSharp_MARC/obj/
 *.suo
+CSharp_MARC/bin/
+packages/
