@@ -101,7 +101,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="CSharp_MARC Keyfile.pfx" />
     <None Include="CSharp_MARC Keyfile.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

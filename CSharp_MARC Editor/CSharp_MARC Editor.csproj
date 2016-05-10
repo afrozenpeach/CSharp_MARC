@@ -203,7 +203,6 @@
     <EmbeddedResource Include="Reports\RecordsReport.rdlc" />
     <EmbeddedResource Include="Reports\CopyrightDateReport.rdlc" />
     <None Include="app.config" />
-    <None Include="CSharp_MARC Keyfile.pfx" />
     <Content Include="MARC.db">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
