@@ -3259,7 +3259,7 @@ namespace CSharp_MARC_Editor
                                                 LEFT OUTER JOIN Fields f2 ON f.RecordID = f2.RecordID AND f2.TagNumber = '007'
                                                 WHERE f2.RecordID IS NULL;
 
-                                            INSERT INTO Fields (RecordID, TagNumber, Ind2, Ind2)
+                                            INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2)
                                                 SELECT RecordID, '337', ' ', ' '
                                                 FROM TempUpdates;
 
@@ -3326,7 +3326,7 @@ namespace CSharp_MARC_Editor
                                                 LEFT OUTER JOIN Fields f2 ON f.RecordID = f2.RecordID AND f2.TagNumber = '007'
                                                 WHERE f2.RecordID IS NULL;
 
-                                            INSERT INTO Fields (RecordID, TagNumber, Ind2, Ind2)
+                                            INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2)
                                                 SELECT RecordID, '338', ' ', ' '
                                                 FROM TempUpdates;
 
