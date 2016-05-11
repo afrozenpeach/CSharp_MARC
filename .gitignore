@@ -7,3 +7,4 @@ CSharp_MARC/obj/
 *.suo
 CSharp_MARC/bin/
 packages/
+*.snk
