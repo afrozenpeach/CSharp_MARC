@@ -3225,7 +3225,7 @@ namespace CSharp_MARC_Editor
                                                 FROM Fields f
                                                 WHERE TagNumber = '008' and (SUBSTR(ControlData, 19, 4) like '%a%' or SUBSTR(ControlData, 19, 4) like '%b%' or SUBSTR(ControlData, 19, 4) like '%o%' or SUBSTR(ControlData, 19, 4) like '%f%');
 
-                                            INSERT INTO Fields (RecordID, TagNumber, Ind2, Ind2)
+                                            INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2)
                                                 SELECT t.RecordID, '336', ' ', ' '
                                                 FROM TempUpdates t
                                                 LEFT OUTER JOIN Fields f ON f.FieldID = t.RecordID and f.TagNumber = '336'
