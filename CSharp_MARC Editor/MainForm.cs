@@ -3243,32 +3243,71 @@ namespace CSharp_MARC_Editor
                     command.Parameters.Add("TagNumber", DbType.String).Value = "300";
                     command.Parameters.Add("Code", DbType.String).Value = "c";
                     command.ExecuteNonQuery();
-                    
+
                     rdaConversionBackgroundWorker.ReportProgress(336);
                     command.CommandText = @"INSERT INTO TempUpdates
-                                                SELECT f.FieldID, ''
-                                                FROM Fields f
-                                                WHERE TagNumber = '008' and (SUBSTR(ControlData, 19, 4) like '%a%' or SUBSTR(ControlData, 19, 4) like '%b%' or SUBSTR(ControlData, 19, 4) like '%o%' or SUBSTR(ControlData, 19, 4) like '%f%');
+                                                SELECT FieldID, SUBSTR(ControlData, 7, 1)
+                                                FROM Fields
+                                                WHERE TagNumber = 'LDR'
 
                                             INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2)
-                                                SELECT t.RecordID, '336', ' ', ' '
-                                                FROM TempUpdates t
-                                                LEFT OUTER JOIN Fields f ON f.FieldID = t.RecordID and f.TagNumber = '336'
-                                                WHERE f.FieldID IS NULL;
+                                                SELECT RecordID, '336', ' ', ' '
+                                                FROM TempUpdates;
 
                                             INSERT INTO Subfields (FieldID, Code, Data)
-                                                SELECT f.FieldID, 'a', 'still image'
+                                                SELECT f.FieldID, 'a',
+                                                    CASE t.Data
+                                                        WHEN 'e' THEN 'cartographic image'
+                                                        WHEN 'f' THEN 'cartographic image'
+                                                        WHEN 'm' THEN 'computer program'
+                                                        WHEN 'a' THEN 'text'
+                                                        WHEN 't' THEN 'text'
+                                                        WHEN 'c' THEN 'notated music'
+                                                        WHEN 'd' THEN 'notated music'
+                                                        WHEN 'j' THEN 'performed music'
+                                                        WHEN 'i' THEN 'spoken word'
+                                                        WHEN 'k' THEN 'still image'
+                                                        WHEN 'r' THEN 'three-dimensional form'
+                                                        WHEN 'g' THEN 'two-dimensional moving image'
+                                                        WHEN 'o' THEN 'other'
+                                                        WHEN 'p' THEN 'other'
+                                                        ELSE 'unspecified'
+                                                    END
                                                 FROM Fields f
                                                 LEFT OUTER JOIN TempUpdates t on t.RecordID = f.RecordID
                                                 LEFT OUTER JOIN Subfields s on s.FieldID = f.FieldID and s.Code = 'a'
-                                                WHERE f.TagNumber = '336' and s.FieldID IS NULL and t.RecordID IS NOT NULL;
+                                                WHERE f.TagNumber = '336' and s.FieldID is null and t.RecordID is not null;
+
+                                            INSERT INTO Subfields (FieldID, Code, Data)
+                                                SELECT f.FieldID, 'b',
+                                                    CASE t.Data
+                                                        WHEN 'e' THEN 'cri'
+                                                        WHEN 'f' THEN 'cri'
+                                                        WHEN 'm' THEN 'cop'
+                                                        WHEN 'a' THEN 'txt'
+                                                        WHEN 't' THEN 'txt'
+                                                        WHEN 'c' THEN 'ntm'
+                                                        WHEN 'd' THEN 'ntm'
+                                                        WHEN 'j' THEN 'prm'
+                                                        WHEN 'i' THEN 'spw'
+                                                        WHEN 'k' THEN 'sti'
+                                                        WHEN 'r' THEN 'tdf'
+                                                        WHEN 'g' THEN 'tdi'
+                                                        WHEN 'o' THEN 'xxx'
+                                                        WHEN 'p' THEN 'xxx'
+                                                        ELSE 'zzz'
+                                                    END
+                                                FROM Fields f
+                                                LEFT OUTER JOIN TempUpdates t on t.RecordID = f.RecordID
+                                                LEFT OUTER JOIN Subfields s on s.FieldID = f.FieldID and s.Code = 'b'
+                                                WHERE f.TagNumber = '367' and s.FieldID is null and t.RecordID is not null;
 
                                             INSERT INTO Subfields (FieldID, Code, Data)
                                                 SELECT f.FieldID, '2', 'rdacontent'
                                                 FROM Fields f
                                                 LEFT OUTER JOIN TempUpdates t on t.RecordID = f.RecordID
                                                 LEFT OUTER JOIN Subfields s on s.FieldID = f.FieldID and s.Code = '2'
-                                                WHERE f.TagNumber = '336' and s.FieldID IS NULL and t.RecordID IS NOT NULL;
+                                                WHERE f.TagNumber = '336' and s.FieldID is null and t.RecordID is not null;
 
                                             DELETE FROM TempUpdates;";
                     command.ExecuteNonQuery();
