@@ -8,3 +8,4 @@ CSharp_MARC/obj/
 CSharp_MARC/bin/
 packages/
 *.snk
+TestResults/
