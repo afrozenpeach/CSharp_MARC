@@ -3406,7 +3406,7 @@ namespace CSharp_MARC_Editor
                                                 FROM Fields f
                                                 LEFT OUTER JOIN TempUpdates t on t.RecordID = f.RecordID
                                                 LEFT OUTER JOIN Subfields s on s.FieldID = f.FieldID and s.Code = 'a'
-                                                WHERE f.TagNumber = '337' and s.FieldID is null and t.RecordID is not null;
+                                                WHERE f.TagNumber = '338' and s.FieldID is null and t.RecordID is not null;
 
                                             INSERT INTO Subfields (FieldID, Code, Data)
                                                 SELECT f.FieldID, 'b',
@@ -3459,14 +3459,14 @@ namespace CSharp_MARC_Editor
                                                 FROM Fields f
                                                 LEFT OUTER JOIN TempUpdates t on t.RecordID = f.RecordID
                                                 LEFT OUTER JOIN Subfields s on s.FieldID = f.FieldID and s.Code = 'b'
-                                                WHERE f.TagNumber = '337' and s.FieldID is null and t.RecordID is not null;
+                                                WHERE f.TagNumber = '338' and s.FieldID is null and t.RecordID is not null;
 
                                             INSERT INTO Subfields (FieldID, Code, Data)
                                                 SELECT f.FieldID, '2', 'rdacarrier'
                                                 FROM Fields f
                                                 LEFT OUTER JOIN TempUpdates t on t.RecordID = f.RecordID
                                                 LEFT OUTER JOIN Subfields s on s.FieldID = f.FieldID and s.Code = '2'
-                                                WHERE f.TagNumber = '337' and s.FieldID is null and t.RecordID is not null;
+                                                WHERE f.TagNumber = '338' and s.FieldID is null and t.RecordID is not null;
 
                                             DELETE FROM TempUpdates;";
                     command.ExecuteNonQuery();
