@@ -3097,6 +3097,21 @@ namespace CSharp_MARC_Editor
 
                 using (SQLiteCommand command = new SQLiteCommand(connection))
                 {
+                    rdaConversionBackgroundWorker.ReportProgress(40);
+                    command.CommandText = @"INSERT INTO TempUpdates
+                                                SELECT f.FieldID, ' '
+                                                FROM Fields f
+                                                WHERE f.TagNumber = @TagNumber;
+
+                                            INSERT INTO Subfields (FieldID, Code, Data)
+                                                SELECT RecordID, @Code, 'rda'
+                                                FROM TempUpdates
+
+                                            DELETE FROM TempUpdates;";
+                    command.Parameters.Add("TagNumber", DbType.String).Value = "040";
+                    command.Parameters.Add("Code", DbType.String).Value = "e";
+                    command.ExecuteNonQuery();
+
                     rdaConversionBackgroundWorker.ReportProgress(100);
                     command.CommandText = @"INSERT INTO TempUpdates
                                                 SELECT s.SubfieldID, REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(s.Data, ' (ca.)', 'approximately'), 'ca.', 'approximately'), 'b.', 'born'), 'd.', 'died'), 'fl.', 'flourished')
