@@ -3367,6 +3367,22 @@ namespace CSharp_MARC_Editor
                     command.Parameters.Add("TagNumber", DbType.String).Value = "700";
                     command.Parameters.Add("Code", DbType.String).Value = "e";
                     command.ExecuteNonQuery();
+
+                    rdaConversionBackgroundWorker.ReportProgress(710);
+                    command.CommandText = @"INSERT INTO TempUpdates
+                                                SELECT s.SubfieldID, REPLACE(s.Data, 'ill.', 'illustrator')
+                                                FROM Subfields s
+                                                LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                WHERE f.TagNumber = @TagNumber and s.Code = @Code and s.Data LIKE '% et al\.%' ESCAPE '\';
+
+                                            UPDATE Subfields
+                                            SET Data = (SELECT Data FROM TempUpdates WHERE TempUpdates.RecordID = Subfields.SubfieldID)
+                                            WHERE SubfieldID IN (SELECT RecordID FROM TempUpdates); 
+
+                                            DELETE FROM TempUpdates;";
+                    command.Parameters.Add("TagNumber", DbType.String).Value = "710";
+                    command.Parameters.Add("Code", DbType.String).Value = "e";
+                    command.ExecuteNonQuery();
                     
                     rdaConversionBackgroundWorker.ReportProgress(-1);
 
