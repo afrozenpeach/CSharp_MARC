@@ -3232,16 +3232,18 @@ namespace CSharp_MARC_Editor
                                                 WHERE f.FieldID IS NULL;
 
                                             INSERT INTO Subfields (FieldID, Code, Data)
-                                                SELECT s.FieldID, 'a', 'still image'
-                                                FROM TempUpdates t
-                                                LEFT OUTER JOIN Subfields s on s.FieldID = t.RecordID and s.Code = 'a'
-                                                WHERE s.FieldID IS NULL;
+                                                SELECT f.FieldID, 'a', 'still image'
+                                                FROM Fields f
+                                                LEFT OUTER JOIN TempUpdates t on t.RecordID = f.RecordID
+                                                LEFT OUTER JOIN Subfields s on s.FieldID = f.FieldID and s.Code = 'a'
+                                                WHERE f.TagNumber = '336' and s.FieldID IS NULL and t.RecordID IS NOT NULL;
 
                                             INSERT INTO Subfields (FieldID, Code, Data)
-                                                SELECT s.FieldID, '2', 'rdacontent'
-                                                FROM TempUpdates t
-                                                LEFT OUTER JOIN Subfields s on s.FieldID = t.RecordID and s.Code = '2'
-                                                WHERE s.FieldID IS NULL;
+                                                SELECT f.FieldID, '2', 'rdacontent'
+                                                FROM Fields f
+                                                LEFT OUTER JOIN TempUpdates t on t.RecordID = f.RecordID
+                                                LEFT OUTER JOIN Subfields s on s.FieldID = f.FieldID and s.Code = '2'
+                                                WHERE f.TagNumber = '336' and s.FieldID IS NULL and t.RecordID IS NOT NULL;
 
                                             DELETE FROM TempUpdates;";
                     command.ExecuteNonQuery();
@@ -3325,7 +3327,7 @@ namespace CSharp_MARC_Editor
                                                 WHERE f2.RecordID IS NULL;
 
                                             INSERT INTO Fields (RecordID, TagNumber, Ind2, Ind2)
-                                                SELECT RecordID, '337', ' ', ' '
+                                                SELECT RecordID, '338', ' ', ' '
                                                 FROM TempUpdates;
 
                                             INSERT INTO Subfields (FieldID, Code, Data)
@@ -3396,7 +3398,7 @@ namespace CSharp_MARC_Editor
                                                         WHEN 'ck' THEN 'ck'
                                                         WHEN 'cb' THEN 'cb'
                                                         WHEN 'cd' THEN 'cd'
-                                                        WHEN 'ce' THEN 'ce
+                                                        WHEN 'ce' THEN 'ce'
                                                         WHEN 'ca' THEN 'ca'
                                                         WHEN 'cf' THEN 'cf'
                                                         WHEN 'ch' THEN 'ch'
