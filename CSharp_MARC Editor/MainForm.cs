@@ -3162,6 +3162,20 @@ namespace CSharp_MARC_Editor
                                             SET Data = (SELECT Data FROM TempUpdates WHERE TempUpdates.RecordID = Subfields.SubfieldID)
                                             WHERE SubfieldID IN (SELECT RecordID FROM TempUpdates); 
 
+                                            DELETE FROM TempUpdates;
+
+                                            UPDATE Fields SET TagNumber = '264' Ind2 = '4' WHERE TagNumber = @TagNumber;
+
+                                            INSERT INTO TempUpdates
+                                                SELECT f.FieldID, ''
+                                                FROM Fields f
+                                                LEFT OUTER JOIN Subfields s on f.FieldID = s.FieldID and s.Code = 'a'
+                                                WHERE f.TagNumber = '264' and s.Code IS NOT NULL;
+                        
+                                            UPDATE Fields
+                                            SET Ind2 = '1'
+                                            WHERE FieldID IN (Select RecordID FROM TempUpdates);
+                                            
                                             DELETE FROM TempUpdates;";
                     command.Parameters.Add("TagNumber", DbType.String).Value = "260";
                     command.Parameters.Add("Code", DbType.String).Value = "c";
