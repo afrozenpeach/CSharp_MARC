@@ -3314,27 +3314,132 @@ namespace CSharp_MARC_Editor
                     
                     rdaConversionBackgroundWorker.ReportProgress(338);
                     command.CommandText = @"INSERT INTO TempUpdates
-                                                SELECT RecordID, ''
-                                                FROM Fields f 
-                                                WHERE TagNumber = @TagNumber;
+                                                SELECT RecordID, SUBSTR(ControlData, 1, 2)
+                                                FROM Fields
+                                                WHERE TagNumber = '007';
+
+                                            INSERT INTO TempUpdates
+                                                SELECT DISTINCT f.RecordID, '  '
+                                                FROM Fields f
+                                                LEFT OUTER JOIN Fields f2 ON f.RecordID = f2.RecordID AND f2.TagNumber = '007'
+                                                WHERE f2.RecordID IS NULL;
 
                                             INSERT INTO Fields (RecordID, TagNumber, Ind2, Ind2)
-                                                SELECT RecordID, '338', ' ', ' '
+                                                SELECT RecordID, '337', ' ', ' '
                                                 FROM TempUpdates;
 
                                             INSERT INTO Subfields (FieldID, Code, Data)
-                                                SELECT f.FieldID, 'a', 'still image'
+                                                SELECT f.FieldID, 'a',
+                                                    CASE t.Data
+                                                        WHEN 'sg' THEN 'audio cartridge'
+                                                        WHEN 'se' THEN 'audio cylinder'
+                                                        WHEN 'sd' THEN 'audio disc'
+                                                        WHEN 'si' THEN 'sound track reel'
+                                                        WHEN 'sq' THEN 'audio roll'
+                                                        WHEN 'sw' THEN 'audio wire reel'
+                                                        WHEN 'ss' THEN 'audiocassette'
+                                                        WHEN 'st' THEN 'audiotape reel'
+                                                        WHEN 'sz' THEN 'other'
+                                                        WHEN 'ck' THEN 'computer card'
+                                                        WHEN 'cb' THEN 'computer chip cartridge'
+                                                        WHEN 'cd' THEN 'computer disc'
+                                                        WHEN 'ce' THEN 'computer disc cartridge'
+                                                        WHEN 'ca' THEN 'computer tape cartridge'
+                                                        WHEN 'cf' THEN 'computer tape cassette'
+                                                        WHEN 'ch' THEN 'computer tape reel'
+                                                        WHEN 'cr' THEN 'online resource'
+                                                        WHEN 'cz' THEN 'other'
+                                                        WHEN 'ha' THEN 'aperture card'
+                                                        WHEN 'he' THEN 'microfiche'
+                                                        WHEN 'hf' THEN 'microfiche cassette'
+                                                        WHEN 'hb' THEN 'microfilm cartridge'
+                                                        WHEN 'hc' THEN 'microfilm cassette'
+                                                        WHEN 'hd' THEN 'microfilm reel'
+                                                        WHEN 'hj' THEN 'microfilm roll'
+                                                        WHEN 'hh' THEN 'microfilm slip'
+                                                        WHEN 'hg' THEN 'microopaque'
+                                                        WHEN 'hz' THEN 'other'
+                                                        WHEN 'gd' THEN 'film cartridge'
+                                                        WHEN 'gf' THEN 'film cassette'
+                                                        WHEN 'gc' THEN 'film reel'
+                                                        WHEN 'gt' THEN 'film roll'
+                                                        WHEN 'gs' THEN 'filmslip'
+                                                        WHEN 'mc' THEN 'filmstrip'
+                                                        WHEN 'mf' THEN 'filmstrip cartridge'
+                                                        WHEN 'mr' THEN 'overhead transparency'
+                                                        WHEN 'mo' THEN 'slide'
+                                                        WHEN 'mz' THEN 'other'
+                                                        WHEN 'vc' THEN 'video cartridge'
+                                                        WHEN 'vf' THEN 'videocassette'
+                                                        WHEN 'vd' THEN 'videodisc'
+                                                        WHEN 'vr' THEN 'videotape reel'
+                                                        WHEN 'vz' THEN 'other'
+                                                        ELSE 'unspecified'
+                                                    END
                                                 FROM Fields f
                                                 LEFT OUTER JOIN TempUpdates t on t.RecordID = f.RecordID
                                                 LEFT OUTER JOIN Subfields s on s.FieldID = f.FieldID and s.Code = 'a'
-                                                WHERE s.FieldID is null and t.RecordID is not null;
+                                                WHERE f.TagNumber = '337' and s.FieldID is null and t.RecordID is not null;
 
                                             INSERT INTO Subfields (FieldID, Code, Data)
-                                                SELECT f.FieldID, '2', 'rdacontent'
+                                                SELECT f.FieldID, 'b',
+                                                    CASE t.Data
+                                                        WHEN 'sg' THEN 'sg'
+                                                        WHEN 'se' THEN 'se'
+                                                        WHEN 'sd' THEN 'sd'
+                                                        WHEN 'si' THEN 'si'
+                                                        WHEN 'sq' THEN 'sq'
+                                                        WHEN 'sw' THEN 'sw'
+                                                        WHEN 'ss' THEN 'ss'
+                                                        WHEN 'st' THEN 'st'
+                                                        WHEN 'sz' THEN 'sz'
+                                                        WHEN 'ck' THEN 'ck'
+                                                        WHEN 'cb' THEN 'cb'
+                                                        WHEN 'cd' THEN 'cd'
+                                                        WHEN 'ce' THEN 'ce
+                                                        WHEN 'ca' THEN 'ca'
+                                                        WHEN 'cf' THEN 'cf'
+                                                        WHEN 'ch' THEN 'ch'
+                                                        WHEN 'cr' THEN 'cr'
+                                                        WHEN 'cz' THEN 'cz'
+                                                        WHEN 'ha' THEN 'ha'
+                                                        WHEN 'he' THEN 'he'
+                                                        WHEN 'hf' THEN 'hf'
+                                                        WHEN 'hb' THEN 'hb'
+                                                        WHEN 'hc' THEN 'hc'
+                                                        WHEN 'hd' THEN 'hd'
+                                                        WHEN 'hj' THEN 'hj'
+                                                        WHEN 'hh' THEN 'hh'
+                                                        WHEN 'hg' THEN 'hg'
+                                                        WHEN 'hz' THEN 'hz'
+                                                        WHEN 'gd' THEN 'gd'
+                                                        WHEN 'gf' THEN 'gf'
+                                                        WHEN 'gc' THEN 'gc'
+                                                        WHEN 'gt' THEN 'gt'
+                                                        WHEN 'gs' THEN 'gs'
+                                                        WHEN 'mc' THEN 'mc'
+                                                        WHEN 'mf' THEN 'mf'
+                                                        WHEN 'mr' THEN 'mr'
+                                                        WHEN 'mo' THEN 'mo'
+                                                        WHEN 'mz' THEN 'mz'
+                                                        WHEN 'vc' THEN 'vc'
+                                                        WHEN 'vf' THEN 'vf'
+                                                        WHEN 'vd' THEN 'vd'
+                                                        WHEN 'vr' THEN 'vr'
+                                                        WHEN 'vz' THEN 'vz'
+                                                        ELSE 'zu'
+                                                    END
+                                                FROM Fields f
+                                                LEFT OUTER JOIN TempUpdates t on t.RecordID = f.RecordID
+                                                LEFT OUTER JOIN Subfields s on s.FieldID = f.FieldID and s.Code = 'b'
+                                                WHERE f.TagNumber = '337' and s.FieldID is null and t.RecordID is not null;
+
+                                            INSERT INTO Subfields (FieldID, Code, Data)
+                                                SELECT f.FieldID, '2', 'rdacarrier'
                                                 FROM Fields f
                                                 LEFT OUTER JOIN TempUpdates t on t.RecordID = f.RecordID
                                                 LEFT OUTER JOIN Subfields s on s.FieldID = f.FieldID and s.Code = '2'
-                                                WHERE s.FieldID is null and t.RecordID is not null;
+                                                WHERE f.TagNumber = '337' and s.FieldID is null and t.RecordID is not null;
 
                                             DELETE FROM TempUpdates;";
                     command.ExecuteNonQuery();
