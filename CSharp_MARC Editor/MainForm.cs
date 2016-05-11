@@ -413,7 +413,7 @@ namespace CSharp_MARC_Editor
 
                 foreach (DataGridViewRow row in fieldsDataGridView.Rows)
                 {
-                    if (!row.IsNewRow && row.Cells[2].Value.ToString().StartsWith("00"))
+                    if (!row.IsNewRow && row.Cells[2].Value.ToString().StartsWith("00") && !row.IsNewRow && row.Cells[2].Value.ToString().StartsWith("LDR"))
                     {
                         row.Cells[3].Value = "-";
                         row.Cells[4].Value = "-";
@@ -1727,7 +1727,7 @@ namespace CSharp_MARC_Editor
                 DataGridViewRow rowClicked = fieldsDataGridView.Rows[e.RowIndex];
                 if (!rowClicked.IsNewRow && rowClicked.Cells[0].Value.ToString() != "")
                 {
-                    if (rowClicked.Cells[2].Value.ToString().StartsWith("00"))
+                    if (rowClicked.Cells[2].Value.ToString().StartsWith("00") || rowClicked.Cells[2].Value.ToString() == "LDR")
                         LoadControlField(Int32.Parse(rowClicked.Cells[0].Value.ToString()), rowClicked.Cells[5].Value.ToString());
                     else
                         LoadSubfields(Int32.Parse(rowClicked.Cells[0].Value.ToString()));
