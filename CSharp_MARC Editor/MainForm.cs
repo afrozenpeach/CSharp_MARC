@@ -1492,6 +1492,8 @@ namespace CSharp_MARC_Editor
             subfieldsDataGridView.Enabled = false;
         }
 
+        #endregion
+
         #region SQLite Addon functions
 
         [SQLiteFunction(Name = "REGEXP", Arguments = 2, FuncType = FunctionType.Scalar)]
@@ -1561,7 +1563,7 @@ namespace CSharp_MARC_Editor
             public override object Invoke(object[] args)
             {
                 StringBuilder matches = new StringBuilder();
-                
+
                 foreach (Match match in Regex.Matches(args[0].ToString(), args[1].ToString()))
                 {
                     matches.Append(match.Value);
@@ -1570,8 +1572,6 @@ namespace CSharp_MARC_Editor
                 return matches.ToString();
             }
         }
-
-        #endregion
 
         #endregion
 
