@@ -1841,6 +1841,15 @@ namespace CSharp_MARC_Editor
                         
                         int recordID = (int)connection.LastInsertRowId;
 
+                        command.CommandText = "INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2, ControlData) VALUES (@RecordID, @TagNumber, @Ind1, @Ind2, @ControlData)";
+                        command.Parameters.Add("@RecordID", DbType.Int32).Value = recordID;
+                        command.Parameters.Add("@TagNumber", DbType.String).Value ="LDR";
+                        command.Parameters.Add("@Ind1", DbType.String).Value = DBNull.Value;
+                        command.Parameters.Add("@Ind2", DbType.String).Value = DBNull.Value;
+                        command.Parameters.Add("@ControlData", DbType.String).Value = record.Leader;
+                        command.ExecuteNonQuery();
+                        command.Parameters.Clear();
+
                         foreach (Field field in record.Fields)
                         {
                             command.CommandText = "INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2, ControlData) VALUES (@RecordID, @TagNumber, @Ind1, @Ind2, @ControlData)";
@@ -2070,7 +2079,9 @@ namespace CSharp_MARC_Editor
                                 {
                                     while (fieldsReader.Read())
                                     {
-                                        if (fieldsReader["TagNumber"].ToString().StartsWith("00"))
+                                        if (fieldsReader["TagNumber"].ToString() == "LDR")
+                                            record.Leader = fieldsReader["ControlData"].ToString();
+                                        else if (fieldsReader["TagNumber"].ToString().StartsWith("00"))
                                         {
                                             ControlField controlField = new ControlField(fieldsReader["TagNumber"].ToString(), fieldsReader["ControlData"].ToString());
                                             record.InsertField(controlField);
