@@ -3273,6 +3273,7 @@ namespace CSharp_MARC_Editor
                                             DELETE FROM TempUpdates;";
                     command.ExecuteNonQuery();
 
+                    rdaConversionBackgroundWorker.ReportProgress(337);
                     command.CommandText = @"INSERT INTO TempUpdates
                                                 SELECT RecordID, SUBSTR(ControlData, 1, 1)
                                                 FROM Fields
