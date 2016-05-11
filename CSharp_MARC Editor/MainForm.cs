@@ -3232,13 +3232,13 @@ namespace CSharp_MARC_Editor
                                                 WHERE f.FieldID IS NULL;
 
                                             INSERT INTO Subfields (FieldID, Code, Data)
-                                                SELECT t.RecordID, 'a', 'still image'
+                                                SELECT s.FieldID, 'a', 'still image'
                                                 FROM TempUpdates t
                                                 LEFT OUTER JOIN Subfields s on s.FieldID = t.RecordID and s.Code = 'a'
                                                 WHERE s.FieldID IS NULL;
 
                                             INSERT INTO Subfields (FieldID, Code, Data)
-                                                SELECT t.RecordID, '2', 'rdacontent'
+                                                SELECT s.FieldID, '2', 'rdacontent'
                                                 FROM TempUpdates t
                                                 LEFT OUTER JOIN Subfields s on s.FieldID = t.RecordID and s.Code = '2'
                                                 WHERE s.FieldID IS NULL;
@@ -3252,7 +3252,7 @@ namespace CSharp_MARC_Editor
                                                 WHERE TagNumber = '007';
 
                                             INSERT INTO TempUpdates
-                                                SELECT f.RecordID, ' '
+                                                SELECT DISTINCT f.RecordID, ' '
                                                 FROM Fields f
                                                 LEFT OUTER JOIN Fields f2 ON f.RecordID = f2.RecordID AND f2.TagNumber = '007'
                                                 WHERE f2.RecordID IS NULL;
@@ -3279,7 +3279,7 @@ namespace CSharp_MARC_Editor
                                                 FROM Fields f
                                                 LEFT OUTER JOIN TempUpdates t on t.RecordID = f.RecordID
                                                 LEFT OUTER JOIN Subfields s on s.FieldID = f.FieldID and s.Code = 'a'
-                                                WHERE s.FieldID is null and t.RecordID is not null;
+                                                WHERE f.TagNumber = '337' and s.FieldID is null and t.RecordID is not null;
 
                                             INSERT INTO Subfields (FieldID, Code, Data)
                                                 SELECT f.FieldID, 'b',
@@ -3300,14 +3300,14 @@ namespace CSharp_MARC_Editor
                                                 FROM Fields f
                                                 LEFT OUTER JOIN TempUpdates t on t.RecordID = f.RecordID
                                                 LEFT OUTER JOIN Subfields s on s.FieldID = f.FieldID and s.Code = 'b'
-                                                WHERE s.FieldID is null and t.RecordID is not null;
+                                                WHERE f.TagNumber = '337' and s.FieldID is null and t.RecordID is not null;
 
                                             INSERT INTO Subfields (FieldID, Code, Data)
                                                 SELECT f.FieldID, '2', 'rdamedia'
                                                 FROM Fields f
                                                 LEFT OUTER JOIN TempUpdates t on t.RecordID = f.RecordID
                                                 LEFT OUTER JOIN Subfields s on s.FieldID = f.FieldID and s.Code = '2'
-                                                WHERE s.FieldID is null and t.RecordID is not null;
+                                                WHERE f.TagNumber = '337' and s.FieldID is null and t.RecordID is not null;
 
                                             DELETE FROM TempUpdates;";
                     command.ExecuteNonQuery();
@@ -3319,7 +3319,7 @@ namespace CSharp_MARC_Editor
                                                 WHERE TagNumber = @TagNumber;
 
                                             INSERT INTO Fields (RecordID, TagNumber, Ind2, Ind2)
-                                                SELECT RecordID, '336', ' ', ' '
+                                                SELECT RecordID, '338', ' ', ' '
                                                 FROM TempUpdates;
 
                                             INSERT INTO Subfields (FieldID, Code, Data)
