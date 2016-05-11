@@ -3386,7 +3386,7 @@ namespace CSharp_MARC_Editor
                                                 WHERE TagNumber = '007';
 
                                             INSERT INTO TempUpdates
-                                                SELECT DISTINCT f.RecordID, '  '
+                                                SELECT DISTINCT f.RecordID, ' '
                                                 FROM Fields f
                                                 LEFT OUTER JOIN Fields f2 ON f.RecordID = f2.RecordID AND f2.TagNumber = '007'
                                                 WHERE f2.RecordID IS NULL;
