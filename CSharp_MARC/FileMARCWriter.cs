@@ -103,19 +103,19 @@ namespace MARC
         /// <param name="record">The record.</param>
         public void Write(Record record)
         {
-            string raw = record.ToRaw(encoding);
+            //Fix the leader if it doesn't match the correct encoding
+            if (encoding.EncodingName == "MARC8" && record.Leader[9] != ' ')
+            {
+                record.Leader = record.Leader.Remove(9, 1);
+                record.Leader = record.Leader.Insert(9, " ");
+            }
+            else if (encoding.EncodingName == "Unicode (UTF-8)" && record.Leader[9] != 'a')
+            {
+                record.Leader = record.Leader.Remove(9, 1);
+                record.Leader = record.Leader.Insert(9, "a");
+            }
 
-			//Fix the leader if it doesn't match the correct encoding
-			if (encoding.EncodingName == "MARC8" && record.Leader[9] != ' ')
-			{
-				record.Leader = record.Leader.Remove(9, 1);
-				record.Leader = record.Leader.Insert(9, " ");
-			}
-			else if (encoding.EncodingName == "Unicode (UTF-8)" && record.Leader[9] != 'a')
-			{
-				record.Leader = record.Leader.Remove(9, 1);
-				record.Leader = record.Leader.Insert(9, "a");
-			}
+            string raw = record.ToRaw(encoding);
 
 			writer.Write(raw);
         }
