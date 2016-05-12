@@ -3121,7 +3121,7 @@ namespace CSharp_MARC_Editor
 
                                             INSERT INTO Subfields (FieldID, Code, Data)
                                                 SELECT RecordID, @Code, 'rda'
-                                                FROM TempUpdates
+                                                FROM TempUpdates;
 
                                             DELETE FROM TempUpdates;";
                     command.Parameters.Add("TagNumber", DbType.String).Value = "040";
@@ -3195,7 +3195,7 @@ namespace CSharp_MARC_Editor
 
                                             DELETE FROM TempUpdates;
 
-                                            UPDATE Fields SET TagNumber = '264' Ind2 = '4' WHERE TagNumber = @TagNumber;
+                                            UPDATE Fields SET TagNumber = '264', Ind2 = '4' WHERE TagNumber = @TagNumber;
 
                                             INSERT INTO TempUpdates
                                                 SELECT f.FieldID, ''
@@ -3279,7 +3279,7 @@ namespace CSharp_MARC_Editor
                     command.CommandText = @"INSERT INTO TempUpdates
                                                 SELECT FieldID, SUBSTR(ControlData, 7, 1)
                                                 FROM Fields
-                                                WHERE TagNumber = 'LDR'
+                                                WHERE TagNumber = 'LDR';
 
                                             INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2)
                                                 SELECT RecordID, '336', ' ', ' '
