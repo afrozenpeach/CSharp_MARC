@@ -3109,6 +3109,11 @@ namespace CSharp_MARC_Editor
 
                 using (SQLiteCommand command = new SQLiteCommand(connection))
                 {
+                    rdaConversionBackgroundWorker.ReportProgress(0);
+                    command.CommandText = @"UPDATE Fields SET ControlData = SUBSTR(ControlData, 1, 18) || 'i' || SUBSTR(ControlData, 20) WHERE TagNumber = @TagNumber";
+                    command.Parameters.Add("TagNumber", DbType.String).Value = "LDR";
+                    command.ExecuteNonQuery();
+
                     rdaConversionBackgroundWorker.ReportProgress(20);
                     command.CommandText = @"INSERT INTO TempUpdates
                                                 SELECT f.FieldID, SPLITSUBSTRING(Data, '(', 1)
