@@ -2157,7 +2157,9 @@ namespace CSharp_MARC_Editor
         private void exportingBackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             progressToolStripStatusLabel.Text = e.ProgressPercentage.ToString();
-            toolStripProgressBar.Value = e.ProgressPercentage;
+            
+            if (e.ProgressPercentage <= 100)
+                toolStripProgressBar.Value = e.ProgressPercentage;
         }
 
         /// <summary>
@@ -2378,6 +2380,8 @@ namespace CSharp_MARC_Editor
         private void csvExportBackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             progressToolStripStatusLabel.Text = e.ProgressPercentage.ToString();
+            if (e.ProgressPercentage <= 100)
+                toolStripProgressBar.Value = e.ProgressPercentage;
         }
 
         /// <summary>
