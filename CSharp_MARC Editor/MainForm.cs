@@ -3099,14 +3099,26 @@ namespace CSharp_MARC_Editor
                 {
                     rdaConversionBackgroundWorker.ReportProgress(20);
                     command.CommandText = @"INSERT INTO TempUpdates
-                                                SELECT f.FieldID, SPLITSUBSTRING(REPLACE(REPLACE(Data, '(', ''), ')', ''), ' ', 1)
+                                                SELECT f.FieldID, SPLITSUBSTRING(Data, '(', 1)
                                                 FROM Fields f
                                                 LEFT OUTER JOIN Subfields s on s.FieldID = f.FieldID and s.Code = 'a'
                                                 WHERE f.TagNumber = @TagNumber;
 
                                             INSERT INTO Subfields (FieldID, Code, Data)
-                                                SELECT RecordID, @Code, Data
-                                                FROM TempUpdates
+                                                SELECT RecordID, @Code, REPLACE(Data, ')', '')
+                                                FROM TempUpdates;
+
+                                            DELETE FROM TempUpdates;
+
+                                            INSERT INTO TempUpdates
+                                                SELECT s.SubfieldID, LTRIM(RTRIM(SPLITSUBSTRING(Data, '(', 0)))
+                                                FROM Fields f
+                                                LEFT OUTER JOIN Subfields s on s.FieldID = f.FieldID and s.Code = 'a'
+                                                WHERE f.TagNumber = @TagNumber;
+
+                                            UPDATE Subfields
+                                            SET Data = (SELECT Data FROM TempUpdates WHERE TempUpdates.RecordID = Subfields.SubfieldID)
+                                            WHERE SubfieldID IN (SELECT RecordID FROM TempUpdates);
 
                                             DELETE FROM TempUpdates;";
                     command.Parameters.Add("TagNumber", DbType.String).Value = "020";
