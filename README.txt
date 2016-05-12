@@ -53,6 +53,12 @@
  * @license   http://www.gnu.org/licenses/gpl-3.0.html  GPL License 3
  */ 
 
+2016-05-12 Changes:
+
+Added RDA Conversion
+Fixed bug resulting in the export progress bar not working
+Leader now working as an editable field - Note: Some parts of the leader will be automatically calculated
+ 
 2016-05-07.1 Changes:
 
 Setup click-once application installer
