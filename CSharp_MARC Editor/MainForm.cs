@@ -2118,7 +2118,9 @@ namespace CSharp_MARC_Editor
                                 {
                                     recordCounter = 1;
                                     fileCounter++;
-
+                                    
+                                    fileName = e.Argument.ToString().Substring(0, e.Argument.ToString().LastIndexOf('.')) + "." + fileCounter + "." + e.Argument.ToString().Substring(e.Argument.ToString().LastIndexOf('.') + 1);
+                                    
                                     if (mARCXMLToolStripMenuItem.Checked)
                                         marcWriter.WriteEnd();
 
