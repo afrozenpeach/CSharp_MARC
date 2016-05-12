@@ -103,13 +103,16 @@ namespace MARC
 					reader.Position = reader.Position - (RealReadSize - DelPosition);
 					char marc8utf8Flag = Convert.ToChar(ByteArray[9]);
 
-					if (marc8utf8Flag == ' ')
-					{
-						Encoding encoding = new MARC8();
-						encoded = encoding.GetString(ByteArray, 0, DelPosition);
-					}
-					else
-						encoded = Encoding.UTF8.GetString(ByteArray, 0, DelPosition);
+                    if (marc8utf8Flag == ' ')
+                    {
+                        Encoding encoding = new MARC8();
+                        encoded = encoding.GetString(ByteArray, 0, DelPosition);
+                    }
+                    else
+                    {
+                        encoded = Encoding.UTF8.GetString(ByteArray, 0, DelPosition);
+                        encoded = encoded.Substring(1); //remove UTF8 Byte Order Mark
+                    }
 
 					FileMARC marc = new FileMARC(encoded);
 					foreach (Record marcRecord in marc)
