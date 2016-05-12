@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Editor for MARC records
  *
  * This project is built upon the CSharp_MARC project of the same name available
@@ -484,7 +484,9 @@ namespace CSharp_MARC_Editor
                             {
                                 while (fieldsReader.Read())
                                 {
-                                    if (fieldsReader["TagNumber"].ToString().StartsWith("00"))
+                                    if (fieldsReader["TagNumber"].ToString() == "LDR")
+                                    	record.Leader = fieldsReader["ControlData"].ToString();
+                                    else if (fieldsReader["TagNumber"].ToString().StartsWith("00"))
                                     {
                                         ControlField controlField = new ControlField(fieldsReader["TagNumber"].ToString(), fieldsReader["ControlData"].ToString());
                                         record.InsertField(controlField);
@@ -2317,10 +2319,12 @@ namespace CSharp_MARC_Editor
                                         while (fieldsReader.Read())
                                         {
                                             columns["TagNumber"] = fieldsReader["TagNumber"].ToString();
-
-                                            if (fieldsReader["TagNumber"].ToString().StartsWith("00"))
+                                            
+                                            if (fieldsReader["TagNumber"].ToString() == "LDR")
+                                            	columns["LDR"] = fieldsReader["ControlData"].ToString();
+                                            else if (fieldsReader["TagNumber"].ToString().StartsWith("00"))
                                             {
-                                                columns["ControlData"] = fieldsReader["ControlData"].ToString();
+                                                columns[fieldsReader["TagNumber"].ToString()] = fieldsReader["ControlData"].ToString();
                                             }
                                             else
                                             {
