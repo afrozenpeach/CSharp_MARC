@@ -44,7 +44,9 @@ namespace MARC
 		#region Member Variables and Properties
 
 		private string filename = null;
-		private FileStream reader = null;
+        private FileStream reader = null;
+
+        private string byteOrderMarkUtf8 = Encoding.UTF8.GetString(Encoding.UTF8.GetPreamble());
 
 		#endregion
 
@@ -111,7 +113,9 @@ namespace MARC
                     else
                     {
                         encoded = Encoding.UTF8.GetString(ByteArray, 0, DelPosition);
-                        encoded = encoded.Substring(1); //remove UTF8 Byte Order Mark
+
+                        if (encoded.StartsWith(byteOrderMarkUtf8))
+                            encoded = encoded.Remove(0, byteOrderMarkUtf8.Length); //remove UTF8 Byte Order Mark
                     }
 
 					FileMARC marc = new FileMARC(encoded);
