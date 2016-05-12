@@ -2110,7 +2110,7 @@ namespace CSharp_MARC_Editor
                                     marcWriter.Write(record);
                                 i++;
                                 recordCounter++;
-                                exportingBackgroundWorker.ReportProgress(i / max);
+                                exportingBackgroundWorker.ReportProgress((i / max) * 100);
 
                                 if (recordsPerFile != 0 && recordCounter > recordsPerFile)
                                 {
@@ -2155,6 +2155,7 @@ namespace CSharp_MARC_Editor
         private void exportingBackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             progressToolStripStatusLabel.Text = e.ProgressPercentage.ToString();
+            toolStripProgressBar.Value = e.ProgressPercentage;
         }
 
         /// <summary>
