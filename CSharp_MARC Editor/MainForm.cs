@@ -3102,11 +3102,11 @@ namespace CSharp_MARC_Editor
                                                 SELECT f.FieldID, SPLITSUBSTRING(Data, '(', 1)
                                                 FROM Fields f
                                                 LEFT OUTER JOIN Subfields s on s.FieldID = f.FieldID and s.Code = 'a'
-                                                WHERE f.TagNumber = @TagNumber;
+                                                WHERE f.TagNumber = @TagNumber and s.FieldID IS NOT NULL;
 
                                             INSERT INTO Subfields (FieldID, Code, Data)
                                                 SELECT RecordID, @Code, REPLACE(Data, ')', '')
-                                                FROM TempUpdates;
+                                                FROM TempUpdates WHERE Data is not null;
 
                                             DELETE FROM TempUpdates;
 
@@ -3114,7 +3114,7 @@ namespace CSharp_MARC_Editor
                                                 SELECT s.SubfieldID, LTRIM(RTRIM(SPLITSUBSTRING(Data, '(', 0)))
                                                 FROM Fields f
                                                 LEFT OUTER JOIN Subfields s on s.FieldID = f.FieldID and s.Code = 'a'
-                                                WHERE f.TagNumber = @TagNumber;
+                                                WHERE f.TagNumber = @TagNumber and s.Data is not null;
 
                                             UPDATE Subfields
                                             SET Data = (SELECT Data FROM TempUpdates WHERE TempUpdates.RecordID = Subfields.SubfieldID)
