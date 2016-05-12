@@ -2156,10 +2156,11 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="ProgressChangedEventArgs"/> instance containing the event data.</param>
         private void exportingBackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            progressToolStripStatusLabel.Text = e.ProgressPercentage.ToString();
-            
             if (e.ProgressPercentage <= 100)
+            {
+                progressToolStripStatusLabel.Text = e.ProgressPercentage.ToString() + "%";
                 toolStripProgressBar.Value = e.ProgressPercentage;
+            }
         }
 
         /// <summary>
@@ -2379,9 +2380,11 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="ProgressChangedEventArgs"/> instance containing the event data.</param>
         private void csvExportBackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            progressToolStripStatusLabel.Text = e.ProgressPercentage.ToString();
             if (e.ProgressPercentage <= 100)
+            {
+                progressToolStripStatusLabel.Text = e.ProgressPercentage.ToString() + "%";
                 toolStripProgressBar.Value = e.ProgressPercentage;
+            }
         }
 
         /// <summary>
@@ -3627,6 +3630,8 @@ namespace CSharp_MARC_Editor
         {
             if (e.ProgressPercentage == -1)
                 progressToolStripStatusLabel.Text = rebuildingPreview;
+            else if (e.ProgressPercentage == 0)
+                progressToolStripStatusLabel.Text = "Converting Leader...";
             else
                 progressToolStripStatusLabel.Text = "Converting tag #" + e.ProgressPercentage.ToString().PadLeft(3, '0') + "...";
         }
