@@ -489,7 +489,7 @@ namespace CSharp_MARC_Editor
                                     else if (fieldsReader["TagNumber"].ToString().StartsWith("00"))
                                     {
                                         ControlField controlField = new ControlField(fieldsReader["TagNumber"].ToString(), fieldsReader["ControlData"].ToString());
-                                        record.InsertField(controlField);
+                                        record.Fields.Add(controlField);
                                     }
                                     else
                                     {
@@ -509,11 +509,11 @@ namespace CSharp_MARC_Editor
                                         {
                                             while (subfieldReader.Read())
                                             {
-                                                dataField.InsertSubfield(new Subfield(subfieldReader["Code"].ToString()[0], subfieldReader["Data"].ToString()));
+                                                dataField.Subfields.Add(new Subfield(subfieldReader["Code"].ToString()[0], subfieldReader["Data"].ToString()));
                                             }
                                         }
 
-                                        record.InsertField(dataField);
+                                        record.Fields.Add(dataField);
                                     }
                                 }
                             }
@@ -2098,7 +2098,7 @@ namespace CSharp_MARC_Editor
                                         else if (fieldsReader["TagNumber"].ToString().StartsWith("00"))
                                         {
                                             ControlField controlField = new ControlField(fieldsReader["TagNumber"].ToString(), fieldsReader["ControlData"].ToString());
-                                            record.InsertField(controlField);
+                                            record.Fields.Add(controlField);
                                         }
                                         else
                                         {
@@ -2109,11 +2109,11 @@ namespace CSharp_MARC_Editor
                                             {
                                                 while (subfieldReader.Read())
                                                 {
-                                                    dataField.InsertSubfield(new Subfield(subfieldReader["Code"].ToString()[0], subfieldReader["Data"].ToString()));
+                                                    dataField.Subfields.Add(new Subfield(subfieldReader["Code"].ToString()[0], subfieldReader["Data"].ToString()));
                                                 }
                                             }
 
-                                            record.InsertField(dataField);
+                                            record.Fields.Add(dataField);
                                         }
                                     }
                                 }
