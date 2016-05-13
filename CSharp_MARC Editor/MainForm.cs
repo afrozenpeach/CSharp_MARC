@@ -2747,6 +2747,10 @@ namespace CSharp_MARC_Editor
                     string tagNumber = fieldsDataGridView.Rows[e.RowIndex].Cells[2].Value.ToString();
                     string ind1 = fieldsDataGridView.Rows[e.RowIndex].Cells[3].Value.ToString();
                     string ind2 = fieldsDataGridView.Rows[e.RowIndex].Cells[4].Value.ToString();
+                    int sort = e.RowIndex;
+
+                    if (e.RowIndex > 0)
+                        sort = Int32.Parse(fieldsDataGridView.Rows[e.RowIndex - 1].Cells[4].Value.ToString());
 
                     if (!Field.ValidateTag(tagNumber) || (tagNumber.StartsWith("00") && (ind1 != "" || ind2 != "")))
                     {
@@ -2795,18 +2799,23 @@ namespace CSharp_MARC_Editor
                     int fieldID = Int32.Parse(fieldsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString());
                     string code = subfieldsDataGridView.Rows[e.RowIndex].Cells[2].Value.ToString();
                     string data = subfieldsDataGridView.Rows[e.RowIndex].Cells[3].Value.ToString();
+                    int sort = e.RowIndex;
+
+                    if (e.RowIndex > 0)
+                        sort = Int32.Parse(subfieldsDataGridView.Rows[e.RowIndex - 1].Cells[4].Value.ToString());
 
                     using (SQLiteConnection connection = new SQLiteConnection(connectionString))
                     {
                         connection.Open();
 
-                        string query = "INSERT INTO Subfields (FieldID, Code, Data) VALUES (@FieldID, @Code, @Data)";
+                        string query = "INSERT INTO Subfields (FieldID, Code, Data, Sort) VALUES (@FieldID, @Code, @Data, @Sort)";
 
                         using (SQLiteCommand command = new SQLiteCommand(query, connection))
                         {
                             command.Parameters.Add("@FieldID", DbType.Int32).Value = fieldID;
                             command.Parameters.Add("@Code", DbType.String).Value = code;
                             command.Parameters.Add("@Data", DbType.String).Value = data;
+                            command.Parameters.Add("@Sort", DbType.Int32).Value = sort;
 
                             command.ExecuteNonQuery();
                             LoadSubfields(fieldID);
