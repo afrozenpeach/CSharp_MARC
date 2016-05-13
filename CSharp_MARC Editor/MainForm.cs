@@ -3273,7 +3273,7 @@ namespace CSharp_MARC_Editor
                                             DELETE FROM TempUpdates;
 
                                             INSERT INTO TempUpdates
-                                                SELECT s.SubfieldID, SUBSTR(s.Data, 0, LEN(s.Data) - 1)
+                                                SELECT s.SubfieldID, SUBSTR(s.Data, 0, LENGTH(s.Data) - 1)
                                                 FROM Subfields s
                                                 LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
                                                 WHERE f.TagNumber = '264' and s.Code = 'b';
