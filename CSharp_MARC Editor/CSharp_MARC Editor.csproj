@@ -32,7 +32,7 @@
     <PublisherName>Matt Schraeder</PublisherName>
     <SuiteName>csharpmarc.net</SuiteName>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>2016.05.12.%2a</ApplicationVersion>
+    <ApplicationVersion>2016.05.13.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>

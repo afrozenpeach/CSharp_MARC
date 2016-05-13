@@ -53,6 +53,11 @@
  * @license   http://www.gnu.org/licenses/gpl-3.0.html  GPL License 3
  */ 
 
+2016-05-13 Changes:
+
+More Improvements to RDA Conversion
+RDA Conversion shouldn't duplicate changes if a record has already been converted
+
 2016-05-12.2 Changes:
 
 Improvements to RDA Conversion
