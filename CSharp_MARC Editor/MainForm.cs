@@ -3218,7 +3218,7 @@ namespace CSharp_MARC_Editor
                                                 SELECT s.SubfieldID, REPLACE(REPLACE(Data, 'c1', '©1'), 'c2', '©2')
                                                 FROM Subfields s
                                                 LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
-                                                WHERE f.TagNumber = @TagNumber and s.Code = @Code;
+                                                WHERE f.TagNumber = '260' and s.Code = 'c';
 
                                             UPDATE Subfields
                                             SET Data = (SELECT Data FROM TempUpdates WHERE TempUpdates.RecordID = Subfields.SubfieldID)
@@ -3226,7 +3226,7 @@ namespace CSharp_MARC_Editor
 
                                             DELETE FROM TempUpdates;
 
-                                            UPDATE Fields SET TagNumber = '264', Ind2 = '4' WHERE TagNumber = @TagNumber;
+                                            UPDATE Fields SET TagNumber = '264', Ind2 = '4' WHERE TagNumber = '260';
 
                                             INSERT INTO TempUpdates
                                                 SELECT f.FieldID, ''
@@ -3238,26 +3238,62 @@ namespace CSharp_MARC_Editor
                                             SET Ind2 = '1'
                                             WHERE FieldID IN (Select RecordID FROM TempUpdates);
                                             
-                                            DELETE FROM TempUpdates;";
-                    command.Parameters.Add("TagNumber", DbType.String).Value = "260";
-                    command.Parameters.Add("Code", DbType.String).Value = "c";
-                    command.ExecuteNonQuery();
+                                            DELETE FROM TempUpdates;
 
-                    command.CommandText = @"INSERT INTO TempUpdates
-                                                SELECT s.SubfieldID, REPLACE(s.Data || ', ©' || SUBSTR(s2.Data, 12, 4), '.,', ',')
+                                            INSERT INTO TempUpdates
+                                                SELECT s.SubfieldID, s.Data
+                                                FROM Fields f
+                                                LEFT OUTER JOIN Subfields s on s.FieldID = f.FieldID and s.code = 'c'
+                                                WHERE f.TagNumber = '264' and f.Ind2 = '1';
+
+                                            INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2, ControlData)
+                                                SELECT f.RecordID, '264', ' ', '4', s.SubfieldID
+                                                FROM TempUpdates t
+                                                LEFT OUTER JOIN Subfields s ON s.SubfieldID = t.RecordID
+                                                LEFT OUTER JOIN Fields f ON f.FieldID = s.FieldID;
+
+                                            UPDATE Subfields SET Data = REPLACE(Data, '.', ''), FieldID = (SELECT FieldID FROM Fields WHERE TagNumber = '264' AND Ind1 = ' ' AND Ind2 = '4' AND ControlData = Subfields.SubfieldID)
+                                                WHERE SubfieldID IN (SELECT RecordID FROM TempUpdates);
+
+                                            UPDATE Fields SET ControlData = null WHERE TagNumber = '264' AND Ind1 = ' ' AND Ind2 = '4';
+
+                                            DELETE FROM TempUpdates;
+
+                                            INSERT INTO TempUpdates
+                                                SELECT s.SubfieldID, SUBSTR(s.Data, 0, LEN(s.Data) - 1)
                                                 FROM Subfields s
                                                 LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
-                                                LEFT OUTER JOIN Fields f2 on f2.RecordID = f.RecordID and f.TagNumber = '008'
-                                                LEFT OUTER JOIN Subfields s2 on f2.FieldID = s2.FieldID
-                                                WHERE f.TagNumber = @TagNumber and s.Code = @Code and SUBSTR(s2.Data, 12, 4) != '    ';
+                                                WHERE f.TagNumber = '264' and s.Code = 'b';
 
-                                            UPDATE Subfields
-                                            SET Data = (SELECT Data FROM TempUpdates WHERE TempUpdates.RecordID = Subfields.SubfieldID)
-                                            WHERE SubfieldID IN (SELECT RecordID FROM TempUpdates); 
+                                            UPDATE Subfields SET Data = (SELECT Data FROM TempUpdates WHERE RecordID = SubfieldID)
+                                                WHERE SubfieldID IN (SELECT RecordID FROM TempUpdates);
+
+                                            DELETE FROM TempUpdates;
+                                            
+                                            INSERT INTO TempUpdates
+                                                SELECT f.RecordID, '©' || SUBSTR(f.ControlData, 12, 4)
+                                                FROM Fields f
+                                                WHERE f.TagNumber = '008' and SUBSTR(f.ControlData, 12, 4) != '    ';
+
+                                            DELETE FROM TempUpdates WHERE RecordID IN (
+                                                SELECT RecordID 
+                                                FROM Fields f
+                                                LEFT OUTER JOIN Subfields s on f.FieldID = s.FieldID
+                                                WHERE f.TagNumber = '264' and s.Code = 'c' and s.Data LIKE '%' || TempUpdates.Data || '%'
+                                            );
+
+                                            INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2)
+                                                SELECT RecordID, '264', ' ', '4'
+                                                FROM TempUpdates;
+
+                                            INSERT INTO Subfields (FieldID, Code, Data)
+                                                SELECT f.FieldID, 'c', t.Data
+                                                FROM TempUpdates t
+                                                LEFT OUTER JOIN Fields f on t.RecordID = f.RecordID
+                                                LEFT OUTER JOIN Subfields s on f.FieldID = s.FieldID
+                                                WHERE f.TagNumber = '264' AND f.Ind1 = ' ' AND f.Ind2 = '4' AND s.Data IS NULL
 
                                             DELETE FROM TempUpdates;";
-                    command.Parameters.Add("TagNumber", DbType.String).Value = "260";
-                    command.Parameters.Add("Code", DbType.String).Value = "c";
                     command.ExecuteNonQuery();
 
                     rdaConversionBackgroundWorker.ReportProgress(300);
