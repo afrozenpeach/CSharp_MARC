@@ -76,6 +76,10 @@ namespace CSharp_MARC_Editor
             this.Custom5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ImportErrors = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.marcDataSet = new CSharp_MARC_Editor.MARCDataSet();
+            this.fieldDownButton = new System.Windows.Forms.Button();
+            this.fieldUpButton = new System.Windows.Forms.Button();
+            this.subfieldDownButton = new System.Windows.Forms.Button();
+            this.subfieldUpButton = new System.Windows.Forms.Button();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.progressToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
@@ -83,17 +87,7 @@ namespace CSharp_MARC_Editor
             this.cancelButtonToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.previewTextBox = new System.Windows.Forms.TextBox();
             this.subfieldsDataGridView = new System.Windows.Forms.DataGridView();
-            this.subfieldIDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.fieldIDDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.codeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.fieldsDataGridView = new System.Windows.Forms.DataGridView();
-            this.fieldIDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.recordIDDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tagNumberDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ind1DataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ind2DataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.controlDataDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.importingBackgroundWorker = new System.ComponentModel.BackgroundWorker();
@@ -144,6 +138,18 @@ namespace CSharp_MARC_Editor
             this.rebuildBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.loadingBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.rdaConversionBackgroundWorker = new System.ComponentModel.BackgroundWorker();
+            this.fieldIDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.recordIDDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tagNumberDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ind1DataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ind2DataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.controlDataDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.subfieldIDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.fieldIDDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.codeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.fieldSortButton = new System.Windows.Forms.Button();
+            this.subfieldSortButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -173,6 +179,12 @@ namespace CSharp_MARC_Editor
             // 
             // splitContainer.Panel2
             // 
+            this.splitContainer.Panel2.Controls.Add(this.subfieldSortButton);
+            this.splitContainer.Panel2.Controls.Add(this.fieldSortButton);
+            this.splitContainer.Panel2.Controls.Add(this.fieldDownButton);
+            this.splitContainer.Panel2.Controls.Add(this.fieldUpButton);
+            this.splitContainer.Panel2.Controls.Add(this.subfieldDownButton);
+            this.splitContainer.Panel2.Controls.Add(this.subfieldUpButton);
             this.splitContainer.Panel2.Controls.Add(this.statusStrip);
             this.splitContainer.Panel2.Controls.Add(this.previewTextBox);
             this.splitContainer.Panel2.Controls.Add(this.subfieldsDataGridView);
@@ -340,6 +352,46 @@ namespace CSharp_MARC_Editor
             this.marcDataSet.DataSetName = "MARCDataSet";
             this.marcDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
+            // fieldDownButton
+            // 
+            this.fieldDownButton.Image = ((System.Drawing.Image)(resources.GetObject("fieldDownButton.Image")));
+            this.fieldDownButton.Location = new System.Drawing.Point(211, 196);
+            this.fieldDownButton.Name = "fieldDownButton";
+            this.fieldDownButton.Size = new System.Drawing.Size(26, 56);
+            this.fieldDownButton.TabIndex = 7;
+            this.fieldDownButton.UseVisualStyleBackColor = true;
+            this.fieldDownButton.Click += new System.EventHandler(this.fieldDownButton_Click);
+            // 
+            // fieldUpButton
+            // 
+            this.fieldUpButton.Image = ((System.Drawing.Image)(resources.GetObject("fieldUpButton.Image")));
+            this.fieldUpButton.Location = new System.Drawing.Point(211, 134);
+            this.fieldUpButton.Name = "fieldUpButton";
+            this.fieldUpButton.Size = new System.Drawing.Size(26, 56);
+            this.fieldUpButton.TabIndex = 6;
+            this.fieldUpButton.UseVisualStyleBackColor = true;
+            this.fieldUpButton.Click += new System.EventHandler(this.fieldUpButton_Click);
+            // 
+            // subfieldDownButton
+            // 
+            this.subfieldDownButton.Image = ((System.Drawing.Image)(resources.GetObject("subfieldDownButton.Image")));
+            this.subfieldDownButton.Location = new System.Drawing.Point(656, 196);
+            this.subfieldDownButton.Name = "subfieldDownButton";
+            this.subfieldDownButton.Size = new System.Drawing.Size(26, 56);
+            this.subfieldDownButton.TabIndex = 5;
+            this.subfieldDownButton.UseVisualStyleBackColor = true;
+            this.subfieldDownButton.Click += new System.EventHandler(this.subfieldDownButton_Click);
+            // 
+            // subfieldUpButton
+            // 
+            this.subfieldUpButton.Image = ((System.Drawing.Image)(resources.GetObject("subfieldUpButton.Image")));
+            this.subfieldUpButton.Location = new System.Drawing.Point(656, 134);
+            this.subfieldUpButton.Name = "subfieldUpButton";
+            this.subfieldUpButton.Size = new System.Drawing.Size(26, 56);
+            this.subfieldUpButton.TabIndex = 4;
+            this.subfieldUpButton.UseVisualStyleBackColor = true;
+            this.subfieldUpButton.Click += new System.EventHandler(this.subfieldUpButton_Click);
+            // 
             // statusStrip
             // 
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -384,12 +436,12 @@ namespace CSharp_MARC_Editor
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.previewTextBox.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.previewTextBox.Location = new System.Drawing.Point(624, 3);
+            this.previewTextBox.Location = new System.Drawing.Point(688, 3);
             this.previewTextBox.Multiline = true;
             this.previewTextBox.Name = "previewTextBox";
             this.previewTextBox.ReadOnly = true;
             this.previewTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.previewTextBox.Size = new System.Drawing.Size(357, 420);
+            this.previewTextBox.Size = new System.Drawing.Size(293, 420);
             this.previewTextBox.TabIndex = 2;
             // 
             // subfieldsDataGridView
@@ -408,7 +460,7 @@ namespace CSharp_MARC_Editor
             this.subfieldsDataGridView.DataMember = "Subfields";
             this.subfieldsDataGridView.DataSource = this.marcDataSet;
             this.subfieldsDataGridView.Enabled = false;
-            this.subfieldsDataGridView.Location = new System.Drawing.Point(211, 3);
+            this.subfieldsDataGridView.Location = new System.Drawing.Point(243, 3);
             this.subfieldsDataGridView.MultiSelect = false;
             this.subfieldsDataGridView.Name = "subfieldsDataGridView";
             this.subfieldsDataGridView.Size = new System.Drawing.Size(407, 420);
@@ -419,37 +471,6 @@ namespace CSharp_MARC_Editor
             this.subfieldsDataGridView.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.subfieldsDataGridView_CellValidating);
             this.subfieldsDataGridView.RowValidating += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.subfieldsDataGridView_RowValidating);
             this.subfieldsDataGridView.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.subfieldsDataGridView_UserDeletingRow);
-            // 
-            // subfieldIDDataGridViewTextBoxColumn
-            // 
-            this.subfieldIDDataGridViewTextBoxColumn.DataPropertyName = "SubfieldID";
-            this.subfieldIDDataGridViewTextBoxColumn.HeaderText = "SubfieldID";
-            this.subfieldIDDataGridViewTextBoxColumn.Name = "subfieldIDDataGridViewTextBoxColumn";
-            this.subfieldIDDataGridViewTextBoxColumn.Visible = false;
-            // 
-            // fieldIDDataGridViewTextBoxColumn1
-            // 
-            this.fieldIDDataGridViewTextBoxColumn1.DataPropertyName = "FieldID";
-            this.fieldIDDataGridViewTextBoxColumn1.HeaderText = "FieldID";
-            this.fieldIDDataGridViewTextBoxColumn1.Name = "fieldIDDataGridViewTextBoxColumn1";
-            this.fieldIDDataGridViewTextBoxColumn1.Visible = false;
-            // 
-            // codeDataGridViewTextBoxColumn
-            // 
-            this.codeDataGridViewTextBoxColumn.DataPropertyName = "Code";
-            this.codeDataGridViewTextBoxColumn.HeaderText = "Code";
-            this.codeDataGridViewTextBoxColumn.MaxInputLength = 1;
-            this.codeDataGridViewTextBoxColumn.MinimumWidth = 40;
-            this.codeDataGridViewTextBoxColumn.Name = "codeDataGridViewTextBoxColumn";
-            this.codeDataGridViewTextBoxColumn.Width = 40;
-            // 
-            // dataDataGridViewTextBoxColumn
-            // 
-            this.dataDataGridViewTextBoxColumn.DataPropertyName = "Data";
-            this.dataDataGridViewTextBoxColumn.HeaderText = "Data";
-            this.dataDataGridViewTextBoxColumn.MinimumWidth = 100;
-            this.dataDataGridViewTextBoxColumn.Name = "dataDataGridViewTextBoxColumn";
-            this.dataDataGridViewTextBoxColumn.Width = 300;
             // 
             // fieldsDataGridView
             // 
@@ -483,54 +504,6 @@ namespace CSharp_MARC_Editor
             this.fieldsDataGridView.SelectionChanged += new System.EventHandler(this.fieldsDataGridView_SelectionChanged);
             this.fieldsDataGridView.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.fieldsDataGridView_UserAddedRow);
             this.fieldsDataGridView.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.fieldsDataGridView_UserDeletingRow);
-            // 
-            // fieldIDDataGridViewTextBoxColumn
-            // 
-            this.fieldIDDataGridViewTextBoxColumn.DataPropertyName = "FieldID";
-            this.fieldIDDataGridViewTextBoxColumn.HeaderText = "FieldID";
-            this.fieldIDDataGridViewTextBoxColumn.Name = "fieldIDDataGridViewTextBoxColumn";
-            this.fieldIDDataGridViewTextBoxColumn.Visible = false;
-            // 
-            // recordIDDataGridViewTextBoxColumn1
-            // 
-            this.recordIDDataGridViewTextBoxColumn1.DataPropertyName = "RecordID";
-            this.recordIDDataGridViewTextBoxColumn1.HeaderText = "RecordID";
-            this.recordIDDataGridViewTextBoxColumn1.Name = "recordIDDataGridViewTextBoxColumn1";
-            this.recordIDDataGridViewTextBoxColumn1.Visible = false;
-            // 
-            // tagNumberDataGridViewTextBoxColumn
-            // 
-            this.tagNumberDataGridViewTextBoxColumn.DataPropertyName = "TagNumber";
-            this.tagNumberDataGridViewTextBoxColumn.HeaderText = "Tag";
-            this.tagNumberDataGridViewTextBoxColumn.MaxInputLength = 3;
-            this.tagNumberDataGridViewTextBoxColumn.MinimumWidth = 45;
-            this.tagNumberDataGridViewTextBoxColumn.Name = "tagNumberDataGridViewTextBoxColumn";
-            this.tagNumberDataGridViewTextBoxColumn.Width = 45;
-            // 
-            // ind1DataGridViewTextBoxColumn
-            // 
-            this.ind1DataGridViewTextBoxColumn.DataPropertyName = "Ind1";
-            this.ind1DataGridViewTextBoxColumn.HeaderText = "Ind1";
-            this.ind1DataGridViewTextBoxColumn.MaxInputLength = 1;
-            this.ind1DataGridViewTextBoxColumn.MinimumWidth = 40;
-            this.ind1DataGridViewTextBoxColumn.Name = "ind1DataGridViewTextBoxColumn";
-            this.ind1DataGridViewTextBoxColumn.Width = 40;
-            // 
-            // ind2DataGridViewTextBoxColumn
-            // 
-            this.ind2DataGridViewTextBoxColumn.DataPropertyName = "Ind2";
-            this.ind2DataGridViewTextBoxColumn.HeaderText = "Ind2";
-            this.ind2DataGridViewTextBoxColumn.MaxInputLength = 1;
-            this.ind2DataGridViewTextBoxColumn.MinimumWidth = 40;
-            this.ind2DataGridViewTextBoxColumn.Name = "ind2DataGridViewTextBoxColumn";
-            this.ind2DataGridViewTextBoxColumn.Width = 40;
-            // 
-            // controlDataDataGridViewTextBoxColumn
-            // 
-            this.controlDataDataGridViewTextBoxColumn.DataPropertyName = "ControlData";
-            this.controlDataDataGridViewTextBoxColumn.HeaderText = "ControlData";
-            this.controlDataDataGridViewTextBoxColumn.Name = "controlDataDataGridViewTextBoxColumn";
-            this.controlDataDataGridViewTextBoxColumn.Visible = false;
             // 
             // saveFileDialog
             // 
@@ -932,6 +905,111 @@ namespace CSharp_MARC_Editor
             this.rdaConversionBackgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.rdaConversionBackgroundWorker_ProgressChanged);
             this.rdaConversionBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.rdaConversionBackgroundWorker_RunWorkerCompleted);
             // 
+            // fieldIDDataGridViewTextBoxColumn
+            // 
+            this.fieldIDDataGridViewTextBoxColumn.DataPropertyName = "FieldID";
+            this.fieldIDDataGridViewTextBoxColumn.HeaderText = "FieldID";
+            this.fieldIDDataGridViewTextBoxColumn.Name = "fieldIDDataGridViewTextBoxColumn";
+            this.fieldIDDataGridViewTextBoxColumn.Visible = false;
+            // 
+            // recordIDDataGridViewTextBoxColumn1
+            // 
+            this.recordIDDataGridViewTextBoxColumn1.DataPropertyName = "RecordID";
+            this.recordIDDataGridViewTextBoxColumn1.HeaderText = "RecordID";
+            this.recordIDDataGridViewTextBoxColumn1.Name = "recordIDDataGridViewTextBoxColumn1";
+            this.recordIDDataGridViewTextBoxColumn1.Visible = false;
+            // 
+            // tagNumberDataGridViewTextBoxColumn
+            // 
+            this.tagNumberDataGridViewTextBoxColumn.DataPropertyName = "TagNumber";
+            this.tagNumberDataGridViewTextBoxColumn.HeaderText = "Tag";
+            this.tagNumberDataGridViewTextBoxColumn.MaxInputLength = 3;
+            this.tagNumberDataGridViewTextBoxColumn.MinimumWidth = 45;
+            this.tagNumberDataGridViewTextBoxColumn.Name = "tagNumberDataGridViewTextBoxColumn";
+            this.tagNumberDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.tagNumberDataGridViewTextBoxColumn.Width = 45;
+            // 
+            // ind1DataGridViewTextBoxColumn
+            // 
+            this.ind1DataGridViewTextBoxColumn.DataPropertyName = "Ind1";
+            this.ind1DataGridViewTextBoxColumn.HeaderText = "Ind1";
+            this.ind1DataGridViewTextBoxColumn.MaxInputLength = 1;
+            this.ind1DataGridViewTextBoxColumn.MinimumWidth = 40;
+            this.ind1DataGridViewTextBoxColumn.Name = "ind1DataGridViewTextBoxColumn";
+            this.ind1DataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.ind1DataGridViewTextBoxColumn.Width = 40;
+            // 
+            // ind2DataGridViewTextBoxColumn
+            // 
+            this.ind2DataGridViewTextBoxColumn.DataPropertyName = "Ind2";
+            this.ind2DataGridViewTextBoxColumn.HeaderText = "Ind2";
+            this.ind2DataGridViewTextBoxColumn.MaxInputLength = 1;
+            this.ind2DataGridViewTextBoxColumn.MinimumWidth = 40;
+            this.ind2DataGridViewTextBoxColumn.Name = "ind2DataGridViewTextBoxColumn";
+            this.ind2DataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.ind2DataGridViewTextBoxColumn.Width = 40;
+            // 
+            // controlDataDataGridViewTextBoxColumn
+            // 
+            this.controlDataDataGridViewTextBoxColumn.DataPropertyName = "ControlData";
+            this.controlDataDataGridViewTextBoxColumn.HeaderText = "ControlData";
+            this.controlDataDataGridViewTextBoxColumn.Name = "controlDataDataGridViewTextBoxColumn";
+            this.controlDataDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.controlDataDataGridViewTextBoxColumn.Visible = false;
+            // 
+            // subfieldIDDataGridViewTextBoxColumn
+            // 
+            this.subfieldIDDataGridViewTextBoxColumn.DataPropertyName = "SubfieldID";
+            this.subfieldIDDataGridViewTextBoxColumn.HeaderText = "SubfieldID";
+            this.subfieldIDDataGridViewTextBoxColumn.Name = "subfieldIDDataGridViewTextBoxColumn";
+            this.subfieldIDDataGridViewTextBoxColumn.Visible = false;
+            // 
+            // fieldIDDataGridViewTextBoxColumn1
+            // 
+            this.fieldIDDataGridViewTextBoxColumn1.DataPropertyName = "FieldID";
+            this.fieldIDDataGridViewTextBoxColumn1.HeaderText = "FieldID";
+            this.fieldIDDataGridViewTextBoxColumn1.Name = "fieldIDDataGridViewTextBoxColumn1";
+            this.fieldIDDataGridViewTextBoxColumn1.Visible = false;
+            // 
+            // codeDataGridViewTextBoxColumn
+            // 
+            this.codeDataGridViewTextBoxColumn.DataPropertyName = "Code";
+            this.codeDataGridViewTextBoxColumn.HeaderText = "Code";
+            this.codeDataGridViewTextBoxColumn.MaxInputLength = 1;
+            this.codeDataGridViewTextBoxColumn.MinimumWidth = 40;
+            this.codeDataGridViewTextBoxColumn.Name = "codeDataGridViewTextBoxColumn";
+            this.codeDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.codeDataGridViewTextBoxColumn.Width = 40;
+            // 
+            // dataDataGridViewTextBoxColumn
+            // 
+            this.dataDataGridViewTextBoxColumn.DataPropertyName = "Data";
+            this.dataDataGridViewTextBoxColumn.HeaderText = "Data";
+            this.dataDataGridViewTextBoxColumn.MinimumWidth = 100;
+            this.dataDataGridViewTextBoxColumn.Name = "dataDataGridViewTextBoxColumn";
+            this.dataDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.dataDataGridViewTextBoxColumn.Width = 300;
+            // 
+            // fieldSortButton
+            // 
+            this.fieldSortButton.Image = ((System.Drawing.Image)(resources.GetObject("fieldSortButton.Image")));
+            this.fieldSortButton.Location = new System.Drawing.Point(211, 258);
+            this.fieldSortButton.Name = "fieldSortButton";
+            this.fieldSortButton.Size = new System.Drawing.Size(26, 56);
+            this.fieldSortButton.TabIndex = 8;
+            this.fieldSortButton.UseVisualStyleBackColor = true;
+            this.fieldSortButton.Click += new System.EventHandler(this.fieldSortButton_Click);
+            // 
+            // subfieldSortButton
+            // 
+            this.subfieldSortButton.Image = ((System.Drawing.Image)(resources.GetObject("subfieldSortButton.Image")));
+            this.subfieldSortButton.Location = new System.Drawing.Point(656, 258);
+            this.subfieldSortButton.Name = "subfieldSortButton";
+            this.subfieldSortButton.Size = new System.Drawing.Size(26, 56);
+            this.subfieldSortButton.TabIndex = 9;
+            this.subfieldSortButton.UseVisualStyleBackColor = true;
+            this.subfieldSortButton.Click += new System.EventHandler(this.subfieldSortButton_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1000,16 +1078,6 @@ namespace CSharp_MARC_Editor
         private System.Windows.Forms.ToolStripMenuItem currentRecordToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem selectedRecordsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem findAndReplaceToolStripMenuItem;
-        private System.Windows.Forms.DataGridViewTextBoxColumn subfieldIDDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn fieldIDDataGridViewTextBoxColumn1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn codeDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn fieldIDDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn recordIDDataGridViewTextBoxColumn1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn tagNumberDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ind1DataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ind2DataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn controlDataDataGridViewTextBoxColumn;
         private System.Windows.Forms.ToolStripMenuItem createBlankRecordToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem clearDatabaseOnExitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem customFieldsToolStripMenuItem;
@@ -1053,6 +1121,22 @@ namespace CSharp_MARC_Editor
         private System.Windows.Forms.ToolStripMenuItem classificationsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem copyrightDateByDecadeToolStripMenuItem;
         private System.ComponentModel.BackgroundWorker rdaConversionBackgroundWorker;
+        private System.Windows.Forms.Button fieldDownButton;
+        private System.Windows.Forms.Button fieldUpButton;
+        private System.Windows.Forms.Button subfieldDownButton;
+        private System.Windows.Forms.Button subfieldUpButton;
+        private System.Windows.Forms.DataGridViewTextBoxColumn subfieldIDDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn fieldIDDataGridViewTextBoxColumn1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn codeDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn fieldIDDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn recordIDDataGridViewTextBoxColumn1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn tagNumberDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ind1DataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ind2DataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn controlDataDataGridViewTextBoxColumn;
+        private System.Windows.Forms.Button subfieldSortButton;
+        private System.Windows.Forms.Button fieldSortButton;
 
     }
 }

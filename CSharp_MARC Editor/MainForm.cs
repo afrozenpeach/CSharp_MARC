@@ -401,7 +401,7 @@ namespace CSharp_MARC_Editor
             using (SQLiteConnection connection = new SQLiteConnection(connectionString))
             {
                 connection.Open();
-                string query = "SELECT * FROM Fields where RecordiD = @RecordID";
+                string query = "SELECT * FROM Fields where RecordiD = @RecordID ORDER BY Sort, TagNumber";
                 
                 using (SQLiteCommand command = new SQLiteCommand(query, connection))
                 {
@@ -445,7 +445,7 @@ namespace CSharp_MARC_Editor
             using (SQLiteConnection connection = new SQLiteConnection(connectionString))
             {
                 connection.Open();
-                string query = "SELECT * FROM Subfields where FieldID = @FieldID";
+                string query = "SELECT * FROM Subfields where FieldID = @FieldID ORDER BY Sort, Code";
 
                 using (SQLiteCommand command = new SQLiteCommand(query, connection))
                 {
@@ -467,14 +467,14 @@ namespace CSharp_MARC_Editor
 
             using (SQLiteConnection fieldsConnection = new SQLiteConnection(connectionString))
             {
-                using (SQLiteCommand fieldsCommand = new SQLiteCommand("SELECT * FROM Fields WHERE RecordID = @RecordID ORDER BY FieldID", fieldsConnection))
+                using (SQLiteCommand fieldsCommand = new SQLiteCommand("SELECT * FROM Fields WHERE RecordID = @RecordID ORDER BY Sort, TagNumber", fieldsConnection))
                 {
                     fieldsCommand.Connection.Open();
                     fieldsCommand.Parameters.Add("@RecordID", DbType.Int32);
 
                     using (SQLiteConnection subfieldsConnection = new SQLiteConnection(connectionString))
                     {
-                        using (SQLiteCommand subfieldsCommand = new SQLiteCommand("SELECT * FROM Subfields WHERE FieldID = @FieldID ORDER BY SubfieldID", subfieldsConnection))
+                        using (SQLiteCommand subfieldsCommand = new SQLiteCommand("SELECT * FROM Subfields WHERE FieldID = @FieldID ORDER BY Sort, Code", subfieldsConnection))
                         {
                             subfieldsCommand.Connection.Open();
                             subfieldsCommand.Parameters.Add("@FieldID", DbType.Int32);
@@ -630,6 +630,7 @@ namespace CSharp_MARC_Editor
                                                     [Ind1] char, 
                                                     [Ind2] char, 
                                                     [ControlData] nvarchar(2147483647), 
+                                                    [Sort] integer, 
                                                     FOREIGN KEY([RecordID]) REFERENCES Records([RecordID]) ON DELETE CASCADE ON UPDATE RESTRICT);
 
                                                 CREATE TABLE [Records](
@@ -674,6 +675,7 @@ namespace CSharp_MARC_Editor
                                                     [FieldID] bigint NOT NULL, 
                                                     [Code] char NOT NULL, 
                                                     [Data] nvarchar(2147483647) NOT NULL, 
+                                                    [Sort] integer, 
                                                     FOREIGN KEY([FieldID]) REFERENCES Fields([FieldID]) ON DELETE CASCADE ON UPDATE RESTRICT);
 
                                                 CREATE TABLE [TempUpdates](
@@ -1843,20 +1845,26 @@ namespace CSharp_MARC_Editor
                         
                         int recordID = (int)connection.LastInsertRowId;
 
-                        command.CommandText = "INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2, ControlData) VALUES (@RecordID, @TagNumber, @Ind1, @Ind2, @ControlData)";
+                        command.CommandText = "INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2, ControlData, Sort) VALUES (@RecordID, @TagNumber, @Ind1, @Ind2, @ControlData, @Sort)";
                         command.Parameters.Add("@RecordID", DbType.Int32).Value = recordID;
                         command.Parameters.Add("@TagNumber", DbType.String).Value ="LDR";
                         command.Parameters.Add("@Ind1", DbType.String).Value = DBNull.Value;
                         command.Parameters.Add("@Ind2", DbType.String).Value = DBNull.Value;
                         command.Parameters.Add("@ControlData", DbType.String).Value = record.Leader;
+                        command.Parameters.Add("@Sort", DbType.Int32).Value = 1;
                         command.ExecuteNonQuery();
                         command.Parameters.Clear();
 
+                        int fieldNumber = 0;
                         foreach (Field field in record.Fields)
                         {
-                            command.CommandText = "INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2, ControlData) VALUES (@RecordID, @TagNumber, @Ind1, @Ind2, @ControlData)";
+                            command.CommandText = "INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2, ControlData, Sort) VALUES (@RecordID, @TagNumber, @Ind1, @Ind2, @ControlData, @Sort)";
                             command.Parameters.Add("@RecordID", DbType.Int32).Value = recordID;
                             command.Parameters.Add("@TagNumber", DbType.String).Value = field.Tag;
+                            command.Parameters.Add("@Sort", DbType.Int32).Value = fieldNumber;
+
+                            fieldNumber++;
+
                             if (field.IsDataField())
                             {
                                 command.Parameters.Add("@Ind1", DbType.String).Value = ((DataField)field).Indicator1;
@@ -1867,13 +1875,17 @@ namespace CSharp_MARC_Editor
                                 
                                 int fieldID = (int)connection.LastInsertRowId;
 
+                                int subfieldNumber = 0;
                                 foreach (Subfield subfield in ((DataField)field).Subfields)
                                 {
-                                    command.CommandText = "INSERT INTO Subfields (FieldID, Code, Data) VALUES (@FieldID, @Code, @Data)";
+                                    command.CommandText = "INSERT INTO Subfields (FieldID, Code, Data, Sort) VALUES (@FieldID, @Code, @Data, @Sort)";
                                     command.Parameters.Add("@FieldID", DbType.Int32).Value = fieldID;
                                     command.Parameters.Add("@Code", DbType.String).Value = subfield.Code;
                                     command.Parameters.Add("@Data", DbType.String).Value = subfield.Data;
+                                    command.Parameters.Add("@Sort", DbType.Int32).Value = subfieldNumber;
                                     command.ExecuteNonQuery();
+
+                                    subfieldNumber++;
                                 }
                             }
                             else
@@ -2037,13 +2049,13 @@ namespace CSharp_MARC_Editor
         {
             using (SQLiteConnection fieldsConnection = new SQLiteConnection(connectionString))
             {
-                using (SQLiteCommand fieldsCommand = new SQLiteCommand("SELECT * FROM Fields WHERE RecordID = @RecordID ORDER BY FieldID", fieldsConnection))
+                using (SQLiteCommand fieldsCommand = new SQLiteCommand("SELECT * FROM Fields WHERE RecordID = @RecordID ORDER BY Sort, TagNumber", fieldsConnection))
                 {
                     fieldsCommand.Connection.Open();
                     fieldsCommand.Parameters.Add("@RecordID", DbType.Int32);
                     using (SQLiteConnection subfieldsConnection = new SQLiteConnection(connectionString))
                     {
-                        using (SQLiteCommand subfieldsCommand = new SQLiteCommand("SELECT * FROM Subfields WHERE FieldID = @FieldID ORDER BY SubfieldID", subfieldsConnection))
+                        using (SQLiteCommand subfieldsCommand = new SQLiteCommand("SELECT * FROM Subfields WHERE FieldID = @FieldID ORDER BY Sort, Code", subfieldsConnection))
                         {
                             subfieldsCommand.Connection.Open();
                             subfieldsCommand.Parameters.Add("@FieldID", DbType.Int32);
@@ -3962,6 +3974,70 @@ namespace CSharp_MARC_Editor
 
         #endregion
 
+        #region Sorting rows
+
+        /// <summary>
+        /// Handles the Click event of the fieldUpButton control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void fieldUpButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        /// <summary>
+        /// Handles the Click event of the fieldDownButton control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void fieldDownButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        /// <summary>
+        /// Handles the Click event of the subfieldUpButton control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void subfieldUpButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        /// <summary>
+        /// Handles the Click event of the subfieldDownButton control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void subfieldDownButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        /// <summary>
+        /// Handles the Click event of the fieldSortButton control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void fieldSortButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        /// <summary>
+        /// Handles the Click event of the subfieldSortButton control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void subfieldSortButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        #endregion
+
         #region Reports
 
         /// <summary>
@@ -4238,7 +4314,7 @@ namespace CSharp_MARC_Editor
         {
             Close();
         }
-        
+
         #endregion
 
         #endregion

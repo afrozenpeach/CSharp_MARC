@@ -804,6 +804,8 @@ namespace CSharp_MARC_Editor {
             
             private global::System.Data.DataColumn columnControlData;
             
+            private global::System.Data.DataColumn columnSort;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public FieldsDataTable() {
@@ -887,6 +889,14 @@ namespace CSharp_MARC_Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn SortColumn {
+                get {
+                    return this.columnSort;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -922,7 +932,7 @@ namespace CSharp_MARC_Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public FieldsRow AddFieldsRow(int FieldID, int RecordID, string TagNumber, string Ind1, string Ind2, string ControlData) {
+            public FieldsRow AddFieldsRow(int FieldID, int RecordID, string TagNumber, string Ind1, string Ind2, string ControlData, int Sort) {
                 FieldsRow rowFieldsRow = ((FieldsRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         FieldID,
@@ -930,7 +940,8 @@ namespace CSharp_MARC_Editor {
                         TagNumber,
                         Ind1,
                         Ind2,
-                        ControlData};
+                        ControlData,
+                        Sort};
                 rowFieldsRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowFieldsRow);
                 return rowFieldsRow;
@@ -959,6 +970,7 @@ namespace CSharp_MARC_Editor {
                 this.columnInd1 = base.Columns["Ind1"];
                 this.columnInd2 = base.Columns["Ind2"];
                 this.columnControlData = base.Columns["ControlData"];
+                this.columnSort = base.Columns["Sort"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -976,6 +988,8 @@ namespace CSharp_MARC_Editor {
                 base.Columns.Add(this.columnInd2);
                 this.columnControlData = new global::System.Data.DataColumn("ControlData", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnControlData);
+                this.columnSort = new global::System.Data.DataColumn("Sort", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnSort);
                 this.columnTagNumber.MaxLength = 3;
                 this.columnInd1.MaxLength = 1;
                 this.columnInd2.MaxLength = 1;
@@ -1120,6 +1134,8 @@ namespace CSharp_MARC_Editor {
             
             private global::System.Data.DataColumn columnData;
             
+            private global::System.Data.DataColumn columnSort;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public SubfieldsDataTable() {
@@ -1187,6 +1203,14 @@ namespace CSharp_MARC_Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn SortColumn {
+                get {
+                    return this.columnSort;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -1222,13 +1246,14 @@ namespace CSharp_MARC_Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public SubfieldsRow AddSubfieldsRow(int SubfieldID, int FieldID, string Code, string Data) {
+            public SubfieldsRow AddSubfieldsRow(int SubfieldID, int FieldID, string Code, string Data, int Sort) {
                 SubfieldsRow rowSubfieldsRow = ((SubfieldsRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         SubfieldID,
                         FieldID,
                         Code,
-                        Data};
+                        Data,
+                        Sort};
                 rowSubfieldsRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowSubfieldsRow);
                 return rowSubfieldsRow;
@@ -1255,6 +1280,7 @@ namespace CSharp_MARC_Editor {
                 this.columnFieldID = base.Columns["FieldID"];
                 this.columnCode = base.Columns["Code"];
                 this.columnData = base.Columns["Data"];
+                this.columnSort = base.Columns["Sort"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1268,6 +1294,8 @@ namespace CSharp_MARC_Editor {
                 base.Columns.Add(this.columnCode);
                 this.columnData = new global::System.Data.DataColumn("Data", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnData);
+                this.columnSort = new global::System.Data.DataColumn("Sort", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnSort);
                 this.columnCode.MaxLength = 1;
             }
             
@@ -1942,6 +1970,22 @@ namespace CSharp_MARC_Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public int Sort {
+                get {
+                    try {
+                        return ((int)(this[this.tableFields.SortColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Sort\' in table \'Fields\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableFields.SortColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsFieldIDNull() {
                 return this.IsNull(this.tableFields.FieldIDColumn);
             }
@@ -2010,6 +2054,18 @@ namespace CSharp_MARC_Editor {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetControlDataNull() {
                 this[this.tableFields.ControlDataColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsSortNull() {
+                return this.IsNull(this.tableFields.SortColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetSortNull() {
+                this[this.tableFields.SortColumn] = global::System.Convert.DBNull;
             }
         }
         
@@ -2093,6 +2149,22 @@ namespace CSharp_MARC_Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public int Sort {
+                get {
+                    try {
+                        return ((int)(this[this.tableSubfields.SortColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Sort\' in table \'Subfields\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableSubfields.SortColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsSubfieldIDNull() {
                 return this.IsNull(this.tableSubfields.SubfieldIDColumn);
             }
@@ -2137,6 +2209,18 @@ namespace CSharp_MARC_Editor {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetDataNull() {
                 this[this.tableSubfields.DataColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsSortNull() {
+                return this.IsNull(this.tableSubfields.SortColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetSortNull() {
+                this[this.tableSubfields.SortColumn] = global::System.Convert.DBNull;
             }
         }
         
