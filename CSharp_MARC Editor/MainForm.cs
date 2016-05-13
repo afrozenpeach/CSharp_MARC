@@ -3277,7 +3277,7 @@ namespace CSharp_MARC_Editor
                                                 SELECT s.SubfieldID, SUBSTR(s.Data, 1, LENGTH(s.Data) - 1)
                                                 FROM Subfields s
                                                 LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
-                                                WHERE f.TagNumber = '264' and s.Code = 'b';
+                                                WHERE f.TagNumber = '264' and s.Code = 'b' and SUBSTR(s.Data, 1, LENGTH(s.Data) - 1) == ',';
 
                                             UPDATE Subfields SET Data = (SELECT Data FROM TempUpdates WHERE RecordID = SubfieldID)
                                                 WHERE SubfieldID IN (SELECT RecordID FROM TempUpdates);
