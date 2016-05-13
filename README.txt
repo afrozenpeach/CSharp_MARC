@@ -53,6 +53,10 @@
  * @license   http://www.gnu.org/licenses/gpl-3.0.html  GPL License 3
  */ 
 
+2016-05-12.2 Changes:
+
+Improvements to RDA Conversion
+
 2016-05-12.1 Changes:
 
 Fix reading and writing UTF8 files
