@@ -3186,7 +3186,20 @@ namespace CSharp_MARC_Editor
                                             SET Data = (SELECT Data FROM TempUpdates WHERE TempUpdates.RecordID = Subfields.SubfieldID)
                                             WHERE SubfieldID IN (SELECT RecordID FROM TempUpdates); 
 
-                                            DELETE FROM TempUpdates;";
+                                            DELETE FROM TempUpdates;
+                                            
+                                            INSERT INTO TempUpdates
+                                                SELECT s.SubfieldID, REGEXREPLACE(Data, '\[.*\]', '')
+                                                FROM Subfields s
+                                                LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                WHERE f.TagNumber = '245' and s.Code = 'h';
+
+                                            UPDATE Subfields SET Data = Data || (SELECT Data FROM TempUpdates WHERE TempUpdates.RecordID = Subfields.SUbfieldID)
+                                            WHERE SubfieldID IN (SELECT SubfieldID FROM TempUpdates);
+
+                                            DELETE FROM TempUpdates;
+
+                                            DELETE FROM Subfields WHERE SubfieldID IN (SELECT SubfieldID FROM Subfields s LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID WHERE f.TagNumber = '245' and s.Code = 'h');";
                     command.Parameters.Add("TagNumber", DbType.String).Value = "245";
                     command.Parameters.Add("Code", DbType.String).Value = "c";
                     command.ExecuteNonQuery();
