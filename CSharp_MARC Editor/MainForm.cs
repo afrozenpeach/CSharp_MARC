@@ -3273,7 +3273,7 @@ namespace CSharp_MARC_Editor
                                             DELETE FROM TempUpdates;
 
                                             INSERT INTO TempUpdates
-                                                SELECT s.SubfieldID, SUBSTR(s.Data, 0, LENGTH(s.Data) - 1)
+                                                SELECT s.SubfieldID, SUBSTR(s.Data, 1, LENGTH(s.Data) - 1)
                                                 FROM Subfields s
                                                 LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
                                                 WHERE f.TagNumber = '264' and s.Code = 'b';
@@ -3304,12 +3304,12 @@ namespace CSharp_MARC_Editor
                                                 FROM TempUpdates t
                                                 LEFT OUTER JOIN Fields f on t.RecordID = f.RecordID
                                                 LEFT OUTER JOIN Subfields s on f.FieldID = s.FieldID
-                                                WHERE f.TagNumber = '264' AND f.Ind1 = ' ' AND f.Ind2 = '4' AND s.Data IS NULL
+                                                WHERE f.TagNumber = '264' AND f.Ind1 = ' ' AND f.Ind2 = '4' AND s.Data IS NULL;
 
                                             DELETE FROM TempUpdates;
 
                                             INSERT INTO TempUpdates
-                                                SELECT SubfieldID, REPLACE(Data 'S.l.', '[Place of publication not identified]')
+                                                SELECT SubfieldID, REPLACE(Data, 'S.l.', '[Place of publication not identified]')
                                                 FROM Subfields s
                                                 LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
                                                 WHERE f.TagNumber = '264' and s.Code = 'a';
@@ -3321,7 +3321,7 @@ namespace CSharp_MARC_Editor
                                             DELETE FROM TempUpdates;
 
                                             INSERT INTO TempUpdates
-                                                SELECT SubfieldID, REPLACE(Data 's.n.', '[Publisher not identified]')
+                                                SELECT SubfieldID, REPLACE(Data, 's.n.', '[Publisher not identified]')
                                                 FROM Subfields s
                                                 LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
                                                 WHERE f.TagNumber = '264' and s.Code = 'b';
@@ -3660,10 +3660,10 @@ namespace CSharp_MARC_Editor
 
                     rdaConversionBackgroundWorker.ReportProgress(500);
                     command.CommandText = @"INSERT INTO TempUpdates
-                                                SELECT s.SubfieldID, REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(s.Data, 'T.p.', 'Title page'), 't.p.', 'title page'), 'P.', 'Page'), 'p.', 'page), 'Vol.', 'Volume'), 'vol.', 'volume')
+                                                SELECT s.SubfieldID, REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(s.Data, 'T.p.', 'Title page'), 't.p.', 'title page'), 'P.', 'Page'), 'p.', 'page'), 'Vol.', 'Volume'), 'vol.', 'volume')
                                                 FROM Subfields s
                                                 LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
-                                                WHERE f.TagNumber = @TagNumber and (s.Data LIKE '%t\.p\.%' ESCAPE '\' or s.Data LIKE '%p\.%' ESCAPE '\' or s.Data LIKE '%vol\.%' ESCAPE '\')
+                                                WHERE f.TagNumber = @TagNumber and (s.Data LIKE '%t\.p\.%' ESCAPE '\' or s.Data LIKE '%p\.%' ESCAPE '\' or s.Data LIKE '%vol\.%' ESCAPE '\');
 
                                             UPDATE Subfields
                                             SET Data = (SELECT Data FROM TempUpdates WHERE TempUpdates.RecordID = Subfields.SubfieldID)
