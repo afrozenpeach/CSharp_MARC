@@ -1851,11 +1851,11 @@ namespace CSharp_MARC_Editor
                         command.Parameters.Add("@Ind1", DbType.String).Value = DBNull.Value;
                         command.Parameters.Add("@Ind2", DbType.String).Value = DBNull.Value;
                         command.Parameters.Add("@ControlData", DbType.String).Value = record.Leader;
-                        command.Parameters.Add("@Sort", DbType.Int32).Value = 1;
+                        command.Parameters.Add("@Sort", DbType.Int32).Value = 0;
                         command.ExecuteNonQuery();
                         command.Parameters.Clear();
 
-                        int fieldNumber = 0;
+                        int fieldNumber = 1;
                         foreach (Field field in record.Fields)
                         {
                             command.CommandText = "INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2, ControlData, Sort) VALUES (@RecordID, @TagNumber, @Ind1, @Ind2, @ControlData, @Sort)";
@@ -2762,7 +2762,7 @@ namespace CSharp_MARC_Editor
                     {
                         connection.Open();
 
-                        string query = "INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2) VALUES (@RecordID, @TagNumber, @Ind1, @Ind2)";
+                        string query = "INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2, Sort) VALUES (@RecordID, @TagNumber, @Ind1, @Ind2, @Sort)";
 
                         using (SQLiteCommand command = new SQLiteCommand(query, connection))
                         {
