@@ -76,6 +76,8 @@ namespace CSharp_MARC_Editor
             this.Custom5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ImportErrors = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.marcDataSet = new CSharp_MARC_Editor.MARCDataSet();
+            this.subfieldSortButton = new System.Windows.Forms.Button();
+            this.fieldSortButton = new System.Windows.Forms.Button();
             this.fieldDownButton = new System.Windows.Forms.Button();
             this.fieldUpButton = new System.Windows.Forms.Button();
             this.subfieldDownButton = new System.Windows.Forms.Button();
@@ -144,12 +146,12 @@ namespace CSharp_MARC_Editor
             this.ind1DataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ind2DataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.controlDataDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Sort = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.subfieldIDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.fieldIDDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.codeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.fieldSortButton = new System.Windows.Forms.Button();
-            this.subfieldSortButton = new System.Windows.Forms.Button();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -352,6 +354,26 @@ namespace CSharp_MARC_Editor
             this.marcDataSet.DataSetName = "MARCDataSet";
             this.marcDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
+            // subfieldSortButton
+            // 
+            this.subfieldSortButton.Image = ((System.Drawing.Image)(resources.GetObject("subfieldSortButton.Image")));
+            this.subfieldSortButton.Location = new System.Drawing.Point(656, 258);
+            this.subfieldSortButton.Name = "subfieldSortButton";
+            this.subfieldSortButton.Size = new System.Drawing.Size(26, 56);
+            this.subfieldSortButton.TabIndex = 9;
+            this.subfieldSortButton.UseVisualStyleBackColor = true;
+            this.subfieldSortButton.Click += new System.EventHandler(this.subfieldSortButton_Click);
+            // 
+            // fieldSortButton
+            // 
+            this.fieldSortButton.Image = ((System.Drawing.Image)(resources.GetObject("fieldSortButton.Image")));
+            this.fieldSortButton.Location = new System.Drawing.Point(211, 258);
+            this.fieldSortButton.Name = "fieldSortButton";
+            this.fieldSortButton.Size = new System.Drawing.Size(26, 56);
+            this.fieldSortButton.TabIndex = 8;
+            this.fieldSortButton.UseVisualStyleBackColor = true;
+            this.fieldSortButton.Click += new System.EventHandler(this.fieldSortButton_Click);
+            // 
             // fieldDownButton
             // 
             this.fieldDownButton.Image = ((System.Drawing.Image)(resources.GetObject("fieldDownButton.Image")));
@@ -456,7 +478,8 @@ namespace CSharp_MARC_Editor
             this.subfieldIDDataGridViewTextBoxColumn,
             this.fieldIDDataGridViewTextBoxColumn1,
             this.codeDataGridViewTextBoxColumn,
-            this.dataDataGridViewTextBoxColumn});
+            this.dataDataGridViewTextBoxColumn,
+            this.dataGridViewTextBoxColumn1});
             this.subfieldsDataGridView.DataMember = "Subfields";
             this.subfieldsDataGridView.DataSource = this.marcDataSet;
             this.subfieldsDataGridView.Enabled = false;
@@ -486,7 +509,8 @@ namespace CSharp_MARC_Editor
             this.tagNumberDataGridViewTextBoxColumn,
             this.ind1DataGridViewTextBoxColumn,
             this.ind2DataGridViewTextBoxColumn,
-            this.controlDataDataGridViewTextBoxColumn});
+            this.controlDataDataGridViewTextBoxColumn,
+            this.Sort});
             this.fieldsDataGridView.DataMember = "Fields";
             this.fieldsDataGridView.DataSource = this.marcDataSet;
             this.fieldsDataGridView.Enabled = false;
@@ -957,6 +981,13 @@ namespace CSharp_MARC_Editor
             this.controlDataDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.controlDataDataGridViewTextBoxColumn.Visible = false;
             // 
+            // Sort
+            // 
+            this.Sort.DataPropertyName = "Sort";
+            this.Sort.HeaderText = "Sort";
+            this.Sort.Name = "Sort";
+            this.Sort.Visible = false;
+            // 
             // subfieldIDDataGridViewTextBoxColumn
             // 
             this.subfieldIDDataGridViewTextBoxColumn.DataPropertyName = "SubfieldID";
@@ -990,25 +1021,12 @@ namespace CSharp_MARC_Editor
             this.dataDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.dataDataGridViewTextBoxColumn.Width = 300;
             // 
-            // fieldSortButton
+            // dataGridViewTextBoxColumn1
             // 
-            this.fieldSortButton.Image = ((System.Drawing.Image)(resources.GetObject("fieldSortButton.Image")));
-            this.fieldSortButton.Location = new System.Drawing.Point(211, 258);
-            this.fieldSortButton.Name = "fieldSortButton";
-            this.fieldSortButton.Size = new System.Drawing.Size(26, 56);
-            this.fieldSortButton.TabIndex = 8;
-            this.fieldSortButton.UseVisualStyleBackColor = true;
-            this.fieldSortButton.Click += new System.EventHandler(this.fieldSortButton_Click);
-            // 
-            // subfieldSortButton
-            // 
-            this.subfieldSortButton.Image = ((System.Drawing.Image)(resources.GetObject("subfieldSortButton.Image")));
-            this.subfieldSortButton.Location = new System.Drawing.Point(656, 258);
-            this.subfieldSortButton.Name = "subfieldSortButton";
-            this.subfieldSortButton.Size = new System.Drawing.Size(26, 56);
-            this.subfieldSortButton.TabIndex = 9;
-            this.subfieldSortButton.UseVisualStyleBackColor = true;
-            this.subfieldSortButton.Click += new System.EventHandler(this.subfieldSortButton_Click);
+            this.dataGridViewTextBoxColumn1.DataPropertyName = "Sort";
+            this.dataGridViewTextBoxColumn1.HeaderText = "Sort";
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            this.dataGridViewTextBoxColumn1.Visible = false;
             // 
             // MainForm
             // 
@@ -1125,18 +1143,20 @@ namespace CSharp_MARC_Editor
         private System.Windows.Forms.Button fieldUpButton;
         private System.Windows.Forms.Button subfieldDownButton;
         private System.Windows.Forms.Button subfieldUpButton;
+        private System.Windows.Forms.Button subfieldSortButton;
+        private System.Windows.Forms.Button fieldSortButton;
         private System.Windows.Forms.DataGridViewTextBoxColumn subfieldIDDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn fieldIDDataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn codeDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn fieldIDDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn recordIDDataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn tagNumberDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn ind1DataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn ind2DataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn controlDataDataGridViewTextBoxColumn;
-        private System.Windows.Forms.Button subfieldSortButton;
-        private System.Windows.Forms.Button fieldSortButton;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Sort;
 
     }
 }

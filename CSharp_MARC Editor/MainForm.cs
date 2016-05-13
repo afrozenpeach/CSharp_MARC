@@ -3983,7 +3983,33 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void fieldUpButton_Click(object sender, EventArgs e)
         {
+            if (fieldsDataGridView.SelectedCells.Count > 0)
+            {
+                int index = fieldsDataGridView.SelectedCells[0].OwningRow.Index;
+                int fieldID = Int32.Parse(fieldsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString());
+                int otherFieldID = Int32.Parse(fieldsDataGridView.Rows[index - 1].Cells[0].Value.ToString());
 
+                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                {
+                    connection.Open();
+
+                    using (SQLiteCommand command = new SQLiteCommand(connection))
+                    {
+                        command.CommandText = "UPDATE Fields SET Sort = Sort - 1 WHERE FieldID = @FieldID";
+                        command.Parameters.Add("@FieldID", DbType.Int32).Value = fieldID;
+                        command.ExecuteNonQuery();
+
+                        command.CommandText = "UPDATE Fields SET Sort = Sort + 1 WHERE FieldID = @FieldID";
+                        command.Parameters["@FieldID"].Value = otherFieldID;
+                        command.ExecuteNonQuery();
+
+                        LoadFields(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()));
+
+                        fieldsDataGridView.ClearSelection();
+                        fieldsDataGridView.Rows[index - 1].Selected = true;
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -3993,7 +4019,33 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void fieldDownButton_Click(object sender, EventArgs e)
         {
+            if (fieldsDataGridView.SelectedCells.Count > 0)
+            {
+                int index = fieldsDataGridView.SelectedCells[0].OwningRow.Index;
+                int fieldID = Int32.Parse(fieldsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString());
+                int otherFieldID = Int32.Parse(fieldsDataGridView.Rows[index + 1].Cells[0].Value.ToString());
 
+                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                {
+                    connection.Open();
+
+                    using (SQLiteCommand command = new SQLiteCommand(connection))
+                    {
+                        command.CommandText = "UPDATE Fields SET Sort = Sort + 1 WHERE FieldID = @FieldID";
+                        command.Parameters.Add("@FieldID", DbType.Int32).Value = fieldID;
+                        command.ExecuteNonQuery();
+
+                        command.CommandText = "UPDATE Fields SET Sort = Sort - 1 WHERE FieldID = @FieldID";
+                        command.Parameters["@FieldID"].Value = otherFieldID;
+                        command.ExecuteNonQuery();
+
+                        LoadFields(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()));
+
+                        fieldsDataGridView.ClearSelection();
+                        fieldsDataGridView.Rows[index + 1].Selected = true;
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -4003,7 +4055,33 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void subfieldUpButton_Click(object sender, EventArgs e)
         {
+            if (subfieldsDataGridView.SelectedCells.Count > 0)
+            {
+                int index = subfieldsDataGridView.SelectedCells[0].OwningRow.Index;
+                int subfieldID = Int32.Parse(subfieldsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString());
+                int otherSubfieldID = Int32.Parse(subfieldsDataGridView.Rows[index - 1].Cells[0].Value.ToString());
 
+                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                {
+                    connection.Open();
+
+                    using (SQLiteCommand command = new SQLiteCommand(connection))
+                    {
+                        command.CommandText = "UPDATE Subfields SET Sort = Sort - 1 WHERE SubfieldID = @SubfieldID";
+                        command.Parameters.Add("@SubfieldID", DbType.Int32).Value = subfieldID;
+                        command.ExecuteNonQuery();
+
+                        command.CommandText = "UPDATE Subfields SET Sort = Sort + 1 WHERE SubfieldID = @SubfieldID";
+                        command.Parameters["@SubfieldID"].Value = otherSubfieldID;
+                        command.ExecuteNonQuery();
+
+                        LoadSubfields(Int32.Parse(fieldsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()));
+
+                        subfieldsDataGridView.ClearSelection();
+                        subfieldsDataGridView.Rows[index - 1].Selected = true;
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -4013,7 +4091,33 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void subfieldDownButton_Click(object sender, EventArgs e)
         {
+            if (subfieldsDataGridView.SelectedCells.Count > 0)
+            {
+                int index = subfieldsDataGridView.SelectedCells[0].OwningRow.Index;
+                int fieldID = Int32.Parse(subfieldsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString());
+                int otherFieldID = Int32.Parse(subfieldsDataGridView.Rows[index + 1].Cells[0].Value.ToString());
 
+                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                {
+                    connection.Open();
+
+                    using (SQLiteCommand command = new SQLiteCommand(connection))
+                    {
+                        command.CommandText = "UPDATE Subfields SET Sort = Sort + 1 WHERE SubfieldID = @SubfieldID";
+                        command.Parameters.Add("@SubfieldID", DbType.Int32).Value = fieldID;
+                        command.ExecuteNonQuery();
+
+                        command.CommandText = "UPDATE Subfields SET Sort = Sort - 1 WHERE SubfieldID = @SubfieldID";
+                        command.Parameters["@SubfieldID"].Value = otherFieldID;
+                        command.ExecuteNonQuery();
+
+                        LoadSubfields(Int32.Parse(fieldsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()));
+
+                        subfieldsDataGridView.ClearSelection();
+                        subfieldsDataGridView.Rows[index + 1].Selected = true;
+                    }
+                }
+            }
         }
 
         /// <summary>
