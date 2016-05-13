@@ -3148,7 +3148,8 @@ namespace CSharp_MARC_Editor
                     command.CommandText = @"INSERT INTO TempUpdates
                                                 SELECT f.FieldID, ' '
                                                 FROM Fields f
-                                                WHERE f.TagNumber = @TagNumber;
+                                                LEFT OUTER JOIN Subfields s on s.FieldID = f.FieldID and s.Code = 'e'
+                                                WHERE f.TagNumber = @TagNumber where s.Data IS NULL;
 
                                             INSERT INTO Subfields (FieldID, Code, Data)
                                                 SELECT RecordID, @Code, 'rda'
