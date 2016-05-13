@@ -3293,6 +3293,30 @@ namespace CSharp_MARC_Editor
                                                 LEFT OUTER JOIN Subfields s on f.FieldID = s.FieldID
                                                 WHERE f.TagNumber = '264' AND f.Ind1 = ' ' AND f.Ind2 = '4' AND s.Data IS NULL
 
+                                            DELETE FROM TempUpdates;
+
+                                            INSERT INTO TempUpdates
+                                                SELECT SubfieldID, REPLACE(Data 'S.l.', '[Place of publication not identified]')
+                                                FROM Subfields s
+                                                LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                WHERE f.TagNumber = '264' and s.Code = 'a';
+
+                                            UPDATE Subfields
+                                            SET Data = (SELECT Data FROM TempUpdates WHERE TempUpdates.RecordID = Subfields.SubfieldID)
+                                            WHERE SubfieldID IN (SELECT RecordID FROM TempUpdates); 
+
+                                            DELETE FROM TempUpdates;
+
+                                            INSERT INTO TempUpdates
+                                                SELECT SubfieldID, REPLACE(Data 's.n.', '[Publisher not identified]')
+                                                FROM Subfields s
+                                                LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                WHERE f.TagNumber = '264' and s.Code = 'b';
+
+                                            UPDATE Subfields
+                                            SET Data = (SELECT Data FROM TempUpdates WHERE TempUpdates.RecordID = Subfields.SubfieldID)
+                                            WHERE SubfieldID IN (SELECT RecordID FROM TempUpdates); 
+
                                             DELETE FROM TempUpdates;";
                     command.ExecuteNonQuery();
 
