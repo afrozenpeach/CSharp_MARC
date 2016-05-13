@@ -3400,7 +3400,9 @@ namespace CSharp_MARC_Editor
 
                                             INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2)
                                                 SELECT RecordID, '336', ' ', ' '
-                                                FROM TempUpdates;
+                                                FROM TempUpdates
+                                                LEFT OUTER JOIN Fields f on f.TagNumber = '336'
+                                                WHERE f.TagNumber IS NULL;
 
                                             INSERT INTO Subfields (FieldID, Code, Data)
                                                 SELECT f.FieldID, 'a',
@@ -3474,7 +3476,9 @@ namespace CSharp_MARC_Editor
 
                                             INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2)
                                                 SELECT RecordID, '337', ' ', ' '
-                                                FROM TempUpdates;
+                                                FROM TempUpdates
+                                                LEFT OUTER JOIN Fields f on f.TagNumber = '336'
+                                                WHERE f.TagNumber IS NULL;
 
                                             INSERT INTO Subfields (FieldID, Code, Data)
                                                 SELECT f.FieldID, 'a',
@@ -3541,7 +3545,9 @@ namespace CSharp_MARC_Editor
 
                                             INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2)
                                                 SELECT RecordID, '338', ' ', ' '
-                                                FROM TempUpdates;
+                                                FROM TempUpdates
+                                                LEFT OUTER JOIN Fields f on f.TagNumber = '336'
+                                                WHERE f.TagNumber IS NULL;
 
                                             INSERT INTO Subfields (FieldID, Code, Data)
                                                 SELECT f.FieldID, 'a',
