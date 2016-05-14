@@ -356,6 +356,7 @@ namespace CSharp_MARC_Editor
             this.subfieldSortButton.Size = new System.Drawing.Size(26, 56);
             this.subfieldSortButton.TabIndex = 9;
             this.subfieldSortButton.UseVisualStyleBackColor = true;
+            this.subfieldSortButton.Visible = false;
             this.subfieldSortButton.Click += new System.EventHandler(this.subfieldSortButton_Click);
             // 
             // subfieldDownButton
