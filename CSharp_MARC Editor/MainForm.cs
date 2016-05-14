@@ -401,7 +401,7 @@ namespace CSharp_MARC_Editor
             using (SQLiteConnection connection = new SQLiteConnection(connectionString))
             {
                 connection.Open();
-                string query = "SELECT * FROM Fields where RecordiD = @RecordID ORDER BY CASE WHEN TagNumber = 'LDR' THEN 0 ELSE TagNumber END";
+                string query = "SELECT * FROM Fields where RecordiD = @RecordID ORDER BY CASE WHEN TagNumber = 'LDR' THEN 0 ELSE 1 END, Sort, TagNumber, FieldID";
                 
                 using (SQLiteCommand command = new SQLiteCommand(query, connection))
                 {
@@ -445,7 +445,7 @@ namespace CSharp_MARC_Editor
             using (SQLiteConnection connection = new SQLiteConnection(connectionString))
             {
                 connection.Open();
-                string query = "SELECT * FROM Subfields where FieldID = @FieldID ORDER BY Sort, Code";
+                string query = "SELECT * FROM Subfields where FieldID = @FieldID Sort, Code, SubfieldID";
 
                 using (SQLiteCommand command = new SQLiteCommand(query, connection))
                 {
@@ -467,14 +467,14 @@ namespace CSharp_MARC_Editor
 
             using (SQLiteConnection fieldsConnection = new SQLiteConnection(connectionString))
             {
-                using (SQLiteCommand fieldsCommand = new SQLiteCommand("SELECT * FROM Fields WHERE RecordID = @RecordID ORDER BY CASE WHEN TagNumber = 'LDR' THEN 0 ELSE TagNumber END", fieldsConnection))
+                using (SQLiteCommand fieldsCommand = new SQLiteCommand("SELECT * FROM Fields WHERE RecordID = @RecordID ORDER BY CASE WHEN TagNumber = 'LDR' THEN 0 ELSE 1 END, Sort, TagNumber, FieldID", fieldsConnection))
                 {
                     fieldsCommand.Connection.Open();
                     fieldsCommand.Parameters.Add("@RecordID", DbType.Int32);
 
                     using (SQLiteConnection subfieldsConnection = new SQLiteConnection(connectionString))
                     {
-                        using (SQLiteCommand subfieldsCommand = new SQLiteCommand("SELECT * FROM Subfields WHERE FieldID = @FieldID ORDER BY Sort, Code", subfieldsConnection))
+                        using (SQLiteCommand subfieldsCommand = new SQLiteCommand("SELECT * FROM Subfields WHERE FieldID = @FieldID ORDER BY Sort, Code, SubfieldID", subfieldsConnection))
                         {
                             subfieldsCommand.Connection.Open();
                             subfieldsCommand.Parameters.Add("@FieldID", DbType.Int32);
@@ -2047,13 +2047,13 @@ namespace CSharp_MARC_Editor
         {
             using (SQLiteConnection fieldsConnection = new SQLiteConnection(connectionString))
             {
-                using (SQLiteCommand fieldsCommand = new SQLiteCommand("SELECT * FROM Fields WHERE RecordID = @RecordID ORDER BY CASE WHEN TagNumber = 'LDR' THEN 0 ELSE TagNumber END", fieldsConnection))
+                using (SQLiteCommand fieldsCommand = new SQLiteCommand("SELECT * FROM Fields WHERE RecordID = @RecordID ORDER BY CASE WHEN TagNumber = 'LDR' THEN 0 ELSE 1 END, Sort, TagNumber. FieldID", fieldsConnection))
                 {
                     fieldsCommand.Connection.Open();
                     fieldsCommand.Parameters.Add("@RecordID", DbType.Int32);
                     using (SQLiteConnection subfieldsConnection = new SQLiteConnection(connectionString))
                     {
-                        using (SQLiteCommand subfieldsCommand = new SQLiteCommand("SELECT * FROM Subfields WHERE FieldID = @FieldID ORDER BY Sort, Code", subfieldsConnection))
+                        using (SQLiteCommand subfieldsCommand = new SQLiteCommand("SELECT * FROM Subfields WHERE FieldID = @FieldID ORDER BY Sort, Code, SubfieldID", subfieldsConnection))
                         {
                             subfieldsCommand.Connection.Open();
                             subfieldsCommand.Parameters.Add("@FieldID", DbType.Int32);
@@ -2265,7 +2265,7 @@ namespace CSharp_MARC_Editor
                     }
                 }
 
-                using (SQLiteCommand command = new SQLiteCommand("SELECT DISTINCT TagNumber FROM Fields ORDER BY CASE WHEN TagNumber = 'LDR' THEN 0 ELSE TagNumber END", connection))
+                using (SQLiteCommand command = new SQLiteCommand("SELECT DISTINCT TagNumber FROM Fields ORDER BY CASE WHEN TagNumber = 'LDR' THEN 0 ELSE 1 END, Sort, TagNumber, FieldID", connection))
                 {
                     using (SQLiteDataReader reader = command.ExecuteReader())
                     {
@@ -3278,8 +3278,8 @@ namespace CSharp_MARC_Editor
                                                 LEFT OUTER JOIN Subfields s on s.FieldID = f.FieldID and s.code = 'c'
                                                 WHERE f.TagNumber = '264' and f.Ind2 = '1';
 
-                                            INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2, ControlData)
-                                                SELECT f.RecordID, '264', ' ', '4', s.SubfieldID
+                                            INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2, ControlData, Sort)
+                                                SELECT f.RecordID, '264', ' ', '4', s.SubfieldID, (SELECT MAX(Sort) FROM Fields f2 WHERE f2.RecordID = f.RecordID AND f2.TagNumber = '264')
                                                 FROM TempUpdates t
                                                 LEFT OUTER JOIN Subfields s ON s.SubfieldID = t.RecordID
                                                 LEFT OUTER JOIN Fields f ON f.FieldID = s.FieldID
@@ -3315,9 +3315,9 @@ namespace CSharp_MARC_Editor
                                                 WHERE f.TagNumber = '264' and s.Code = 'c' and s.Data LIKE '%' || TempUpdates.Data || '%'
                                             );
 
-                                            INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2)
-                                                SELECT RecordID, '264', ' ', '4'
-                                                FROM TempUpdates;
+                                            INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2, Sort)
+                                                SELECT RecordID, '264', ' ', '4', (SELECT MAX(Sort) FROM Fields f WHERE f.RecordID = t.RecordID AND f.TagNumber = '264')
+                                                FROM TempUpdates t;
 
                                             INSERT INTO Subfields (FieldID, Code, Data, Sort)
                                                 SELECT f.FieldID, 'c', t.Data, 0
@@ -3417,8 +3417,8 @@ namespace CSharp_MARC_Editor
                                                 FROM Fields
                                                 WHERE TagNumber = 'LDR';
 
-                                            INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2)
-                                                SELECT t.RecordID, '336', ' ', ' '
+                                            INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2, Sort)
+                                                SELECT t.RecordID, '336', ' ', ' ', (SELECT MAX(Sort) FROM Fields f2 WHERE f2.RecordID = f.RecordID AND f2.TagNumber < '336')
                                                 FROM TempUpdates t
                                                 LEFT OUTER JOIN Fields f on f.RecordID = t.RecordID AND f.TagNumber = '336'
                                                 WHERE f.TagNumber IS NULL;
@@ -3492,8 +3492,8 @@ namespace CSharp_MARC_Editor
                                                 FROM Fields f
                                                 WHERE RecordID NOT IN (SELECT RecordID FROM TempUpdates);
 
-                                            INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2)
-                                                SELECT t.RecordID, '337', ' ', ' '
+                                            INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2, Sort)
+                                                SELECT t.RecordID, '337', ' ', ' ', (SELECT MAX(Sort) FROM Fields f2 WHERE f2.RecordID = f.RecordID AND f2.TagNumber < '337')
                                                 FROM TempUpdates t
                                                 LEFT OUTER JOIN Fields f on f.TagNumber = '337'
                                                 WHERE f.TagNumber IS NULL;
@@ -3561,8 +3561,8 @@ namespace CSharp_MARC_Editor
                                                 LEFT OUTER JOIN Fields f2 ON f.RecordID = f2.RecordID AND f2.TagNumber = '007'
                                                 WHERE f2.RecordID IS NULL;
 
-                                            INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2)
-                                                SELECT t.RecordID, '338', ' ', ' '
+                                            INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2, Sort)
+                                                SELECT t.RecordID, '338', ' ', ' ', (SELECT MAX(Sort) FROM Fields f2 WHERE f2.RecordID = f.RecordID AND f2.TagNumber < '338')
                                                 FROM TempUpdates t
                                                 LEFT OUTER JOIN Fields f on f.TagNumber = '338'
                                                 WHERE f.TagNumber IS NULL;
@@ -3981,6 +3981,126 @@ namespace CSharp_MARC_Editor
         #endregion
 
         #region Sorting rows
+
+        /// <summary>
+        /// Handles the Click event of the fieldUpButton control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void fieldUpButton_Click(object sender, EventArgs e)
+        {
+            if (fieldsDataGridView.SelectedCells.Count > 0)
+            {
+                int index = fieldsDataGridView.SelectedCells[0].OwningRow.Index;
+                int fieldID = Int32.Parse(fieldsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString());
+                int otherFieldID = Int32.Parse(fieldsDataGridView.Rows[index - 1].Cells[0].Value.ToString());
+
+                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                {
+                    connection.Open();
+
+                    using (SQLiteCommand command = new SQLiteCommand(connection))
+                    {
+                        command.CommandText = "UPDATE Fields SET Sort = Sort - 1 WHERE FieldID = @FieldID";
+                        command.Parameters.Add("@SubfieldID", DbType.Int32).Value = fieldID;
+                        command.ExecuteNonQuery();
+
+                        command.CommandText = "UPDATE Fields SET Sort = Sort + 1 WHERE FieldID = @FieldID";
+                        command.Parameters["@FieldID"].Value = otherFieldID;
+                        command.ExecuteNonQuery();
+
+                        LoadSubfields(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()));
+
+                        fieldsDataGridView.ClearSelection();
+                        fieldsDataGridView.Rows[index - 1].Selected = true;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Handles the Click event of the fieldDownButton control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void fieldDownButton_Click(object sender, EventArgs e)
+        {
+            int index = fieldsDataGridView.SelectedCells[0].OwningRow.Index;
+            int fieldID = Int32.Parse(fieldsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString());
+            int otherFieldID = Int32.Parse(fieldsDataGridView.Rows[index - 1].Cells[0].Value.ToString());
+
+            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            {
+                connection.Open();
+
+                using (SQLiteCommand command = new SQLiteCommand(connection))
+                {
+                    command.CommandText = "UPDATE Fields SET Sort = Sort + 1 WHERE FieldID = @FieldID";
+                    command.Parameters.Add("@FieldID", DbType.Int32).Value = fieldID;
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = "UPDATE Fields SET Sort = Sort - 1 WHERE FieldID = @FieldID";
+                    command.Parameters["@FieldID"].Value = otherFieldID;
+                    command.ExecuteNonQuery();
+
+                    LoadSubfields(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()));
+
+                    fieldsDataGridView.ClearSelection();
+                    fieldsDataGridView.Rows[index + 1].Selected = true;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Handles the Click event of the fieldsSortButton control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void fieldsSortButton_Click(object sender, EventArgs e)
+        {
+            if (recordsDataGridView.SelectedCells.Count > 0)
+            {
+                int recordID = Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString());
+                List<int> fields = new List<int>();
+                int i = 0;
+
+                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                {
+                    connection.Open();
+
+                    using (SQLiteCommand command = new SQLiteCommand(connection))
+                    {
+                        command.CommandText = "SELECT RecordID FROM Fields WHERE RecordID = @RecordID ORDER BY CASE WHEN TagNumber = 'LDR' THEN 0 ELSE 1 END, Sort, TagNumber, FieldID";
+                        command.Parameters.Add("@RecordID", DbType.Int32).Value = recordID;
+
+                        using (SQLiteDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                fields.Add(Int32.Parse(reader["FieldID"].ToString()));
+                            }
+                        }
+
+                        command.Parameters.Clear();
+
+                        command.CommandText = "UPDATE Fields SET Sort = @Sort WHERE FieldID = @FieldID";
+                        command.Parameters.Add("@FieldID", DbType.Int32);
+                        command.Parameters.Add("@Sort", DbType.Int32);
+
+                        foreach (int fieldID in fields)
+                        {
+                            command.Parameters["@FieldID"].Value = fieldID;
+                            command.Parameters["@Sort"].Value = i;
+                            command.ExecuteNonQuery();
+
+                            i++;
+                        }
+
+                        LoadFields(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()));
+                    }
+                }
+            }
+        }
 
         /// <summary>
         /// Handles the Click event of the subfieldUpButton control.
