@@ -401,7 +401,7 @@ namespace CSharp_MARC_Editor
             using (SQLiteConnection connection = new SQLiteConnection(connectionString))
             {
                 connection.Open();
-                string query = "SELECT * FROM Fields where RecordiD = @RecordID ORDER BY Sort, TagNumber";
+                string query = "SELECT * FROM Fields where RecordiD = @RecordID ORDER BY CASE WHEN TagNumber = 'LDR' THEN 0 ELSE TagNumber END";
                 
                 using (SQLiteCommand command = new SQLiteCommand(query, connection))
                 {
@@ -467,7 +467,7 @@ namespace CSharp_MARC_Editor
 
             using (SQLiteConnection fieldsConnection = new SQLiteConnection(connectionString))
             {
-                using (SQLiteCommand fieldsCommand = new SQLiteCommand("SELECT * FROM Fields WHERE RecordID = @RecordID ORDER BY Sort, TagNumber", fieldsConnection))
+                using (SQLiteCommand fieldsCommand = new SQLiteCommand("SELECT * FROM Fields WHERE RecordID = @RecordID ORDER BY CASE WHEN TagNumber = 'LDR' THEN 0 ELSE TagNumber END", fieldsConnection))
                 {
                     fieldsCommand.Connection.Open();
                     fieldsCommand.Parameters.Add("@RecordID", DbType.Int32);
@@ -1845,23 +1845,21 @@ namespace CSharp_MARC_Editor
                         
                         int recordID = (int)connection.LastInsertRowId;
 
-                        command.CommandText = "INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2, ControlData, Sort) VALUES (@RecordID, @TagNumber, @Ind1, @Ind2, @ControlData, @Sort)";
+                        command.CommandText = "INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2, ControlData) VALUES (@RecordID, @TagNumber, @Ind1, @Ind2, @ControlData)";
                         command.Parameters.Add("@RecordID", DbType.Int32).Value = recordID;
                         command.Parameters.Add("@TagNumber", DbType.String).Value ="LDR";
                         command.Parameters.Add("@Ind1", DbType.String).Value = DBNull.Value;
                         command.Parameters.Add("@Ind2", DbType.String).Value = DBNull.Value;
                         command.Parameters.Add("@ControlData", DbType.String).Value = record.Leader;
-                        command.Parameters.Add("@Sort", DbType.Int32).Value = 0;
                         command.ExecuteNonQuery();
                         command.Parameters.Clear();
 
                         int fieldNumber = 1;
                         foreach (Field field in record.Fields)
                         {
-                            command.CommandText = "INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2, ControlData, Sort) VALUES (@RecordID, @TagNumber, @Ind1, @Ind2, @ControlData, @Sort)";
+                            command.CommandText = "INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2, ControlData) VALUES (@RecordID, @TagNumber, @Ind1, @Ind2, @ControlData)";
                             command.Parameters.Add("@RecordID", DbType.Int32).Value = recordID;
                             command.Parameters.Add("@TagNumber", DbType.String).Value = field.Tag;
-                            command.Parameters.Add("@Sort", DbType.Int32).Value = fieldNumber;
 
                             fieldNumber++;
 
@@ -2049,7 +2047,7 @@ namespace CSharp_MARC_Editor
         {
             using (SQLiteConnection fieldsConnection = new SQLiteConnection(connectionString))
             {
-                using (SQLiteCommand fieldsCommand = new SQLiteCommand("SELECT * FROM Fields WHERE RecordID = @RecordID ORDER BY Sort, TagNumber", fieldsConnection))
+                using (SQLiteCommand fieldsCommand = new SQLiteCommand("SELECT * FROM Fields WHERE RecordID = @RecordID ORDER BY CASE WHEN TagNumber = 'LDR' THEN 0 ELSE TagNumber END", fieldsConnection))
                 {
                     fieldsCommand.Connection.Open();
                     fieldsCommand.Parameters.Add("@RecordID", DbType.Int32);
@@ -2267,7 +2265,7 @@ namespace CSharp_MARC_Editor
                     }
                 }
 
-                using (SQLiteCommand command = new SQLiteCommand("SELECT DISTINCT TagNumber FROM Fields ORDER BY TagNumber", connection))
+                using (SQLiteCommand command = new SQLiteCommand("SELECT DISTINCT TagNumber FROM Fields ORDER BY CASE WHEN TagNumber = 'LDR' THEN 0 ELSE TagNumber END", connection))
                 {
                     using (SQLiteDataReader reader = command.ExecuteReader())
                     {
@@ -2747,10 +2745,6 @@ namespace CSharp_MARC_Editor
                     string tagNumber = fieldsDataGridView.Rows[e.RowIndex].Cells[2].Value.ToString();
                     string ind1 = fieldsDataGridView.Rows[e.RowIndex].Cells[3].Value.ToString();
                     string ind2 = fieldsDataGridView.Rows[e.RowIndex].Cells[4].Value.ToString();
-                    int sort = e.RowIndex;
-
-                    if (e.RowIndex > 0)
-                        sort = Int32.Parse(fieldsDataGridView.Rows[e.RowIndex - 1].Cells[4].Value.ToString());
 
                     if (!Field.ValidateTag(tagNumber) || (tagNumber.StartsWith("00") && (ind1 != "" || ind2 != "")))
                     {
@@ -2762,7 +2756,7 @@ namespace CSharp_MARC_Editor
                     {
                         connection.Open();
 
-                        string query = "INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2, Sort) VALUES (@RecordID, @TagNumber, @Ind1, @Ind2, @Sort)";
+                        string query = "INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2) VALUES (@RecordID, @TagNumber, @Ind1, @Ind2)";
 
                         using (SQLiteCommand command = new SQLiteCommand(query, connection))
                         {
@@ -3144,8 +3138,8 @@ namespace CSharp_MARC_Editor
                                                 LEFT OUTER JOIN Subfields s on s.FieldID = f.FieldID and s.Code = 'a'
                                                 WHERE f.TagNumber = @TagNumber and s.FieldID IS NOT NULL;
 
-                                            INSERT INTO Subfields (FieldID, Code, Data)
-                                                SELECT RecordID, @Code, REPLACE(Data, ')', '')
+                                            INSERT INTO Subfields (FieldID, Code, Data, Sort)
+                                                SELECT RecordID, @Code, REPLACE(Data, ')', ''), (SELECT MAX(Sort) + 1 FROM Subfields WHERE FieldID = RecordID)
                                                 FROM TempUpdates WHERE Data is not null;
 
                                             DELETE FROM TempUpdates;
@@ -3170,11 +3164,14 @@ namespace CSharp_MARC_Editor
                                                 SELECT f.FieldID, ' '
                                                 FROM Fields f
                                                 LEFT OUTER JOIN Subfields s on s.FieldID = f.FieldID and s.Code = 'e'
-                                                WHERE f.TagNumber = @TagNumber where s.Data IS NULL;
+                                                WHERE f.TagNumber = @TagNumber AND s.Data IS NULL;
 
-                                            INSERT INTO Subfields (FieldID, Code, Data)
-                                                SELECT RecordID, @Code, 'rda'
+                                            INSERT INTO Subfields (FieldID, Code, Data, Sort)
+                                                SELECT RecordID, @Code, 'rda', (SELECT MAX(Sort) + 1 FROM Subfields WHERE FieldID = RecordID AND (Code = 'a' OR Code = 'b'))
                                                 FROM TempUpdates;
+
+                                            UPDATE Subfields SET Sort = Sort + 1 
+                                            WHERE FieldID IN (SELECT RecordID FROM TempUpdates) AND Code != 'a' AND Code != 'b' AND Code != 'e';
 
                                             DELETE FROM TempUpdates;";
                     command.Parameters.Add("TagNumber", DbType.String).Value = "040";
@@ -3285,7 +3282,8 @@ namespace CSharp_MARC_Editor
                                                 SELECT f.RecordID, '264', ' ', '4', s.SubfieldID
                                                 FROM TempUpdates t
                                                 LEFT OUTER JOIN Subfields s ON s.SubfieldID = t.RecordID
-                                                LEFT OUTER JOIN Fields f ON f.FieldID = s.FieldID;
+                                                LEFT OUTER JOIN Fields f ON f.FieldID = s.FieldID
+                                                WHERE f.TagNumber = '264' and f.Ind2 = '1';
 
                                             UPDATE Subfields SET Data = REPLACE(Data, '.', ''), FieldID = (SELECT FieldID FROM Fields WHERE TagNumber = '264' AND Ind1 = ' ' AND Ind2 = '4' AND ControlData = Subfields.SubfieldID)
                                                 WHERE SubfieldID IN (SELECT RecordID FROM TempUpdates);
@@ -3321,8 +3319,8 @@ namespace CSharp_MARC_Editor
                                                 SELECT RecordID, '264', ' ', '4'
                                                 FROM TempUpdates;
 
-                                            INSERT INTO Subfields (FieldID, Code, Data)
-                                                SELECT f.FieldID, 'c', t.Data
+                                            INSERT INTO Subfields (FieldID, Code, Data, Sort)
+                                                SELECT f.FieldID, 'c', t.Data, 0
                                                 FROM TempUpdates t
                                                 LEFT OUTER JOIN Fields f on t.RecordID = f.RecordID
                                                 LEFT OUTER JOIN Subfields s on f.FieldID = s.FieldID
@@ -3415,17 +3413,17 @@ namespace CSharp_MARC_Editor
 
                     rdaConversionBackgroundWorker.ReportProgress(336);
                     command.CommandText = @"INSERT INTO TempUpdates
-                                                SELECT FieldID, SUBSTR(ControlData, 7, 1)
+                                                SELECT RecordID, SUBSTR(ControlData, 7, 1)
                                                 FROM Fields
                                                 WHERE TagNumber = 'LDR';
 
                                             INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2)
-                                                SELECT RecordID, '336', ' ', ' '
-                                                FROM TempUpdates
-                                                LEFT OUTER JOIN Fields f on f.TagNumber = '336'
+                                                SELECT t.RecordID, '336', ' ', ' '
+                                                FROM TempUpdates t
+                                                LEFT OUTER JOIN Fields f on f.RecordID = t.RecordID AND f.TagNumber = '336'
                                                 WHERE f.TagNumber IS NULL;
 
-                                            INSERT INTO Subfields (FieldID, Code, Data)
+                                            INSERT INTO Subfields (FieldID, Code, Data, Sort)
                                                 SELECT f.FieldID, 'a',
                                                     CASE t.Data
                                                         WHEN t.Data = 'e' THEN 'cartographic image'
@@ -3443,13 +3441,13 @@ namespace CSharp_MARC_Editor
                                                         WHEN t.Data = 'o' THEN 'other'
                                                         WHEN t.Data = 'p' THEN 'other'
                                                         ELSE 'unspecified'
-                                                    END
+                                                    END, 0
                                                 FROM Fields f
                                                 LEFT OUTER JOIN TempUpdates t on t.RecordID = f.RecordID
                                                 LEFT OUTER JOIN Subfields s on s.FieldID = f.FieldID and s.Code = 'a'
                                                 WHERE f.TagNumber = '336' and s.FieldID is null and t.RecordID is not null;
 
-                                            INSERT INTO Subfields (FieldID, Code, Data)
+                                            INSERT INTO Subfields (FieldID, Code, Data, Sort)
                                                 SELECT f.FieldID, 'b',
                                                     CASE t.Data
                                                         WHEN t.Data = 'e' THEN 'cri'
@@ -3467,14 +3465,14 @@ namespace CSharp_MARC_Editor
                                                         WHEN t.Data = 'o' THEN 'xxx'
                                                         WHEN t.Data = 'p' THEN 'xxx'
                                                         ELSE 'zzz'
-                                                    END
+                                                    END, 1
                                                 FROM Fields f
                                                 LEFT OUTER JOIN TempUpdates t on t.RecordID = f.RecordID
                                                 LEFT OUTER JOIN Subfields s on s.FieldID = f.FieldID and s.Code = 'b'
-                                                WHERE f.TagNumber = '367' and s.FieldID is null and t.RecordID is not null;
+                                                WHERE f.TagNumber = '336' and s.FieldID is null and t.RecordID is not null;
 
-                                            INSERT INTO Subfields (FieldID, Code, Data)
-                                                SELECT f.FieldID, '2', 'rdacontent'
+                                            INSERT INTO Subfields (FieldID, Code, Data, Sort)
+                                                SELECT f.FieldID, '2', 'rdacontent', 2
                                                 FROM Fields f
                                                 LEFT OUTER JOIN TempUpdates t on t.RecordID = f.RecordID
                                                 LEFT OUTER JOIN Subfields s on s.FieldID = f.FieldID and s.Code = '2'
@@ -3492,16 +3490,15 @@ namespace CSharp_MARC_Editor
                                             INSERT INTO TempUpdates
                                                 SELECT DISTINCT f.RecordID, ' '
                                                 FROM Fields f
-                                                LEFT OUTER JOIN Fields f2 ON f.RecordID = f2.RecordID AND f2.TagNumber = '007'
-                                                WHERE f2.RecordID IS NULL;
+                                                WHERE RecordID NOT IN (SELECT RecordID FROM TempUpdates);
 
                                             INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2)
-                                                SELECT RecordID, '337', ' ', ' '
-                                                FROM TempUpdates
-                                                LEFT OUTER JOIN Fields f on f.TagNumber = '336'
+                                                SELECT t.RecordID, '337', ' ', ' '
+                                                FROM TempUpdates t
+                                                LEFT OUTER JOIN Fields f on f.TagNumber = '337'
                                                 WHERE f.TagNumber IS NULL;
 
-                                            INSERT INTO Subfields (FieldID, Code, Data)
+                                            INSERT INTO Subfields (FieldID, Code, Data, Sort)
                                                 SELECT f.FieldID, 'a',
                                                     CASE t.Data
                                                         WHEN t.Data = 's' THEN 'audio'
@@ -3515,13 +3512,13 @@ namespace CSharp_MARC_Editor
                                                         WHEN t.Data = 'v' THEN 'video'
                                                         WHEN t.Data = 'z' THEN 'unspecified'
                                                         ELSE 'other'
-                                                    END
+                                                    END, 0
                                                 FROM Fields f
                                                 LEFT OUTER JOIN TempUpdates t on t.RecordID = f.RecordID
                                                 LEFT OUTER JOIN Subfields s on s.FieldID = f.FieldID and s.Code = 'a'
                                                 WHERE f.TagNumber = '337' and s.FieldID is null and t.RecordID is not null;
 
-                                            INSERT INTO Subfields (FieldID, Code, Data)
+                                            INSERT INTO Subfields (FieldID, Code, Data, Sort)
                                                 SELECT f.FieldID, 'b',
                                                     CASE t.Data
                                                         WHEN t.Data = 's' THEN 's'
@@ -3536,14 +3533,14 @@ namespace CSharp_MARC_Editor
                                                         WHEN t.Data = 'v' THEN 'v'
                                                         WHEN t.Data = 'z' THEN 'z'
                                                         ELSE 'x'
-                                                    END
+                                                    END, 1
                                                 FROM Fields f
                                                 LEFT OUTER JOIN TempUpdates t on t.RecordID = f.RecordID
                                                 LEFT OUTER JOIN Subfields s on s.FieldID = f.FieldID and s.Code = 'b'
                                                 WHERE f.TagNumber = '337' and s.FieldID is null and t.RecordID is not null;
 
-                                            INSERT INTO Subfields (FieldID, Code, Data)
-                                                SELECT f.FieldID, '2', 'rdamedia'
+                                            INSERT INTO Subfields (FieldID, Code, Data, Sort)
+                                                SELECT f.FieldID, '2', 'rdamedia', 2
                                                 FROM Fields f
                                                 LEFT OUTER JOIN TempUpdates t on t.RecordID = f.RecordID
                                                 LEFT OUTER JOIN Subfields s on s.FieldID = f.FieldID and s.Code = '2'
@@ -3565,12 +3562,12 @@ namespace CSharp_MARC_Editor
                                                 WHERE f2.RecordID IS NULL;
 
                                             INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2)
-                                                SELECT RecordID, '338', ' ', ' '
-                                                FROM TempUpdates
-                                                LEFT OUTER JOIN Fields f on f.TagNumber = '336'
+                                                SELECT t.RecordID, '338', ' ', ' '
+                                                FROM TempUpdates t
+                                                LEFT OUTER JOIN Fields f on f.TagNumber = '338'
                                                 WHERE f.TagNumber IS NULL;
 
-                                            INSERT INTO Subfields (FieldID, Code, Data)
+                                            INSERT INTO Subfields (FieldID, Code, Data, Sort)
                                                 SELECT f.FieldID, 'a',
                                                     CASE
                                                         WHEN (SELECT Data FROM Subfields s LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID WHERE f.TagNumber = '337' and s.Code = 'b') = 'n' THEN 'volume'
@@ -3618,13 +3615,13 @@ namespace CSharp_MARC_Editor
                                                         WHEN t.Data = 'vr' THEN 'videotape reel'
                                                         WHEN t.Data = 'vz' THEN 'other'
                                                         ELSE 'unspecified'
-                                                    END
+                                                    END, 0
                                                 FROM Fields f
                                                 LEFT OUTER JOIN TempUpdates t on t.RecordID = f.RecordID
                                                 LEFT OUTER JOIN Subfields s on s.FieldID = f.FieldID and s.Code = 'a'
                                                 WHERE f.TagNumber = '338' and s.FieldID is null and t.RecordID is not null;
 
-                                            INSERT INTO Subfields (FieldID, Code, Data)
+                                            INSERT INTO Subfields (FieldID, Code, Data, Sort)
                                                 SELECT f.FieldID, 'b',
                                                     CASE
                                                         WHEN (SELECT Data FROM Subfields s LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID WHERE f.TagNumber = '337' and s.Code = 'b') = 'n' THEN 'nc'
@@ -3672,14 +3669,14 @@ namespace CSharp_MARC_Editor
                                                         WHEN t.Data = 'vr' THEN 'vr'
                                                         WHEN t.Data = 'vz' THEN 'vz'
                                                         ELSE 'zu'
-                                                    END
+                                                    END, 1
                                                 FROM Fields f
                                                 LEFT OUTER JOIN TempUpdates t on t.RecordID = f.RecordID
                                                 LEFT OUTER JOIN Subfields s on s.FieldID = f.FieldID and s.Code = 'b'
                                                 WHERE f.TagNumber = '338' and s.FieldID is null and t.RecordID is not null;
 
-                                            INSERT INTO Subfields (FieldID, Code, Data)
-                                                SELECT f.FieldID, '2', 'rdacarrier'
+                                            INSERT INTO Subfields (FieldID, Code, Data, Sort)
+                                                SELECT f.FieldID, '2', 'rdacarrier', 2
                                                 FROM Fields f
                                                 LEFT OUTER JOIN TempUpdates t on t.RecordID = f.RecordID
                                                 LEFT OUTER JOIN Subfields s on s.FieldID = f.FieldID and s.Code = '2'
@@ -3986,78 +3983,6 @@ namespace CSharp_MARC_Editor
         #region Sorting rows
 
         /// <summary>
-        /// Handles the Click event of the fieldUpButton control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        private void fieldUpButton_Click(object sender, EventArgs e)
-        {
-            if (fieldsDataGridView.SelectedCells.Count > 0)
-            {
-                int index = fieldsDataGridView.SelectedCells[0].OwningRow.Index;
-                int fieldID = Int32.Parse(fieldsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString());
-                int otherFieldID = Int32.Parse(fieldsDataGridView.Rows[index - 1].Cells[0].Value.ToString());
-
-                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
-                {
-                    connection.Open();
-
-                    using (SQLiteCommand command = new SQLiteCommand(connection))
-                    {
-                        command.CommandText = "UPDATE Fields SET Sort = Sort - 1 WHERE FieldID = @FieldID";
-                        command.Parameters.Add("@FieldID", DbType.Int32).Value = fieldID;
-                        command.ExecuteNonQuery();
-
-                        command.CommandText = "UPDATE Fields SET Sort = Sort + 1 WHERE FieldID = @FieldID";
-                        command.Parameters["@FieldID"].Value = otherFieldID;
-                        command.ExecuteNonQuery();
-
-                        LoadFields(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()));
-
-                        fieldsDataGridView.ClearSelection();
-                        fieldsDataGridView.Rows[index - 1].Selected = true;
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Handles the Click event of the fieldDownButton control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        private void fieldDownButton_Click(object sender, EventArgs e)
-        {
-            if (fieldsDataGridView.SelectedCells.Count > 0)
-            {
-                int index = fieldsDataGridView.SelectedCells[0].OwningRow.Index;
-                int fieldID = Int32.Parse(fieldsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString());
-                int otherFieldID = Int32.Parse(fieldsDataGridView.Rows[index + 1].Cells[0].Value.ToString());
-
-                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
-                {
-                    connection.Open();
-
-                    using (SQLiteCommand command = new SQLiteCommand(connection))
-                    {
-                        command.CommandText = "UPDATE Fields SET Sort = Sort + 1 WHERE FieldID = @FieldID";
-                        command.Parameters.Add("@FieldID", DbType.Int32).Value = fieldID;
-                        command.ExecuteNonQuery();
-
-                        command.CommandText = "UPDATE Fields SET Sort = Sort - 1 WHERE FieldID = @FieldID";
-                        command.Parameters["@FieldID"].Value = otherFieldID;
-                        command.ExecuteNonQuery();
-
-                        LoadFields(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()));
-
-                        fieldsDataGridView.ClearSelection();
-                        fieldsDataGridView.Rows[index + 1].Selected = true;
-                    }
-                }
-            }
-        }
-
-        /// <summary>
         /// Handles the Click event of the subfieldUpButton control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
@@ -4128,17 +4053,7 @@ namespace CSharp_MARC_Editor
                 }
             }
         }
-
-        /// <summary>
-        /// Handles the Click event of the fieldSortButton control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        private void fieldSortButton_Click(object sender, EventArgs e)
-        {
-
-        }
-
+        
         /// <summary>
         /// Handles the Click event of the subfieldSortButton control.
         /// </summary>

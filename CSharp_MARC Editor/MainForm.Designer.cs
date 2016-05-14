@@ -77,9 +77,6 @@ namespace CSharp_MARC_Editor
             this.ImportErrors = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.marcDataSet = new CSharp_MARC_Editor.MARCDataSet();
             this.subfieldSortButton = new System.Windows.Forms.Button();
-            this.fieldSortButton = new System.Windows.Forms.Button();
-            this.fieldDownButton = new System.Windows.Forms.Button();
-            this.fieldUpButton = new System.Windows.Forms.Button();
             this.subfieldDownButton = new System.Windows.Forms.Button();
             this.subfieldUpButton = new System.Windows.Forms.Button();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
@@ -182,9 +179,6 @@ namespace CSharp_MARC_Editor
             // splitContainer.Panel2
             // 
             this.splitContainer.Panel2.Controls.Add(this.subfieldSortButton);
-            this.splitContainer.Panel2.Controls.Add(this.fieldSortButton);
-            this.splitContainer.Panel2.Controls.Add(this.fieldDownButton);
-            this.splitContainer.Panel2.Controls.Add(this.fieldUpButton);
             this.splitContainer.Panel2.Controls.Add(this.subfieldDownButton);
             this.splitContainer.Panel2.Controls.Add(this.subfieldUpButton);
             this.splitContainer.Panel2.Controls.Add(this.statusStrip);
@@ -357,47 +351,17 @@ namespace CSharp_MARC_Editor
             // subfieldSortButton
             // 
             this.subfieldSortButton.Image = ((System.Drawing.Image)(resources.GetObject("subfieldSortButton.Image")));
-            this.subfieldSortButton.Location = new System.Drawing.Point(656, 258);
+            this.subfieldSortButton.Location = new System.Drawing.Point(624, 258);
             this.subfieldSortButton.Name = "subfieldSortButton";
             this.subfieldSortButton.Size = new System.Drawing.Size(26, 56);
             this.subfieldSortButton.TabIndex = 9;
             this.subfieldSortButton.UseVisualStyleBackColor = true;
             this.subfieldSortButton.Click += new System.EventHandler(this.subfieldSortButton_Click);
             // 
-            // fieldSortButton
-            // 
-            this.fieldSortButton.Image = ((System.Drawing.Image)(resources.GetObject("fieldSortButton.Image")));
-            this.fieldSortButton.Location = new System.Drawing.Point(211, 258);
-            this.fieldSortButton.Name = "fieldSortButton";
-            this.fieldSortButton.Size = new System.Drawing.Size(26, 56);
-            this.fieldSortButton.TabIndex = 8;
-            this.fieldSortButton.UseVisualStyleBackColor = true;
-            this.fieldSortButton.Click += new System.EventHandler(this.fieldSortButton_Click);
-            // 
-            // fieldDownButton
-            // 
-            this.fieldDownButton.Image = ((System.Drawing.Image)(resources.GetObject("fieldDownButton.Image")));
-            this.fieldDownButton.Location = new System.Drawing.Point(211, 196);
-            this.fieldDownButton.Name = "fieldDownButton";
-            this.fieldDownButton.Size = new System.Drawing.Size(26, 56);
-            this.fieldDownButton.TabIndex = 7;
-            this.fieldDownButton.UseVisualStyleBackColor = true;
-            this.fieldDownButton.Click += new System.EventHandler(this.fieldDownButton_Click);
-            // 
-            // fieldUpButton
-            // 
-            this.fieldUpButton.Image = ((System.Drawing.Image)(resources.GetObject("fieldUpButton.Image")));
-            this.fieldUpButton.Location = new System.Drawing.Point(211, 134);
-            this.fieldUpButton.Name = "fieldUpButton";
-            this.fieldUpButton.Size = new System.Drawing.Size(26, 56);
-            this.fieldUpButton.TabIndex = 6;
-            this.fieldUpButton.UseVisualStyleBackColor = true;
-            this.fieldUpButton.Click += new System.EventHandler(this.fieldUpButton_Click);
-            // 
             // subfieldDownButton
             // 
             this.subfieldDownButton.Image = ((System.Drawing.Image)(resources.GetObject("subfieldDownButton.Image")));
-            this.subfieldDownButton.Location = new System.Drawing.Point(656, 196);
+            this.subfieldDownButton.Location = new System.Drawing.Point(624, 196);
             this.subfieldDownButton.Name = "subfieldDownButton";
             this.subfieldDownButton.Size = new System.Drawing.Size(26, 56);
             this.subfieldDownButton.TabIndex = 5;
@@ -407,7 +371,7 @@ namespace CSharp_MARC_Editor
             // subfieldUpButton
             // 
             this.subfieldUpButton.Image = ((System.Drawing.Image)(resources.GetObject("subfieldUpButton.Image")));
-            this.subfieldUpButton.Location = new System.Drawing.Point(656, 134);
+            this.subfieldUpButton.Location = new System.Drawing.Point(624, 134);
             this.subfieldUpButton.Name = "subfieldUpButton";
             this.subfieldUpButton.Size = new System.Drawing.Size(26, 56);
             this.subfieldUpButton.TabIndex = 4;
@@ -458,12 +422,12 @@ namespace CSharp_MARC_Editor
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.previewTextBox.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.previewTextBox.Location = new System.Drawing.Point(688, 3);
+            this.previewTextBox.Location = new System.Drawing.Point(656, 3);
             this.previewTextBox.Multiline = true;
             this.previewTextBox.Name = "previewTextBox";
             this.previewTextBox.ReadOnly = true;
             this.previewTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.previewTextBox.Size = new System.Drawing.Size(293, 420);
+            this.previewTextBox.Size = new System.Drawing.Size(325, 420);
             this.previewTextBox.TabIndex = 2;
             // 
             // subfieldsDataGridView
@@ -483,7 +447,7 @@ namespace CSharp_MARC_Editor
             this.subfieldsDataGridView.DataMember = "Subfields";
             this.subfieldsDataGridView.DataSource = this.marcDataSet;
             this.subfieldsDataGridView.Enabled = false;
-            this.subfieldsDataGridView.Location = new System.Drawing.Point(243, 3);
+            this.subfieldsDataGridView.Location = new System.Drawing.Point(211, 3);
             this.subfieldsDataGridView.MultiSelect = false;
             this.subfieldsDataGridView.Name = "subfieldsDataGridView";
             this.subfieldsDataGridView.Size = new System.Drawing.Size(407, 420);
@@ -1139,12 +1103,9 @@ namespace CSharp_MARC_Editor
         private System.Windows.Forms.ToolStripMenuItem classificationsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem copyrightDateByDecadeToolStripMenuItem;
         private System.ComponentModel.BackgroundWorker rdaConversionBackgroundWorker;
-        private System.Windows.Forms.Button fieldDownButton;
-        private System.Windows.Forms.Button fieldUpButton;
         private System.Windows.Forms.Button subfieldDownButton;
         private System.Windows.Forms.Button subfieldUpButton;
         private System.Windows.Forms.Button subfieldSortButton;
-        private System.Windows.Forms.Button fieldSortButton;
         private System.Windows.Forms.DataGridViewTextBoxColumn subfieldIDDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn fieldIDDataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn codeDataGridViewTextBoxColumn;
