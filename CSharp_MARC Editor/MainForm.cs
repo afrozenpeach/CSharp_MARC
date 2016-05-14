@@ -3120,7 +3120,20 @@ namespace CSharp_MARC_Editor
                                                 FROM Fields WHERE TagNumber NOT IN ('001', '003', '005', '006', '007', '008', '100', '110', '111', '130', '210', '222', '240', '242', '243', '245', '246', '247', '250', '254', '255', '256', '257', '258', '260', '263', '264', '270', '300', '306', '307', '310', '321', '336', '337', '338', '340', '342', '343', '344', '345', '346', '347', '348', '351', '352', '355', '357', '362', '363', '375', '366', '370', '377', '380', '381', '382', '383', '384', '385', '386', '388', '490', '500', '501', '502', '504', '505', '506', '507', '508', '510', '511', '513', '514', '515', '516', '518', '520', '521', '522', '524', '525', '526', '530', '533', '534', '535', '536', '538', '540', '541', '542', '544', '545', '546', '547', '550', '552', '555', '556', '561', '562', '563', '565', '567', '580', '581', '583', '584', '585', '586', '588', '590', '591', '592', '593', '594', '594', '596', '597', '598', '599', '600', '610', '611', '630', '648', '650', '651', '653', '654', '655', '656', '657', '658', '662', '691', '692', '693', '694', '695', '696', '697', '698', '699', '700', '710', '711', '720', '730', '740', '751', '752', '753', '754', '760', '762', '765', '767', '770', '772', '773', '774', '775', '776', '777', '780', '785', '786', '787', '800', '810', '811', '830', '841', '842', '843', '844', '845', '850', '852', '853', '854', '855', '856', '863', '864', '865', '866', '867', '868', '876', '877', '878', '880', '882', '883', '884', '886', '887');
 
                                             UPDATE Records 
-                                            SET ValidationErrors = ValidationErrors || (SELECT Data FROM TempUpdates WHERE Records.RecordID = TempUpdates.RecordID)
+                                            SET ValidationErrors = ValidationErrors || '\n' || (SELECT Data FROM TempUpdates WHERE Records.RecordID = TempUpdates.RecordID)
+                                            WHERE RecordID IN (SELECT RecordID FROM TempUpdates);
+
+                                            DELETE FROM TempUpdates;";
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = @"INSERT INTO TempUpdates
+                                                SELECT RecordID, '\nInvalid Subfields: ' || Code || ' in tag ' || f.TagNumber
+                                                FROM Subfields s
+                                                LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                WHERE Code NOT IN ('');
+
+                                            UPDATE Records
+                                            SET ValidationErrors = ValidationErrors || '\n' || (SELECT Data FROM TempUpdates WHERE Records.RecordID = TempUpdates.RecordID)
                                             WHERE RecordID IN (SELECT RecordID FROM TempUpdates);
 
                                             DELETE FROM TempUpdates;";
