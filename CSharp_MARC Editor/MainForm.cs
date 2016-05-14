@@ -4061,7 +4061,48 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void subfieldSortButton_Click(object sender, EventArgs e)
         {
+            if (fieldsDataGridView.SelectedCells.Count > 0)
+            {
+                int fieldID = Int32.Parse(fieldsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString());
+                List<int> subfields = new List<int>();
+                int i = 0;
 
+                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                {
+                    connection.Open();
+
+                    using (SQLiteCommand command = new SQLiteCommand(connection))
+                    {
+                        command.CommandText = "SELECT SubfieldID FROM Subfields WHERE FieldID = @FieldID ORDER BY CASE WHEN Code >= '0' AND Code < '9' THEN 1 ELSE 0 END, Code";
+                        command.Parameters.Add("@FieldID", DbType.Int32).Value = fieldID;
+                        
+                        using (SQLiteDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                subfields.Add(Int32.Parse(reader["SubfieldID"].ToString()));
+                            }
+                        }
+
+                        command.Parameters.Clear();
+
+                        command.CommandText = "UPDATE Subfields SET Sort = @Sort WHERE SubfieldID = @SubfieldID";
+                        command.Parameters.Add("@SubfieldID", DbType.Int32);
+                        command.Parameters.Add("@Sort", DbType.Int32);
+
+                        foreach (int subfieldID in subfields)
+                        {
+                            command.Parameters["@SubfieldID"].Value = subfieldID;
+                            command.Parameters["@Sort"].Value = i;
+                            command.ExecuteNonQuery();
+
+                            i++;
+                        }
+
+                        LoadSubfields(Int32.Parse(fieldsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()));
+                    }
+                }
+            }
         }
 
         #endregion
