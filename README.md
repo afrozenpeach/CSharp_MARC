@@ -19,6 +19,11 @@ This project is built upon the CSharp_MARC project of the same name available at
 
 ### 2016-05-13 Changes:
 
+* Allow manually sorting of subfields
+* More Improvements to RDA Conversion
+
+### 2016-05-13 Changes:
+
 * More Improvements to RDA Conversion
 * RDA Conversion shouldn't duplicate changes if a record has already been converted
 

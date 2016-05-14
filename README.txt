@@ -55,6 +55,11 @@
 
 2016-05-13 Changes:
 
+Allow manually sorting of subfields
+More RDA conversion improvements
+
+2016-05-13 Changes:
+
 More Improvements to RDA Conversion
 RDA Conversion shouldn't duplicate changes if a record has already been converted
 
