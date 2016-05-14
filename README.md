@@ -17,6 +17,10 @@ This project is built upon the CSharp_MARC project of the same name available at
 
 ## Changelog:
 
+### 2016-05-14 Changes:
+
+* Allow manually sorting of fields
+
 ### 2016-05-13 Changes:
 
 * Allow manually sorting of subfields

@@ -53,6 +53,10 @@
  * @license   http://www.gnu.org/licenses/gpl-3.0.html  GPL License 3
  */ 
 
+2016-05-14 Changes:
+
+Allow manual sorting of fields
+
 2016-05-13 Changes:
 
 Allow manually sorting of subfields
