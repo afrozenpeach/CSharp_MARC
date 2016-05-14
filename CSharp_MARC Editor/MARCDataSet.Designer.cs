@@ -379,6 +379,8 @@ namespace CSharp_MARC_Editor {
             
             private global::System.Data.DataColumn columnImportErrors;
             
+            private global::System.Data.DataColumn columnValidationErrors;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public RecordsDataTable() {
@@ -534,6 +536,14 @@ namespace CSharp_MARC_Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn ValidationErrorsColumn {
+                get {
+                    return this.columnValidationErrors;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -569,7 +579,23 @@ namespace CSharp_MARC_Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public RecordsRow AddRecordsRow(int RecordID, System.DateTime DateAdded, System.DateTime DateChanged, string Author, string Title, int CopyrightDate, string Barcode, string Classification, string MainEntry, string Custom1, string Custom2, string Custom3, string Custom4, string Custom5, string ImportErrors) {
+            public RecordsRow AddRecordsRow(
+                        int RecordID, 
+                        System.DateTime DateAdded, 
+                        System.DateTime DateChanged, 
+                        string Author, 
+                        string Title, 
+                        int CopyrightDate, 
+                        string Barcode, 
+                        string Classification, 
+                        string MainEntry, 
+                        string Custom1, 
+                        string Custom2, 
+                        string Custom3, 
+                        string Custom4, 
+                        string Custom5, 
+                        string ImportErrors, 
+                        string ValidationErrors) {
                 RecordsRow rowRecordsRow = ((RecordsRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         RecordID,
@@ -586,7 +612,8 @@ namespace CSharp_MARC_Editor {
                         Custom3,
                         Custom4,
                         Custom5,
-                        ImportErrors};
+                        ImportErrors,
+                        ValidationErrors};
                 rowRecordsRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowRecordsRow);
                 return rowRecordsRow;
@@ -624,6 +651,7 @@ namespace CSharp_MARC_Editor {
                 this.columnCustom4 = base.Columns["Custom4"];
                 this.columnCustom5 = base.Columns["Custom5"];
                 this.columnImportErrors = base.Columns["ImportErrors"];
+                this.columnValidationErrors = base.Columns["ValidationErrors"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -659,6 +687,8 @@ namespace CSharp_MARC_Editor {
                 base.Columns.Add(this.columnCustom5);
                 this.columnImportErrors = new global::System.Data.DataColumn("ImportErrors", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnImportErrors);
+                this.columnValidationErrors = new global::System.Data.DataColumn("ValidationErrors", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnValidationErrors);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1679,6 +1709,22 @@ namespace CSharp_MARC_Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string ValidationErrors {
+                get {
+                    try {
+                        return ((string)(this[this.tableRecords.ValidationErrorsColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'ValidationErrors\' in table \'Records\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableRecords.ValidationErrorsColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsRecordIDNull() {
                 return this.IsNull(this.tableRecords.RecordIDColumn);
             }
@@ -1855,6 +1901,18 @@ namespace CSharp_MARC_Editor {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetImportErrorsNull() {
                 this[this.tableRecords.ImportErrorsColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsValidationErrorsNull() {
+                return this.IsNull(this.tableRecords.ValidationErrorsColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetValidationErrorsNull() {
+                this[this.tableRecords.ValidationErrorsColumn] = global::System.Convert.DBNull;
             }
         }
         

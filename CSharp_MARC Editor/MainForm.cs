@@ -648,7 +648,8 @@ namespace CSharp_MARC_Editor
                                                     [Custom3] nvarchar(2147483647), 
                                                     [Custom4] nvarchar(2147483647), 
                                                     [Custom5] nvarchar(2147483647), 
-                                                    [ImportErrors] nvarchar(2147483647));
+                                                    [ImportErrors] nvarchar(2147483647), 
+                                                    [ValidationErrors] nvarchar(2147483647));
 
                                                 CREATE TABLE [Settings](
                                                     [RecordListAtTop] bool, 
@@ -3089,7 +3090,72 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void validateRecordsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("This feature is not yet implemented, but is coming soon.", "Coming Soon!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            DisableForm();
+            toolStripProgressBar.Style = ProgressBarStyle.Marquee;
+            toolStripProgressBar.MarqueeAnimationSpeed = 30;
+            toolStripProgressBar.Enabled = true;
+            toolStripProgressBar.Visible = true;
+            progressToolStripStatusLabel.Visible = true;
+            recordsDataGridView.SuspendLayout();
+            recordsDataGridView.DataSource = null;
+            validationBackgroundWorker.RunWorkerAsync();
+        }
+
+        /// <summary>
+        /// Handles the DoWork event of the validationBackgroundWorker control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="DoWorkEventArgs"/> instance containing the event data.</param>
+        private void validationBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            {
+                connection.Open();
+
+                using (SQLiteCommand command = new SQLiteCommand(connection))
+                {
+                    validationBackgroundWorker.ReportProgress(0, "Validating Tag Numbers...");
+                    command.CommandText = @"INSERT INTO TempUpdates
+                                                SELECT RecordID, '\nInvalid TagNumber: ' || TagNumber
+                                                FROM Fields WHERE TagNumber NOT IN ('001', '003', '005', '006', '007', '008', '100', '110', '111', '130', '210', '222', '240', '242', '243', '245', '246', '247', '250', '254', '255', '256', '257', '258', '260', '263', '264', '270', '300', '306', '307', '310', '321', '336', '337', '338', '340', '342', '343', '344', '345', '346', '347', '348', '351', '352', '355', '357', '362', '363', '375', '366', '370', '377', '380', '381', '382', '383', '384', '385', '386', '388', '490', '500', '501', '502', '504', '505', '506', '507', '508', '510', '511', '513', '514', '515', '516', '518', '520', '521', '522', '524', '525', '526', '530', '533', '534', '535', '536', '538', '540', '541', '542', '544', '545', '546', '547', '550', '552', '555', '556', '561', '562', '563', '565', '567', '580', '581', '583', '584', '585', '586', '588', '590', '591', '592', '593', '594', '594', '596', '597', '598', '599', '600', '610', '611', '630', '648', '650', '651', '653', '654', '655', '656', '657', '658', '662', '691', '692', '693', '694', '695', '696', '697', '698', '699', '700', '710', '711', '720', '730', '740', '751', '752', '753', '754', '760', '762', '765', '767', '770', '772', '773', '774', '775', '776', '777', '780', '785', '786', '787', '800', '810', '811', '830', '841', '842', '843', '844', '845', '850', '852', '853', '854', '855', '856', '863', '864', '865', '866', '867', '868', '876', '877', '878', '880', '882', '883', '884', '886', '887');
+
+                                            UPDATE Records 
+                                            SET ValidationErrors = ValidationErrors || (SELECT Data FROM TempUpdates WHERE Records.RecordID = TempUpdates.RecordID)
+                                            WHERE RecordID IN (SELECT RecordID FROM TempUpdates);
+
+                                            DELETE FROM TempUpdates;";
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Handles the ProgressChanged event of the validationBackgroundWorker control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="ProgressChangedEventArgs"/> instance containing the event data.</param>
+        private void validationBackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            progressToolStripStatusLabel.Text = e.UserState.ToString();
+        }
+
+        /// <summary>
+        /// Handles the RunWorkerCompleted event of the validationBackgroundWorker control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RunWorkerCompletedEventArgs"/> instance containing the event data.</param>
+        private void validationBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            progressToolStripStatusLabel.Text = "";
+            toolStripProgressBar.Visible = false;
+            toolStripProgressBar.Enabled = false;
+            progressToolStripStatusLabel.Visible = false;
+            cancelButtonToolStripStatusLabel.Visible = false;
+            toolStripProgressBar.MarqueeAnimationSpeed = 0;
+            recordsDataGridView.DataSource = marcDataSet.Tables["Records"];
+            recordsDataGridView.ResumeLayout();
+            loading = false;
+            EnableForm();
         }
 
         /// <summary>
