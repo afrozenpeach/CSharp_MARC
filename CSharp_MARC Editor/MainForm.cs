@@ -445,7 +445,7 @@ namespace CSharp_MARC_Editor
             using (SQLiteConnection connection = new SQLiteConnection(connectionString))
             {
                 connection.Open();
-                string query = "SELECT * FROM Subfields where FieldID = @FieldID Sort, Code, SubfieldID";
+                string query = "SELECT * FROM Subfields where FieldID = @FieldID ORDER BY Sort, Code, SubfieldID";
 
                 using (SQLiteCommand command = new SQLiteCommand(query, connection))
                 {
