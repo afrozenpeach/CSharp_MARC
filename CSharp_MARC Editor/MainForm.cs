@@ -3202,10 +3202,10 @@ namespace CSharp_MARC_Editor
                     ValidateSubfieldCodes(command, "085", new List<string> { "a", "b", "c", "f", "r", "s", "t", "u", "v", "w", "y", "z", "6", "8" });
                     ValidateSubfieldCodes(command, "086", new List<string> { "a", "z", "2", "6", "8" });
                     ValidateSubfieldCodes(command, "088", new List<string> { "a", "z", "6", "8" });
-                    ValidateSubfieldCodes(command, "100", new List<string> {  });
-                    ValidateSubfieldCodes(command, "110", new List<string> {  });
-                    ValidateSubfieldCodes(command, "111", new List<string> {  });
-                    ValidateSubfieldCodes(command, "130", new List<string> {  });
+                    ValidateSubfieldCodes(command, "100", new List<string> { "a", "b", "x", "d", "e", "f", "g", "j", "k", "l", "n", "p", "q", "t", "u", "0", "4", "6", "8" });
+                    ValidateSubfieldCodes(command, "110", new List<string> { "a", "b", "c", "d", "e", "f", "g", "k", "l", " n", "p", "t", "u", "0", "4", "6", "8" });
+                    ValidateSubfieldCodes(command, "111", new List<string> { "a", "c", "d", "e", "f", "q", "j", "k", "l", "n", "p", "q", "t", "u", "0", "4", "6", "8" });
+                    ValidateSubfieldCodes(command, "130", new List<string> { "a", "b", "f", "g", "k", "l", "m", "n", "o", "p", "r", "s", "t", "0", "6", "8" });
                     ValidateSubfieldCodes(command, "210", new List<string> {  });
                     ValidateSubfieldCodes(command, "222", new List<string> {  });
                     ValidateSubfieldCodes(command, "240", new List<string> {  });
