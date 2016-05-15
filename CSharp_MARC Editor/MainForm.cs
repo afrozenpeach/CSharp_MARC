@@ -1497,6 +1497,27 @@ namespace CSharp_MARC_Editor
             subfieldsDataGridView.Enabled = false;
         }
 
+        /// <summary>
+        /// Adds the array parameters.
+        /// Thanks to http://stackoverflow.com/questions/2377506/pass-array-parameter-in-sqlcommand
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="cmd">The command.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="values">The values.</param>
+        public static void AddArrayParameters<T>(SQLiteCommand cmd, string name, IEnumerable<T> values)
+        {
+            name = name.StartsWith("@") ? name : "@" + name;
+            var names = string.Join(", ", values.Select((value, i) =>
+            {
+                var paramName = name + i;
+                cmd.Parameters.AddWithValue(paramName, value);
+                return paramName;
+            }));
+            cmd.CommandText = cmd.CommandText.Replace(name, names);
+        }
+
+
         #endregion
 
         #region SQLite Addon functions
@@ -3114,32 +3135,69 @@ namespace CSharp_MARC_Editor
 
                 using (SQLiteCommand command = new SQLiteCommand(connection))
                 {
+                    command.CommandText = "UPDATE Records SET ValidationErrors = ''";
+                    command.ExecuteNonQuery();
+
                     validationBackgroundWorker.ReportProgress(0, "Validating Tag Numbers...");
                     command.CommandText = @"INSERT INTO TempUpdates
-                                                SELECT RecordID, '\nInvalid TagNumber: ' || TagNumber
-                                                FROM Fields WHERE TagNumber NOT IN ('001', '003', '005', '006', '007', '008', '100', '110', '111', '130', '210', '222', '240', '242', '243', '245', '246', '247', '250', '254', '255', '256', '257', '258', '260', '263', '264', '270', '300', '306', '307', '310', '321', '336', '337', '338', '340', '342', '343', '344', '345', '346', '347', '348', '351', '352', '355', '357', '362', '363', '375', '366', '370', '377', '380', '381', '382', '383', '384', '385', '386', '388', '490', '500', '501', '502', '504', '505', '506', '507', '508', '510', '511', '513', '514', '515', '516', '518', '520', '521', '522', '524', '525', '526', '530', '533', '534', '535', '536', '538', '540', '541', '542', '544', '545', '546', '547', '550', '552', '555', '556', '561', '562', '563', '565', '567', '580', '581', '583', '584', '585', '586', '588', '590', '591', '592', '593', '594', '594', '596', '597', '598', '599', '600', '610', '611', '630', '648', '650', '651', '653', '654', '655', '656', '657', '658', '662', '691', '692', '693', '694', '695', '696', '697', '698', '699', '700', '710', '711', '720', '730', '740', '751', '752', '753', '754', '760', '762', '765', '767', '770', '772', '773', '774', '775', '776', '777', '780', '785', '786', '787', '800', '810', '811', '830', '841', '842', '843', '844', '845', '850', '852', '853', '854', '855', '856', '863', '864', '865', '866', '867', '868', '876', '877', '878', '880', '882', '883', '884', '886', '887');
+                                                SELECT RecordID, 'Invalid TagNumber: ' || TagNumber || char(10)
+                                                FROM Fields WHERE TagNumber NOT IN (@list);
 
                                             UPDATE Records 
-                                            SET ValidationErrors = ValidationErrors || '\n' || (SELECT Data FROM TempUpdates WHERE Records.RecordID = TempUpdates.RecordID)
+                                            SET ValidationErrors = ValidationErrors || (SELECT Data FROM TempUpdates WHERE Records.RecordID = TempUpdates.RecordID)
                                             WHERE RecordID IN (SELECT RecordID FROM TempUpdates);
 
                                             DELETE FROM TempUpdates;";
+                    List<string> list = new List<string> {"LDR", "001", "003", "005", "006", "007", "008", "010", "013", "015", "016", "017", "018", "020", "022", "024", "025", "026", "027", "028", "030", "031", "032", "033", "034", "035", "036", "037", "038", "040", "041", "042", "043", "044", "045", "046", "047", "048", "050", "051", "052", "055", "060", "061", "066", "070", "071", "072", "074", "080", "082", "083", "084", "085", "086", "088", "091", "092", "093", "094", "095", "096", "097", "098", "099", "100", "110", "111", "130", "210", "222", "240", "242", "243", "245", "246", "247", "250", "254", "255", "256", "257", "258", "260", "263", "264", "270", "300", "306", "307", "310", "321", "336", "337", "338", "340", "342", "343", "344", "345", "346", "347", "348", "351", "352", "355", "357", "362", "363", "375", "366", "370", "377", "380", "381", "382", "383", "384", "385", "386", "388", "490", "500", "501", "502", "504", "505", "506", "507", "508", "510", "511", "513", "514", "515", "516", "518", "520", "521", "522", "524", "525", "526", "530", "533", "534", "535", "536", "538", "540", "541", "542", "544", "545", "546", "547", "550", "552", "555", "556", "561", "562", "563", "565", "567", "580", "581", "583", "584", "585", "586", "588", "590", "591", "592", "593", "594", "594", "596", "597", "598", "599", "600", "610", "611", "630", "648", "650", "651", "653", "654", "655", "656", "657", "658", "662", "691", "692", "693", "694", "695", "696", "697", "698", "699", "700", "710", "711", "720", "730", "740", "751", "752", "753", "754", "760", "762", "765", "767", "770", "772", "773", "774", "775", "776", "777", "780", "785", "786", "787", "800", "810", "811", "830", "841", "842", "843", "844", "845", "850", "852", "853", "854", "855", "856", "863", "864", "865", "866", "867", "868", "876", "877", "878", "880", "882", "883", "884", "886", "887" };
+                    AddArrayParameters(command, "@list", list);
                     command.ExecuteNonQuery();
-
-                    command.CommandText = @"INSERT INTO TempUpdates
-                                                SELECT RecordID, '\nInvalid Subfields: ' || Code || ' in tag ' || f.TagNumber
-                                                FROM Subfields s
-                                                LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
-                                                WHERE Code NOT IN ('');
-
-                                            UPDATE Records
-                                            SET ValidationErrors = ValidationErrors || '\n' || (SELECT Data FROM TempUpdates WHERE Records.RecordID = TempUpdates.RecordID)
-                                            WHERE RecordID IN (SELECT RecordID FROM TempUpdates);
-
-                                            DELETE FROM TempUpdates;";
-                    command.ExecuteNonQuery();
+                    command.Parameters.Clear();
+                    
+                    ValidateSubfieldCodes(command, "010", new List<string> { "a", "b", "z", "8" });
+                    ValidateSubfieldCodes(command, "013", new List<string> { "a", "b", "c", "d", "e", "f", "6", "8" });
+                    ValidateSubfieldCodes(command, "015", new List<string> { "a", "q", "z", "2", "6", "8" });
+                    ValidateSubfieldCodes(command, "016", new List<string> { "a", "z", "2", "8" });
+                    ValidateSubfieldCodes(command, "017", new List<string> { "a", "b", "d", "i", "z", "2", "6", "8" });
+                    ValidateSubfieldCodes(command, "", new List<string> { });
+                    ValidateSubfieldCodes(command, "", new List<string> { });
+                    ValidateSubfieldCodes(command, "", new List<string> { });
+                    ValidateSubfieldCodes(command, "", new List<string> { });
+                    ValidateSubfieldCodes(command, "", new List<string> { });
+                    ValidateSubfieldCodes(command, "", new List<string> { });
+                    ValidateSubfieldCodes(command, "", new List<string> { });
+                    ValidateSubfieldCodes(command, "", new List<string> { });
+                    ValidateSubfieldCodes(command, "", new List<string> { });
+                    ValidateSubfieldCodes(command, "", new List<string> { });
                 }
             }
+        }
+
+        /// <summary>
+        /// Validates the subfield codes.
+        /// </summary>
+        /// <param name="command">The command.</param>
+        /// <param name="tagNumber">The tag number.</param>
+        /// <param name="list">The list.</param>
+        private void ValidateSubfieldCodes(SQLiteCommand command, string tagNumber, List<string> list)
+        {
+            validationBackgroundWorker.ReportProgress(0, "Validating " + tagNumber + " Subfield Codes...");
+
+            command.CommandText = @"INSERT INTO TempUpdates
+                                                SELECT f.RecordID, 'Invalid Subfields: ' || s.Code || ' in tag ' || f.TagNumber || char(10)
+                                                FROM Subfields s
+                                                LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                WHERE f.TagNumber = @TagNumber AND Code NOT IN (@list);
+
+                                            UPDATE Records
+                                            SET ValidationErrors = ValidationErrors || (SELECT Data FROM TempUpdates WHERE Records.RecordID = TempUpdates.RecordID)
+                                            WHERE RecordID IN (SELECT RecordID FROM TempUpdates);
+
+                                            DELETE FROM TempUpdates;";
+
+            command.Parameters.Add("@TagNumber", DbType.String).Value = tagNumber;
+            AddArrayParameters(command, "@list", list);
+            command.ExecuteNonQuery();
+            command.Parameters.Clear();
         }
 
         /// <summary>
@@ -3168,6 +3226,7 @@ namespace CSharp_MARC_Editor
             recordsDataGridView.DataSource = marcDataSet.Tables["Records"];
             recordsDataGridView.ResumeLayout();
             loading = false;
+            this.OnLoad(new EventArgs());
             EnableForm();
         }
 
