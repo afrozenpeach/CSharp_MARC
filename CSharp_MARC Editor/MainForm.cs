@@ -3358,6 +3358,251 @@ namespace CSharp_MARC_Editor
                     ValidateSubfieldCodes(command, "884", new List<string> { "a", "g", "k", "q", "u" });
                     ValidateSubfieldCodes(command, "887", new List<string> { "a", "2" });
 
+                    ValidateFieldIndicators(command, "010", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "013", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "015", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "016", new List<string> { " ", "7" }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "017", new List<string> { " " }, new List<string> { " ", "8" });
+                    ValidateFieldIndicators(command, "018", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "020", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "022", new List<string> { " ", "0", "1" }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "024", new List<string> { "0", "1", "2", "3", "4", "7", "8" }, new List<string> { " ", "0", "1" });
+                    ValidateFieldIndicators(command, "025", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "026", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "027", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "028", new List<string> { "0", "1", "2", "3", "4", "5" }, new List<string> { "0", "1", "2", "3" });
+                    ValidateFieldIndicators(command, "030", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "031", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "032", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "033", new List<string> { " ", "0", "1", "2" }, new List<string> { " ", "0", "1", "2" });
+                    ValidateFieldIndicators(command, "034", new List<string> { "0", "1", "3" }, new List<string> { " ", "0", "1" });
+                    ValidateFieldIndicators(command, "035", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "036", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "037", new List<string> { " ", "2", "3" }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "038", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "040", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "041", new List<string> { " ", "0", "1" }, new List<string> { " ", "7" });
+                    ValidateFieldIndicators(command, "042", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "043", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "044", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "045", new List<string> { " ", "0", "1", "2" }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "046", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "047", new List<string> { " " }, new List<string> { " ", "7" });
+                    ValidateFieldIndicators(command, "048", new List<string> { " " }, new List<string> { " ", "7" });
+                    ValidateFieldIndicators(command, "050", new List<string> { " ", "0", "1" }, new List<string> { "0", "4" });
+                    ValidateFieldIndicators(command, "051", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "052", new List<string> { " ", "1", "7" }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "055", new List<string> { " ", "0", "1" }, new List<string> { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" });
+                    ValidateFieldIndicators(command, "060", new List<string> { " ", "0", "1" }, new List<string> { "0", "4" });
+                    ValidateFieldIndicators(command, "061", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "066", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "070", new List<string> { "0", "1" }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "071", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "072", new List<string> { " " }, new List<string> { "0", "7" });
+                    ValidateFieldIndicators(command, "074", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "080", new List<string> { " ", "0", "1" }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "082", new List<string> { "0", "1", "7" }, new List<string> { " ", "0", "4" });
+                    ValidateFieldIndicators(command, "083", new List<string> { "0", "1", "7" }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "084", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "085", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "086", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "088", new List<string> { " ", "0", "1" }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "100", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "110", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "111", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "130", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "210", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "222", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "240", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "242", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "243", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "245", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "246", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "247", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "250", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "254", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "255", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "256", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "257", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "258", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "260", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "263", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "264", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "270", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "300", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "306", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "307", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "310", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "321", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "336", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "337", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "338", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "340", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "342", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "343", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "344", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "345", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "346", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "347", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "348", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "351", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "352", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "355", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "357", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "362", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "363", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "375", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "366", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "370", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "377", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "380", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "381", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "382", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "383", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "384", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "385", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "386", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "388", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "490", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "500", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "501", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "502", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "504", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "505", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "506", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "507", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "508", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "510", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "511", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "513", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "514", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "515", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "516", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "518", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "520", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "521", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "522", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "524", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "525", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "526", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "530", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "533", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "534", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "535", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "536", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "538", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "540", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "541", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "542", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "544", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "545", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "546", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "547", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "550", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "552", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "555", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "556", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "561", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "562", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "563", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "565", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "567", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "580", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "581", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "583", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "584", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "585", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "586", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "588", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "590", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "591", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "592", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "593", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "594", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "594", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "596", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "597", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "598", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "599", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "600", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "610", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "611", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "630", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "648", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "650", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "651", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "653", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "654", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "655", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "656", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "657", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "658", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "662", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "691", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "692", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "693", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "694", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "695", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "696", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "697", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "698", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "699", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "700", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "710", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "711", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "720", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "730", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "740", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "751", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "752", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "753", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "754", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "760", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "762", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "765", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "767", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "770", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "772", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "773", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "774", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "775", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "776", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "777", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "780", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "785", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "786", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "787", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "800", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "810", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "811", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "830", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "841", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "842", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "843", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "844", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "845", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "850", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "852", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "853", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "854", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "855", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "856", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "863", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "864", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "865", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "866", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "867", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "868", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "876", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "877", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "878", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "880", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "882", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "883", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "884", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "886", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "887", new List<string> { " " }, new List<string> { " " });
+
                     validationBackgroundWorker.ReportProgress(0, "Finishing validation...");
                     command.CommandText = "UPDATE Records SET ValidationErrors = SUBSTR(ValidationErrors, 1, LENGTH(ValidationErrors) - 1)";
                     command.ExecuteNonQuery();
@@ -3376,21 +3621,65 @@ namespace CSharp_MARC_Editor
             validationBackgroundWorker.ReportProgress(0, "Validating " + tagNumber + " Subfield Codes...");
 
             command.CommandText = @"INSERT INTO TempUpdates
-                                                SELECT f.RecordID, 'Invalid Subfields: ' || s.Code || ' in tag ' || f.TagNumber || char(10)
-                                                FROM Subfields s
-                                                LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
-                                                WHERE f.TagNumber = @TagNumber AND Code NOT IN (@list);
+                                        SELECT f.RecordID, 'Invalid Subfields: ' || s.Code || ' in tag ' || f.TagNumber || char(10)
+                                        FROM Subfields s
+                                        LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                        WHERE f.TagNumber = @TagNumber AND Code NOT IN (@list);
 
-                                            UPDATE Records
-                                            SET ValidationErrors = ValidationErrors || (SELECT Data FROM TempUpdates WHERE Records.RecordID = TempUpdates.RecordID)
-                                            WHERE RecordID IN (SELECT RecordID FROM TempUpdates);
+                                    UPDATE Records
+                                    SET ValidationErrors = ValidationErrors || (SELECT Data FROM TempUpdates WHERE Records.RecordID = TempUpdates.RecordID)
+                                    WHERE RecordID IN (SELECT RecordID FROM TempUpdates);
 
-                                            DELETE FROM TempUpdates;";
+                                    DELETE FROM TempUpdates;";
 
             command.Parameters.Add("@TagNumber", DbType.String).Value = tagNumber;
             AddArrayParameters(command, "@list", list);
             command.ExecuteNonQuery();
             command.Parameters.Clear();
+        }
+
+        /// <summary>
+        /// Validates the field indicators.
+        /// </summary>
+        /// <param name="command">The command.</param>
+        /// <param name="tagNumber">The tag number.</param>
+        /// <param name="ind1s">The ind1s.</param>
+        /// <param name="ind2s">The ind2s.</param>
+        private void ValidateFieldIndicators(SQLiteCommand command, string tagNumber, List<string> ind1s, List<string> ind2s)
+        {
+            validationBackgroundWorker.ReportProgress(0, "Validating " + tagNumber + " Indicators...");
+
+            command.CommandText = @"INSERT INTO TempUpdates
+                                        SELECT f.RecordID, 'Invalid Indicator 1: ' || f.Ind1 || ' in tag ' || f.TagNumber || char(10)
+                                        FROM Fields
+                                        WHERE f.TagNumber = @TagNumber AND Ind1 NOT IN (@ind1s);
+
+                                    UPDATE Records
+                                    SET ValidationErrors = ValidationErrors || (SELECT Data FROM TempUpdates WHERE Records.RecordID = TempUpdates.RecordID)
+                                    WHERE RecordID IN (SELECT RecordID FROM TempUpdates);
+
+                                    DELETE FROM TempUpdates;";
+
+            command.Parameters.Add("@TagNumber", DbType.String).Value = tagNumber;
+            AddArrayParameters(command, "@ind1s", ind1s);
+            command.ExecuteNonQuery();
+            command.Parameters.Clear();
+
+            command.CommandText = @"INSERT INTO TempUpdates
+                                        SELECT f.RecordID, 'Invalid Indicator 2: ' || f.Ind1 || ' in tag ' || f.TagNumber || char(10)
+                                        FROM Fields
+                                        WHERE f.TagNumber = @TagNumber AND Ind1 NOT IN (@ind2s);
+
+                                    UPDATE Records
+                                    SET ValidationErrors = ValidationErrors || (SELECT Data FROM TempUpdates WHERE Records.RecordID = TempUpdates.RecordID)
+                                    WHERE RecordID IN (SELECT RecordID FROM TempUpdates);
+
+                                    DELETE FROM TempUpdates;";
+
+            command.Parameters.Add("@TagNumber", DbType.String).Value = tagNumber;
+            AddArrayParameters(command, "@ind2s", ind2s);
+            command.ExecuteNonQuery();
+            command.Parameters.Clear();                
         }
 
         /// <summary>
