@@ -58,6 +58,11 @@ namespace CSharp_MARC_Editor
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.fieldsSortButton = new System.Windows.Forms.Button();
             this.fieldDownButton = new System.Windows.Forms.Button();
@@ -123,6 +128,16 @@ namespace CSharp_MARC_Editor
             this.rdaConversionBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.validationBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.recordsDataGridView = new System.Windows.Forms.DataGridView();
+            this.marcDataSet = new CSharp_MARC_Editor.MARCDataSet();
+            this.subfieldsDataGridView = new System.Windows.Forms.DataGridView();
+            this.fieldsDataGridView = new System.Windows.Forms.DataGridView();
+            this.fieldIDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.recordIDDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tagNumberDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ind1DataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ind2DataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.controlDataDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Sort = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.recordIDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dateAddedDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dateChangedDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -139,21 +154,11 @@ namespace CSharp_MARC_Editor
             this.Custom5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ImportErrors = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ValidationErrors = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.marcDataSet = new CSharp_MARC_Editor.MARCDataSet();
-            this.subfieldsDataGridView = new System.Windows.Forms.DataGridView();
             this.subfieldIDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.fieldIDDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.codeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.fieldsDataGridView = new System.Windows.Forms.DataGridView();
-            this.fieldIDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.recordIDDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tagNumberDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ind1DataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ind2DataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.controlDataDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Sort = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -726,6 +731,7 @@ namespace CSharp_MARC_Editor
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.recordsDataGridView.AutoGenerateColumns = false;
+            this.recordsDataGridView.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
             this.recordsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.recordsDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.recordIDDataGridViewTextBoxColumn,
@@ -756,128 +762,6 @@ namespace CSharp_MARC_Editor
             this.recordsDataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.recordsDataGridView_CellClick);
             this.recordsDataGridView.SelectionChanged += new System.EventHandler(this.recordsDataGridView_SelectionChanged);
             this.recordsDataGridView.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.recordsDataGridView_UserDeletingRow);
-            // 
-            // recordIDDataGridViewTextBoxColumn
-            // 
-            this.recordIDDataGridViewTextBoxColumn.DataPropertyName = "RecordID";
-            this.recordIDDataGridViewTextBoxColumn.HeaderText = "ID";
-            this.recordIDDataGridViewTextBoxColumn.MinimumWidth = 50;
-            this.recordIDDataGridViewTextBoxColumn.Name = "recordIDDataGridViewTextBoxColumn";
-            this.recordIDDataGridViewTextBoxColumn.ReadOnly = true;
-            this.recordIDDataGridViewTextBoxColumn.Width = 50;
-            // 
-            // dateAddedDataGridViewTextBoxColumn
-            // 
-            this.dateAddedDataGridViewTextBoxColumn.DataPropertyName = "DateAdded";
-            this.dateAddedDataGridViewTextBoxColumn.HeaderText = "Date Added";
-            this.dateAddedDataGridViewTextBoxColumn.MinimumWidth = 140;
-            this.dateAddedDataGridViewTextBoxColumn.Name = "dateAddedDataGridViewTextBoxColumn";
-            this.dateAddedDataGridViewTextBoxColumn.ReadOnly = true;
-            this.dateAddedDataGridViewTextBoxColumn.Width = 140;
-            // 
-            // dateChangedDataGridViewTextBoxColumn
-            // 
-            this.dateChangedDataGridViewTextBoxColumn.DataPropertyName = "DateChanged";
-            this.dateChangedDataGridViewTextBoxColumn.HeaderText = "Date Changed";
-            this.dateChangedDataGridViewTextBoxColumn.MinimumWidth = 140;
-            this.dateChangedDataGridViewTextBoxColumn.Name = "dateChangedDataGridViewTextBoxColumn";
-            this.dateChangedDataGridViewTextBoxColumn.ReadOnly = true;
-            this.dateChangedDataGridViewTextBoxColumn.Width = 140;
-            // 
-            // authorDataGridViewTextBoxColumn
-            // 
-            this.authorDataGridViewTextBoxColumn.DataPropertyName = "Author";
-            this.authorDataGridViewTextBoxColumn.HeaderText = "Author";
-            this.authorDataGridViewTextBoxColumn.MinimumWidth = 20;
-            this.authorDataGridViewTextBoxColumn.Name = "authorDataGridViewTextBoxColumn";
-            this.authorDataGridViewTextBoxColumn.ReadOnly = true;
-            this.authorDataGridViewTextBoxColumn.Width = 200;
-            // 
-            // titleDataGridViewTextBoxColumn
-            // 
-            this.titleDataGridViewTextBoxColumn.DataPropertyName = "Title";
-            this.titleDataGridViewTextBoxColumn.HeaderText = "Title";
-            this.titleDataGridViewTextBoxColumn.MinimumWidth = 20;
-            this.titleDataGridViewTextBoxColumn.Name = "titleDataGridViewTextBoxColumn";
-            this.titleDataGridViewTextBoxColumn.ReadOnly = true;
-            this.titleDataGridViewTextBoxColumn.Width = 400;
-            // 
-            // CopyrightDate
-            // 
-            this.CopyrightDate.DataPropertyName = "CopyrightDate";
-            this.CopyrightDate.HeaderText = "CopyrightDate";
-            this.CopyrightDate.Name = "CopyrightDate";
-            this.CopyrightDate.ReadOnly = true;
-            // 
-            // barcodeDataGridViewTextBoxColumn
-            // 
-            this.barcodeDataGridViewTextBoxColumn.DataPropertyName = "Barcode";
-            this.barcodeDataGridViewTextBoxColumn.HeaderText = "Barcode";
-            this.barcodeDataGridViewTextBoxColumn.Name = "barcodeDataGridViewTextBoxColumn";
-            this.barcodeDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // classificationDataGridViewTextBoxColumn
-            // 
-            this.classificationDataGridViewTextBoxColumn.DataPropertyName = "Classification";
-            this.classificationDataGridViewTextBoxColumn.HeaderText = "Classification";
-            this.classificationDataGridViewTextBoxColumn.Name = "classificationDataGridViewTextBoxColumn";
-            this.classificationDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // mainEntryDataGridViewTextBoxColumn
-            // 
-            this.mainEntryDataGridViewTextBoxColumn.DataPropertyName = "MainEntry";
-            this.mainEntryDataGridViewTextBoxColumn.HeaderText = "MainEntry";
-            this.mainEntryDataGridViewTextBoxColumn.Name = "mainEntryDataGridViewTextBoxColumn";
-            this.mainEntryDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // Custom1
-            // 
-            this.Custom1.DataPropertyName = "Custom1";
-            this.Custom1.HeaderText = "Custom1";
-            this.Custom1.Name = "Custom1";
-            this.Custom1.ReadOnly = true;
-            // 
-            // Custom2
-            // 
-            this.Custom2.DataPropertyName = "Custom2";
-            this.Custom2.HeaderText = "Custom2";
-            this.Custom2.Name = "Custom2";
-            this.Custom2.ReadOnly = true;
-            // 
-            // Custom3
-            // 
-            this.Custom3.DataPropertyName = "Custom3";
-            this.Custom3.HeaderText = "Custom3";
-            this.Custom3.Name = "Custom3";
-            this.Custom3.ReadOnly = true;
-            // 
-            // Custom4
-            // 
-            this.Custom4.DataPropertyName = "Custom4";
-            this.Custom4.HeaderText = "Custom4";
-            this.Custom4.Name = "Custom4";
-            this.Custom4.ReadOnly = true;
-            // 
-            // Custom5
-            // 
-            this.Custom5.DataPropertyName = "Custom5";
-            this.Custom5.HeaderText = "Custom5";
-            this.Custom5.Name = "Custom5";
-            this.Custom5.ReadOnly = true;
-            // 
-            // ImportErrors
-            // 
-            this.ImportErrors.DataPropertyName = "ImportErrors";
-            this.ImportErrors.HeaderText = "ImportErrors";
-            this.ImportErrors.Name = "ImportErrors";
-            this.ImportErrors.ReadOnly = true;
-            // 
-            // ValidationErrors
-            // 
-            this.ValidationErrors.DataPropertyName = "ValidationErrors";
-            this.ValidationErrors.HeaderText = "ValidationErrors";
-            this.ValidationErrors.Name = "ValidationErrors";
-            this.ValidationErrors.ReadOnly = true;
             // 
             // marcDataSet
             // 
@@ -912,46 +796,6 @@ namespace CSharp_MARC_Editor
             this.subfieldsDataGridView.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.subfieldsDataGridView_CellValidating);
             this.subfieldsDataGridView.RowValidating += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.subfieldsDataGridView_RowValidating);
             this.subfieldsDataGridView.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.subfieldsDataGridView_UserDeletingRow);
-            // 
-            // subfieldIDDataGridViewTextBoxColumn
-            // 
-            this.subfieldIDDataGridViewTextBoxColumn.DataPropertyName = "SubfieldID";
-            this.subfieldIDDataGridViewTextBoxColumn.HeaderText = "SubfieldID";
-            this.subfieldIDDataGridViewTextBoxColumn.Name = "subfieldIDDataGridViewTextBoxColumn";
-            this.subfieldIDDataGridViewTextBoxColumn.Visible = false;
-            // 
-            // fieldIDDataGridViewTextBoxColumn1
-            // 
-            this.fieldIDDataGridViewTextBoxColumn1.DataPropertyName = "FieldID";
-            this.fieldIDDataGridViewTextBoxColumn1.HeaderText = "FieldID";
-            this.fieldIDDataGridViewTextBoxColumn1.Name = "fieldIDDataGridViewTextBoxColumn1";
-            this.fieldIDDataGridViewTextBoxColumn1.Visible = false;
-            // 
-            // codeDataGridViewTextBoxColumn
-            // 
-            this.codeDataGridViewTextBoxColumn.DataPropertyName = "Code";
-            this.codeDataGridViewTextBoxColumn.HeaderText = "Code";
-            this.codeDataGridViewTextBoxColumn.MaxInputLength = 1;
-            this.codeDataGridViewTextBoxColumn.MinimumWidth = 40;
-            this.codeDataGridViewTextBoxColumn.Name = "codeDataGridViewTextBoxColumn";
-            this.codeDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.codeDataGridViewTextBoxColumn.Width = 40;
-            // 
-            // dataDataGridViewTextBoxColumn
-            // 
-            this.dataDataGridViewTextBoxColumn.DataPropertyName = "Data";
-            this.dataDataGridViewTextBoxColumn.HeaderText = "Data";
-            this.dataDataGridViewTextBoxColumn.MinimumWidth = 100;
-            this.dataDataGridViewTextBoxColumn.Name = "dataDataGridViewTextBoxColumn";
-            this.dataDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.dataDataGridViewTextBoxColumn.Width = 300;
-            // 
-            // dataGridViewTextBoxColumn1
-            // 
-            this.dataGridViewTextBoxColumn1.DataPropertyName = "Sort";
-            this.dataGridViewTextBoxColumn1.HeaderText = "Sort";
-            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
-            this.dataGridViewTextBoxColumn1.Visible = false;
             // 
             // fieldsDataGridView
             // 
@@ -1045,6 +889,180 @@ namespace CSharp_MARC_Editor
             this.Sort.HeaderText = "Sort";
             this.Sort.Name = "Sort";
             this.Sort.Visible = false;
+            // 
+            // recordIDDataGridViewTextBoxColumn
+            // 
+            this.recordIDDataGridViewTextBoxColumn.DataPropertyName = "RecordID";
+            this.recordIDDataGridViewTextBoxColumn.HeaderText = "ID";
+            this.recordIDDataGridViewTextBoxColumn.MinimumWidth = 50;
+            this.recordIDDataGridViewTextBoxColumn.Name = "recordIDDataGridViewTextBoxColumn";
+            this.recordIDDataGridViewTextBoxColumn.ReadOnly = true;
+            this.recordIDDataGridViewTextBoxColumn.Width = 50;
+            // 
+            // dateAddedDataGridViewTextBoxColumn
+            // 
+            this.dateAddedDataGridViewTextBoxColumn.DataPropertyName = "DateAdded";
+            this.dateAddedDataGridViewTextBoxColumn.HeaderText = "Date Added";
+            this.dateAddedDataGridViewTextBoxColumn.MinimumWidth = 140;
+            this.dateAddedDataGridViewTextBoxColumn.Name = "dateAddedDataGridViewTextBoxColumn";
+            this.dateAddedDataGridViewTextBoxColumn.ReadOnly = true;
+            this.dateAddedDataGridViewTextBoxColumn.Width = 140;
+            // 
+            // dateChangedDataGridViewTextBoxColumn
+            // 
+            this.dateChangedDataGridViewTextBoxColumn.DataPropertyName = "DateChanged";
+            this.dateChangedDataGridViewTextBoxColumn.HeaderText = "Date Changed";
+            this.dateChangedDataGridViewTextBoxColumn.MinimumWidth = 140;
+            this.dateChangedDataGridViewTextBoxColumn.Name = "dateChangedDataGridViewTextBoxColumn";
+            this.dateChangedDataGridViewTextBoxColumn.ReadOnly = true;
+            this.dateChangedDataGridViewTextBoxColumn.Width = 140;
+            // 
+            // authorDataGridViewTextBoxColumn
+            // 
+            this.authorDataGridViewTextBoxColumn.DataPropertyName = "Author";
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.authorDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle1;
+            this.authorDataGridViewTextBoxColumn.HeaderText = "Author";
+            this.authorDataGridViewTextBoxColumn.MinimumWidth = 20;
+            this.authorDataGridViewTextBoxColumn.Name = "authorDataGridViewTextBoxColumn";
+            this.authorDataGridViewTextBoxColumn.ReadOnly = true;
+            this.authorDataGridViewTextBoxColumn.Width = 200;
+            // 
+            // titleDataGridViewTextBoxColumn
+            // 
+            this.titleDataGridViewTextBoxColumn.DataPropertyName = "Title";
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.titleDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle2;
+            this.titleDataGridViewTextBoxColumn.HeaderText = "Title";
+            this.titleDataGridViewTextBoxColumn.MinimumWidth = 20;
+            this.titleDataGridViewTextBoxColumn.Name = "titleDataGridViewTextBoxColumn";
+            this.titleDataGridViewTextBoxColumn.ReadOnly = true;
+            this.titleDataGridViewTextBoxColumn.Width = 400;
+            // 
+            // CopyrightDate
+            // 
+            this.CopyrightDate.DataPropertyName = "CopyrightDate";
+            this.CopyrightDate.HeaderText = "CopyrightDate";
+            this.CopyrightDate.Name = "CopyrightDate";
+            this.CopyrightDate.ReadOnly = true;
+            // 
+            // barcodeDataGridViewTextBoxColumn
+            // 
+            this.barcodeDataGridViewTextBoxColumn.DataPropertyName = "Barcode";
+            this.barcodeDataGridViewTextBoxColumn.HeaderText = "Barcode";
+            this.barcodeDataGridViewTextBoxColumn.Name = "barcodeDataGridViewTextBoxColumn";
+            this.barcodeDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // classificationDataGridViewTextBoxColumn
+            // 
+            this.classificationDataGridViewTextBoxColumn.DataPropertyName = "Classification";
+            this.classificationDataGridViewTextBoxColumn.HeaderText = "Classification";
+            this.classificationDataGridViewTextBoxColumn.Name = "classificationDataGridViewTextBoxColumn";
+            this.classificationDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // mainEntryDataGridViewTextBoxColumn
+            // 
+            this.mainEntryDataGridViewTextBoxColumn.DataPropertyName = "MainEntry";
+            this.mainEntryDataGridViewTextBoxColumn.HeaderText = "MainEntry";
+            this.mainEntryDataGridViewTextBoxColumn.Name = "mainEntryDataGridViewTextBoxColumn";
+            this.mainEntryDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // Custom1
+            // 
+            this.Custom1.DataPropertyName = "Custom1";
+            this.Custom1.HeaderText = "Custom1";
+            this.Custom1.Name = "Custom1";
+            this.Custom1.ReadOnly = true;
+            // 
+            // Custom2
+            // 
+            this.Custom2.DataPropertyName = "Custom2";
+            this.Custom2.HeaderText = "Custom2";
+            this.Custom2.Name = "Custom2";
+            this.Custom2.ReadOnly = true;
+            // 
+            // Custom3
+            // 
+            this.Custom3.DataPropertyName = "Custom3";
+            this.Custom3.HeaderText = "Custom3";
+            this.Custom3.Name = "Custom3";
+            this.Custom3.ReadOnly = true;
+            // 
+            // Custom4
+            // 
+            this.Custom4.DataPropertyName = "Custom4";
+            this.Custom4.HeaderText = "Custom4";
+            this.Custom4.Name = "Custom4";
+            this.Custom4.ReadOnly = true;
+            // 
+            // Custom5
+            // 
+            this.Custom5.DataPropertyName = "Custom5";
+            this.Custom5.HeaderText = "Custom5";
+            this.Custom5.Name = "Custom5";
+            this.Custom5.ReadOnly = true;
+            // 
+            // ImportErrors
+            // 
+            this.ImportErrors.DataPropertyName = "ImportErrors";
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.ImportErrors.DefaultCellStyle = dataGridViewCellStyle3;
+            this.ImportErrors.HeaderText = "ImportErrors";
+            this.ImportErrors.Name = "ImportErrors";
+            this.ImportErrors.ReadOnly = true;
+            this.ImportErrors.Width = 500;
+            // 
+            // ValidationErrors
+            // 
+            this.ValidationErrors.DataPropertyName = "ValidationErrors";
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.ValidationErrors.DefaultCellStyle = dataGridViewCellStyle4;
+            this.ValidationErrors.HeaderText = "ValidationErrors";
+            this.ValidationErrors.Name = "ValidationErrors";
+            this.ValidationErrors.ReadOnly = true;
+            this.ValidationErrors.Width = 500;
+            // 
+            // subfieldIDDataGridViewTextBoxColumn
+            // 
+            this.subfieldIDDataGridViewTextBoxColumn.DataPropertyName = "SubfieldID";
+            this.subfieldIDDataGridViewTextBoxColumn.HeaderText = "SubfieldID";
+            this.subfieldIDDataGridViewTextBoxColumn.Name = "subfieldIDDataGridViewTextBoxColumn";
+            this.subfieldIDDataGridViewTextBoxColumn.Visible = false;
+            // 
+            // fieldIDDataGridViewTextBoxColumn1
+            // 
+            this.fieldIDDataGridViewTextBoxColumn1.DataPropertyName = "FieldID";
+            this.fieldIDDataGridViewTextBoxColumn1.HeaderText = "FieldID";
+            this.fieldIDDataGridViewTextBoxColumn1.Name = "fieldIDDataGridViewTextBoxColumn1";
+            this.fieldIDDataGridViewTextBoxColumn1.Visible = false;
+            // 
+            // codeDataGridViewTextBoxColumn
+            // 
+            this.codeDataGridViewTextBoxColumn.DataPropertyName = "Code";
+            this.codeDataGridViewTextBoxColumn.HeaderText = "Code";
+            this.codeDataGridViewTextBoxColumn.MaxInputLength = 1;
+            this.codeDataGridViewTextBoxColumn.MinimumWidth = 40;
+            this.codeDataGridViewTextBoxColumn.Name = "codeDataGridViewTextBoxColumn";
+            this.codeDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.codeDataGridViewTextBoxColumn.Width = 40;
+            // 
+            // dataDataGridViewTextBoxColumn
+            // 
+            this.dataDataGridViewTextBoxColumn.DataPropertyName = "Data";
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle5;
+            this.dataDataGridViewTextBoxColumn.HeaderText = "Data";
+            this.dataDataGridViewTextBoxColumn.MinimumWidth = 100;
+            this.dataDataGridViewTextBoxColumn.Name = "dataDataGridViewTextBoxColumn";
+            this.dataDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.dataDataGridViewTextBoxColumn.Width = 300;
+            // 
+            // dataGridViewTextBoxColumn1
+            // 
+            this.dataGridViewTextBoxColumn1.DataPropertyName = "Sort";
+            this.dataGridViewTextBoxColumn1.HeaderText = "Sort";
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            this.dataGridViewTextBoxColumn1.Visible = false;
             // 
             // MainForm
             // 
@@ -1145,11 +1163,6 @@ namespace CSharp_MARC_Editor
         private System.Windows.Forms.Button subfieldDownButton;
         private System.Windows.Forms.Button subfieldUpButton;
         private System.Windows.Forms.Button subfieldSortButton;
-        private System.Windows.Forms.DataGridViewTextBoxColumn subfieldIDDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn fieldIDDataGridViewTextBoxColumn1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn codeDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn fieldIDDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn recordIDDataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn tagNumberDataGridViewTextBoxColumn;
@@ -1177,6 +1190,11 @@ namespace CSharp_MARC_Editor
         private System.Windows.Forms.DataGridViewTextBoxColumn Custom5;
         private System.Windows.Forms.DataGridViewTextBoxColumn ImportErrors;
         private System.Windows.Forms.DataGridViewTextBoxColumn ValidationErrors;
+        private System.Windows.Forms.DataGridViewTextBoxColumn subfieldIDDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn fieldIDDataGridViewTextBoxColumn1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn codeDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
 
     }
 }

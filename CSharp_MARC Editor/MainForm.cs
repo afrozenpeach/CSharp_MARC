@@ -3168,6 +3168,9 @@ namespace CSharp_MARC_Editor
                     ValidateSubfieldCodes(command, "", new List<string> { });
                     ValidateSubfieldCodes(command, "", new List<string> { });
                     ValidateSubfieldCodes(command, "", new List<string> { });
+
+                    command.CommandText = "UPDATE Records SET ValidationErrors = SUBSTR(ValidationErrors, 1, LENGTH(ValidationErrors) - 1)";
+                    command.ExecuteNonQuery();
                 }
             }
         }
