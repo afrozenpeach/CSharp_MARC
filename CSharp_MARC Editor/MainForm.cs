@@ -3141,7 +3141,7 @@ namespace CSharp_MARC_Editor
                     validationBackgroundWorker.ReportProgress(0, "Validating Tag Numbers...");
                     command.CommandText = @"INSERT INTO TempUpdates
                                                 SELECT RecordID, 'Invalid Tag Number: ' || TagNumber || char(10)
-                                                FROM Fields WHERE TagNumber NOT IN (@list);
+                                                FROM Fields WHERE SUBSTR(TagNumber, 1, 1) != '9' AND TagNumber NOT IN (@list);
 
                                             UPDATE Records 
                                             SET ValidationErrors = ValidationErrors || (SELECT Data FROM TempUpdates WHERE Records.RecordID = TempUpdates.RecordID)
