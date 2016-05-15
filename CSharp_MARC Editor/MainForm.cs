@@ -3407,10 +3407,10 @@ namespace CSharp_MARC_Editor
                     ValidateFieldIndicators(command, "085", new List<string> { " " }, new List<string> { " " });
                     ValidateFieldIndicators(command, "086", new List<string> { " " }, new List<string> { " " });
                     ValidateFieldIndicators(command, "088", new List<string> { " ", "0", "1" }, new List<string> { " " });
-                    ValidateFieldIndicators(command, "100", new List<string> { " " }, new List<string> { " " });
-                    ValidateFieldIndicators(command, "110", new List<string> { " " }, new List<string> { " " });
-                    ValidateFieldIndicators(command, "111", new List<string> { " " }, new List<string> { " " });
-                    ValidateFieldIndicators(command, "130", new List<string> { " " }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "100", new List<string> { "0", "1", "3" }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "110", new List<string> { "0", "1", "2" }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "111", new List<string> { "0", "1", "2" }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "130", new List<string> { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" }, new List<string> { " " });
                     ValidateFieldIndicators(command, "210", new List<string> { " " }, new List<string> { " " });
                     ValidateFieldIndicators(command, "222", new List<string> { " " }, new List<string> { " " });
                     ValidateFieldIndicators(command, "240", new List<string> { " " }, new List<string> { " " });
