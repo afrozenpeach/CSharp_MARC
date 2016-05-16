@@ -2825,6 +2825,7 @@ namespace CSharp_MARC_Editor
                 {
                     int recordID = Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString());
                     int fieldID = Int32.Parse(fieldsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString());
+                    string tagNumber = fieldsDataGridView.SelectedCells[0].OwningRow.Cells[2].Value.ToString();
                     string code = subfieldsDataGridView.Rows[e.RowIndex].Cells[2].Value.ToString();
                     string data = subfieldsDataGridView.Rows[e.RowIndex].Cells[3].Value.ToString();
                     int sort = e.RowIndex;
@@ -2847,7 +2848,7 @@ namespace CSharp_MARC_Editor
 
                             command.ExecuteNonQuery();
                             LoadSubfields(fieldID);
-                            RebuildRecordsPreviewInformation(recordID);
+                            RebuildRecordsPreviewInformation(recordID, tagNumber);
                         }
                     }
                 }
