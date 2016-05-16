@@ -12,6 +12,7 @@ This project is built upon the CSharp_MARC project of the same name available at
 * Split large record sets into multiple files
 * Z39.50 support using the SRU API with customizable address string
 * Converts AACR2 to RDA (not intended to be a full conversion, but takes what it can from AACR2 and converts to RDA)
+* Validate tag numbers, indicators, and subfield codes
 * Report generation by copyright year, classification, and a record summary
 * SQLite database backend - advanced users can connect with any SQLite client to do further SQL queries on the dataset
 
