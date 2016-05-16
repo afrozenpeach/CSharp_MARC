@@ -52,6 +52,11 @@
  * @copyright 2016 Matt Schraeder
  * @license   http://www.gnu.org/licenses/gpl-3.0.html  GPL License 3
  */ 
+ 
+2016-05-15 Changes:
+
+Add tag number, indicator, and subfield code validation
+Fix issue where field and subfield sorting buttons were not disabled while a batch process is running
 
 2016-05-14.1 Changes:
 
