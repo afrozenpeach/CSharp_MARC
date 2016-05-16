@@ -1484,6 +1484,12 @@ namespace CSharp_MARC_Editor
             recordsDataGridView.Enabled = true;
             fieldsDataGridView.Enabled = true;
             subfieldsDataGridView.Enabled = true;
+            fieldUpButton.Enabled = true;
+            subfieldUpButton.Enabled = true;
+            fieldDownButton.Enabled = true;
+            subfieldDownButton.Enabled = true;
+            fieldsSortButton.Enabled = true;
+            subfieldSortButton.Enabled = true;
         }
 
         /// <summary>
@@ -1495,6 +1501,12 @@ namespace CSharp_MARC_Editor
             recordsDataGridView.Enabled = false;
             fieldsDataGridView.Enabled = false;
             subfieldsDataGridView.Enabled = false;
+            fieldUpButton.Enabled = false;
+            subfieldUpButton.Enabled = false;
+            fieldDownButton.Enabled = false;
+            subfieldDownButton.Enabled = false;
+            fieldsSortButton.Enabled = false;
+            subfieldSortButton.Enabled = false;
         }
 
         /// <summary>
