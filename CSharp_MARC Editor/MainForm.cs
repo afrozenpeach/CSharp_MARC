@@ -3111,15 +3111,18 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void validateRecordsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DisableForm();
-            toolStripProgressBar.Style = ProgressBarStyle.Marquee;
-            toolStripProgressBar.MarqueeAnimationSpeed = 30;
-            toolStripProgressBar.Enabled = true;
-            toolStripProgressBar.Visible = true;
-            progressToolStripStatusLabel.Visible = true;
-            recordsDataGridView.SuspendLayout();
-            recordsDataGridView.DataSource = null;
-            validationBackgroundWorker.RunWorkerAsync();
+            if (MessageBox.Show("This will validate tag numbers, indicators, and subfield codes in your MARC database." + Environment.NewLine + Environment.NewLine + "When finished, errors will be listed in the \"Validation Errors\" of the records grid.", "Start validation?", MessageBoxButtons.OKCancel, MessageBoxIcon.Information) == DialogResult.OK)
+            {
+                DisableForm();
+                toolStripProgressBar.Style = ProgressBarStyle.Marquee;
+                toolStripProgressBar.MarqueeAnimationSpeed = 30;
+                toolStripProgressBar.Enabled = true;
+                toolStripProgressBar.Visible = true;
+                progressToolStripStatusLabel.Visible = true;
+                recordsDataGridView.SuspendLayout();
+                recordsDataGridView.DataSource = null;
+                validationBackgroundWorker.RunWorkerAsync();
+            }
         }
 
         /// <summary>
