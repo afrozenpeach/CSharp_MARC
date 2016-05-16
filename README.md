@@ -18,6 +18,12 @@ This project is built upon the CSharp_MARC project of the same name available at
 
 ## Changelog:
 
+### 2016-05-16 Changes:
+
+* Improve speed of adding fields and subfields
+* Speed up loading large datasets
+* Fix parsing of records with an less than 5 characters in the Record Length portion of the LDR.
+
 ### 2016-05-15 Changes:
 
 * Add tag number, indicator, and subfield code validation

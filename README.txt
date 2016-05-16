@@ -53,6 +53,12 @@
  * @license   http://www.gnu.org/licenses/gpl-3.0.html  GPL License 3
  */ 
  
+2016-05-16 Changes:
+ 
+Improve speed of adding fields and subfields
+Speed up loading large datasets
+Fix parsing of records with an less than 5 characters in the Record Length portion of the LDR.
+
 2016-05-15 Changes:
 
 Add tag number, indicator, and subfield code validation
