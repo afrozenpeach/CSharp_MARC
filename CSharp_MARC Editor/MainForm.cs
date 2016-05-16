@@ -3464,12 +3464,12 @@ namespace CSharp_MARC_Editor
                     ValidateFieldIndicators(command, "386", new List<string> { " " }, new List<string> { " " });
                     ValidateFieldIndicators(command, "388", new List<string> { " ", "1", "2" }, new List<string> { " " });
                     ValidateFieldIndicators(command, "490", new List<string> { "0", "1" }, new List<string> { " " });
-                    ValidateFieldIndicators(command, "500", new List<string> { "0", "1", "2", "8" }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "500", new List<string> { " " }, new List<string> { " " });
                     ValidateFieldIndicators(command, "501", new List<string> { " " }, new List<string> { " ", "0" });
                     ValidateFieldIndicators(command, "502", new List<string> { " " }, new List<string> { " " });
                     ValidateFieldIndicators(command, "504", new List<string> { " " }, new List<string> { " " });
-                    ValidateFieldIndicators(command, "505", new List<string> { " " }, new List<string> { " " });
-                    ValidateFieldIndicators(command, "506", new List<string> { "0", "1" }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "505", new List<string> { "0", "1", "2", "8" }, new List<string> { " " });
+                    ValidateFieldIndicators(command, "506", new List<string> { " ", "0", "1" }, new List<string> { " " });
                     ValidateFieldIndicators(command, "507", new List<string> { " " }, new List<string> { " " });
                     ValidateFieldIndicators(command, "508", new List<string> { " " }, new List<string> { " " });
                     ValidateFieldIndicators(command, "510", new List<string> { "0", "1", "2", "3", "4" }, new List<string> { " " });
@@ -3612,9 +3612,9 @@ namespace CSharp_MARC_Editor
             validationBackgroundWorker.ReportProgress(0, "Validating " + tagNumber + " Indicators...");
 
             command.CommandText = @"INSERT INTO TempUpdates
-                                        SELECT f.RecordID, 'Invalid Indicator 1: ' || f.Ind1 || ' in tag ' || f.TagNumber || char(10)
+                                        SELECT RecordID, 'Invalid Indicator 1: ' || CASE WHEN Ind1 = ' ' THEN '_' ELSE Ind1 END || ' in tag ' || TagNumber || char(10)
                                         FROM Fields
-                                        WHERE f.TagNumber = @TagNumber AND Ind1 NOT IN (@ind1s);
+                                        WHERE TagNumber = @TagNumber AND Ind1 NOT IN (@ind1s);
 
                                     UPDATE Records
                                     SET ValidationErrors = ValidationErrors || (SELECT Data FROM TempUpdates WHERE Records.RecordID = TempUpdates.RecordID)
@@ -3628,9 +3628,9 @@ namespace CSharp_MARC_Editor
             command.Parameters.Clear();
 
             command.CommandText = @"INSERT INTO TempUpdates
-                                        SELECT f.RecordID, 'Invalid Indicator 2: ' || f.Ind1 || ' in tag ' || f.TagNumber || char(10)
+                                        SELECT RecordID, 'Invalid Indicator 2: ' || CASE WHEN Ind2 = ' ' THEN '_' ELSE Ind2 END || ' in tag ' || TagNumber || char(10)
                                         FROM Fields
-                                        WHERE f.TagNumber = @TagNumber AND Ind1 NOT IN (@ind2s);
+                                        WHERE TagNumber = @TagNumber AND Ind2 NOT IN (@ind2s);
 
                                     UPDATE Records
                                     SET ValidationErrors = ValidationErrors || (SELECT Data FROM TempUpdates WHERE Records.RecordID = TempUpdates.RecordID)
