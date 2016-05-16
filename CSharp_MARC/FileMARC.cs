@@ -184,7 +184,17 @@ namespace MARC
 
             // Store record length
             if (match.Captures.Count == 0)
-                marc.AddWarnings("MARC record length is not numeric.");
+            {
+                marc.AddWarnings("MARC record length is not numeric or incorrect number of characters.");
+                string[] split = Regex.Split(raw, "[^0-9]");
+                
+                if (Int32.TryParse(split[0], out recordLength))
+                {
+                    string padding = "";
+                    padding = padding.PadLeft(5 - split[0].Length, '0');
+                    raw = padding + raw;
+                }
+            }
             else
                 recordLength = Convert.ToInt32(match.Captures[0].Value);
 
@@ -215,7 +225,15 @@ namespace MARC
             //Bytes 12-16 of leader give offset to the body of the record
             int dataStart = Convert.ToInt32(raw.Substring(12, 5));
 
+            //Verify data start matches the first end of field marker
+            if (raw.IndexOf(FileMARC.END_OF_FIELD) + 1 != dataStart)
+            {
+                dataStart = raw.IndexOf(FileMARC.END_OF_FIELD) + 1;
+                marc.AddWarnings("Leader specifies incorrect base address of data.");
+            }
+
             //Immediately after the leader comes the directory (no separator)
+
             string directory = raw.Substring(LEADER_LEN, dataStart - LEADER_LEN - 1);
 
             //Character after the directory should be END_OF_FIELD
