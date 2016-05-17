@@ -1789,10 +1789,7 @@ namespace CSharp_MARC_Editor
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 Console.WriteLine("Start Import: " + DateTime.Now.ToString());
-                recordsDataGridView.Enabled = false;
-                subfieldsDataGridView.Enabled = false;
-                fieldsDataGridView.Enabled = false;
-                menuStrip.Enabled = false;
+                DisableForm();
                 toolStripProgressBar.Style = ProgressBarStyle.Marquee;
                 toolStripProgressBar.MarqueeAnimationSpeed = 30;
                 toolStripProgressBar.Enabled = true;
@@ -2016,10 +2013,7 @@ namespace CSharp_MARC_Editor
             recordsDataGridView.DataSource = marcDataSet.Tables["Records"];
             recordsDataGridView.ResumeLayout();
             loading = false;
-            recordsDataGridView.Enabled = true;
-            subfieldsDataGridView.Enabled = true;
-            fieldsDataGridView.Enabled = true;
-            menuStrip.Enabled = true;
+            EnableForm();
             Console.WriteLine("End Import: " + DateTime.Now.ToString());
         }
 
