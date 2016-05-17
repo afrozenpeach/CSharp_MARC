@@ -40,6 +40,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Collections;
 using System.Drawing.Printing;
+using System.Globalization;
 
 namespace CSharp_MARC_Editor
 {
@@ -127,7 +128,7 @@ namespace CSharp_MARC_Editor
                 DateTime dateTimeChanged = new DateTime();
 
                 if (DateTime.TryParse(dateChanged, out dateTimeChanged))
-                    dateChanged = dateTimeChanged.ToString();
+                    dateChanged = dateTimeChanged.ToString(CultureInfo.CurrentCulture);
                 else
                     dateChanged = null;
             }
@@ -561,7 +562,7 @@ namespace CSharp_MARC_Editor
 
                         foreach (DataGridViewRow row in recordsDataGridView.Rows)
                         {
-                            if (Int32.Parse(row.Cells[0].Value.ToString()) == recordID)
+                            if (Int32.Parse(row.Cells[0].Value.ToString(), CultureInfo.InvariantCulture) == recordID)
                             {
                                 row.Cells[2].Value = newRow["DateChanged"];
                                 row.Cells[3].Value = newRow["Author"];
@@ -708,7 +709,7 @@ namespace CSharp_MARC_Editor
         /// </summary>
         private void RebuildRecordsPreviewInformation(int? recordID = null, string tagNumber = null)
         {
-            Console.WriteLine("Begin rebuild: " + DateTime.Now.ToString());
+            Console.WriteLine("Begin rebuild: " + DateTime.Now.ToString(CultureInfo.CurrentCulture));
             string whereRecordID = "";
 
             if (recordID != null)
@@ -1290,7 +1291,7 @@ namespace CSharp_MARC_Editor
                 }
             }
 
-            Console.WriteLine("End rebuild: " + DateTime.Now.ToString());
+            Console.WriteLine("End rebuild: " + DateTime.Now.ToString(CultureInfo.CurrentCulture));
         }
 
         /// <summary>
@@ -1747,7 +1748,7 @@ namespace CSharp_MARC_Editor
             {
                 DataGridViewRow rowClicked = recordsDataGridView.Rows[e.RowIndex];
                 if (!rowClicked.IsNewRow)
-                    LoadFields(Int32.Parse(rowClicked.Cells[0].Value.ToString()));
+                    LoadFields(Int32.Parse(rowClicked.Cells[0].Value.ToString(), CultureInfo.InvariantCulture));
                 else
                     fieldsDataGridView.Rows.Clear();
             }
@@ -1766,9 +1767,9 @@ namespace CSharp_MARC_Editor
                 if (!rowClicked.IsNewRow && rowClicked.Cells[0].Value.ToString() != "")
                 {
                     if (rowClicked.Cells[2].Value.ToString().StartsWith("00") || rowClicked.Cells[2].Value.ToString() == "LDR")
-                        LoadControlField(Int32.Parse(rowClicked.Cells[0].Value.ToString()), rowClicked.Cells[5].Value.ToString());
+                        LoadControlField(Int32.Parse(rowClicked.Cells[0].Value.ToString(), CultureInfo.InvariantCulture), rowClicked.Cells[5].Value.ToString());
                     else
-                        LoadSubfields(Int32.Parse(rowClicked.Cells[0].Value.ToString()));
+                        LoadSubfields(Int32.Parse(rowClicked.Cells[0].Value.ToString(), CultureInfo.InvariantCulture));
                 }
                 else
                     marcDataSet.Tables["Subfields"].Clear();
@@ -1788,7 +1789,7 @@ namespace CSharp_MARC_Editor
         {
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                Console.WriteLine("Start Import: " + DateTime.Now.ToString());
+                Console.WriteLine("Start Import: " + DateTime.Now.ToString(CultureInfo.CurrentCulture));
                 DisableForm();
                 toolStripProgressBar.Style = ProgressBarStyle.Marquee;
                 toolStripProgressBar.MarqueeAnimationSpeed = 30;
@@ -1896,8 +1897,9 @@ namespace CSharp_MARC_Editor
 
                             if (field.IsDataField())
                             {
-                                command.Parameters.Add("@Ind1", DbType.String).Value = ((DataField)field).Indicator1;
-                                command.Parameters.Add("@Ind2", DbType.String).Value = ((DataField)field).Indicator2;
+                                DataField dataField = (DataField)field;
+                                command.Parameters.Add("@Ind1", DbType.String).Value = dataField.Indicator1;
+                                command.Parameters.Add("@Ind2", DbType.String).Value = dataField.Indicator2;
                                 command.Parameters.Add("@ControlData", DbType.String).Value = DBNull.Value;
                                 
                                 command.ExecuteNonQuery();
@@ -1905,7 +1907,7 @@ namespace CSharp_MARC_Editor
                                 int fieldID = (int)connection.LastInsertRowId;
 
                                 int subfieldNumber = 0;
-                                foreach (Subfield subfield in ((DataField)field).Subfields)
+                                foreach (Subfield subfield in dataField.Subfields)
                                 {
                                     command.CommandText = "INSERT INTO Subfields (FieldID, Code, Data, Sort) VALUES (@FieldID, @Code, @Data, @Sort)";
                                     command.Parameters.Add("@FieldID", DbType.Int32).Value = fieldID;
@@ -1933,7 +1935,7 @@ namespace CSharp_MARC_Editor
                     i = -2;
                     importingBackgroundWorker.ReportProgress(i);
 
-                    Console.WriteLine("Start Commit: " + DateTime.Now.ToString());
+                    Console.WriteLine("Start Commit: " + DateTime.Now.ToString(CultureInfo.CurrentCulture));
                     command.CommandText = "END";
                     command.ExecuteNonQuery();
                 }
@@ -2014,7 +2016,7 @@ namespace CSharp_MARC_Editor
             recordsDataGridView.ResumeLayout();
             loading = false;
             EnableForm();
-            Console.WriteLine("End Import: " + DateTime.Now.ToString());
+            Console.WriteLine("End Import: " + DateTime.Now.ToString(CultureInfo.CurrentCulture));
         }
 
         /// <summary>
@@ -2338,7 +2340,6 @@ namespace CSharp_MARC_Editor
 
                                 foreach (DataGridViewRow row in recordsDataGridView.Rows)
                                 {
-                                    Record record = new Record();
                                     fieldsCommand.Parameters["@RecordID"].Value = row.Cells[0].Value;
 
                                     columns["RecordID"] = row.Cells[0].Value.ToString();
@@ -2463,25 +2464,25 @@ namespace CSharp_MARC_Editor
                     {
                         case 2:
                             if (fieldsDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString().StartsWith("00") && !e.FormattedValue.ToString().StartsWith("00"))
-                                throw new Exception("Cannot change a control field to a data field.");
+                                throw new InvalidOperationException("Cannot change a control field to a data field.");
                             else if (!fieldsDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString().StartsWith("00") && e.FormattedValue.ToString().StartsWith("00"))
-                                throw new Exception("Cannot change a data field to a control field.");
+                                throw new InvalidOperationException("Cannot change a data field to a control field.");
                             else if (Field.ValidateTag(e.FormattedValue.ToString()))
                                 query += "tagnumber = @Value ";
                             else
-                                throw new Exception("Invalid tag number.");
+                                throw new FormatException("Invalid tag number.");
                             break;
                         case 3:
                             if (e.FormattedValue.ToString().Length == 1 && DataField.ValidateIndicator(e.FormattedValue.ToString()[0]))
                                 query += "ind1 = @Value ";
                             else
-                                throw new Exception("Invalid indicator.");
+                                throw new FormatException("Invalid indicator.");
                             break;
                         case 4:
                             if (e.FormattedValue.ToString().Length == 1 && DataField.ValidateIndicator(e.FormattedValue.ToString()[0]))
                                 query += "ind2 = @Value ";
                             else
-                                throw new Exception("Invalid indicator.");
+                                throw new FormatException("Invalid indicator.");
                             break;
                         case 5:
                             query += "controldata = @Value ";
@@ -2541,13 +2542,13 @@ namespace CSharp_MARC_Editor
                                     query += "code = @Value ";
                                 }
                                 else
-                                    throw new Exception("Invalid subfield code.");
+                                    throw new FormatException("Invalid subfield code.");
                                 break;
                             case 3:
                                 query += "data = @Value ";
                                 break;
                             default:
-                                throw new Exception("Error 002 - This should never happen. ColumnIndex: " + e.ColumnIndex);
+                                throw new ArgumentOutOfRangeException("Error 002 - This should never happen. ColumnIndex: " + e.ColumnIndex);
                         }
 
                         query += "WHERE SubfieldID = @SubfieldID";
@@ -2575,7 +2576,7 @@ namespace CSharp_MARC_Editor
                                 query += "controldata = @Value ";
                                 break;
                             default:
-                                throw new Exception("Error 003 - This should never happen. ColumnIndex: " + e.ColumnIndex);
+                                throw new ArgumentOutOfRangeException("Error 003 - This should never happen. ColumnIndex: " + e.ColumnIndex);
                         }
 
                         query += "WHERE FieldID = @FieldID";
@@ -2648,7 +2649,7 @@ namespace CSharp_MARC_Editor
                         }
                         break;
                     default:
-                        throw new Exception("Error 004 - This should never happen. Column: " + e.ColumnIndex);
+                        throw new ArgumentOutOfRangeException("Error 004 - This should never happen. Column: " + e.ColumnIndex);
                 }
             }
         }
@@ -2705,7 +2706,7 @@ namespace CSharp_MARC_Editor
             fieldsDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].ErrorText = "";
             
             if (recordsDataGridView.SelectedCells.Count > 0)
-                LoadPreview(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()), reloadFields);
+                LoadPreview(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString(), CultureInfo.InvariantCulture), reloadFields);
 
             reloadFields = false;
         }
@@ -2721,7 +2722,7 @@ namespace CSharp_MARC_Editor
             subfieldsDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].ErrorText = "";
 
             if (recordsDataGridView.SelectedCells.Count > 0)
-                LoadPreview(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()), reloadFields);
+                LoadPreview(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString(), CultureInfo.InvariantCulture), reloadFields);
 
             reloadFields = false;
         }
@@ -2754,7 +2755,7 @@ namespace CSharp_MARC_Editor
 
         private void fieldsDataGridView_UserAddedRow(object sender, DataGridViewRowEventArgs e)
         {
-            int recordID = Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString());
+            int recordID = Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString(), CultureInfo.InvariantCulture);
             e.Row.Cells[1].Value = recordID;
         }
 
@@ -2769,7 +2770,7 @@ namespace CSharp_MARC_Editor
             {
                 try
                 {
-                    int recordID = Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString());
+                    int recordID = Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString(), CultureInfo.InvariantCulture);
                     string tagNumber = fieldsDataGridView.Rows[e.RowIndex].Cells[2].Value.ToString();
                     string ind1 = fieldsDataGridView.Rows[e.RowIndex].Cells[3].Value.ToString();
                     string ind2 = fieldsDataGridView.Rows[e.RowIndex].Cells[4].Value.ToString();
@@ -2817,15 +2818,15 @@ namespace CSharp_MARC_Editor
             {
                 try
                 {
-                    int recordID = Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString());
-                    int fieldID = Int32.Parse(fieldsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString());
+                    int recordID = Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString(), CultureInfo.InvariantCulture);
+                    int fieldID = Int32.Parse(fieldsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString(), CultureInfo.InvariantCulture);
                     string tagNumber = fieldsDataGridView.SelectedCells[0].OwningRow.Cells[2].Value.ToString();
                     string code = subfieldsDataGridView.Rows[e.RowIndex].Cells[2].Value.ToString();
                     string data = subfieldsDataGridView.Rows[e.RowIndex].Cells[3].Value.ToString();
                     int sort = e.RowIndex;
 
                     if (e.RowIndex > 0)
-                        sort = Int32.Parse(subfieldsDataGridView.Rows[e.RowIndex - 1].Cells[4].Value.ToString());
+                        sort = Int32.Parse(subfieldsDataGridView.Rows[e.RowIndex - 1].Cells[4].Value.ToString(), CultureInfo.InvariantCulture);
 
                     using (SQLiteConnection connection = new SQLiteConnection(connectionString))
                     {
@@ -2874,11 +2875,11 @@ namespace CSharp_MARC_Editor
 
                     using (SQLiteCommand command = new SQLiteCommand(query, connection))
                     {
-                        command.Parameters.Add("@RecordID", DbType.Int32).Value = Int32.Parse(e.Row.Cells[0].Value.ToString());
+                        command.Parameters.Add("@RecordID", DbType.Int32).Value = Int32.Parse(e.Row.Cells[0].Value.ToString(), CultureInfo.InvariantCulture);
                         command.ExecuteNonQuery();
                     }
 
-                    RebuildRecordsPreviewInformation(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()));
+                    RebuildRecordsPreviewInformation(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString(), CultureInfo.InvariantCulture));
                 }
             }
         }
@@ -2900,11 +2901,11 @@ namespace CSharp_MARC_Editor
 
                     using (SQLiteCommand command = new SQLiteCommand(query, connection))
                     {
-                        command.Parameters.Add("@FieldID", DbType.Int32).Value = Int32.Parse(e.Row.Cells[0].Value.ToString());
+                        command.Parameters.Add("@FieldID", DbType.Int32).Value = Int32.Parse(e.Row.Cells[0].Value.ToString(), CultureInfo.InvariantCulture);
                         command.ExecuteNonQuery();
                     }
 
-                    RebuildRecordsPreviewInformation(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()));
+                    RebuildRecordsPreviewInformation(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString(), CultureInfo.InvariantCulture));
                 }
             }
         }
@@ -4584,8 +4585,8 @@ namespace CSharp_MARC_Editor
             if (fieldsDataGridView.SelectedCells.Count > 0)
             {
                 int index = fieldsDataGridView.SelectedCells[0].OwningRow.Index;
-                int fieldID = Int32.Parse(fieldsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString());
-                int otherFieldID = Int32.Parse(fieldsDataGridView.Rows[index - 1].Cells[0].Value.ToString());
+                int fieldID = Int32.Parse(fieldsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString(), CultureInfo.InvariantCulture);
+                int otherFieldID = Int32.Parse(fieldsDataGridView.Rows[index - 1].Cells[0].Value.ToString(), CultureInfo.InvariantCulture);
 
                 using (SQLiteConnection connection = new SQLiteConnection(connectionString))
                 {
@@ -4601,7 +4602,7 @@ namespace CSharp_MARC_Editor
                         command.Parameters["@FieldID"].Value = otherFieldID;
                         command.ExecuteNonQuery();
 
-                        LoadSubfields(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()));
+                        LoadSubfields(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString(), CultureInfo.InvariantCulture));
 
                         fieldsDataGridView.ClearSelection();
                         fieldsDataGridView.Rows[index - 1].Selected = true;
@@ -4618,8 +4619,8 @@ namespace CSharp_MARC_Editor
         private void fieldDownButton_Click(object sender, EventArgs e)
         {
             int index = fieldsDataGridView.SelectedCells[0].OwningRow.Index;
-            int fieldID = Int32.Parse(fieldsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString());
-            int otherFieldID = Int32.Parse(fieldsDataGridView.Rows[index - 1].Cells[0].Value.ToString());
+            int fieldID = Int32.Parse(fieldsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString(), CultureInfo.InvariantCulture);
+            int otherFieldID = Int32.Parse(fieldsDataGridView.Rows[index - 1].Cells[0].Value.ToString(), CultureInfo.InvariantCulture);
 
             using (SQLiteConnection connection = new SQLiteConnection(connectionString))
             {
@@ -4635,7 +4636,7 @@ namespace CSharp_MARC_Editor
                     command.Parameters["@FieldID"].Value = otherFieldID;
                     command.ExecuteNonQuery();
 
-                    LoadSubfields(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()));
+                    LoadSubfields(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString(), CultureInfo.InvariantCulture));
 
                     fieldsDataGridView.ClearSelection();
                     fieldsDataGridView.Rows[index + 1].Selected = true;
@@ -4652,7 +4653,7 @@ namespace CSharp_MARC_Editor
         {
             if (recordsDataGridView.SelectedCells.Count > 0)
             {
-                int recordID = Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString());
+                int recordID = Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString(), CultureInfo.InvariantCulture);
                 List<int> fields = new List<int>();
                 int i = 0;
 
@@ -4669,7 +4670,7 @@ namespace CSharp_MARC_Editor
                         {
                             while (reader.Read())
                             {
-                                fields.Add(Int32.Parse(reader["FieldID"].ToString()));
+                                fields.Add(Int32.Parse(reader["FieldID"].ToString(), CultureInfo.InvariantCulture));
                             }
                         }
 
@@ -4688,7 +4689,7 @@ namespace CSharp_MARC_Editor
                             i++;
                         }
 
-                        LoadFields(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()));
+                        LoadFields(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString(), CultureInfo.InvariantCulture));
                     }
                 }
             }
@@ -4740,8 +4741,8 @@ namespace CSharp_MARC_Editor
             if (subfieldsDataGridView.SelectedCells.Count > 0)
             {
                 int index = subfieldsDataGridView.SelectedCells[0].OwningRow.Index;
-                int fieldID = Int32.Parse(subfieldsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString());
-                int otherFieldID = Int32.Parse(subfieldsDataGridView.Rows[index + 1].Cells[0].Value.ToString());
+                int fieldID = Int32.Parse(subfieldsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString(), CultureInfo.InvariantCulture);
+                int otherFieldID = Int32.Parse(subfieldsDataGridView.Rows[index + 1].Cells[0].Value.ToString(), CultureInfo.InvariantCulture);
 
                 using (SQLiteConnection connection = new SQLiteConnection(connectionString))
                 {
@@ -4757,7 +4758,7 @@ namespace CSharp_MARC_Editor
                         command.Parameters["@SubfieldID"].Value = otherFieldID;
                         command.ExecuteNonQuery();
 
-                        LoadSubfields(Int32.Parse(fieldsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()));
+                        LoadSubfields(Int32.Parse(fieldsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString(), CultureInfo.InvariantCulture));
 
                         subfieldsDataGridView.ClearSelection();
                         subfieldsDataGridView.Rows[index + 1].Selected = true;

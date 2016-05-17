@@ -261,8 +261,9 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void listBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (((ListBox)sender).SelectedItems.Count > 1 && ((ListBox)sender).SelectedItems.Contains("Any"))
-                ((ListBox)sender).SelectedItems.Remove("Any");
+            ListBox box = (ListBox)sender;
+            if (box.SelectedItems.Count > 1 && box.SelectedItems.Contains("Any"))
+                box.SelectedItems.Remove("Any");
         }
 
         #endregion

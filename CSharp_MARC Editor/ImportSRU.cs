@@ -258,7 +258,6 @@ namespace CSharp_MARC_Editor
 		{
 			if (openFileDialog.ShowDialog() == DialogResult.OK)
 			{
-				List<Record> records = new List<Record>();
 				IEnumerable loopy = null;
 
 				if (openFileDialog.FileName.EndsWith(".mrc") || openFileDialog.FileName.EndsWith(".usm") || openFileDialog.FileName.EndsWith(".001"))
