@@ -54,6 +54,10 @@
  */ 
  
 2016-05-16 Changes:
+
+Fix issue exporting records
+
+2016-05-16 Changes:
  
 Improve speed of adding fields and subfields
 Speed up loading large datasets

@@ -7,6 +7,8 @@ This project is built upon the CSharp_MARC project of the same name available at
 ## Features
 
 * Easily read and view MARC records in a simple text based format
+* FAST and lightweight! Capable of importing 28,000 records a minute!
+* Can handle MARC Records of any size
 * Find and Replace with Regular Expression support with tag, indicator, and subfield level filtering
 * Export to MARC21 UTF8 or MARC8 encoding, MARCXML, or CSV file formats
 * Split large record sets into multiple files
@@ -17,6 +19,10 @@ This project is built upon the CSharp_MARC project of the same name available at
 * SQLite database backend - advanced users can connect with any SQLite client to do further SQL queries on the dataset
 
 ## Changelog:
+
+### 2016-05-16.1 Changes:
+
+* Fix issue exporting records
 
 ### 2016-05-16 Changes:
 
