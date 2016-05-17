@@ -2075,7 +2075,7 @@ namespace CSharp_MARC_Editor
         {
             using (SQLiteConnection fieldsConnection = new SQLiteConnection(connectionString))
             {
-                using (SQLiteCommand fieldsCommand = new SQLiteCommand("SELECT * FROM Fields WHERE RecordID = @RecordID ORDER BY CASE WHEN TagNumber = 'LDR' THEN 0 ELSE 1 END, Sort, TagNumber. FieldID", fieldsConnection))
+                using (SQLiteCommand fieldsCommand = new SQLiteCommand("SELECT * FROM Fields WHERE RecordID = @RecordID ORDER BY CASE WHEN TagNumber = 'LDR' THEN 0 ELSE 1 END, Sort, TagNumber, FieldID", fieldsConnection))
                 {
                     fieldsCommand.Connection.Open();
                     fieldsCommand.Parameters.Add("@RecordID", DbType.Int32);
