@@ -1520,7 +1520,7 @@ namespace CSharp_MARC_Editor
         /// <param name="values">The values.</param>
         public static void AddArrayParameters<T>(SQLiteCommand cmd, string name, IEnumerable<T> values)
         {
-            name = name.StartsWith("@") ? name : "@" + name;
+            name = name.StartsWith("@", StringComparison.InvariantCulture) ? name : "@" + name;
             var names = string.Join(", ", values.Select((value, i) =>
             {
                 var paramName = name + i;
@@ -1578,7 +1578,10 @@ namespace CSharp_MARC_Editor
             {
                 string[] split = args[0].ToString().Split(args[1].ToString().ToCharArray());
                 int args2 = -1;
-                Int32.TryParse(args[2].ToString(), out args2);
+
+                if (!Int32.TryParse(args[2].ToString(), out args2))
+                    args2 = -1;
+
                 if (args2 != -1 && args2 < split.Length)
                     return split[args2];
                 else
@@ -1964,7 +1967,7 @@ namespace CSharp_MARC_Editor
                     progressToolStripStatusLabel.Text = rebuildingPreview;
                     break;
                 default:
-                    progressToolStripStatusLabel.Text = e.ProgressPercentage.ToString();
+                    progressToolStripStatusLabel.Text = e.ProgressPercentage.ToString(CultureInfo.CurrentCulture);
                     break;
             }
         }
@@ -2200,7 +2203,7 @@ namespace CSharp_MARC_Editor
         {
             if (e.ProgressPercentage <= 100)
             {
-                progressToolStripStatusLabel.Text = e.ProgressPercentage.ToString() + "%";
+                progressToolStripStatusLabel.Text = e.ProgressPercentage.ToString(CultureInfo.CurrentCulture) + "%";
                 toolStripProgressBar.Value = e.ProgressPercentage;
             }
         }
@@ -2423,7 +2426,7 @@ namespace CSharp_MARC_Editor
         {
             if (e.ProgressPercentage <= 100)
             {
-                progressToolStripStatusLabel.Text = e.ProgressPercentage.ToString() + "%";
+                progressToolStripStatusLabel.Text = e.ProgressPercentage.ToString(CultureInfo.CurrentCulture) + "%";
                 toolStripProgressBar.Value = e.ProgressPercentage;
             }
         }
@@ -2601,7 +2604,7 @@ namespace CSharp_MARC_Editor
 
                         using (SQLiteCommand command = new SQLiteCommand("UPDATE Fields SET ControlData = @Data WHERE FieldID IN (SELECT FieldID FROM Fields WHERE RecordID = (SELECT RecordID FROM Fields WHERE FieldID = @FieldID) AND TagNumber = '005')", connection))
                         {
-                            command.Parameters.Add("@Data", DbType.String).Value = DateTime.Now.ToString("yyyyMMddHHmmss.f");
+                            command.Parameters.Add("@Data", DbType.String).Value = DateTime.Now.ToString("yyyyMMddHHmmss.f", CultureInfo.InvariantCulture);
                             command.Parameters.Add("@FieldID", DbType.Int32).Value = subfieldsDataGridView.Rows[e.RowIndex].Cells[1].Value.ToString();
                             command.ExecuteNonQuery();
                         }
@@ -2927,11 +2930,11 @@ namespace CSharp_MARC_Editor
 
                     using (SQLiteCommand command = new SQLiteCommand(query, connection))
                     {
-                        command.Parameters.Add("@SubfieldID", DbType.Int32).Value = Int32.Parse(e.Row.Cells[0].Value.ToString());
+                        command.Parameters.Add("@SubfieldID", DbType.Int32).Value = Int32.Parse(e.Row.Cells[0].Value.ToString(), CultureInfo.InvariantCulture);
                         command.ExecuteNonQuery();
                     }
 
-                    RebuildRecordsPreviewInformation(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()));
+                    RebuildRecordsPreviewInformation(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString(), CultureInfo.InvariantCulture));
                 }
             }
         }
@@ -3026,7 +3029,7 @@ namespace CSharp_MARC_Editor
 
                                 foreach (string ind1 in form.SelectedIndicator1s)
                                 {
-                                    string indicator = string.Format("@Ind1{0}", i);
+                                    string indicator = string.Format(CultureInfo.InvariantCulture, "@Ind1{0}", i);
                                     command.Parameters.Add(indicator, DbType.String).Value = ind1;
                                     whereClause.AppendFormat("{0}, ", indicator);
 
@@ -3052,7 +3055,7 @@ namespace CSharp_MARC_Editor
 
                                 foreach (string ind2 in form.SelectedIndicator2s)
                                 {
-                                    string indicator = string.Format("@Ind2{0}", i);
+                                    string indicator = string.Format(CultureInfo.InvariantCulture, "@Ind2{0}", i);
                                     command.Parameters.Add(indicator, DbType.String).Value = ind2;
                                     whereClause.AppendFormat("{0}, ", indicator);
 
@@ -3078,7 +3081,7 @@ namespace CSharp_MARC_Editor
 
                                 foreach (string code in form.SelectedCodes)
                                 {
-                                    string codeParam = string.Format("@Code{0}", i);
+                                    string codeParam = string.Format(CultureInfo.InvariantCulture, "@Code{0}", i);
                                     command.Parameters.Add(codeParam, DbType.String).Value = code;
                                     whereClause.AppendFormat("{0}, ", codeParam);
 
@@ -4360,7 +4363,7 @@ namespace CSharp_MARC_Editor
             else if (e.ProgressPercentage == 0)
                 progressToolStripStatusLabel.Text = "Converting Leader...";
             else
-                progressToolStripStatusLabel.Text = "Converting tag #" + e.ProgressPercentage.ToString().PadLeft(3, '0') + "...";
+                progressToolStripStatusLabel.Text = "Converting tag #" + e.ProgressPercentage.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0') + "...";
         }
 
         /// <summary>
@@ -4705,8 +4708,8 @@ namespace CSharp_MARC_Editor
             if (subfieldsDataGridView.SelectedCells.Count > 0)
             {
                 int index = subfieldsDataGridView.SelectedCells[0].OwningRow.Index;
-                int subfieldID = Int32.Parse(subfieldsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString());
-                int otherSubfieldID = Int32.Parse(subfieldsDataGridView.Rows[index - 1].Cells[0].Value.ToString());
+                int subfieldID = Int32.Parse(subfieldsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString(), CultureInfo.InvariantCulture);
+                int otherSubfieldID = Int32.Parse(subfieldsDataGridView.Rows[index - 1].Cells[0].Value.ToString(), CultureInfo.InvariantCulture);
 
                 using (SQLiteConnection connection = new SQLiteConnection(connectionString))
                 {
@@ -4722,7 +4725,7 @@ namespace CSharp_MARC_Editor
                         command.Parameters["@SubfieldID"].Value = otherSubfieldID;
                         command.ExecuteNonQuery();
 
-                        LoadSubfields(Int32.Parse(fieldsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()));
+                        LoadSubfields(Int32.Parse(fieldsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString(), CultureInfo.InvariantCulture));
 
                         subfieldsDataGridView.ClearSelection();
                         subfieldsDataGridView.Rows[index - 1].Selected = true;
@@ -4776,7 +4779,7 @@ namespace CSharp_MARC_Editor
         {
             if (fieldsDataGridView.SelectedCells.Count > 0)
             {
-                int fieldID = Int32.Parse(fieldsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString());
+                int fieldID = Int32.Parse(fieldsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString(), CultureInfo.InvariantCulture);
                 List<int> subfields = new List<int>();
                 int i = 0;
 
@@ -4793,7 +4796,7 @@ namespace CSharp_MARC_Editor
                         {
                             while (reader.Read())
                             {
-                                subfields.Add(Int32.Parse(reader["SubfieldID"].ToString()));
+                                subfields.Add(Int32.Parse(reader["SubfieldID"].ToString(), CultureInfo.InvariantCulture));
                             }
                         }
 
@@ -4812,7 +4815,7 @@ namespace CSharp_MARC_Editor
                             i++;
                         }
 
-                        LoadSubfields(Int32.Parse(fieldsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString()));
+                        LoadSubfields(Int32.Parse(fieldsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString(), CultureInfo.InvariantCulture));
                     }
                 }
             }
