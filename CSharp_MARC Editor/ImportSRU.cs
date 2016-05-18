@@ -260,14 +260,14 @@ namespace CSharp_MARC_Editor
 			{
 				IEnumerable loopy = null;
 
-				if (openFileDialog.FileName.EndsWith(".mrc") || openFileDialog.FileName.EndsWith(".usm") || openFileDialog.FileName.EndsWith(".001"))
+				if (openFileDialog.FileName.EndsWith(".mrc", StringComparison.OrdinalIgnoreCase) || openFileDialog.FileName.EndsWith(".usm", StringComparison.OrdinalIgnoreCase) || openFileDialog.FileName.EndsWith(".001", StringComparison.OrdinalIgnoreCase))
 				{
 					FileMARC import = new FileMARC();
 					import.ImportMARC(openFileDialog.FileName);
 
 					loopy = import;
 				}
-				else if (openFileDialog.FileName.EndsWith(".xml"))
+				else if (openFileDialog.FileName.EndsWith(".xml", StringComparison.OrdinalIgnoreCase))
 				{
 					FileMARCXML import = new FileMARCXML(XDocument.Load(openFileDialog.FileName));
 

@@ -62,7 +62,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>CSharp_MARC Keyfile.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>CSharp_MARC_sn.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -101,7 +101,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="CSharp_MARC Keyfile.snk" />
+    <None Include="CSharp_MARC_sn.pfx" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

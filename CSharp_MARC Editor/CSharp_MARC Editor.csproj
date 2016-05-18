@@ -31,8 +31,8 @@
     <ProductName>CSharp_MARC Editor</ProductName>
     <PublisherName>Matt Schraeder</PublisherName>
     <SuiteName>csharpmarc.net</SuiteName>
-    <ApplicationRevision>2</ApplicationRevision>
-    <ApplicationVersion>2016.05.16.%2a</ApplicationVersion>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>2016.05.18.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -92,7 +92,7 @@
     <ManifestCertificateThumbprint>F578A85CF28B31DEA388B3010C5854F036B5BECE</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>CSharp_MARC Keyfile.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>CSharp_MARC_sn.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <TargetZone>LocalIntranet</TargetZone>
@@ -217,7 +217,7 @@
     <Content Include="MARC.db">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="CSharp_MARC Keyfile.snk" />
+    <None Include="CSharp_MARC_sn.pfx" />
     <None Include="MARCDataSet.xsc">
       <DependentUpon>MARCDataSet.xsd</DependentUpon>
     </None>

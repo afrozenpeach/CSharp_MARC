@@ -414,7 +414,7 @@ namespace CSharp_MARC_Editor
 
                 foreach (DataGridViewRow row in fieldsDataGridView.Rows)
                 {
-                    if (!row.IsNewRow && row.Cells[2].Value.ToString().StartsWith("00") && !row.IsNewRow && row.Cells[2].Value.ToString().StartsWith("LDR"))
+                    if (!row.IsNewRow && row.Cells[2].Value.ToString().StartsWith("00", StringComparison.Ordinal) && !row.IsNewRow && row.Cells[2].Value.ToString().StartsWith("LDR", StringComparison.Ordinal))
                     {
                         row.Cells[3].Value = "-";
                         row.Cells[4].Value = "-";
@@ -1520,7 +1520,7 @@ namespace CSharp_MARC_Editor
         /// <param name="values">The values.</param>
         public static void AddArrayParameters<T>(SQLiteCommand cmd, string name, IEnumerable<T> values)
         {
-            name = name.StartsWith("@", StringComparison.InvariantCulture) ? name : "@" + name;
+            name = name.StartsWith("@", StringComparison.Ordinal) ? name : "@" + name;
             var names = string.Join(", ", values.Select((value, i) =>
             {
                 var paramName = name + i;
@@ -1769,7 +1769,7 @@ namespace CSharp_MARC_Editor
                 DataGridViewRow rowClicked = fieldsDataGridView.Rows[e.RowIndex];
                 if (!rowClicked.IsNewRow && rowClicked.Cells[0].Value.ToString() != "")
                 {
-                    if (rowClicked.Cells[2].Value.ToString().StartsWith("00") || rowClicked.Cells[2].Value.ToString() == "LDR")
+                    if (rowClicked.Cells[2].Value.ToString().StartsWith("00", StringComparison.Ordinal) || rowClicked.Cells[2].Value.ToString() == "LDR")
                         LoadControlField(Int32.Parse(rowClicked.Cells[0].Value.ToString(), CultureInfo.InvariantCulture), rowClicked.Cells[5].Value.ToString());
                     else
                         LoadSubfields(Int32.Parse(rowClicked.Cells[0].Value.ToString(), CultureInfo.InvariantCulture));
@@ -2126,7 +2126,7 @@ namespace CSharp_MARC_Editor
                                     {
                                         if (fieldsReader["TagNumber"].ToString() == "LDR")
                                             record.Leader = fieldsReader["ControlData"].ToString();
-                                        else if (fieldsReader["TagNumber"].ToString().StartsWith("00"))
+                                        else if (fieldsReader["TagNumber"].ToString().StartsWith("00", StringComparison.Ordinal))
                                         {
                                             ControlField controlField = new ControlField(fieldsReader["TagNumber"].ToString(), fieldsReader["ControlData"].ToString());
                                             record.Fields.Add(controlField);
@@ -2369,7 +2369,7 @@ namespace CSharp_MARC_Editor
                                             
                                             if (fieldsReader["TagNumber"].ToString() == "LDR")
                                             	columns["LDR"] = fieldsReader["ControlData"].ToString();
-                                            else if (fieldsReader["TagNumber"].ToString().StartsWith("00"))
+                                            else if (fieldsReader["TagNumber"].ToString().StartsWith("00", StringComparison.Ordinal))
                                             {
                                                 columns[fieldsReader["TagNumber"].ToString()] = fieldsReader["ControlData"].ToString();
                                             }
@@ -2466,9 +2466,9 @@ namespace CSharp_MARC_Editor
                     switch (e.ColumnIndex)
                     {
                         case 2:
-                            if (fieldsDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString().StartsWith("00") && !e.FormattedValue.ToString().StartsWith("00"))
+                            if (fieldsDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString().StartsWith("00", StringComparison.Ordinal) && !e.FormattedValue.ToString().StartsWith("00", StringComparison.Ordinal))
                                 throw new InvalidOperationException("Cannot change a control field to a data field.");
-                            else if (!fieldsDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString().StartsWith("00") && e.FormattedValue.ToString().StartsWith("00"))
+                            else if (!fieldsDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString().StartsWith("00", StringComparison.Ordinal) && e.FormattedValue.ToString().StartsWith("00", StringComparison.Ordinal))
                                 throw new InvalidOperationException("Cannot change a data field to a control field.");
                             else if (Field.ValidateTag(e.FormattedValue.ToString()))
                                 query += "tagnumber = @Value ";
@@ -2644,7 +2644,7 @@ namespace CSharp_MARC_Editor
                         break;
                     case 3:
                     case 4:
-                        if (tagNumber.StartsWith("00") || tagNumber == "")
+                        if (tagNumber.StartsWith("00", StringComparison.Ordinal) || tagNumber == "")
                         {
                             MessageBox.Show("Control Fields do not have indicators.", "Indicators are locked.", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             startEdit = false;
@@ -2778,7 +2778,7 @@ namespace CSharp_MARC_Editor
                     string ind1 = fieldsDataGridView.Rows[e.RowIndex].Cells[3].Value.ToString();
                     string ind2 = fieldsDataGridView.Rows[e.RowIndex].Cells[4].Value.ToString();
 
-                    if (!Field.ValidateTag(tagNumber) || (tagNumber.StartsWith("00") && (ind1 != "" || ind2 != "")))
+                    if (!Field.ValidateTag(tagNumber) || (tagNumber.StartsWith("00", StringComparison.Ordinal) && (ind1 != "" || ind2 != "")))
                     {
                         e.Cancel = true;
                         return;
@@ -3002,7 +3002,7 @@ namespace CSharp_MARC_Editor
 
                                 foreach (string tag in form.SelectedTags)
                                 {
-                                    string tagNumber = string.Format("@TagNumber{0}", i);
+                                    string tagNumber = string.Format(CultureInfo.InvariantCulture, "@TagNumber{0}", i);
                                     command.Parameters.Add(tagNumber, DbType.String).Value = tag;
                                     whereClause.AppendFormat("{0}, ", tagNumber);
 
