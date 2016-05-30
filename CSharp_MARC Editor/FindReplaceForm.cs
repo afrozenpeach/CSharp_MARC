@@ -186,7 +186,7 @@ namespace CSharp_MARC_Editor
             ind2ListBox.SelectedIndex = 0;
             codesListBox.SelectedIndex = 0;
 
-            using (SQLiteConnection connection = new SQLiteConnection(MainForm.connectionString))
+            using (SQLiteConnection connection = new SQLiteConnection(MainForm.ConnectionString))
             {
                 using (SQLiteCommand command = new SQLiteCommand(connection))
                 {

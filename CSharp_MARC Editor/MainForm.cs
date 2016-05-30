@@ -49,7 +49,7 @@ namespace CSharp_MARC_Editor
         #region Private member variables
 
         private FileMARCReader marcRecords;
-        public static string connectionString = "Data Source=MARC.db;Version=3";
+        public const string ConnectionString = "Data Source=MARC.db;Version=3";
 
         private string reloadingDB = "Reloading Database...";
         private string committingTransaction = "Committing Transaction...";
@@ -399,17 +399,19 @@ namespace CSharp_MARC_Editor
         {
             marcDataSet.Tables["Fields"].Rows.Clear();
 
-            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
             {
                 connection.Open();
                 string query = "SELECT * FROM Fields where RecordiD = @RecordID ORDER BY CASE WHEN TagNumber = 'LDR' THEN 0 ELSE 1 END, Sort, TagNumber, FieldID";
-                
+
                 using (SQLiteCommand command = new SQLiteCommand(query, connection))
                 {
                     command.Parameters.Add("@RecordID", DbType.Int32).Value = recordID;
-                    SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter(command);
-                    dataAdapter.Fill(marcDataSet, "Fields");
-                    fieldsDataGridView.DataSource = marcDataSet.Tables["Fields"];
+                    using (SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter(command))
+                    {
+                        dataAdapter.Fill(marcDataSet, "Fields");
+                        fieldsDataGridView.DataSource = marcDataSet.Tables["Fields"];
+                    }
                 }
 
                 foreach (DataGridViewRow row in fieldsDataGridView.Rows)
@@ -443,7 +445,7 @@ namespace CSharp_MARC_Editor
             codeDataGridViewTextBoxColumn.Visible = true;
             subfieldsDataGridView.AllowUserToAddRows = true;
 
-            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
             {
                 connection.Open();
                 string query = "SELECT * FROM Subfields where FieldID = @FieldID ORDER BY Sort, Code, SubfieldID";
@@ -451,9 +453,11 @@ namespace CSharp_MARC_Editor
                 using (SQLiteCommand command = new SQLiteCommand(query, connection))
                 {
                     command.Parameters.Add("@FieldID", DbType.Int32).Value = FieldID;
-                    SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter(command);
-                    dataAdapter.Fill(marcDataSet, "Subfields");
-                    subfieldsDataGridView.DataSource = marcDataSet.Tables["Subfields"];
+                    using (SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter(command))
+                    { 
+                        dataAdapter.Fill(marcDataSet, "Subfields");
+                        subfieldsDataGridView.DataSource = marcDataSet.Tables["Subfields"];
+                    }
                 }
             }
         }
@@ -466,14 +470,14 @@ namespace CSharp_MARC_Editor
         {
             Record record = new Record();
 
-            using (SQLiteConnection fieldsConnection = new SQLiteConnection(connectionString))
+            using (SQLiteConnection fieldsConnection = new SQLiteConnection(ConnectionString))
             {
                 using (SQLiteCommand fieldsCommand = new SQLiteCommand("SELECT * FROM Fields WHERE RecordID = @RecordID ORDER BY CASE WHEN TagNumber = 'LDR' THEN 0 ELSE 1 END, Sort, TagNumber, FieldID", fieldsConnection))
                 {
                     fieldsCommand.Connection.Open();
                     fieldsCommand.Parameters.Add("@RecordID", DbType.Int32);
 
-                    using (SQLiteConnection subfieldsConnection = new SQLiteConnection(connectionString))
+                    using (SQLiteConnection subfieldsConnection = new SQLiteConnection(ConnectionString))
                     {
                         using (SQLiteCommand subfieldsCommand = new SQLiteCommand("SELECT * FROM Subfields WHERE FieldID = @FieldID ORDER BY Sort, Code, SubfieldID", subfieldsConnection))
                         {
@@ -487,7 +491,7 @@ namespace CSharp_MARC_Editor
                                 {
                                     if (fieldsReader["TagNumber"].ToString() == "LDR")
                                     	record.Leader = fieldsReader["ControlData"].ToString();
-                                    else if (fieldsReader["TagNumber"].ToString().StartsWith("00"))
+                                    else if (fieldsReader["TagNumber"].ToString().StartsWith("00", StringComparison.Ordinal))
                                     {
                                         ControlField controlField = new ControlField(fieldsReader["TagNumber"].ToString(), fieldsReader["ControlData"].ToString());
                                         record.Fields.Add(controlField);
@@ -528,7 +532,7 @@ namespace CSharp_MARC_Editor
             if (recordsTableReload == true)
             {
                 DataRow newRow = GetRecordRow(record);
-                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
                 {
                     connection.Open();
 
@@ -618,7 +622,7 @@ namespace CSharp_MARC_Editor
                 if (File.Exists("MARC.db"))
                     File.Delete("MARC.db");
 
-                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
                 {
                     connection.Open();
 
@@ -715,7 +719,7 @@ namespace CSharp_MARC_Editor
             if (recordID != null)
                 whereRecordID = " AND RecordID = " + recordID;
 
-            using (SQLiteConnection readerConnection = new SQLiteConnection(connectionString))
+            using (SQLiteConnection readerConnection = new SQLiteConnection(ConnectionString))
             {
                 readerConnection.Open();
 
@@ -1299,7 +1303,7 @@ namespace CSharp_MARC_Editor
         /// </summary>
         private void LoadOptions()
         {
-            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
             {
                 connection.Open();
 
@@ -1392,7 +1396,7 @@ namespace CSharp_MARC_Editor
         {
             if (startEdit || rebuildingID != null)
             {
-                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
                 {
                     connection.Open();
 
@@ -1430,7 +1434,7 @@ namespace CSharp_MARC_Editor
             if (loading)
                 return;
 
-            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
             {
                 connection.Open();
 
@@ -1663,26 +1667,26 @@ namespace CSharp_MARC_Editor
                 marcDataSet.Tables["Fields"].Rows.Clear();
                 marcDataSet.Tables["Subfields"].Rows.Clear();
 
-                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
                 {
                     connection.Open();
 
                     using (SQLiteCommand command = new SQLiteCommand("SELECT * FROM Records", connection))
                     {
-                        SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter(command);
-                        dataAdapter.Fill(marcDataSet, "Records");
+                        using (SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter(command))
+                            dataAdapter.Fill(marcDataSet, "Records");
                     }
 
                     using (SQLiteCommand command = new SQLiteCommand("SELECT * FROM Fields WHERE 1 = 0", connection))
                     {
-                        SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter(command);
-                        dataAdapter.Fill(marcDataSet, "Fields");
+                        using (SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter(command))
+                            dataAdapter.Fill(marcDataSet, "Fields");
                     }
 
                     using (SQLiteCommand command = new SQLiteCommand("SELECT * FROM Subfields WHERE 1 = 0", connection))
                     {
-                        SQLiteDataAdapter recordsDataAdapter = new SQLiteDataAdapter(command);
-                        recordsDataAdapter.Fill(marcDataSet, "Subfields");
+                        using (SQLiteDataAdapter recordsDataAdapter = new SQLiteDataAdapter(command))
+                            recordsDataAdapter.Fill(marcDataSet, "Subfields");
                     }
                 }
             }
@@ -1829,7 +1833,7 @@ namespace CSharp_MARC_Editor
 
             int i = 0;
 
-            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
             {
                 connection.Open();
                 using (SQLiteCommand command = new SQLiteCommand(connection))
@@ -1991,15 +1995,19 @@ namespace CSharp_MARC_Editor
         {
             marcDataSet.Tables["Records"].Rows.Clear();
 
-            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
             {
                 using (SQLiteCommand command = new SQLiteCommand("SELECT * FROM Records", connection))
                 {
-                    SQLiteDataAdapter recordsDataAdapter = new SQLiteDataAdapter(command);
-                    recordsDataAdapter.Fill(marcDataSet, "Records");
-                    SQLiteCommandBuilder commandBuilder = new SQLiteCommandBuilder(recordsDataAdapter);
-                    recordsDataAdapter.InsertCommand = commandBuilder.GetInsertCommand();
-                    recordsDataGridView.DataSource = marcDataSet.Tables["Records"];
+                    using (SQLiteDataAdapter recordsDataAdapter = new SQLiteDataAdapter(command))
+                    {
+                        recordsDataAdapter.Fill(marcDataSet, "Records");
+                        using (SQLiteCommandBuilder commandBuilder = new SQLiteCommandBuilder(recordsDataAdapter))
+                        { 
+                            recordsDataAdapter.InsertCommand = commandBuilder.GetInsertCommand();
+                            recordsDataGridView.DataSource = marcDataSet.Tables["Records"];
+                        }
+                    }
                 }
             }
 
@@ -2078,13 +2086,13 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="DoWorkEventArgs"/> instance containing the event data.</param>
         private void exportingBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            using (SQLiteConnection fieldsConnection = new SQLiteConnection(connectionString))
+            using (SQLiteConnection fieldsConnection = new SQLiteConnection(ConnectionString))
             {
                 using (SQLiteCommand fieldsCommand = new SQLiteCommand("SELECT * FROM Fields WHERE RecordID = @RecordID ORDER BY CASE WHEN TagNumber = 'LDR' THEN 0 ELSE 1 END, Sort, TagNumber, FieldID", fieldsConnection))
                 {
                     fieldsCommand.Connection.Open();
                     fieldsCommand.Parameters.Add("@RecordID", DbType.Int32);
-                    using (SQLiteConnection subfieldsConnection = new SQLiteConnection(connectionString))
+                    using (SQLiteConnection subfieldsConnection = new SQLiteConnection(ConnectionString))
                     {
                         using (SQLiteCommand subfieldsCommand = new SQLiteCommand("SELECT * FROM Subfields WHERE FieldID = @FieldID ORDER BY Sort, Code, SubfieldID", subfieldsConnection))
                         {
@@ -2271,7 +2279,7 @@ namespace CSharp_MARC_Editor
         {
             Dictionary<string, string> columns = new Dictionary<string, string>();
             
-            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
             {
                 connection.Open();
 
@@ -2310,14 +2318,14 @@ namespace CSharp_MARC_Editor
                 }
             }
 
-            using (SQLiteConnection fieldsConnection = new SQLiteConnection(connectionString))
+            using (SQLiteConnection fieldsConnection = new SQLiteConnection(ConnectionString))
             {
                 using (SQLiteCommand fieldsCommand = new SQLiteCommand("SELECT * FROM Fields WHERE RecordID = @RecordID ORDER BY FieldID", fieldsConnection))
                 {
                     fieldsCommand.Connection.Open();
                     fieldsCommand.Parameters.Add("@RecordID", DbType.Int32);
 
-                    using (SQLiteConnection subfieldsConnection = new SQLiteConnection(connectionString))
+                    using (SQLiteConnection subfieldsConnection = new SQLiteConnection(ConnectionString))
                     {
                         using (SQLiteCommand subfieldsCommand = new SQLiteCommand("SELECT * FROM Subfields WHERE FieldID = @FieldID ORDER BY SubfieldID", subfieldsConnection))
                         {
@@ -2498,7 +2506,7 @@ namespace CSharp_MARC_Editor
 
                     query += "WHERE FieldID = @FieldID";
 
-                    using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                    using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
                     {
                         connection.Open();
 
@@ -2556,7 +2564,7 @@ namespace CSharp_MARC_Editor
 
                         query += "WHERE SubfieldID = @SubfieldID";
 
-                        using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                        using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
                         {
                             connection.Open();
 
@@ -2584,7 +2592,7 @@ namespace CSharp_MARC_Editor
 
                         query += "WHERE FieldID = @FieldID";
 
-                        using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                        using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
                         {
                             connection.Open();
 
@@ -2598,7 +2606,7 @@ namespace CSharp_MARC_Editor
                         }
                     }
 
-                    using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                    using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
                     {
                         connection.Open();
 
@@ -2741,7 +2749,7 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void createBlankRecordToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
             {
                 connection.Open();
 
@@ -2784,7 +2792,7 @@ namespace CSharp_MARC_Editor
                         return;
                     }
 
-                    using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                    using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
                     {
                         connection.Open();
 
@@ -2831,7 +2839,7 @@ namespace CSharp_MARC_Editor
                     if (e.RowIndex > 0)
                         sort = Int32.Parse(subfieldsDataGridView.Rows[e.RowIndex - 1].Cells[4].Value.ToString(), CultureInfo.InvariantCulture);
 
-                    using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                    using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
                     {
                         connection.Open();
 
@@ -2870,7 +2878,7 @@ namespace CSharp_MARC_Editor
         {
             if (e.Row.Cells[0].Value.ToString() != "")
             {
-                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
                 {
                     connection.Open();
 
@@ -2896,7 +2904,7 @@ namespace CSharp_MARC_Editor
         {
             if (e.Row.Cells[0].Value.ToString() != "")
             {
-                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
                 {
                     connection.Open();
 
@@ -2922,7 +2930,7 @@ namespace CSharp_MARC_Editor
         {
             if (e.Row.Cells[0].Value.ToString() != "")
             {
-                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
                 {
                     connection.Open();
 
@@ -2956,7 +2964,7 @@ namespace CSharp_MARC_Editor
                 {
                     DisableForm();
 
-                    using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                    using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
                     {
                         connection.Open();
                         using (SQLiteCommand command = new SQLiteCommand(connection))
@@ -3143,7 +3151,7 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="DoWorkEventArgs"/> instance containing the event data.</param>
         private void validationBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
             {
                 connection.Open();
 
@@ -3716,7 +3724,7 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="DoWorkEventArgs"/> instance containing the event data.</param>
         private void rdaConversionBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
             {
                 connection.Open();
 
@@ -4506,13 +4514,13 @@ namespace CSharp_MARC_Editor
             {
                 string line = linesToPrint[0];
 
-                if (line.StartsWith(START_OF_HEADING.ToString()))
+                if (line.StartsWith(START_OF_HEADING.ToString(), StringComparison.Ordinal))
                 {
                     currentHeader = line.Substring(1);
                     linesToPrint.Remove(line);
                     continue;
                 }
-                else if (line.StartsWith(NEW_PAGE.ToString()))
+                else if (line.StartsWith(NEW_PAGE.ToString(), StringComparison.Ordinal))
                 {
                     currentHeader = string.Empty;
                     linesToPrint.Remove(line);
@@ -4591,7 +4599,7 @@ namespace CSharp_MARC_Editor
                 int fieldID = Int32.Parse(fieldsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString(), CultureInfo.InvariantCulture);
                 int otherFieldID = Int32.Parse(fieldsDataGridView.Rows[index - 1].Cells[0].Value.ToString(), CultureInfo.InvariantCulture);
 
-                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
                 {
                     connection.Open();
 
@@ -4625,7 +4633,7 @@ namespace CSharp_MARC_Editor
             int fieldID = Int32.Parse(fieldsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString(), CultureInfo.InvariantCulture);
             int otherFieldID = Int32.Parse(fieldsDataGridView.Rows[index - 1].Cells[0].Value.ToString(), CultureInfo.InvariantCulture);
 
-            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
             {
                 connection.Open();
 
@@ -4660,7 +4668,7 @@ namespace CSharp_MARC_Editor
                 List<int> fields = new List<int>();
                 int i = 0;
 
-                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
                 {
                     connection.Open();
 
@@ -4711,7 +4719,7 @@ namespace CSharp_MARC_Editor
                 int subfieldID = Int32.Parse(subfieldsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString(), CultureInfo.InvariantCulture);
                 int otherSubfieldID = Int32.Parse(subfieldsDataGridView.Rows[index - 1].Cells[0].Value.ToString(), CultureInfo.InvariantCulture);
 
-                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
                 {
                     connection.Open();
 
@@ -4747,7 +4755,7 @@ namespace CSharp_MARC_Editor
                 int fieldID = Int32.Parse(subfieldsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString(), CultureInfo.InvariantCulture);
                 int otherFieldID = Int32.Parse(subfieldsDataGridView.Rows[index + 1].Cells[0].Value.ToString(), CultureInfo.InvariantCulture);
 
-                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
                 {
                     connection.Open();
 
@@ -4783,7 +4791,7 @@ namespace CSharp_MARC_Editor
                 List<int> subfields = new List<int>();
                 int i = 0;
 
-                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
                 {
                     connection.Open();
 
@@ -5036,7 +5044,7 @@ namespace CSharp_MARC_Editor
             {
                 DisableForm();
 
-                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
                 {
                     connection.Open();
 
