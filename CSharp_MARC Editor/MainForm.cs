@@ -3968,18 +3968,6 @@ namespace CSharp_MARC_Editor
                                             SET Data = (SELECT Data FROM TempUpdates WHERE TempUpdates.RecordID = Subfields.SubfieldID)
                                             WHERE SubfieldID IN (SELECT RecordID FROM TempUpdates); 
 
-                                            DELETE FROM TempUpdates;
-
-                                            INSERT INTO TempUpdates
-                                                SELECT s.SubfieldID, REPLACE(REPLACE(Data, 'cm.', 'cm'), 'mm.', 'mm')
-                                                FROM Subfields s
-                                                LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
-                                                WHERE f.TagNumber = @TagNumber and s.Code = @Code and (s.Data LIKE '%cm\.' ESCAPE '\' or s.Data LIKE '%mm\.') and (SELECT COUNT(*) FROM Fields WHERE RecordID = f.RecordID and TagNumber = '490') > 0;
-
-                                            UPDATE Subfields
-                                            SET Data = (SELECT Data FROM TempUpdates WHERE TempUpdates.RecordID = Subfields.SubfieldID)
-                                            WHERE SubfieldID IN (SELECT RecordID FROM TempUpdates);
-
                                             DELETE FROM TempUpdates;";
                     command.Parameters.Add("TagNumber", DbType.String).Value = "300";
                     command.Parameters.Add("Code", DbType.String).Value = "a";
@@ -4009,6 +3997,18 @@ namespace CSharp_MARC_Editor
                                             UPDATE Subfields
                                             SET Data = (SELECT Data FROM TempUpdates WHERE TempUpdates.RecordID = Subfields.SubfieldID)
                                             WHERE SubfieldID IN (SELECT RecordID FROM TempUpdates); 
+
+                                            DELETE FROM TempUpdates;
+
+                                            INSERT INTO TempUpdates
+                                                SELECT s.SubfieldID, REPLACE(REPLACE(Data, 'cm.', 'cm'), 'mm.', 'mm')
+                                                FROM Subfields s
+                                                LEFT OUTER JOIN Fields f on f.FieldID = s.FieldID
+                                                WHERE f.TagNumber = @TagNumber and s.Code = @Code and (s.Data LIKE '%cm\.' ESCAPE '\' or s.Data LIKE '%mm\.' ESCAPE '\') and (SELECT COUNT(*) FROM Fields f2 WHERE f2.RecordID = f.RecordID and f2.TagNumber = '490') = 0;
+
+                                            UPDATE Subfields
+                                            SET Data = (SELECT Data FROM TempUpdates WHERE TempUpdates.RecordID = Subfields.SubfieldID)
+                                            WHERE SubfieldID IN (SELECT RecordID FROM TempUpdates);
 
                                             DELETE FROM TempUpdates;";
                     command.Parameters.Add("TagNumber", DbType.String).Value = "300";
