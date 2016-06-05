@@ -20,6 +20,11 @@ This project is built upon the CSharp_MARC project of the same name available at
 
 ## Changelog:
 
+###2016-06-05 Changes:
+
+* Fix issue importing UTF8 records with some strange encoding issues
+* Add option to force UTF8 encoding
+
 ###2016-06-01 Changes:
 
 * Fix issue with RDA Conversion relating to 300c being changed from cm. and mm. to cm and mm

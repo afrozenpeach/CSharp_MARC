@@ -45,6 +45,7 @@ namespace MARC
 
 		private string filename = null;
         private FileStream reader = null;
+        private bool forceUTF8 = false;
 
         private string byteOrderMarkUtf8 = Encoding.UTF8.GetString(Encoding.UTF8.GetPreamble());
 
@@ -58,6 +59,13 @@ namespace MARC
 			this.filename = filename;
 			reader = new FileStream(this.filename, FileMode.Open, FileAccess.Read, FileShare.Read);
 		}
+
+        public FileMARCReader(string filename, bool forceUTF8)
+        {
+            this.forceUTF8 = forceUTF8;
+            this.filename = filename;
+            reader = new FileStream(this.filename, FileMode.Open, FileAccess.Read, FileShare.Read);
+        }
 
 		#endregion
 
@@ -105,7 +113,7 @@ namespace MARC
 					reader.Position = reader.Position - (RealReadSize - DelPosition);
 					char marc8utf8Flag = Convert.ToChar(ByteArray[9]);
 
-                    if (marc8utf8Flag == ' ')
+                    if (marc8utf8Flag == ' ' && !forceUTF8)
                     {
                         Encoding encoding = new MARC8();
                         encoded = encoding.GetString(ByteArray, 0, DelPosition);

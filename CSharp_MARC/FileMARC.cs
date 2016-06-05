@@ -202,12 +202,17 @@ namespace MARC
             {
                 //Check if there are multi-byte characters in the string
                 System.Globalization.StringInfo stringInfo = new System.Globalization.StringInfo(raw);
+                
                 int extraBytes = raw.Length - stringInfo.LengthInTextElements;
+                int extraBytes2 = Encoding.UTF8.GetByteCount(raw) - raw.Length;
 
                 if (recordLength == extraBytes + raw.Length)
                 {
-                    //There are multi-byte characters, so the recordLength is effectively longer
                     recordLength -= extraBytes;
+                }
+                else if (recordLength == extraBytes2 + raw.Length)
+                {
+                    recordLength -= extraBytes2;
                 }
                 else
                 {
@@ -299,17 +304,40 @@ namespace MARC
                 //Check if there are multi-byte characters in the string
                 System.Globalization.StringInfo stringInfo = new System.Globalization.StringInfo(tagData);
                 int extraBytes = fieldLength - stringInfo.LengthInTextElements;
+                int extraBytes2 = Encoding.UTF8.GetByteCount(tagData) - fieldLength;
+                int endOfFieldIndex = tagData.IndexOf(END_OF_FIELD);
 
-                if (extraBytes > 0)
+                if (tagData.Length - 1 != endOfFieldIndex)
                 {
-                    fieldLength -= extraBytes;
-                    totalExtraBytesRead += extraBytes;
-                    tagData = raw.Substring(fieldStart, fieldLength);
+                    int differenceLength = tagData.Length - 1 - endOfFieldIndex;
+
+                    if (differenceLength != extraBytes && differenceLength != extraBytes2)
+                    {
+                        fieldLength -= differenceLength;
+                        totalExtraBytesRead += differenceLength;
+                        tagData = raw.Substring(fieldStart, endOfFieldIndex + 1);
+                    }
+                    else
+                    {
+                        if (extraBytes > 0)
+                        {
+                            fieldLength -= extraBytes;
+                            totalExtraBytesRead += extraBytes;
+                            tagData = raw.Substring(fieldStart, fieldLength);
+                        }
+                        else if (extraBytes2 > 0)
+                        {
+                            fieldLength -= extraBytes2;
+                            totalExtraBytesRead += extraBytes2;
+                            tagData = raw.Substring(fieldStart, fieldLength);
+                        }
+                    }
                 }
 
                 if (fieldLength > 0)
                 {
-                    if (tagData.Substring(tagData.Length - 1, 1) == END_OF_FIELD.ToString())
+                    string endCharacter = tagData.Substring(tagData.Length - 1, 1);
+                    if (endCharacter == END_OF_FIELD.ToString())
                     {
                         //Get rid of the end of tag character
                         tagData = tagData.Remove(tagData.Length - 1);

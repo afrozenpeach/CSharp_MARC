@@ -674,7 +674,8 @@ namespace CSharp_MARC_Editor
                                                     [CustomData4] nvarchar(2147483647), 
                                                     [CustomTag5] nvarchar(3), 
                                                     [CustomCode5] varchar(1), 
-                                                    [CustomData5] nvarchar(2147483647));
+                                                    [CustomData5] nvarchar(2147483647))
+                                                    [ForceUTF8Import] bool;
 
                                                 CREATE TABLE [Subfields](
                                                     [SubfieldID] integer PRIMARY KEY ASC AUTOINCREMENT NOT NULL, 
@@ -1468,12 +1469,13 @@ namespace CSharp_MARC_Editor
                     command.Parameters.Add("@CustomTag5", DbType.String).Value = customFieldsForm.TagNumber5;
                     command.Parameters.Add("@CustomCode5", DbType.String).Value = customFieldsForm.Code5;
                     command.Parameters.Add("@CustomData5", DbType.String).Value = customFieldsForm.Data5;
+                    command.Parameters.Add("@ForceUTF8Import", DbType.Boolean).Value = forceUTF8ImportToolStripMenuItem.Checked;
 
                     int changes = command.ExecuteNonQuery();
 
                     if (changes == 0)
                     {
-                        command.CommandText = "INSERT INTO Settings (RecordListAtTop, ClearDatabaseOnExit, ExportFormat, CustomTag1, CustomCode1, CustomData1, CustomTag2, CustomCode2, CustomData2, CustomTag3, CustomCode3, CustomData3, CustomTag4, CustomCode4, CustomData4, CustomTag5, CustomCode5, CustomData5) VALUES (@RecordListAtTop, @ClearDatabaseOnExit, @ExportFormat, @CustomTag1, @CustomCode1, @CustomData1, @CustomTag2, @CustomCode2, @CustomData2, @CustomTag3, @CustomCode3, @CustomData3, @CustomTag4, @CustomCode4, @CustomData4, @CustomTag5, @CustomCode5, @CustomData5)";
+                        command.CommandText = "INSERT INTO Settings (RecordListAtTop, ClearDatabaseOnExit, ExportFormat, CustomTag1, CustomCode1, CustomData1, CustomTag2, CustomCode2, CustomData2, CustomTag3, CustomCode3, CustomData3, CustomTag4, CustomCode4, CustomData4, CustomTag5, CustomCode5, CustomData5, ForceUTF8Import) VALUES (@RecordListAtTop, @ClearDatabaseOnExit, @ExportFormat, @CustomTag1, @CustomCode1, @CustomData1, @CustomTag2, @CustomCode2, @CustomData2, @CustomTag3, @CustomCode3, @CustomData3, @CustomTag4, @CustomCode4, @CustomData4, @CustomTag5, @CustomCode5, @CustomData5, @ForceUTF8Import)";
                         command.ExecuteNonQuery();
                     }
                 }
@@ -1822,7 +1824,7 @@ namespace CSharp_MARC_Editor
 
             if (e.Argument.GetType() == typeof(string))
             {
-                marcRecords = new FileMARCReader(e.Argument.ToString());
+                marcRecords = new FileMARCReader(e.Argument.ToString(), forceUTF8ImportToolStripMenuItem.Checked);
                 recordEnumerator = marcRecords;
             }
             else
@@ -4908,6 +4910,25 @@ namespace CSharp_MARC_Editor
             {
                 recordListAtTopToolStripMenuItem.Checked = true;
                 splitContainer.Orientation = Orientation.Horizontal;
+            }
+
+            SaveOptions();
+        }
+
+        /// <summary>
+        /// Handles the Click event of the forceUTF8ImportToolStripMenuItem control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void forceUTF8ImportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (forceUTF8ImportToolStripMenuItem.Checked)
+            {
+                forceUTF8ImportToolStripMenuItem.Checked = false;
+            }
+            else
+            {
+                forceUTF8ImportToolStripMenuItem.Checked = true;
             }
 
             SaveOptions();
