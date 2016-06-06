@@ -66,7 +66,7 @@
             this.ClientSize = new System.Drawing.Size(1030, 493);
             this.Controls.Add(this.reportViewer);
             this.Name = "ReportForm";
-            this.Text = "ReportForm";
+            this.Text = "Report Preview";
             this.Shown += new System.EventHandler(this.ReportForm_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.mARCDataSet)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mARCDataSetBindingSource)).EndInit();

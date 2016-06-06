@@ -41,6 +41,7 @@ using System.Collections;
 using System.Net;
 using System.Xml.Linq;
 using System.Diagnostics;
+using System.Collections.ObjectModel;
 
 namespace CSharp_MARC_Editor
 {
@@ -51,11 +52,11 @@ namespace CSharp_MARC_Editor
 		/// <summary>
 		/// Gets the selected record.
 		/// </summary>
-		public List<Record> SelectedRecords
+		public Collection<Record> SelectedRecords
 		{
 			get 
             {
-                List<Record> selectedRecords = new List<Record>();
+                Collection<Record> selectedRecords = new Collection<Record>();
                 
                 foreach (DataGridViewRow row in searchResultsDataGridView.SelectedRows)
                     selectedRecords.Add((Record)row.Tag);
@@ -176,7 +177,7 @@ namespace CSharp_MARC_Editor
 		{
 			searchResultsDataGridView.Rows.Clear();
 
-			if (isbnTextBox.Text != string.Empty || lccnTextBox.Text != string.Empty || titleTextBox.Text != string.Empty || authorTextBox.Text != string.Empty)
+			if (!String.IsNullOrEmpty(isbnTextBox.Text)|| !String.IsNullOrEmpty(lccnTextBox.Text) || !String.IsNullOrEmpty(titleTextBox.Text) || !String.IsNullOrEmpty(authorTextBox.Text))
 			{
 				searchGroupBox.Enabled = false;
 				searchButton.Text = "Searching ...";
@@ -275,7 +276,7 @@ namespace CSharp_MARC_Editor
 				}
 				else
 				{
-					switch(MessageBox.Show("Unable to import records from the selected file." + Environment.NewLine + Environment.NewLine + "If this is a MARC21 File click 'YES'" + Environment.NewLine + "If this is a MARCXML file click 'NO'" + Environment.NewLine + "Otherwise hit 'CANCEL'", "Unkonwn filetype.", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Asterisk))
+					switch(MessageBox.Show("Unable to import records from the selected file." + Environment.NewLine + Environment.NewLine + "If this is a MARC21 File click 'YES'" + Environment.NewLine + "If this is a MARCXML file click 'NO'" + Environment.NewLine + "Otherwise hit 'CANCEL'", "Unknown filetype.", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Asterisk))
 					{
 						case DialogResult.Yes:
 							FileMARC import = new FileMARC();

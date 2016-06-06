@@ -170,35 +170,35 @@ namespace CSharp_MARC_Editor
                 subfield949i = datafield['i'];
             }
 
-            if (customFieldsForm.TagNumber1 != "")
+            if (!String.IsNullOrEmpty(customFieldsForm.TagNumber1))
             {
                 datafield = (DataField)record[customFieldsForm.TagNumber1];
                 if (datafield != null)
                     subfieldCustom1 = datafield[customFieldsForm.Code1[0]];
             }
 
-            if (customFieldsForm.TagNumber2 != "")
+            if (!String.IsNullOrEmpty(customFieldsForm.TagNumber2))
             {
                 datafield = (DataField)record[customFieldsForm.TagNumber2];
                 if (datafield != null)
                     subfieldCustom1 = datafield[customFieldsForm.Code1[0]];
             }
 
-            if (customFieldsForm.TagNumber3 != "")
+            if (!String.IsNullOrEmpty(customFieldsForm.TagNumber3))
             {
                 datafield = (DataField)record[customFieldsForm.TagNumber3];
                 if (datafield != null)
                     subfieldCustom1 = datafield[customFieldsForm.Code1[0]];
             }
 
-            if (customFieldsForm.TagNumber4 != "")
+            if (!String.IsNullOrEmpty(customFieldsForm.TagNumber4))
             {
                 datafield = (DataField)record[customFieldsForm.TagNumber4];
                 if (datafield != null)
                     subfieldCustom1 = datafield[customFieldsForm.Code1[0]];
             }
 
-            if (customFieldsForm.TagNumber5 != "")
+            if (!String.IsNullOrEmpty(customFieldsForm.TagNumber5))
             {
                 datafield = (DataField)record[customFieldsForm.TagNumber5];
                 if (datafield != null)
@@ -223,7 +223,7 @@ namespace CSharp_MARC_Editor
             if (copyright != null && copyright.Length > 4)
                 copyright = copyright.Substring(0, 4);
 
-            if (copyright == "")
+            if (String.IsNullOrEmpty(copyright))
                 copyright = null;
 
             if (subfield852p != null)
@@ -284,7 +284,7 @@ namespace CSharp_MARC_Editor
 
             if (subfieldCustom1 != null)
             {
-                if (customFieldsForm.Data1 == "")
+                if (String.IsNullOrEmpty(customFieldsForm.Data1))
                     custom1 = subfieldCustom1.Data;
                 else
                 {
@@ -298,7 +298,7 @@ namespace CSharp_MARC_Editor
 
             if (subfieldCustom2 != null)
             {
-                if (customFieldsForm.Data2 == "")
+                if (String.IsNullOrEmpty(customFieldsForm.Data2))
                     custom2 = subfieldCustom2.Data;
                 else
                 {
@@ -312,7 +312,7 @@ namespace CSharp_MARC_Editor
 
             if (subfieldCustom3 != null)
             {
-                if (customFieldsForm.Data3 == "")
+                if (String.IsNullOrEmpty(customFieldsForm.Data3))
                     custom3 = subfieldCustom3.Data;
                 else
                 {
@@ -326,7 +326,7 @@ namespace CSharp_MARC_Editor
 
             if (subfieldCustom4 != null)
             {
-                if (customFieldsForm.Data4 == "")
+                if (String.IsNullOrEmpty(customFieldsForm.Data4))
                     custom4 = subfieldCustom4.Data;
                 else
                 {
@@ -340,7 +340,7 @@ namespace CSharp_MARC_Editor
 
             if (subfieldCustom5 != null)
             {
-                if (customFieldsForm.Data5 == "")
+                if (String.IsNullOrEmpty(customFieldsForm.Data5))
                     custom5 = subfieldCustom5.Data;
                 else
                 {
@@ -1089,9 +1089,9 @@ namespace CSharp_MARC_Editor
                         command.ExecuteNonQuery();
                     }
 
-                    if (customFieldsForm.TagNumber1 != "" && (tagNumber == "customOnly" || tagNumber == customFieldsForm.TagNumber1))
+                    if (!String.IsNullOrEmpty(customFieldsForm.TagNumber1) && (tagNumber == "customOnly" || tagNumber == customFieldsForm.TagNumber1))
                     {
-                        if (customFieldsForm.Data1 != "")
+                        if (!String.IsNullOrEmpty(customFieldsForm.Data1))
                         {
                             command.CommandText = @"INSERT INTO TempUpdates
                                                       SELECT f.RecordID, REGEXMATCH(Data, @Data)
@@ -1130,9 +1130,9 @@ namespace CSharp_MARC_Editor
                         }
                     }
 
-                    if (customFieldsForm.TagNumber2 != "" && (tagNumber == "customOnly" || tagNumber == customFieldsForm.TagNumber2))
+                    if (!String.IsNullOrEmpty(customFieldsForm.TagNumber2) && (tagNumber == "customOnly" || tagNumber == customFieldsForm.TagNumber2))
                     {
-                        if (customFieldsForm.Data2 != "")
+                        if (!String.IsNullOrEmpty(customFieldsForm.Data2))
                         {
                             command.CommandText = @"INSERT INTO TempUpdates
                                                       SELECT f.RecordID, REGEXMATCH(Data, @Data)
@@ -1171,9 +1171,9 @@ namespace CSharp_MARC_Editor
                         }
                     }
 
-                    if (customFieldsForm.TagNumber3 != "" && (tagNumber == "customOnly" || tagNumber == customFieldsForm.TagNumber3))
+                    if (!String.IsNullOrEmpty(customFieldsForm.TagNumber3) && (tagNumber == "customOnly" || tagNumber == customFieldsForm.TagNumber3))
                     {
-                        if (customFieldsForm.Data3 != "")
+                        if (!String.IsNullOrEmpty(customFieldsForm.Data3))
                         {
                             command.CommandText = @"INSERT INTO TempUpdates
                                                       SELECT f.RecordID, REGEXMATCH(Data, @Data)
@@ -1212,9 +1212,9 @@ namespace CSharp_MARC_Editor
                         }
                     }
 
-                    if (customFieldsForm.TagNumber4 != "" && (tagNumber == "customOnly" || tagNumber == customFieldsForm.TagNumber4))
+                    if (!String.IsNullOrEmpty(customFieldsForm.TagNumber4) && (tagNumber == "customOnly" || tagNumber == customFieldsForm.TagNumber4))
                     {
-                        if (customFieldsForm.Data4 != "")
+                        if (!String.IsNullOrEmpty(customFieldsForm.Data4))
                         {
                             command.CommandText = @"INSERT INTO TempUpdates
                                                       SELECT f.RecordID, REGEXMATCH(Data, @Data)
@@ -1253,9 +1253,9 @@ namespace CSharp_MARC_Editor
                         }
                     }
 
-                    if (customFieldsForm.TagNumber5 != "" && (tagNumber == "customOnly" || tagNumber == customFieldsForm.TagNumber5))
+                    if (!String.IsNullOrEmpty(customFieldsForm.TagNumber5) && (tagNumber == "customOnly" || tagNumber == customFieldsForm.TagNumber5))
                     {
-                        if (customFieldsForm.Data5 != "")
+                        if (!String.IsNullOrEmpty(customFieldsForm.Data5))
                         {
                             command.CommandText = @"INSERT INTO TempUpdates
                                                       SELECT f.RecordID, REGEXMATCH(Data, @Data)
@@ -1773,7 +1773,7 @@ namespace CSharp_MARC_Editor
             if (e.RowIndex >= 0)
             {
                 DataGridViewRow rowClicked = fieldsDataGridView.Rows[e.RowIndex];
-                if (!rowClicked.IsNewRow && rowClicked.Cells[0].Value.ToString() != "")
+                if (!rowClicked.IsNewRow && !String.IsNullOrEmpty(rowClicked.Cells[0].Value.ToString()))
                 {
                     if (rowClicked.Cells[2].Value.ToString().StartsWith("00", StringComparison.Ordinal) || rowClicked.Cells[2].Value.ToString() == "LDR")
                         LoadControlField(Int32.Parse(rowClicked.Cells[0].Value.ToString(), CultureInfo.InvariantCulture), rowClicked.Cells[5].Value.ToString());
@@ -2639,7 +2639,7 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="DataGridViewCellCancelEventArgs"/> instance containing the event data.</param>
         private void fieldsDataGridView_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
         {
-            if (!loading && fieldsDataGridView.Rows[e.RowIndex].Cells[0].Value.ToString() != "")
+            if (!loading && !String.IsNullOrEmpty(fieldsDataGridView.Rows[e.RowIndex].Cells[0].Value.ToString()))
             {
                 string tagNumber = fieldsDataGridView.Rows[e.RowIndex].Cells[2].Value.ToString();
                 switch (e.ColumnIndex)
@@ -2654,7 +2654,7 @@ namespace CSharp_MARC_Editor
                         break;
                     case 3:
                     case 4:
-                        if (tagNumber.StartsWith("00", StringComparison.Ordinal) || tagNumber == "")
+                        if (tagNumber.StartsWith("00", StringComparison.Ordinal) || String.IsNullOrEmpty(tagNumber))
                         {
                             MessageBox.Show("Control Fields do not have indicators.", "Indicators are locked.", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             startEdit = false;
@@ -2682,7 +2682,7 @@ namespace CSharp_MARC_Editor
                 return;
             }
 
-            if (!loading && subfieldsDataGridView.Rows[e.RowIndex].Cells[0].Value.ToString() != "")
+            if (!loading && !String.IsNullOrEmpty(subfieldsDataGridView.Rows[e.RowIndex].Cells[0].Value.ToString()))
                 startEdit = true;
         }
 
@@ -2779,7 +2779,7 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="DataGridViewCellCancelEventArgs"/> instance containing the event data.</param>
         private void fieldsDataGridView_RowValidating(object sender, DataGridViewCellCancelEventArgs e)
         {
-            if (!loading && !fieldsDataGridView.Rows[e.RowIndex].IsNewRow && fieldsDataGridView.Rows[e.RowIndex].Cells[0].Value.ToString() == "")
+            if (!loading && !fieldsDataGridView.Rows[e.RowIndex].IsNewRow && String.IsNullOrEmpty(fieldsDataGridView.Rows[e.RowIndex].Cells[0].Value.ToString()))
             {
                 try
                 {
@@ -2788,7 +2788,7 @@ namespace CSharp_MARC_Editor
                     string ind1 = fieldsDataGridView.Rows[e.RowIndex].Cells[3].Value.ToString();
                     string ind2 = fieldsDataGridView.Rows[e.RowIndex].Cells[4].Value.ToString();
 
-                    if (!Field.ValidateTag(tagNumber) || (tagNumber.StartsWith("00", StringComparison.Ordinal) && (ind1 != "" || ind2 != "")))
+                    if (!Field.ValidateTag(tagNumber) || (tagNumber.StartsWith("00", StringComparison.Ordinal) && (!String.IsNullOrEmpty(ind1) || !String.IsNullOrEmpty(ind2))))
                     {
                         e.Cancel = true;
                         return;
@@ -2827,7 +2827,7 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="DataGridViewCellCancelEventArgs"/> instance containing the event data.</param>
         private void subfieldsDataGridView_RowValidating(object sender, DataGridViewCellCancelEventArgs e)
         {
-            if (!loading && !subfieldsDataGridView.Rows[e.RowIndex].IsNewRow && subfieldsDataGridView.Rows[e.RowIndex].Cells[0].Value.ToString() == "")
+            if (!loading && !subfieldsDataGridView.Rows[e.RowIndex].IsNewRow && String.IsNullOrEmpty(subfieldsDataGridView.Rows[e.RowIndex].Cells[0].Value.ToString()))
             {
                 try
                 {
@@ -2878,7 +2878,7 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="DataGridViewRowCancelEventArgs"/> instance containing the event data.</param>
         private void recordsDataGridView_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
         {
-            if (e.Row.Cells[0].Value.ToString() != "")
+            if (!String.IsNullOrEmpty(e.Row.Cells[0].Value.ToString()))
             {
                 using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
                 {
@@ -2904,7 +2904,7 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="DataGridViewRowCancelEventArgs"/> instance containing the event data.</param>
         private void fieldsDataGridView_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
         {
-            if (e.Row.Cells[0].Value.ToString() != "")
+            if (!String.IsNullOrEmpty(e.Row.Cells[0].Value.ToString()))
             {
                 using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
                 {
@@ -2930,7 +2930,7 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="DataGridViewRowCancelEventArgs"/> instance containing the event data.</param>
         private void subfieldsDataGridView_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
         {
-            if (e.Row.Cells[0].Value.ToString() != "")
+            if (!String.IsNullOrEmpty(e.Row.Cells[0].Value.ToString()))
             {
                 using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
                 {
@@ -4533,7 +4533,7 @@ namespace CSharp_MARC_Editor
                     break;
                 }
 
-                if (newPage && currentHeader != string.Empty)
+                if (newPage && !String.IsNullOrEmpty(currentHeader))
                 {
                     e.Graphics.DrawString(currentHeader, headerFont, Brushes.Black, new RectangleF(15, 15, e.MarginBounds.Size.Width + 30, e.MarginBounds.Size.Height));
                     newPage = false;

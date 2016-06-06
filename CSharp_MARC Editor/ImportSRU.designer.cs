@@ -296,7 +296,7 @@ namespace CSharp_MARC_Editor
             // 
             // openFileDialog
             // 
-            this.openFileDialog.Filter = "MARC Files|*.mrc;*.usm;*.001;*.xml;";
+            this.openFileDialog.Filter = "MARC Files|*.mrc;*.usm;*.001;*.xml;*.marc";
             // 
             // serverGroupBox
             // 

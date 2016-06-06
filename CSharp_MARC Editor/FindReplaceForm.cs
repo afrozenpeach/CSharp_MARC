@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Data.SQLite;
+using System.Collections.ObjectModel;
 
 namespace CSharp_MARC_Editor
 {
@@ -20,11 +21,11 @@ namespace CSharp_MARC_Editor
         /// <value>
         /// The selected tags.
         /// </value>
-        public List<string> SelectedTags
+        public Collection<string> SelectedTags
         {
             get
             {
-                List<string> selectedTags = new List<string>();
+                Collection<string> selectedTags = new Collection<string>();
                 
                 foreach (string item in tagsListBox.SelectedItems)
                     selectedTags.Add(item);
@@ -39,11 +40,11 @@ namespace CSharp_MARC_Editor
         /// <value>
         /// The selected indicator1s.
         /// </value>
-        public List<string> SelectedIndicator1s
+        public Collection<string> SelectedIndicator1s
         {
             get
             {
-                List<string> selectedIndicators = new List<string>();
+                Collection<string> selectedIndicators = new Collection<string>();
 
                 foreach (object item in ind1ListBox.Items)
                 {
@@ -61,11 +62,11 @@ namespace CSharp_MARC_Editor
         /// <value>
         /// The selected indicator2s.
         /// </value>
-        public List<string> SelectedIndicator2s
+        public Collection<string> SelectedIndicator2s
         {
             get
             {
-                List<string> selectedIndicators = new List<string>();
+                Collection<string> selectedIndicators = new Collection<string>();
 
                 foreach (object item in ind2ListBox.Items)
                 {
@@ -83,11 +84,11 @@ namespace CSharp_MARC_Editor
         /// <value>
         /// The selected codes.
         /// </value>
-        public List<string> SelectedCodes
+        public Collection<string> SelectedCodes
         {
             get
             {
-                List<string> selectedCodes = new List<string>();
+                Collection<string> selectedCodes = new Collection<string>();
 
                 foreach (string item in codesListBox.Items)
                     selectedCodes.Add(item);
