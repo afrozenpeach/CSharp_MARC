@@ -1361,28 +1361,34 @@ namespace CSharp_MARC_Editor
                         }
                         else
                         {
-                            reader.Close();
-                            command.CommandText = "INSERT INTO Settings (RecordListAtTop, ClearDatabaseOnExit, ExportFormat, CustomTag1, CustomCode1, CustomData1, CustomTag2, CustomCode2, CustomData2, CustomTag3, CustomCode3, CustomData3, CustomTag4, CustomCode4, CustomData4, CustomTag5, CustomCode5, CustomData5) VALUES (@RecordListAtTop, @ClearDatabaseOnExit, @ExportFormat, @CustomTag1, @CustomCode1, @CustomData1, @CustomTag2, @CustomCode2, @CustomData2, @CustomTag3, @CustomCode3, @CustomData3, @CustomTag4, @CustomCode4, @CustomData4, @CustomTag5, @CustomCode5, @CustomData5)";
-                            command.Parameters.Add("@RecordListAtTop", DbType.Boolean).Value = true;
-                            command.Parameters.Add("@ClearDatabaseOnExit", DbType.Boolean).Value = false;
-                            command.Parameters.Add("@ExportFormat", DbType.Boolean).Value = 'U';
-                            command.Parameters.Add("@CustomTag1", DbType.String).Value = customFieldsForm.TagNumber1;
-                            command.Parameters.Add("@CustomCode1", DbType.String).Value = customFieldsForm.Code1;
-                            command.Parameters.Add("@CustomData1", DbType.String).Value = customFieldsForm.Data1;
-                            command.Parameters.Add("@CustomTag2", DbType.String).Value = customFieldsForm.TagNumber2;
-                            command.Parameters.Add("@CustomCode2", DbType.String).Value = customFieldsForm.Code2;
-                            command.Parameters.Add("@CustomData2", DbType.String).Value = customFieldsForm.Data2;
-                            command.Parameters.Add("@CustomTag3", DbType.String).Value = customFieldsForm.TagNumber3;
-                            command.Parameters.Add("@CustomCode3", DbType.String).Value = customFieldsForm.Code3;
-                            command.Parameters.Add("@CustomData3", DbType.String).Value = customFieldsForm.Data3;
-                            command.Parameters.Add("@CustomTag4", DbType.String).Value = customFieldsForm.TagNumber4;
-                            command.Parameters.Add("@CustomCode4", DbType.String).Value = customFieldsForm.Code4;
-                            command.Parameters.Add("@CustomData4", DbType.String).Value = customFieldsForm.Data4;
-                            command.Parameters.Add("@CustomTag5", DbType.String).Value = customFieldsForm.TagNumber5;
-                            command.Parameters.Add("@CustomCode5", DbType.String).Value = customFieldsForm.Code5;
-                            command.Parameters.Add("@CustomData5", DbType.String).Value = customFieldsForm.Data5;
+                            using (SQLiteConnection connection2 = new SQLiteConnection(ConnectionString))
+                            {
+                                connection.Open();
 
-                            command.ExecuteNonQuery();
+                                using (SQLiteCommand command2 = new SQLiteCommand("INSERT INTO Settings (RecordListAtTop, ClearDatabaseOnExit, ExportFormat, CustomTag1, CustomCode1, CustomData1, CustomTag2, CustomCode2, CustomData2, CustomTag3, CustomCode3, CustomData3, CustomTag4, CustomCode4, CustomData4, CustomTag5, CustomCode5, CustomData5) VALUES (@RecordListAtTop, @ClearDatabaseOnExit, @ExportFormat, @CustomTag1, @CustomCode1, @CustomData1, @CustomTag2, @CustomCode2, @CustomData2, @CustomTag3, @CustomCode3, @CustomData3, @CustomTag4, @CustomCode4, @CustomData4, @CustomTag5, @CustomCode5, @CustomData5)", connection))
+                                {
+                                    command2.Parameters.Add("@RecordListAtTop", DbType.Boolean).Value = true;
+                                    command2.Parameters.Add("@ClearDatabaseOnExit", DbType.Boolean).Value = false;
+                                    command2.Parameters.Add("@ExportFormat", DbType.Boolean).Value = 'U';
+                                    command2.Parameters.Add("@CustomTag1", DbType.String).Value = customFieldsForm.TagNumber1;
+                                    command2.Parameters.Add("@CustomCode1", DbType.String).Value = customFieldsForm.Code1;
+                                    command2.Parameters.Add("@CustomData1", DbType.String).Value = customFieldsForm.Data1;
+                                    command2.Parameters.Add("@CustomTag2", DbType.String).Value = customFieldsForm.TagNumber2;
+                                    command2.Parameters.Add("@CustomCode2", DbType.String).Value = customFieldsForm.Code2;
+                                    command2.Parameters.Add("@CustomData2", DbType.String).Value = customFieldsForm.Data2;
+                                    command2.Parameters.Add("@CustomTag3", DbType.String).Value = customFieldsForm.TagNumber3;
+                                    command2.Parameters.Add("@CustomCode3", DbType.String).Value = customFieldsForm.Code3;
+                                    command2.Parameters.Add("@CustomData3", DbType.String).Value = customFieldsForm.Data3;
+                                    command2.Parameters.Add("@CustomTag4", DbType.String).Value = customFieldsForm.TagNumber4;
+                                    command2.Parameters.Add("@CustomCode4", DbType.String).Value = customFieldsForm.Code4;
+                                    command2.Parameters.Add("@CustomData4", DbType.String).Value = customFieldsForm.Data4;
+                                    command2.Parameters.Add("@CustomTag5", DbType.String).Value = customFieldsForm.TagNumber5;
+                                    command2.Parameters.Add("@CustomCode5", DbType.String).Value = customFieldsForm.Code5;
+                                    command2.Parameters.Add("@CustomData5", DbType.String).Value = customFieldsForm.Data5;
+
+                                    command.ExecuteNonQuery();
+                                }
+                            }
                         }
                     }
                 }
