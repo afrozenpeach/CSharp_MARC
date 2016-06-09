@@ -19,6 +19,11 @@ This project is built upon the CSharp_MARC project of the same name available at
 * SQLite database backend - advanced users can connect with any SQLite client to do further SQL queries on the dataset
 
 ## Changelog:
+ 
+###2016-06-09 Changes:
+
+* Fix some more warnings
+* Fix issue importing records with certain 949 holdings tags
 
 ###2016-06-05 Changes:
 
