@@ -144,6 +144,12 @@
     <Compile Include="AboutForm.Designer.cs">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="AdvancedBatchEditForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AdvancedBatchEditForm.Designer.cs">
+      <DependentUpon>AdvancedBatchEditForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="CustomFieldsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -189,6 +195,9 @@
     </Compile>
     <EmbeddedResource Include="AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AdvancedBatchEditForm.resx">
+      <DependentUpon>AdvancedBatchEditForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CustomFieldsForm.resx">
       <DependentUpon>CustomFieldsForm.cs</DependentUpon>

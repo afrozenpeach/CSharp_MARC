@@ -4840,6 +4840,22 @@ namespace CSharp_MARC_Editor
             }
         }
 
+        /// <summary>
+        /// Handles the Click event of the batchEditToolStripMenuItem control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void advancedBatchEditToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (AdvancedBatchEditForm form = new AdvancedBatchEditForm())
+            {
+                if (form.ShowDialog() == DialogResult.OK)
+                {
+
+                }
+            }
+        }
+
         #endregion
 
         #region Reports
