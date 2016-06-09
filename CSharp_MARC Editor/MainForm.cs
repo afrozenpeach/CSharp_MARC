@@ -1363,9 +1363,9 @@ namespace CSharp_MARC_Editor
                         {
                             using (SQLiteConnection connection2 = new SQLiteConnection(ConnectionString))
                             {
-                                connection.Open();
+                                connection2.Open();
 
-                                using (SQLiteCommand command2 = new SQLiteCommand("INSERT INTO Settings (RecordListAtTop, ClearDatabaseOnExit, ExportFormat, CustomTag1, CustomCode1, CustomData1, CustomTag2, CustomCode2, CustomData2, CustomTag3, CustomCode3, CustomData3, CustomTag4, CustomCode4, CustomData4, CustomTag5, CustomCode5, CustomData5) VALUES (@RecordListAtTop, @ClearDatabaseOnExit, @ExportFormat, @CustomTag1, @CustomCode1, @CustomData1, @CustomTag2, @CustomCode2, @CustomData2, @CustomTag3, @CustomCode3, @CustomData3, @CustomTag4, @CustomCode4, @CustomData4, @CustomTag5, @CustomCode5, @CustomData5)", connection))
+                                using (SQLiteCommand command2 = new SQLiteCommand("INSERT INTO Settings (RecordListAtTop, ClearDatabaseOnExit, ExportFormat, CustomTag1, CustomCode1, CustomData1, CustomTag2, CustomCode2, CustomData2, CustomTag3, CustomCode3, CustomData3, CustomTag4, CustomCode4, CustomData4, CustomTag5, CustomCode5, CustomData5) VALUES (@RecordListAtTop, @ClearDatabaseOnExit, @ExportFormat, @CustomTag1, @CustomCode1, @CustomData1, @CustomTag2, @CustomCode2, @CustomData2, @CustomTag3, @CustomCode3, @CustomData3, @CustomTag4, @CustomCode4, @CustomData4, @CustomTag5, @CustomCode5, @CustomData5)", connection2))
                                 {
                                     command2.Parameters.Add("@RecordListAtTop", DbType.Boolean).Value = true;
                                     command2.Parameters.Add("@ClearDatabaseOnExit", DbType.Boolean).Value = false;
@@ -1386,7 +1386,7 @@ namespace CSharp_MARC_Editor
                                     command2.Parameters.Add("@CustomCode5", DbType.String).Value = customFieldsForm.Code5;
                                     command2.Parameters.Add("@CustomData5", DbType.String).Value = customFieldsForm.Data5;
 
-                                    command.ExecuteNonQuery();
+                                    command2.ExecuteNonQuery();
                                 }
                             }
                         }
