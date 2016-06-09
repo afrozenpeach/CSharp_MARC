@@ -262,7 +262,10 @@ namespace CSharp_MARC_Editor
             }
             else if (subfield949b != null)
             {
-                classification = subfield949b.Data + " " + subfield949c.Data;
+                classification = subfield949b.Data;
+
+                if (subfield949c != null)
+                    classification += " " + subfield949c.Data;
             }
             else if (subfield949c != null)
             {
