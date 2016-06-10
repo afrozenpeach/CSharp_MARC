@@ -309,7 +309,7 @@ namespace CSharp_MARC_Editor
                 if (row.IsNewRow)
                     break;
 
-                if (string.IsNullOrEmpty(row.Cells[0].ToString()) || !DataField.ValidateIndicator(row.Cells[0].ToString()[0]))
+                if (string.IsNullOrEmpty(row.Cells[0].Value.ToString()) || !DataField.ValidateIndicator(row.Cells[0].Value.ToString()[0]))
                 {
                     MessageBox.Show("The field to add has an invalid tag number.", "Invalid tag number.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
