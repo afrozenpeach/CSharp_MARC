@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using MARC;
 
 namespace CSharp_MARC_Editor
 {
@@ -273,8 +274,49 @@ namespace CSharp_MARC_Editor
 
         private void okButton_Click(object sender, EventArgs e)
         {
+            switch (this.Action)
+            {
+                case "Add":
+                    if (string.IsNullOrEmpty(TagModification))
+                    {
+                        MessageBox.Show("Adding new fields requires a tag number.", "Missing Tag Number", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    break;
+            }
+
+            if (!string.IsNullOrEmpty(TagModification) && !Field.ValidateTag(TagModification))
+            {
+                MessageBox.Show("The field to add has an invalid tag number.", "Invalid tag number.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            foreach (DataGridViewRow row in Subfields)
+            {
+                if (row.IsNewRow)
+                    break;
+
+                if (string.IsNullOrEmpty(row.Cells[0].ToString()) || !DataField.ValidateIndicator(row.Cells[0].ToString()[0]))
+                {
+                    MessageBox.Show("The field to add has an invalid tag number.", "Invalid tag number.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
+
             DialogResult = DialogResult.OK;
             Close();
+        }
+
+        /// <summary>
+        /// Handles the SelectedIndexChanged event of the ListBox controls.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void listBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ListBox box = (ListBox)sender;
+            if (box.SelectedItems.Count > 1 && box.SelectedItems.Contains("Any"))
+                box.SelectedItems.Remove("Any");
         }
 
         /// <summary>
@@ -299,8 +341,8 @@ namespace CSharp_MARC_Editor
                             Environment.NewLine + Environment.NewLine + Environment.NewLine +
                             "Add: If conditions are met, create a new tag as designated." + Environment.NewLine + Environment.NewLine +
                             "Delete: If conditions are met, delete the given tag's subfields. If tag is left blank, delete the tags that match the conditions. If subfields are left blank, delete the entire tag." + Environment.NewLine + Environment.NewLine +
-                            "Edit: If conditions are met, edit the given tag's subfields. If tag is left blank, edit the subfields of the tags that match the conditions." + Environment.NewLine + Environment.NewLine +
-                            "Replace: If conditions are met, replace the given tag's subfields with those specified. If tag is left blank, replace the subfields of the tags taht match the conditions." + Environment.NewLine + Environment.NewLine +
+                            "Edit: If conditions are met, edit the given tag's subfields. Subfields that do not yet exist will be added. If tag is left blank, edit the subfields of the tags that match the conditions." + Environment.NewLine + Environment.NewLine +
+                            "Replace: If conditions are met, completely replace the given tag and its subfields with those specified. If tag is left blank, replace the subfields of the tags taht match the conditions." + Environment.NewLine + Environment.NewLine +
                             Environment.NewLine +
                             "If Ind1 and Ind2 are filled in, the given tag's indicators will be changed. If tag is left blank, any tag that matches the conditions will have its indicators changed.",
                             "How to use Advanced Batch Edit.", MessageBoxButtons.OK, MessageBoxIcon.Information);

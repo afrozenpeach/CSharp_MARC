@@ -44,8 +44,8 @@
             this.cancelButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
             this.modificationsDataGridView = new System.Windows.Forms.DataGridView();
-            this.codeColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Code = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Data = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ind2TextBox = new System.Windows.Forms.TextBox();
             this.ind2Label = new System.Windows.Forms.Label();
             this.ind1TextBox = new System.Windows.Forms.TextBox();
@@ -87,6 +87,7 @@
             this.codesListBox.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
             this.codesListBox.Size = new System.Drawing.Size(50, 108);
             this.codesListBox.TabIndex = 15;
+            this.codesListBox.SelectedIndexChanged += new System.EventHandler(this.listBox_SelectedIndexChanged);
             // 
             // codesLabel
             // 
@@ -107,6 +108,7 @@
             this.ind2ListBox.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
             this.ind2ListBox.Size = new System.Drawing.Size(50, 108);
             this.ind2ListBox.TabIndex = 13;
+            this.ind2ListBox.SelectedIndexChanged += new System.EventHandler(this.listBox_SelectedIndexChanged);
             // 
             // ind1ListBox
             // 
@@ -118,6 +120,7 @@
             this.ind1ListBox.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
             this.ind1ListBox.Size = new System.Drawing.Size(50, 108);
             this.ind1ListBox.TabIndex = 12;
+            this.ind1ListBox.SelectedIndexChanged += new System.EventHandler(this.listBox_SelectedIndexChanged);
             // 
             // indicatorsLabel
             // 
@@ -147,6 +150,7 @@
             this.tagsListBox.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
             this.tagsListBox.Size = new System.Drawing.Size(50, 108);
             this.tagsListBox.TabIndex = 9;
+            this.tagsListBox.SelectedIndexChanged += new System.EventHandler(this.listBox_SelectedIndexChanged);
             // 
             // conditionsGroupBox
             // 
@@ -244,27 +248,27 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.modificationsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.modificationsDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.codeColumn,
-            this.dataColumn});
+            this.Code,
+            this.Data});
             this.modificationsDataGridView.Location = new System.Drawing.Point(6, 46);
             this.modificationsDataGridView.Name = "modificationsDataGridView";
             this.modificationsDataGridView.Size = new System.Drawing.Size(474, 130);
             this.modificationsDataGridView.TabIndex = 8;
             // 
-            // codeColumn
+            // Code
             // 
-            this.codeColumn.HeaderText = "Code";
-            this.codeColumn.MaxInputLength = 1;
-            this.codeColumn.MinimumWidth = 50;
-            this.codeColumn.Name = "Code";
-            this.codeColumn.Width = 50;
+            this.Code.HeaderText = "Code";
+            this.Code.MaxInputLength = 1;
+            this.Code.MinimumWidth = 50;
+            this.Code.Name = "Code";
+            this.Code.Width = 50;
             // 
-            // dataColumn
+            // Data
             // 
-            this.dataColumn.HeaderText = "Data";
-            this.dataColumn.MinimumWidth = 50;
-            this.dataColumn.Name = "Data";
-            this.dataColumn.Width = 300;
+            this.Data.HeaderText = "Data";
+            this.Data.MinimumWidth = 50;
+            this.Data.Name = "Data";
+            this.Data.Width = 300;
             // 
             // ind2TextBox
             // 
@@ -393,5 +397,7 @@
         private System.Windows.Forms.Label tagLabel;
         private System.Windows.Forms.DataGridViewTextBoxColumn codeColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Code;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Data;
     }
 }
