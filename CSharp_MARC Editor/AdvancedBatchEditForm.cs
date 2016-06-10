@@ -296,6 +296,25 @@ namespace CSharp_MARC_Editor
                         return;
                     }
                     break;
+                case "Delete":
+                    foreach (DataGridViewRow row in Subfields)
+                    {
+                        if (!row.IsNewRow)
+                        {
+                            if (!String.IsNullOrEmpty(row.Cells[1].Value.ToString()))
+                            {
+                                MessageBox.Show("The data column is not used when deleting subfields. Clear the data columns before continuing.", "Data column is not used.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                return;
+                            }
+
+                            if (!String.IsNullOrEmpty(Ind1) || !String.IsNullOrEmpty(Ind2))
+                            {
+                                MessageBox.Show("Indicators are not used when deleting subfields. Clear the indicators before continuing.", "Indicators are not used.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                return;
+                            }
+                        }
+                    }
+                    break;
             }
 
             if (!string.IsNullOrEmpty(TagModification) && !Field.ValidateTag(TagModification))
