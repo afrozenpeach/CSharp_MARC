@@ -212,11 +212,19 @@ namespace CSharp_MARC_Editor
 
         #endregion
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AdvancedBatchEditForm"/> class.
+        /// </summary>
         public AdvancedBatchEditForm()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Handles the Load event of the AdvancedBatchEditForm control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void AdvancedBatchEditForm_Load(object sender, EventArgs e)
         {
             tagsListBox.Items.Clear();
@@ -272,6 +280,11 @@ namespace CSharp_MARC_Editor
             actionComboBox.SelectedIndex = 0;
         }
 
+        /// <summary>
+        /// Handles the Click event of the okButton control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void okButton_Click(object sender, EventArgs e)
         {
             switch (this.Action)
