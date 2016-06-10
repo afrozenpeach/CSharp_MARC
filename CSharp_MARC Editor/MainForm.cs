@@ -4558,12 +4558,12 @@ namespace CSharp_MARC_Editor
                                     foundFields.Add(Int32.Parse(reader["FieldID"].ToString()), Int32.Parse(reader["RecordID"].ToString()));
                             }
 
+                            command.CommandText = "BEGIN";
+                            command.ExecuteNonQuery();
+
                             switch (form.Action)
                             {
                                 case "Add":
-                                    command.CommandText = "BEGIN";
-                                    command.ExecuteNonQuery();
-
                                     command.CommandText = "INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2, ControlData) VALUES (@RecordID, @TagNumber, @Ind1, @Ind2, @ControlData);";
                                     command.Parameters.Clear();
                                     command.Parameters.Add("@RecordID", DbType.Int32);
@@ -4633,17 +4633,35 @@ namespace CSharp_MARC_Editor
                                             }
                                         }
                                     }
-
-                                    command.CommandText = "END";
-                                    command.ExecuteNonQuery();
                                     break;
                                 case "Delete":
+                                    if (!String.IsNullOrEmpty(form.TagModification))
+                                    {
+                                        if (form.Subfields.Count > 0)
+                                        {
+
+                                        }
+                                        else
+                                        {
+                                            command.CommandText = "DELETE FROM Fields WHERE FieldID = @FieldID";
+                                            command.Parameters.Clear();
+                                            command.Parameters.Add("@FieldID", DbType.Int32);
+
+                                            foreach (KeyValuePair<int, int> field in foundFields)
+                                            {
+
+                                            }
+                                        }
+                                    }
                                     break;
                                 case "Edit":
                                     break;
                                 case "Replace":
                                     break;
                             }
+
+                            command.CommandText = "END";
+                            command.ExecuteNonQuery();
                         }
                     }
 
