@@ -4637,9 +4637,25 @@ namespace CSharp_MARC_Editor
                                 case "Delete":
                                     if (!String.IsNullOrEmpty(form.TagModification))
                                     {
-                                        if (form.Subfields.Count > 0)
+                                        if (form.Subfields.Count > 1) //1 is the new row
                                         {
+                                            command.CommandText = "DELETE FROM Subfields WHERE FieldID = @FieldID and Code = @Code";
+                                            command.Parameters.Clear();
+                                            command.Parameters.Add("@FieldID", DbType.Int32);
+                                            command.Parameters.Add("@Code", DbType.String);
 
+                                            foreach (DataGridViewRow row in form.Subfields)
+                                            {
+                                                if (!row.IsNewRow)
+                                                {
+                                                    foreach (KeyValuePair<int, int> field in foundFields)
+                                                    {
+                                                        command.Parameters["@FieldID"].Value = field.Value;
+                                                        command.Parameters["@Code"].Value = row.Cells[0].Value;
+                                                        command.ExecuteNonQuery();
+                                                    }
+                                                }
+                                            }
                                         }
                                         else
                                         {
@@ -4649,7 +4665,8 @@ namespace CSharp_MARC_Editor
 
                                             foreach (KeyValuePair<int, int> field in foundFields)
                                             {
-
+                                                command.Parameters["@FieldID"].Value = field.Value;
+                                                command.ExecuteNonQuery();
                                             }
                                         }
                                     }
