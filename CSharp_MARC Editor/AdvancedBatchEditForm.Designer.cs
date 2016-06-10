@@ -44,8 +44,6 @@
             this.cancelButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
             this.modificationsDataGridView = new System.Windows.Forms.DataGridView();
-            this.Code = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Data = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ind2TextBox = new System.Windows.Forms.TextBox();
             this.ind2Label = new System.Windows.Forms.Label();
             this.ind1TextBox = new System.Windows.Forms.TextBox();
@@ -54,6 +52,8 @@
             this.tagLabel = new System.Windows.Forms.Label();
             this.actionComboBox = new System.Windows.Forms.ComboBox();
             this.actionLabel = new System.Windows.Forms.Label();
+            this.CodeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DataCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.conditionsGroupBox.SuspendLayout();
             this.modificationGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.modificationsDataGridView)).BeginInit();
@@ -248,27 +248,12 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.modificationsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.modificationsDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Code,
-            this.Data});
+            this.CodeCol,
+            this.DataCol});
             this.modificationsDataGridView.Location = new System.Drawing.Point(6, 46);
             this.modificationsDataGridView.Name = "modificationsDataGridView";
             this.modificationsDataGridView.Size = new System.Drawing.Size(474, 130);
             this.modificationsDataGridView.TabIndex = 8;
-            // 
-            // Code
-            // 
-            this.Code.HeaderText = "Code";
-            this.Code.MaxInputLength = 1;
-            this.Code.MinimumWidth = 50;
-            this.Code.Name = "Code";
-            this.Code.Width = 50;
-            // 
-            // Data
-            // 
-            this.Data.HeaderText = "Data";
-            this.Data.MinimumWidth = 50;
-            this.Data.Name = "Data";
-            this.Data.Width = 300;
             // 
             // ind2TextBox
             // 
@@ -344,6 +329,21 @@
             this.actionLabel.TabIndex = 0;
             this.actionLabel.Text = "Action:";
             // 
+            // CodeCol
+            // 
+            this.CodeCol.HeaderText = "Code";
+            this.CodeCol.MaxInputLength = 1;
+            this.CodeCol.MinimumWidth = 50;
+            this.CodeCol.Name = "CodeCol";
+            this.CodeCol.Width = 50;
+            // 
+            // DataCol
+            // 
+            this.DataCol.HeaderText = "Data";
+            this.DataCol.MinimumWidth = 50;
+            this.DataCol.Name = "DataCol";
+            this.DataCol.Width = 300;
+            // 
             // AdvancedBatchEditForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -397,7 +397,7 @@
         private System.Windows.Forms.Label tagLabel;
         private System.Windows.Forms.DataGridViewTextBoxColumn codeColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Code;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Data;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CodeCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn DataCol;
     }
 }
