@@ -353,7 +353,7 @@ namespace CSharp_MARC_Editor
             MessageBox.Show("Select tags, indicators, codes, and data to match in the Conditions box." +
                             Environment.NewLine + Environment.NewLine + Environment.NewLine +
                             "Add: If conditions are met, create a new tag as designated." + Environment.NewLine + Environment.NewLine +
-                            "Delete: If conditions are met, delete the given tag's subfields. If tag is left blank, delete the tags that match the conditions. If subfields are left blank, delete the entire tag." + Environment.NewLine + Environment.NewLine +
+                            "Delete: If conditions are met, delete the given tag's subfields. Subfield data column is ignored. If tag is left blank, delete the tags that match the conditions. If subfields are left blank, delete the entire tag." + Environment.NewLine + Environment.NewLine +
                             "Edit: If conditions are met, edit the given tag's subfields. Subfields that do not yet exist will be added. If tag is left blank, edit the subfields of the tags that match the conditions." + Environment.NewLine + Environment.NewLine +
                             "Replace: If conditions are met, completely replace the given tag and its subfields with those specified. If tag is left blank, replace the subfields of the tags taht match the conditions." + Environment.NewLine + Environment.NewLine +
                             Environment.NewLine +
