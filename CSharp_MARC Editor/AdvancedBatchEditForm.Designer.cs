@@ -387,16 +387,12 @@
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.DataGridView modificationsDataGridView;
-        private System.Windows.Forms.DataGridViewTextBoxColumn CodeColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn DataColumn;
         private System.Windows.Forms.TextBox ind2TextBox;
         private System.Windows.Forms.Label ind2Label;
         private System.Windows.Forms.TextBox ind1TextBox;
         private System.Windows.Forms.Label ind1Label;
         private System.Windows.Forms.TextBox tagTextBox;
         private System.Windows.Forms.Label tagLabel;
-        private System.Windows.Forms.DataGridViewTextBoxColumn codeColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn CodeCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn DataCol;
     }
