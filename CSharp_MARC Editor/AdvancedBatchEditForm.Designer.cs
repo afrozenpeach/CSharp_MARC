@@ -41,19 +41,19 @@
             this.regexCheckBox = new System.Windows.Forms.CheckBox();
             this.caseSensitiveCheckBox = new System.Windows.Forms.CheckBox();
             this.modificationGroupBox = new System.Windows.Forms.GroupBox();
-            this.actionLabel = new System.Windows.Forms.Label();
-            this.actionComboBox = new System.Windows.Forms.ComboBox();
-            this.tagLabel = new System.Windows.Forms.Label();
-            this.tagTextBox = new System.Windows.Forms.TextBox();
-            this.ind1Label = new System.Windows.Forms.Label();
-            this.ind1TextBox = new System.Windows.Forms.TextBox();
+            this.cancelButton = new System.Windows.Forms.Button();
+            this.okButton = new System.Windows.Forms.Button();
+            this.modificationsDataGridView = new System.Windows.Forms.DataGridView();
+            this.codeColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ind2TextBox = new System.Windows.Forms.TextBox();
             this.ind2Label = new System.Windows.Forms.Label();
-            this.modificationsDataGridView = new System.Windows.Forms.DataGridView();
-            this.Code = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Data = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.okButton = new System.Windows.Forms.Button();
-            this.cancelButton = new System.Windows.Forms.Button();
+            this.ind1TextBox = new System.Windows.Forms.TextBox();
+            this.ind1Label = new System.Windows.Forms.Label();
+            this.tagTextBox = new System.Windows.Forms.TextBox();
+            this.tagLabel = new System.Windows.Forms.Label();
+            this.actionComboBox = new System.Windows.Forms.ComboBox();
+            this.actionLabel = new System.Windows.Forms.Label();
             this.conditionsGroupBox.SuspendLayout();
             this.modificationGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.modificationsDataGridView)).BeginInit();
@@ -215,62 +215,56 @@
             this.modificationGroupBox.TabStop = false;
             this.modificationGroupBox.Text = "Modifications:";
             // 
-            // actionLabel
+            // cancelButton
             // 
-            this.actionLabel.AutoSize = true;
-            this.actionLabel.Location = new System.Drawing.Point(6, 22);
-            this.actionLabel.Name = "actionLabel";
-            this.actionLabel.Size = new System.Drawing.Size(40, 13);
-            this.actionLabel.TabIndex = 0;
-            this.actionLabel.Text = "Action:";
+            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.cancelButton.Location = new System.Drawing.Point(246, 182);
+            this.cancelButton.Name = "cancelButton";
+            this.cancelButton.Size = new System.Drawing.Size(75, 23);
+            this.cancelButton.TabIndex = 10;
+            this.cancelButton.Text = "Cancel";
+            this.cancelButton.UseVisualStyleBackColor = true;
+            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
-            // actionComboBox
+            // okButton
             // 
-            this.actionComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.actionComboBox.FormattingEnabled = true;
-            this.actionComboBox.Items.AddRange(new object[] {
-            "Add",
-            "Delete",
-            "Edit",
-            "Replace"});
-            this.actionComboBox.Location = new System.Drawing.Point(52, 19);
-            this.actionComboBox.Name = "actionComboBox";
-            this.actionComboBox.Size = new System.Drawing.Size(65, 21);
-            this.actionComboBox.TabIndex = 1;
+            this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.okButton.Location = new System.Drawing.Point(165, 182);
+            this.okButton.Name = "okButton";
+            this.okButton.Size = new System.Drawing.Size(75, 23);
+            this.okButton.TabIndex = 9;
+            this.okButton.Text = "OK";
+            this.okButton.UseVisualStyleBackColor = true;
+            this.okButton.Click += new System.EventHandler(this.okButton_Click);
             // 
-            // tagLabel
+            // modificationsDataGridView
             // 
-            this.tagLabel.AutoSize = true;
-            this.tagLabel.Location = new System.Drawing.Point(123, 22);
-            this.tagLabel.Name = "tagLabel";
-            this.tagLabel.Size = new System.Drawing.Size(29, 13);
-            this.tagLabel.TabIndex = 2;
-            this.tagLabel.Text = "Tag:";
+            this.modificationsDataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.modificationsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.modificationsDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.codeColumn,
+            this.dataColumn});
+            this.modificationsDataGridView.Location = new System.Drawing.Point(6, 46);
+            this.modificationsDataGridView.Name = "modificationsDataGridView";
+            this.modificationsDataGridView.Size = new System.Drawing.Size(474, 130);
+            this.modificationsDataGridView.TabIndex = 8;
             // 
-            // tagTextBox
+            // codeColumn
             // 
-            this.tagTextBox.Location = new System.Drawing.Point(158, 19);
-            this.tagTextBox.MaxLength = 3;
-            this.tagTextBox.Name = "tagTextBox";
-            this.tagTextBox.Size = new System.Drawing.Size(68, 20);
-            this.tagTextBox.TabIndex = 3;
+            this.codeColumn.HeaderText = "Code";
+            this.codeColumn.MaxInputLength = 1;
+            this.codeColumn.MinimumWidth = 50;
+            this.codeColumn.Name = "Code";
+            this.codeColumn.Width = 50;
             // 
-            // ind1Label
+            // dataColumn
             // 
-            this.ind1Label.AutoSize = true;
-            this.ind1Label.Location = new System.Drawing.Point(232, 22);
-            this.ind1Label.Name = "ind1Label";
-            this.ind1Label.Size = new System.Drawing.Size(34, 13);
-            this.ind1Label.TabIndex = 4;
-            this.ind1Label.Text = "Ind 1:";
-            // 
-            // ind1TextBox
-            // 
-            this.ind1TextBox.Location = new System.Drawing.Point(272, 19);
-            this.ind1TextBox.MaxLength = 1;
-            this.ind1TextBox.Name = "ind1TextBox";
-            this.ind1TextBox.Size = new System.Drawing.Size(37, 20);
-            this.ind1TextBox.TabIndex = 5;
+            this.dataColumn.HeaderText = "Data";
+            this.dataColumn.MinimumWidth = 50;
+            this.dataColumn.Name = "Data";
+            this.dataColumn.Width = 300;
             // 
             // ind2TextBox
             // 
@@ -289,55 +283,62 @@
             this.ind2Label.TabIndex = 6;
             this.ind2Label.Text = "Ind 2:";
             // 
-            // modificationsDataGridView
+            // ind1TextBox
             // 
-            this.modificationsDataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.modificationsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.modificationsDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Code,
-            this.Data});
-            this.modificationsDataGridView.Location = new System.Drawing.Point(6, 46);
-            this.modificationsDataGridView.Name = "modificationsDataGridView";
-            this.modificationsDataGridView.Size = new System.Drawing.Size(474, 130);
-            this.modificationsDataGridView.TabIndex = 8;
+            this.ind1TextBox.Location = new System.Drawing.Point(272, 19);
+            this.ind1TextBox.MaxLength = 1;
+            this.ind1TextBox.Name = "ind1TextBox";
+            this.ind1TextBox.Size = new System.Drawing.Size(37, 20);
+            this.ind1TextBox.TabIndex = 5;
             // 
-            // Code
+            // ind1Label
             // 
-            this.Code.HeaderText = "Code";
-            this.Code.MaxInputLength = 1;
-            this.Code.MinimumWidth = 50;
-            this.Code.Name = "Code";
-            this.Code.Width = 50;
+            this.ind1Label.AutoSize = true;
+            this.ind1Label.Location = new System.Drawing.Point(232, 22);
+            this.ind1Label.Name = "ind1Label";
+            this.ind1Label.Size = new System.Drawing.Size(34, 13);
+            this.ind1Label.TabIndex = 4;
+            this.ind1Label.Text = "Ind 1:";
             // 
-            // Data
+            // tagTextBox
             // 
-            this.Data.HeaderText = "Data";
-            this.Data.MinimumWidth = 50;
-            this.Data.Name = "Data";
-            this.Data.Width = 300;
+            this.tagTextBox.Location = new System.Drawing.Point(158, 19);
+            this.tagTextBox.MaxLength = 3;
+            this.tagTextBox.Name = "tagTextBox";
+            this.tagTextBox.Size = new System.Drawing.Size(68, 20);
+            this.tagTextBox.TabIndex = 3;
             // 
-            // okButton
+            // tagLabel
             // 
-            this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.okButton.Location = new System.Drawing.Point(165, 182);
-            this.okButton.Name = "okButton";
-            this.okButton.Size = new System.Drawing.Size(75, 23);
-            this.okButton.TabIndex = 9;
-            this.okButton.Text = "OK";
-            this.okButton.UseVisualStyleBackColor = true;
+            this.tagLabel.AutoSize = true;
+            this.tagLabel.Location = new System.Drawing.Point(123, 22);
+            this.tagLabel.Name = "tagLabel";
+            this.tagLabel.Size = new System.Drawing.Size(29, 13);
+            this.tagLabel.TabIndex = 2;
+            this.tagLabel.Text = "Tag:";
             // 
-            // cancelButton
+            // actionComboBox
             // 
-            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.cancelButton.Location = new System.Drawing.Point(246, 182);
-            this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(75, 23);
-            this.cancelButton.TabIndex = 10;
-            this.cancelButton.Text = "Cancel";
-            this.cancelButton.UseVisualStyleBackColor = true;
-            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
+            this.actionComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.actionComboBox.FormattingEnabled = true;
+            this.actionComboBox.Items.AddRange(new object[] {
+            "Add",
+            "Delete",
+            "Edit",
+            "Replace"});
+            this.actionComboBox.Location = new System.Drawing.Point(52, 19);
+            this.actionComboBox.Name = "actionComboBox";
+            this.actionComboBox.Size = new System.Drawing.Size(65, 21);
+            this.actionComboBox.TabIndex = 1;
+            // 
+            // actionLabel
+            // 
+            this.actionLabel.AutoSize = true;
+            this.actionLabel.Location = new System.Drawing.Point(6, 22);
+            this.actionLabel.Name = "actionLabel";
+            this.actionLabel.Size = new System.Drawing.Size(40, 13);
+            this.actionLabel.TabIndex = 0;
+            this.actionLabel.Text = "Action:";
             // 
             // AdvancedBatchEditForm
             // 
@@ -351,6 +352,7 @@
             this.MinimizeBox = false;
             this.Name = "AdvancedBatchEditForm";
             this.Text = "Advanced Batch Edit";
+            this.HelpButtonClicked += new System.ComponentModel.CancelEventHandler(this.AdvancedBatchEditForm_HelpButtonClicked);
             this.Load += new System.EventHandler(this.AdvancedBatchEditForm_Load);
             this.conditionsGroupBox.ResumeLayout(false);
             this.conditionsGroupBox.PerformLayout();
@@ -381,13 +383,15 @@
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.DataGridView modificationsDataGridView;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Code;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Data;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CodeColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn DataColumn;
         private System.Windows.Forms.TextBox ind2TextBox;
         private System.Windows.Forms.Label ind2Label;
         private System.Windows.Forms.TextBox ind1TextBox;
         private System.Windows.Forms.Label ind1Label;
         private System.Windows.Forms.TextBox tagTextBox;
         private System.Windows.Forms.Label tagLabel;
+        private System.Windows.Forms.DataGridViewTextBoxColumn codeColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataColumn;
     }
 }

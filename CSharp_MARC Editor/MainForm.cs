@@ -4404,6 +4404,257 @@ namespace CSharp_MARC_Editor
             EnableForm();
         }
 
+        /// <summary>
+        /// Handles the Click event of the batchEditToolStripMenuItem control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void advancedBatchEditToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (AdvancedBatchEditForm form = new AdvancedBatchEditForm())
+            {
+                if (form.ShowDialog() == DialogResult.OK)
+                {
+                    DisableForm();
+
+                    using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
+                    {
+                        connection.Open();
+                        using (SQLiteCommand command = new SQLiteCommand(connection))
+                        {
+                            StringBuilder query = new StringBuilder("SELECT DISTINCT f.FieldID, f.RecordID From Fields f LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID");
+
+                            if (form.CaseSensitive)
+                            {
+                                query.Insert(0, "PRAGMA case_sensitive_like=ON;");
+                            }
+
+                            command.Parameters.Add("@ReplaceData", DbType.String).Value = form.Data;
+
+                            StringBuilder whereClause = new StringBuilder(" WHERE ");
+
+                            if (form.SelectedTags.Contains("Any"))
+                            {
+                                // Do nothing!
+                            }
+                            else if (form.SelectedTags.Count == 1)
+                            {
+                                whereClause.Append("f.TagNumber = @TagNumber AND ");
+                                command.Parameters.Add("@TagNumber", DbType.String).Value = form.SelectedTags[0];
+                            }
+                            else if (form.SelectedTags.Count > 1)
+                            {
+                                int i = 0;
+                                whereClause.Append("f.TagNumber IN (");
+
+                                foreach (string tag in form.SelectedTags)
+                                {
+                                    string tagNumber = string.Format(CultureInfo.InvariantCulture, "@TagNumber{0}", i);
+                                    command.Parameters.Add(tagNumber, DbType.String).Value = tag;
+                                    whereClause.AppendFormat("{0}, ", tagNumber);
+
+                                    i++;
+                                }
+
+                                whereClause.Remove(whereClause.Length - 2, 2);
+                                whereClause.Append(") AND ");
+                            }
+
+                            if (form.SelectedIndicator1s.Contains("Any"))
+                            {
+                                // Do nothing!
+                            }
+                            else if (form.SelectedIndicator1s.Count == 1)
+                            {
+                                whereClause.Append("f.Ind1 = @Ind1 AND ");
+                                command.Parameters.Add("@Ind1", DbType.String).Value = form.SelectedIndicator1s[0];
+                            }
+                            else if (form.SelectedIndicator1s.Count > 1)
+                            {
+                                int i = 0;
+                                whereClause.Append("f.Ind1 IN (");
+
+                                foreach (string ind1 in form.SelectedIndicator1s)
+                                {
+                                    string indicator = string.Format(CultureInfo.InvariantCulture, "@Ind1{0}", i);
+                                    command.Parameters.Add(indicator, DbType.String).Value = ind1;
+                                    whereClause.AppendFormat("{0}, ", indicator);
+
+                                    i++;
+                                }
+                                whereClause.Remove(whereClause.Length - 2, 2);
+                                whereClause.Append(") AND ");
+                            }
+
+                            if (form.SelectedIndicator2s.Contains("Any"))
+                            {
+                                // Do nothing!
+                            }
+                            else if (form.SelectedIndicator2s.Count == 1)
+                            {
+                                whereClause.Append("f.Ind2 = @Ind2 AND ");
+                                command.Parameters.Add("@Ind2", DbType.String).Value = form.SelectedIndicator2s[0];
+                            }
+                            else if (form.SelectedIndicator1s.Count > 1)
+                            {
+                                int i = 0;
+                                whereClause.Append("f.Ind2 IN (");
+
+                                foreach (string ind2 in form.SelectedIndicator2s)
+                                {
+                                    string indicator = string.Format(CultureInfo.InvariantCulture, "@Ind2{0}", i);
+                                    command.Parameters.Add(indicator, DbType.String).Value = ind2;
+                                    whereClause.AppendFormat("{0}, ", indicator);
+
+                                    i++;
+                                }
+                                whereClause.Remove(whereClause.Length - 2, 2);
+                                whereClause.Append(") AND ");
+                            }
+
+                            if (form.SelectedCodes.Contains("Any"))
+                            {
+                                // Do nothing!
+                            }
+                            else if (form.SelectedCodes.Count == 1)
+                            {
+                                whereClause.Append("s.Code = @Code AND ");
+                                command.Parameters.Add("@Code", DbType.String).Value = form.SelectedCodes[0];
+                            }
+                            else if (form.SelectedCodes.Count > 1)
+                            {
+                                int i = 0;
+                                whereClause.Append("s.Code IN (");
+
+                                foreach (string code in form.SelectedCodes)
+                                {
+                                    string codeParam = string.Format(CultureInfo.InvariantCulture, "@Code{0}", i);
+                                    command.Parameters.Add(codeParam, DbType.String).Value = code;
+                                    whereClause.AppendFormat("{0}, ", codeParam);
+
+                                    i++;
+                                }
+                                whereClause.Remove(whereClause.Length - 2, 2);
+                                whereClause.Append(") AND ");
+                            }
+
+                            if (form.Regex)
+                                whereClause.Append("Data REGEXP @Data;");
+                            else
+                                whereClause.Append("Data LIKE @Data;");
+
+                            command.Parameters.Add("@Data", DbType.String).Value = "%" + form.Data + "%";
+
+                            query.Append(whereClause);
+                            query.Append("PRAGMA case_sensitive_like=OFF;");
+
+                            command.CommandText = query.ToString();
+
+                            Dictionary<int, int> foundFields = new Dictionary<int, int>();
+
+                            using (SQLiteDataReader reader = command.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                    foundFields.Add(Int32.Parse(reader["FieldID"].ToString()), Int32.Parse(reader["RecordID"].ToString()));
+                            }
+
+                            switch (form.Action)
+                            {
+                                case "Add":
+                                    command.CommandText = "BEGIN";
+                                    command.ExecuteNonQuery();
+
+                                    command.CommandText = "INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2, ControlData) VALUES (@RecordID, @TagNumber, @Ind1, @Ind2, @ControlData);";
+                                    command.Parameters.Clear();
+                                    command.Parameters.Add("@RecordID", DbType.Int32);
+                                    command.Parameters.Add("@TagNumber", DbType.String);
+                                    command.Parameters.Add("@Ind1", DbType.String);
+                                    command.Parameters.Add("@Ind2", DbType.String);
+                                    command.Parameters.Add("@ControlData", DbType.String);
+
+                                    Dictionary<int, int> added = new Dictionary<int, int>();
+
+                                    foreach (KeyValuePair<int, int> field in foundFields)
+                                    {
+                                        //Added is keyed on recordID so we only get one added per record.
+                                        if (!added.Keys.Contains(field.Value))
+                                        {
+                                            command.Parameters["@RecordID"].Value = field.Value;
+                                            command.Parameters["@TagNumber"].Value = form.TagModification;
+
+                                            if (!form.TagModification.StartsWith("00"))
+                                            {
+                                                if (String.IsNullOrEmpty(form.Ind1))
+                                                    command.Parameters["@Ind1"].Value = " ";
+                                                else
+                                                    command.Parameters["@Ind1"].Value = form.Ind1;
+
+                                                if (String.IsNullOrEmpty(form.Ind2))
+                                                    command.Parameters["@Ind2"].Value = " ";
+                                                else
+                                                    command.Parameters["@Ind2"].Value = form.Ind2;
+
+                                                command.Parameters["@ControlData"].Value = null;
+                                            }
+                                            else
+                                            {
+                                                command.Parameters["@Ind1"].Value = null;
+                                                command.Parameters["@Ind2"].Value = null;
+
+                                                command.Parameters["@ControlData"].Value = form.Subfields[0].Cells[1].Value;
+                                            }
+
+                                            command.ExecuteNonQuery();
+                                            int fieldID = (int)connection.LastInsertRowId;
+                                            added.Add(field.Value, fieldID);
+                                        }
+                                    }
+
+                                    if (!form.TagModification.StartsWith("00"))
+                                    {
+                                        command.CommandText = "INSERT INTO Subfields (FieldID, Code, Data) VALUES (@FieldID, @Code, @Data);";
+                                        command.Parameters.Clear();
+                                        command.Parameters.Add("@FieldID", DbType.Int32);
+                                        command.Parameters.Add("@Code", DbType.String);
+                                        command.Parameters.Add("@Data", DbType.String);
+
+                                        foreach (KeyValuePair<int, int> field in added)
+                                        {
+                                            foreach (DataGridViewRow row in form.Subfields)
+                                            {
+                                                if (!row.IsNewRow)
+                                                {
+                                                    command.Parameters["@FieldID"].Value = field.Value;
+                                                    command.Parameters["@Code"].Value = row.Cells[0].Value;
+                                                    command.Parameters["@Data"].Value = row.Cells[1].Value;
+
+                                                    command.ExecuteNonQuery();
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    command.CommandText = "END";
+                                    command.ExecuteNonQuery();
+                                    break;
+                                case "Delete":
+                                    break;
+                                case "Edit":
+                                    break;
+                                case "Replace":
+                                    break;
+                            }
+                        }
+                    }
+
+                    RebuildRecordsPreviewInformation();
+
+                    this.OnLoad(new EventArgs());
+                    EnableForm();
+                }
+            }
+        }
+
         #endregion
 
         #region Print Events
@@ -4836,22 +5087,6 @@ namespace CSharp_MARC_Editor
 
                         LoadSubfields(Int32.Parse(fieldsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString(), CultureInfo.InvariantCulture));
                     }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Handles the Click event of the batchEditToolStripMenuItem control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        private void advancedBatchEditToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            using (AdvancedBatchEditForm form = new AdvancedBatchEditForm())
-            {
-                if (form.ShowDialog() == DialogResult.OK)
-                {
-
                 }
             }
         }
