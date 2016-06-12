@@ -4674,6 +4674,128 @@ namespace CSharp_MARC_Editor
                                     }
                                     break;
                                 case "Edit":
+                                    if (!String.IsNullOrEmpty(form.TagModification))
+                                    {
+                                        command.Parameters.Clear();
+                                        
+                                        command.CommandText = "DELETE FROM Subfields WHERE FieldID IN (SELECT FieldID FROM Fields WHERE TagNumber = @TagNumber";
+
+                                        if (!String.IsNullOrEmpty(form.Ind1))
+                                        {
+                                            command.CommandText += " AND Ind1 = @Ind1";
+                                            command.Parameters.Add("@Ind1", DbType.String).Value = form.Ind1;
+                                        }
+
+                                        if (!String.IsNullOrEmpty(form.Ind2))
+                                        {
+                                            command.CommandText += " AND Ind2 = @Ind2";
+                                            command.Parameters.Add("@Ind2", DbType.String).Value = form.Ind2;
+                                        }
+
+                                        command.CommandText += " AND Code IN (";
+
+                                        foreach (DataGridViewRow row in form.Subfields)
+                                        {
+                                            if (!row.IsNewRow)
+                                                command.CommandText += "'" + row.Cells[0].Value + "', ";
+                                        }
+
+                                        command.CommandText = command.CommandText.Substring(0, command.CommandText.Length - 2);
+
+                                        command.CommandText += "));";
+
+                                        command.Parameters.Add("@TagNumber", DbType.Int32).Value = form.TagModification;
+                                        command.ExecuteNonQuery();
+
+                                        command.Parameters.Clear();
+                                        command.CommandText = "INSERT INTO Subfields (FieldID, Code, Data) SELECT FieldID, @Code, @Data FROM Fields WHERE TagNumber = @TagNumber";
+
+                                        command.Parameters.Add("@Code", DbType.String);
+                                        command.Parameters.Add("@Data", DbType.String);
+
+                                        if (!String.IsNullOrEmpty(form.Ind1))
+                                        {
+                                            command.CommandText += " AND Ind1 = @Ind1";
+                                            command.Parameters.Add("@Ind1", DbType.String).Value = form.Ind1;
+                                        }
+
+                                        if (!String.IsNullOrEmpty(form.Ind2))
+                                        {
+                                            command.CommandText += " AND Ind2 = @Ind2";
+                                            command.Parameters.Add("@Ind2", DbType.String).Value = form.Ind2;
+                                        }
+
+                                        command.Parameters.Add("@TagNumber", DbType.Int32).Value = form.TagModification;
+
+                                        foreach (DataGridViewRow row in form.Subfields)
+                                        {
+                                            if (!row.IsNewRow)
+                                            {
+                                                command.Parameters["@Code"].Value = row.Cells[0].Value;
+                                                command.Parameters["@Data"].Value = row.Cells[1].Value;
+                                                command.ExecuteNonQuery();
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        command.CommandText = "DELETE FROM Subfields WHERE FieldID = @FieldID";
+
+                                        command.CommandText += " AND Code IN (";
+
+                                        foreach (DataGridViewRow row in form.Subfields)
+                                        {
+                                            if (!row.IsNewRow)
+                                                command.CommandText += "'" + row.Cells[0].Value + "', ";
+                                        }
+
+                                        command.CommandText = command.CommandText.Substring(0, command.CommandText.Length - 2) + ");";
+
+                                        command.Parameters.Clear();
+                                        command.Parameters.Add("@FieldID", DbType.Int32);
+
+                                        foreach (DataGridViewRow row in form.Subfields)
+                                        {
+                                            if (!row.IsNewRow)
+                                            {
+                                                foreach (KeyValuePair<int, int> field in foundFields)
+                                                {
+                                                    command.Parameters["@FieldID"].Value = field.Key;
+                                                    command.ExecuteNonQuery();
+                                                }
+                                            }
+                                        }
+
+                                        command.CommandText = "INSERT INTO Subfields (FieldID, Code, Data) VALUES (@FieldID, @Code, @Data);";
+                                        command.Parameters.Clear();
+                                        command.Parameters.Add("@FieldID", DbType.Int32);
+                                        command.Parameters.Add("@Code", DbType.String);
+                                        command.Parameters.Add("@Data", DbType.String);
+
+                                        added.Clear();
+
+                                        foreach (KeyValuePair<int, int> field in foundFields)
+                                        {
+                                            //Added is keyed on recordID so we only get one added per record.
+                                            if (!added.Keys.Contains(field.Key))
+                                            {
+                                                foreach (DataGridViewRow row in form.Subfields)
+                                                {
+                                                    if (!row.IsNewRow)
+                                                    {
+                                                        command.Parameters["@FieldID"].Value = field.Key;
+                                                        command.Parameters["@Code"].Value = row.Cells[0].Value;
+                                                        command.Parameters["@Data"].Value = row.Cells[1].Value;
+
+                                                        command.ExecuteNonQuery();
+                                                    }
+                                                }
+
+                                                int fieldID = (int)connection.LastInsertRowId;
+                                                added.Add(field.Key, fieldID);
+                                            }
+                                        }
+                                    }
                                     break;
                                 case "Replace":
                                     if (!String.IsNullOrEmpty(form.TagModification))
