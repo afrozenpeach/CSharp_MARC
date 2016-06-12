@@ -4652,7 +4652,7 @@ namespace CSharp_MARC_Editor
                                                 {
                                                     foreach (KeyValuePair<int, int> field in foundFields)
                                                     {
-                                                        command.Parameters["@FieldID"].Value = field.Value;
+                                                        command.Parameters["@FieldID"].Value = field.Key;
                                                         command.Parameters["@Code"].Value = row.Cells[0].Value;
                                                         command.ExecuteNonQuery();
                                                     }
@@ -4667,7 +4667,7 @@ namespace CSharp_MARC_Editor
 
                                             foreach (KeyValuePair<int, int> field in foundFields)
                                             {
-                                                command.Parameters["@FieldID"].Value = field.Value;
+                                                command.Parameters["@FieldID"].Value = field.Key;
                                                 command.ExecuteNonQuery();
                                             }
                                         }
@@ -4740,7 +4740,7 @@ namespace CSharp_MARC_Editor
                                             {
                                                 foreach (KeyValuePair<int, int> field in foundFields)
                                                 {
-                                                    command.Parameters["@FieldID"].Value = field.Value;
+                                                    command.Parameters["@FieldID"].Value = field.Key;
                                                     command.ExecuteNonQuery();
                                                 }
                                             }
@@ -4757,13 +4757,13 @@ namespace CSharp_MARC_Editor
                                         foreach (KeyValuePair<int, int> field in foundFields)
                                         {
                                             //Added is keyed on recordID so we only get one added per record.
-                                            if (!added.Keys.Contains(field.Value))
+                                            if (!added.Keys.Contains(field.Key))
                                             {
                                                 foreach (DataGridViewRow row in form.Subfields)
                                                 {
                                                     if (!row.IsNewRow)
                                                     {
-                                                        command.Parameters["@FieldID"].Value = field.Value;
+                                                        command.Parameters["@FieldID"].Value = field.Key;
                                                         command.Parameters["@Code"].Value = row.Cells[0].Value;
                                                         command.Parameters["@Data"].Value = row.Cells[1].Value;
 
@@ -4772,7 +4772,7 @@ namespace CSharp_MARC_Editor
                                                 }
 
                                                 int fieldID = (int)connection.LastInsertRowId;
-                                                added.Add(field.Value, fieldID);
+                                                added.Add(field.Key, fieldID);
                                             }
                                         }
                                     }
