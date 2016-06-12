@@ -53,6 +53,11 @@
  * @license   http://www.gnu.org/licenses/gpl-3.0.html  GPL License 3
  */ 
  
+2016-06-12 Changes:
+
+Add Advanced Batch Edit feature
+Fix database reset
+ 
 2016-06-09 Changes:
 
 Fix some more warnings

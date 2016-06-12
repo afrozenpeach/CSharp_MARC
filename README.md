@@ -20,6 +20,11 @@ This project is built upon the CSharp_MARC project of the same name available at
 
 ## Changelog:
  
+###2016-06-12 Changes:
+
+* Add Advanced Batch Edit feature
+* Fix database reset
+ 
 ###2016-06-09 Changes:
 
 * Fix some more warnings
