@@ -1491,6 +1491,46 @@ namespace CSharp_MARC_Editor
             }
         }
 
+        private void SortSubfields(int fieldID)
+        {
+            List<int> subfields = new List<int>();
+            int i = 0;
+
+            using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
+            {
+                connection.Open();
+
+                using (SQLiteCommand command = new SQLiteCommand(connection))
+                {
+                    command.CommandText = "SELECT SubfieldID FROM Subfields WHERE FieldID = @FieldID ORDER BY CASE WHEN Code >= '0' AND Code < '9' THEN 1 ELSE 0 END, Code";
+                    command.Parameters.Add("@FieldID", DbType.Int32).Value = fieldID;
+
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            subfields.Add(Int32.Parse(reader["SubfieldID"].ToString(), CultureInfo.InvariantCulture));
+                        }
+                    }
+
+                    command.Parameters.Clear();
+
+                    command.CommandText = "UPDATE Subfields SET Sort = @Sort WHERE SubfieldID = @SubfieldID";
+                    command.Parameters.Add("@SubfieldID", DbType.Int32);
+                    command.Parameters.Add("@Sort", DbType.Int32);
+
+                    foreach (int subfieldID in subfields)
+                    {
+                        command.Parameters["@SubfieldID"].Value = subfieldID;
+                        command.Parameters["@Sort"].Value = i;
+                        command.ExecuteNonQuery();
+
+                        i++;
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// Enables the form.
         /// </summary>
@@ -1544,7 +1584,6 @@ namespace CSharp_MARC_Editor
             }));
             cmd.CommandText = cmd.CommandText.Replace(name, names);
         }
-
 
         #endregion
 
@@ -4631,6 +4670,8 @@ namespace CSharp_MARC_Editor
                                                     command.Parameters["@Data"].Value = row.Cells[1].Value;
 
                                                     command.ExecuteNonQuery();
+
+                                                    SortSubfields(field.Value);
                                                 }
                                             }
                                         }
@@ -4655,6 +4696,8 @@ namespace CSharp_MARC_Editor
                                                         command.Parameters["@FieldID"].Value = field.Key;
                                                         command.Parameters["@Code"].Value = row.Cells[0].Value;
                                                         command.ExecuteNonQuery();
+
+                                                        SortSubfields(field.Key);
                                                     }
                                                 }
                                             }
@@ -4793,6 +4836,8 @@ namespace CSharp_MARC_Editor
 
                                                 int fieldID = (int)connection.LastInsertRowId;
                                                 added.Add(field.Key, fieldID);
+
+                                                SortSubfields(fieldID);
                                             }
                                         }
                                     }
@@ -4893,8 +4938,9 @@ namespace CSharp_MARC_Editor
                                                     }
                                                 }
 
-                                                int fieldID = (int)connection.LastInsertRowId;
-                                                added.Add(field.Key, fieldID);
+                                                added.Add(field.Key, field.Key);
+
+                                                SortSubfields(field.Key);
                                             }
                                         }
                                     }
@@ -5309,44 +5355,10 @@ namespace CSharp_MARC_Editor
             if (fieldsDataGridView.SelectedCells.Count > 0)
             {
                 int fieldID = Int32.Parse(fieldsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString(), CultureInfo.InvariantCulture);
-                List<int> subfields = new List<int>();
-                int i = 0;
 
-                using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
-                {
-                    connection.Open();
+                SortSubfields(fieldID);
 
-                    using (SQLiteCommand command = new SQLiteCommand(connection))
-                    {
-                        command.CommandText = "SELECT SubfieldID FROM Subfields WHERE FieldID = @FieldID ORDER BY CASE WHEN Code >= '0' AND Code < '9' THEN 1 ELSE 0 END, Code";
-                        command.Parameters.Add("@FieldID", DbType.Int32).Value = fieldID;
-                        
-                        using (SQLiteDataReader reader = command.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                subfields.Add(Int32.Parse(reader["SubfieldID"].ToString(), CultureInfo.InvariantCulture));
-                            }
-                        }
-
-                        command.Parameters.Clear();
-
-                        command.CommandText = "UPDATE Subfields SET Sort = @Sort WHERE SubfieldID = @SubfieldID";
-                        command.Parameters.Add("@SubfieldID", DbType.Int32);
-                        command.Parameters.Add("@Sort", DbType.Int32);
-
-                        foreach (int subfieldID in subfields)
-                        {
-                            command.Parameters["@SubfieldID"].Value = subfieldID;
-                            command.Parameters["@Sort"].Value = i;
-                            command.ExecuteNonQuery();
-
-                            i++;
-                        }
-
-                        LoadSubfields(Int32.Parse(fieldsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString(), CultureInfo.InvariantCulture));
-                    }
-                }
+                LoadSubfields(fieldID);
             }
         }
 
