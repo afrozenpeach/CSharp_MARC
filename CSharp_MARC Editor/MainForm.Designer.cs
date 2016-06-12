@@ -491,7 +491,7 @@ namespace CSharp_MARC_Editor
             this.previewTextBox.Name = "previewTextBox";
             this.previewTextBox.ReadOnly = true;
             this.previewTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.previewTextBox.Size = new System.Drawing.Size(293, 420);
+            this.previewTextBox.Size = new System.Drawing.Size(293, 409);
             this.previewTextBox.TabIndex = 2;
             // 
             // subfieldsDataGridView
@@ -514,7 +514,7 @@ namespace CSharp_MARC_Editor
             this.subfieldsDataGridView.Location = new System.Drawing.Point(243, 3);
             this.subfieldsDataGridView.MultiSelect = false;
             this.subfieldsDataGridView.Name = "subfieldsDataGridView";
-            this.subfieldsDataGridView.Size = new System.Drawing.Size(407, 420);
+            this.subfieldsDataGridView.Size = new System.Drawing.Size(407, 409);
             this.subfieldsDataGridView.TabIndex = 1;
             this.subfieldsDataGridView.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.subfieldsDataGridView_CellBeginEdit);
             this.subfieldsDataGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.subfieldsDataGridView_CellEndEdit);
@@ -587,7 +587,7 @@ namespace CSharp_MARC_Editor
             this.fieldsDataGridView.Location = new System.Drawing.Point(3, 3);
             this.fieldsDataGridView.MultiSelect = false;
             this.fieldsDataGridView.Name = "fieldsDataGridView";
-            this.fieldsDataGridView.Size = new System.Drawing.Size(202, 420);
+            this.fieldsDataGridView.Size = new System.Drawing.Size(202, 409);
             this.fieldsDataGridView.TabIndex = 0;
             this.fieldsDataGridView.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.fieldsDataGridView_CellBeginEdit);
             this.fieldsDataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.fieldsDataGridView_CellClick);
@@ -827,7 +827,7 @@ namespace CSharp_MARC_Editor
             // 
             this.createBlankRecordToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("createBlankRecordToolStripMenuItem.Image")));
             this.createBlankRecordToolStripMenuItem.Name = "createBlankRecordToolStripMenuItem";
-            this.createBlankRecordToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.createBlankRecordToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
             this.createBlankRecordToolStripMenuItem.Text = "Create Blank Record";
             this.createBlankRecordToolStripMenuItem.Click += new System.EventHandler(this.createBlankRecordToolStripMenuItem_Click);
             // 
@@ -835,12 +835,13 @@ namespace CSharp_MARC_Editor
             // 
             this.findAndReplaceToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("findAndReplaceToolStripMenuItem.Image")));
             this.findAndReplaceToolStripMenuItem.Name = "findAndReplaceToolStripMenuItem";
-            this.findAndReplaceToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.findAndReplaceToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
             this.findAndReplaceToolStripMenuItem.Text = "Find and Replace";
             this.findAndReplaceToolStripMenuItem.Click += new System.EventHandler(this.findAndReplaceToolStripMenuItem_Click);
             // 
             // advancedBatchEditToolStripMenuItem
             // 
+            this.advancedBatchEditToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("advancedBatchEditToolStripMenuItem.Image")));
             this.advancedBatchEditToolStripMenuItem.Name = "advancedBatchEditToolStripMenuItem";
             this.advancedBatchEditToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
             this.advancedBatchEditToolStripMenuItem.Text = "Advanced Batch Edit";

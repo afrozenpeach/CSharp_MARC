@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AdvancedBatchEditForm));
             this.dataTextBox = new System.Windows.Forms.TextBox();
             this.dataLabel = new System.Windows.Forms.Label();
             this.codesListBox = new System.Windows.Forms.ListBox();
@@ -44,6 +45,8 @@
             this.cancelButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
             this.modificationsDataGridView = new System.Windows.Forms.DataGridView();
+            this.CodeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DataCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ind2TextBox = new System.Windows.Forms.TextBox();
             this.ind2Label = new System.Windows.Forms.Label();
             this.ind1TextBox = new System.Windows.Forms.TextBox();
@@ -52,8 +55,6 @@
             this.tagLabel = new System.Windows.Forms.Label();
             this.actionComboBox = new System.Windows.Forms.ComboBox();
             this.actionLabel = new System.Windows.Forms.Label();
-            this.CodeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.DataCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.conditionsGroupBox.SuspendLayout();
             this.modificationGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.modificationsDataGridView)).BeginInit();
@@ -255,6 +256,21 @@
             this.modificationsDataGridView.Size = new System.Drawing.Size(474, 130);
             this.modificationsDataGridView.TabIndex = 8;
             // 
+            // CodeCol
+            // 
+            this.CodeCol.HeaderText = "Code";
+            this.CodeCol.MaxInputLength = 1;
+            this.CodeCol.MinimumWidth = 50;
+            this.CodeCol.Name = "CodeCol";
+            this.CodeCol.Width = 50;
+            // 
+            // DataCol
+            // 
+            this.DataCol.HeaderText = "Data";
+            this.DataCol.MinimumWidth = 50;
+            this.DataCol.Name = "DataCol";
+            this.DataCol.Width = 300;
+            // 
             // ind2TextBox
             // 
             this.ind2TextBox.Location = new System.Drawing.Point(355, 19);
@@ -329,21 +345,6 @@
             this.actionLabel.TabIndex = 0;
             this.actionLabel.Text = "Action:";
             // 
-            // CodeCol
-            // 
-            this.CodeCol.HeaderText = "Code";
-            this.CodeCol.MaxInputLength = 1;
-            this.CodeCol.MinimumWidth = 50;
-            this.CodeCol.Name = "CodeCol";
-            this.CodeCol.Width = 50;
-            // 
-            // DataCol
-            // 
-            this.DataCol.HeaderText = "Data";
-            this.DataCol.MinimumWidth = 50;
-            this.DataCol.Name = "DataCol";
-            this.DataCol.Width = 300;
-            // 
             // AdvancedBatchEditForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -352,6 +353,7 @@
             this.Controls.Add(this.modificationGroupBox);
             this.Controls.Add(this.conditionsGroupBox);
             this.HelpButton = true;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "AdvancedBatchEditForm";
