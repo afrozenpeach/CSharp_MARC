@@ -677,7 +677,7 @@ namespace CSharp_MARC_Editor
                                                     [CustomData4] nvarchar(2147483647), 
                                                     [CustomTag5] nvarchar(3), 
                                                     [CustomCode5] varchar(1), 
-                                                    [CustomData5] nvarchar(2147483647))
+                                                    [CustomData5] nvarchar(2147483647)),
                                                     [ForceUTF8Import] bool;
 
                                                 CREATE TABLE [Subfields](
