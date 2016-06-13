@@ -19,7 +19,14 @@ This project is built upon the CSharp_MARC project of the same name available at
 * SQLite database backend - advanced users can connect with any SQLite client to do further SQL queries on the dataset
 
 ## Changelog:
- 
+
+###2016-06-12.1 Changes:
+
+* Fix field sorting
+* Speed sorting up
+* Batch Edit is now in a background worker thread
+* Add sort all fields and subfields functionality
+
 ###2016-06-12 Changes:
 
 * Add Advanced Batch Edit feature

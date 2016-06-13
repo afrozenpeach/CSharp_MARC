@@ -53,6 +53,13 @@
  * @license   http://www.gnu.org/licenses/gpl-3.0.html  GPL License 3
  */ 
  
+2016-06-12.1 Changes:
+
+Fix field sorting
+Speed sorting up
+Batch Edit is now in a background worker thread
+Add sort all fields and subfields functionality
+ 
 2016-06-12 Changes:
 
 Add Advanced Batch Edit feature
