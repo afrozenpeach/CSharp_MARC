@@ -53,6 +53,10 @@
  * @license   http://www.gnu.org/licenses/gpl-3.0.html  GPL License 3
  */ 
  
+2016-06-12.2 Changes:
+
+Fix database reset
+
 2016-06-12.1 Changes:
 
 Fix field sorting
