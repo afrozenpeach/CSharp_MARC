@@ -57,12 +57,12 @@ namespace CSharp_MARC_Editor
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.recordsDataGridView = new System.Windows.Forms.DataGridView();
             this.recordIDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -164,6 +164,7 @@ namespace CSharp_MARC_Editor
             this.sortAllFieldsAndSubfieldsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sortAllBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.batchEditBackgroundWorker = new System.ComponentModel.BackgroundWorker();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -278,8 +279,8 @@ namespace CSharp_MARC_Editor
             // authorDataGridViewTextBoxColumn
             // 
             this.authorDataGridViewTextBoxColumn.DataPropertyName = "Author";
-            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.authorDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.authorDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle1;
             this.authorDataGridViewTextBoxColumn.HeaderText = "Author";
             this.authorDataGridViewTextBoxColumn.MinimumWidth = 20;
             this.authorDataGridViewTextBoxColumn.Name = "authorDataGridViewTextBoxColumn";
@@ -289,8 +290,8 @@ namespace CSharp_MARC_Editor
             // titleDataGridViewTextBoxColumn
             // 
             this.titleDataGridViewTextBoxColumn.DataPropertyName = "Title";
-            dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.titleDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.titleDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle2;
             this.titleDataGridViewTextBoxColumn.HeaderText = "Title";
             this.titleDataGridViewTextBoxColumn.MinimumWidth = 20;
             this.titleDataGridViewTextBoxColumn.Name = "titleDataGridViewTextBoxColumn";
@@ -363,8 +364,8 @@ namespace CSharp_MARC_Editor
             // ImportErrors
             // 
             this.ImportErrors.DataPropertyName = "ImportErrors";
-            dataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.ImportErrors.DefaultCellStyle = dataGridViewCellStyle13;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.ImportErrors.DefaultCellStyle = dataGridViewCellStyle3;
             this.ImportErrors.HeaderText = "Import Errors";
             this.ImportErrors.Name = "ImportErrors";
             this.ImportErrors.ReadOnly = true;
@@ -373,8 +374,8 @@ namespace CSharp_MARC_Editor
             // ValidationErrors
             // 
             this.ValidationErrors.DataPropertyName = "ValidationErrors";
-            dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.ValidationErrors.DefaultCellStyle = dataGridViewCellStyle14;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.ValidationErrors.DefaultCellStyle = dataGridViewCellStyle4;
             this.ValidationErrors.HeaderText = "Validation Errors";
             this.ValidationErrors.Name = "ValidationErrors";
             this.ValidationErrors.ReadOnly = true;
@@ -392,6 +393,7 @@ namespace CSharp_MARC_Editor
             this.fieldsSortButton.Name = "fieldsSortButton";
             this.fieldsSortButton.Size = new System.Drawing.Size(26, 56);
             this.fieldsSortButton.TabIndex = 12;
+            this.toolTip.SetToolTip(this.fieldsSortButton, "Sort fields by tag number");
             this.fieldsSortButton.UseVisualStyleBackColor = true;
             this.fieldsSortButton.Click += new System.EventHandler(this.fieldsSortButton_Click);
             // 
@@ -402,6 +404,7 @@ namespace CSharp_MARC_Editor
             this.fieldDownButton.Name = "fieldDownButton";
             this.fieldDownButton.Size = new System.Drawing.Size(26, 56);
             this.fieldDownButton.TabIndex = 11;
+            this.toolTip.SetToolTip(this.fieldDownButton, "Move field down");
             this.fieldDownButton.UseVisualStyleBackColor = true;
             this.fieldDownButton.Click += new System.EventHandler(this.fieldDownButton_Click);
             // 
@@ -412,6 +415,7 @@ namespace CSharp_MARC_Editor
             this.fieldUpButton.Name = "fieldUpButton";
             this.fieldUpButton.Size = new System.Drawing.Size(26, 56);
             this.fieldUpButton.TabIndex = 10;
+            this.toolTip.SetToolTip(this.fieldUpButton, "Move field up");
             this.fieldUpButton.UseVisualStyleBackColor = true;
             this.fieldUpButton.Click += new System.EventHandler(this.fieldUpButton_Click);
             // 
@@ -422,6 +426,7 @@ namespace CSharp_MARC_Editor
             this.subfieldSortButton.Name = "subfieldSortButton";
             this.subfieldSortButton.Size = new System.Drawing.Size(26, 56);
             this.subfieldSortButton.TabIndex = 9;
+            this.toolTip.SetToolTip(this.subfieldSortButton, "Sort subfields by code");
             this.subfieldSortButton.UseVisualStyleBackColor = true;
             this.subfieldSortButton.Click += new System.EventHandler(this.subfieldSortButton_Click);
             // 
@@ -432,6 +437,7 @@ namespace CSharp_MARC_Editor
             this.subfieldDownButton.Name = "subfieldDownButton";
             this.subfieldDownButton.Size = new System.Drawing.Size(26, 56);
             this.subfieldDownButton.TabIndex = 5;
+            this.toolTip.SetToolTip(this.subfieldDownButton, "Move subfield down");
             this.subfieldDownButton.UseVisualStyleBackColor = true;
             this.subfieldDownButton.Click += new System.EventHandler(this.subfieldDownButton_Click);
             // 
@@ -442,6 +448,7 @@ namespace CSharp_MARC_Editor
             this.subfieldUpButton.Name = "subfieldUpButton";
             this.subfieldUpButton.Size = new System.Drawing.Size(26, 56);
             this.subfieldUpButton.TabIndex = 4;
+            this.toolTip.SetToolTip(this.subfieldUpButton, "Move subfield up");
             this.subfieldUpButton.UseVisualStyleBackColor = true;
             this.subfieldUpButton.Click += new System.EventHandler(this.subfieldUpButton_Click);
             // 
@@ -553,8 +560,8 @@ namespace CSharp_MARC_Editor
             // dataDataGridViewTextBoxColumn
             // 
             this.dataDataGridViewTextBoxColumn.DataPropertyName = "Data";
-            dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle15;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle5;
             this.dataDataGridViewTextBoxColumn.HeaderText = "Data";
             this.dataDataGridViewTextBoxColumn.MinimumWidth = 100;
             this.dataDataGridViewTextBoxColumn.Name = "dataDataGridViewTextBoxColumn";
@@ -1247,6 +1254,7 @@ namespace CSharp_MARC_Editor
         private System.Windows.Forms.ToolStripMenuItem sortAllFieldsAndSubfieldsToolStripMenuItem;
         private System.ComponentModel.BackgroundWorker sortAllBackgroundWorker;
         private System.ComponentModel.BackgroundWorker batchEditBackgroundWorker;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }
 
