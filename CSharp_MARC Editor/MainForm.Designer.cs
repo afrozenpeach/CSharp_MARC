@@ -162,6 +162,8 @@ namespace CSharp_MARC_Editor
             this.rdaConversionBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.validationBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.sortAllFieldsAndSubfieldsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sortAllBackgroundWorker = new System.ComponentModel.BackgroundWorker();
+            this.batchEditBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -492,7 +494,7 @@ namespace CSharp_MARC_Editor
             this.previewTextBox.Name = "previewTextBox";
             this.previewTextBox.ReadOnly = true;
             this.previewTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.previewTextBox.Size = new System.Drawing.Size(293, 409);
+            this.previewTextBox.Size = new System.Drawing.Size(293, 420);
             this.previewTextBox.TabIndex = 2;
             // 
             // subfieldsDataGridView
@@ -515,7 +517,7 @@ namespace CSharp_MARC_Editor
             this.subfieldsDataGridView.Location = new System.Drawing.Point(243, 3);
             this.subfieldsDataGridView.MultiSelect = false;
             this.subfieldsDataGridView.Name = "subfieldsDataGridView";
-            this.subfieldsDataGridView.Size = new System.Drawing.Size(407, 409);
+            this.subfieldsDataGridView.Size = new System.Drawing.Size(407, 420);
             this.subfieldsDataGridView.TabIndex = 1;
             this.subfieldsDataGridView.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.subfieldsDataGridView_CellBeginEdit);
             this.subfieldsDataGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.subfieldsDataGridView_CellEndEdit);
@@ -588,7 +590,7 @@ namespace CSharp_MARC_Editor
             this.fieldsDataGridView.Location = new System.Drawing.Point(3, 3);
             this.fieldsDataGridView.MultiSelect = false;
             this.fieldsDataGridView.Name = "fieldsDataGridView";
-            this.fieldsDataGridView.Size = new System.Drawing.Size(202, 409);
+            this.fieldsDataGridView.Size = new System.Drawing.Size(202, 420);
             this.fieldsDataGridView.TabIndex = 0;
             this.fieldsDataGridView.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.fieldsDataGridView_CellBeginEdit);
             this.fieldsDataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.fieldsDataGridView_CellClick);
@@ -845,7 +847,7 @@ namespace CSharp_MARC_Editor
             // 
             this.advancedBatchEditToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("advancedBatchEditToolStripMenuItem.Image")));
             this.advancedBatchEditToolStripMenuItem.Name = "advancedBatchEditToolStripMenuItem";
-            this.advancedBatchEditToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.advancedBatchEditToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
             this.advancedBatchEditToolStripMenuItem.Text = "Advanced Batch Edit";
             this.advancedBatchEditToolStripMenuItem.Click += new System.EventHandler(this.advancedBatchEditToolStripMenuItem_Click);
             // 
@@ -1027,7 +1029,7 @@ namespace CSharp_MARC_Editor
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
@@ -1092,6 +1094,22 @@ namespace CSharp_MARC_Editor
             this.sortAllFieldsAndSubfieldsToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
             this.sortAllFieldsAndSubfieldsToolStripMenuItem.Text = "Sort all fields and subfields";
             this.sortAllFieldsAndSubfieldsToolStripMenuItem.Click += new System.EventHandler(this.sortAllFieldsAndSubfieldsToolStripMenuItem_Click);
+            // 
+            // sortAllBackgroundWorker
+            // 
+            this.sortAllBackgroundWorker.WorkerReportsProgress = true;
+            this.sortAllBackgroundWorker.WorkerSupportsCancellation = true;
+            this.sortAllBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.sortAllBackgroundWorker_DoWork);
+            this.sortAllBackgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.sortAllBackgroundWorker_ProgressChanged);
+            this.sortAllBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.sortAllBackgroundWorker_RunWorkerCompleted);
+            // 
+            // batchEditBackgroundWorker
+            // 
+            this.batchEditBackgroundWorker.WorkerReportsProgress = true;
+            this.batchEditBackgroundWorker.WorkerSupportsCancellation = true;
+            this.batchEditBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.batchEditBackgroundWorker_DoWork);
+            this.batchEditBackgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.batchEditBackgroundWorker_ProgressChanged);
+            this.batchEditBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.batchEditBackgroundWorker_RunWorkerCompleted);
             // 
             // MainForm
             // 
@@ -1227,6 +1245,8 @@ namespace CSharp_MARC_Editor
         private System.Windows.Forms.ToolStripMenuItem forceUTF8ImportToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem advancedBatchEditToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sortAllFieldsAndSubfieldsToolStripMenuItem;
+        private System.ComponentModel.BackgroundWorker sortAllBackgroundWorker;
+        private System.ComponentModel.BackgroundWorker batchEditBackgroundWorker;
     }
 }
 

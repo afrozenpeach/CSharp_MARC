@@ -59,6 +59,7 @@ namespace CSharp_MARC_Editor
         private bool reloadFields = false;
         private decimal recordsPerFile = 0;
         private CustomFieldsForm customFieldsForm = new CustomFieldsForm();
+        private AdvancedBatchEditForm batchEditForm = null;
         private List<string> linesToPrint;
         private Exception errorLoading = null;
         int? rebuildingID = null;
@@ -1506,6 +1507,9 @@ namespace CSharp_MARC_Editor
 
                 using (SQLiteCommand command = new SQLiteCommand(connection))
                 {
+                    command.CommandText = "BEGIN";
+                    command.ExecuteNonQuery();
+
                     command.CommandText = "SELECT SubfieldID FROM Subfields WHERE FieldID = @FieldID ORDER BY CASE WHEN Code >= '0' AND Code < '9' THEN 1 ELSE 0 END, Code";
                     command.Parameters.Add("@FieldID", DbType.Int32).Value = fieldID;
 
@@ -1531,6 +1535,9 @@ namespace CSharp_MARC_Editor
 
                         i++;
                     }
+
+                    command.CommandText = "END";
+                    command.ExecuteNonQuery();
                 }
             }
         }
@@ -1550,6 +1557,9 @@ namespace CSharp_MARC_Editor
 
                 using (SQLiteCommand command = new SQLiteCommand(connection))
                 {
+                    command.CommandText = "BEGIN";
+                    command.ExecuteNonQuery();
+
                     command.CommandText = "SELECT FieldID FROM Fields WHERE RecordID = @RecordID ORDER BY CASE WHEN TagNumber = 'LDR' THEN 0 ELSE 1 END, TagNumber, Sort, FieldID";
                     command.Parameters.Add("@RecordID", DbType.Int32).Value = recordID;
 
@@ -1560,10 +1570,7 @@ namespace CSharp_MARC_Editor
                             fields.Add(Int32.Parse(reader["FieldID"].ToString(), CultureInfo.InvariantCulture));
                         }
                     }
-                }
 
-                using (SQLiteCommand command = new SQLiteCommand(connection))
-                { 
                     command.Parameters.Clear();
 
                     command.CommandText = "UPDATE Fields SET Sort = @Sort WHERE FieldID = @FieldID";
@@ -1578,6 +1585,8 @@ namespace CSharp_MARC_Editor
 
                         i++;
                     }
+                    command.CommandText = "END";
+                    command.ExecuteNonQuery();
                 }
             }
         }
@@ -4510,514 +4519,555 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void advancedBatchEditToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (AdvancedBatchEditForm form = new AdvancedBatchEditForm())
+            batchEditForm = new AdvancedBatchEditForm();
+
+            if (batchEditForm.ShowDialog() == DialogResult.OK)
             {
-                if (form.ShowDialog() == DialogResult.OK)
+                Console.WriteLine("Start batch edit: " + DateTime.Now.ToString(CultureInfo.CurrentCulture));
+                DisableForm();
+                toolStripProgressBar.Style = ProgressBarStyle.Marquee;
+                toolStripProgressBar.MarqueeAnimationSpeed = 30;
+                toolStripProgressBar.Enabled = true;
+                toolStripProgressBar.Visible = true;
+                progressToolStripStatusLabel.Visible = true;
+                cancelButtonToolStripStatusLabel.Visible = true;
+                batchEditBackgroundWorker.RunWorkerAsync(batchEditForm);
+            }
+        }
+
+        /// <summary>
+        /// Handles the DoWork event of the batchEditBackgroundWorker control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="DoWorkEventArgs"/> instance containing the event data.</param>
+        private void batchEditBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
+            {
+                connection.Open();
+                using (SQLiteCommand command = new SQLiteCommand(connection))
                 {
-                    DisableForm();
+                    StringBuilder query = new StringBuilder("SELECT DISTINCT f.FieldID, f.RecordID From Fields f LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID");
 
-                    using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
+                    if (batchEditForm.CaseSensitive)
                     {
-                        connection.Open();
-                        using (SQLiteCommand command = new SQLiteCommand(connection))
+                        query.Insert(0, "PRAGMA case_sensitive_like=ON;");
+                    }
+
+                    command.Parameters.Add("@ReplaceData", DbType.String).Value = batchEditForm.Data;
+
+                    StringBuilder whereClause = new StringBuilder(" WHERE ");
+
+                    if (batchEditForm.SelectedTags.Contains("Any"))
+                    {
+                        // Do nothing!
+                    }
+                    else if (batchEditForm.SelectedTags.Count == 1)
+                    {
+                        whereClause.Append("f.TagNumber = @TagNumber AND ");
+                        command.Parameters.Add("@TagNumber", DbType.String).Value = batchEditForm.SelectedTags[0];
+                    }
+                    else if (batchEditForm.SelectedTags.Count > 1)
+                    {
+                        int i = 0;
+                        whereClause.Append("f.TagNumber IN (");
+
+                        foreach (string tag in batchEditForm.SelectedTags)
                         {
-                            StringBuilder query = new StringBuilder("SELECT DISTINCT f.FieldID, f.RecordID From Fields f LEFT OUTER JOIN Subfields s ON s.FieldID = f.FieldID");
+                            string tagNumber = string.Format(CultureInfo.InvariantCulture, "@TagNumber{0}", i);
+                            command.Parameters.Add(tagNumber, DbType.String).Value = tag;
+                            whereClause.AppendFormat("{0}, ", tagNumber);
 
-                            if (form.CaseSensitive)
+                            i++;
+                        }
+
+                        whereClause.Remove(whereClause.Length - 2, 2);
+                        whereClause.Append(") AND ");
+                    }
+
+                    if (batchEditForm.SelectedIndicator1s.Contains("Any"))
+                    {
+                        // Do nothing!
+                    }
+                    else if (batchEditForm.SelectedIndicator1s.Count == 1)
+                    {
+                        whereClause.Append("f.Ind1 = @Ind1 AND ");
+                        command.Parameters.Add("@Ind1", DbType.String).Value = batchEditForm.SelectedIndicator1s[0];
+                    }
+                    else if (batchEditForm.SelectedIndicator1s.Count > 1)
+                    {
+                        int i = 0;
+                        whereClause.Append("f.Ind1 IN (");
+
+                        foreach (string ind1 in batchEditForm.SelectedIndicator1s)
+                        {
+                            string indicator = string.Format(CultureInfo.InvariantCulture, "@Ind1{0}", i);
+                            command.Parameters.Add(indicator, DbType.String).Value = ind1;
+                            whereClause.AppendFormat("{0}, ", indicator);
+
+                            i++;
+                        }
+                        whereClause.Remove(whereClause.Length - 2, 2);
+                        whereClause.Append(") AND ");
+                    }
+
+                    if (batchEditForm.SelectedIndicator2s.Contains("Any"))
+                    {
+                        // Do nothing!
+                    }
+                    else if (batchEditForm.SelectedIndicator2s.Count == 1)
+                    {
+                        whereClause.Append("f.Ind2 = @Ind2 AND ");
+                        command.Parameters.Add("@Ind2", DbType.String).Value = batchEditForm.SelectedIndicator2s[0];
+                    }
+                    else if (batchEditForm.SelectedIndicator1s.Count > 1)
+                    {
+                        int i = 0;
+                        whereClause.Append("f.Ind2 IN (");
+
+                        foreach (string ind2 in batchEditForm.SelectedIndicator2s)
+                        {
+                            string indicator = string.Format(CultureInfo.InvariantCulture, "@Ind2{0}", i);
+                            command.Parameters.Add(indicator, DbType.String).Value = ind2;
+                            whereClause.AppendFormat("{0}, ", indicator);
+
+                            i++;
+                        }
+                        whereClause.Remove(whereClause.Length - 2, 2);
+                        whereClause.Append(") AND ");
+                    }
+
+                    if (batchEditForm.SelectedCodes.Contains("Any"))
+                    {
+                        // Do nothing!
+                    }
+                    else if (batchEditForm.SelectedCodes.Count == 1)
+                    {
+                        whereClause.Append("s.Code = @Code AND ");
+                        command.Parameters.Add("@Code", DbType.String).Value = batchEditForm.SelectedCodes[0];
+                    }
+                    else if (batchEditForm.SelectedCodes.Count > 1)
+                    {
+                        int i = 0;
+                        whereClause.Append("s.Code IN (");
+
+                        foreach (string code in batchEditForm.SelectedCodes)
+                        {
+                            string codeParam = string.Format(CultureInfo.InvariantCulture, "@Code{0}", i);
+                            command.Parameters.Add(codeParam, DbType.String).Value = code;
+                            whereClause.AppendFormat("{0}, ", codeParam);
+
+                            i++;
+                        }
+                        whereClause.Remove(whereClause.Length - 2, 2);
+                        whereClause.Append(") AND ");
+                    }
+
+                    if (batchEditForm.Regex)
+                        whereClause.Append("Data REGEXP @Data;");
+                    else
+                        whereClause.Append("Data LIKE @Data;");
+
+                    command.Parameters.Add("@Data", DbType.String).Value = "%" + batchEditForm.Data + "%";
+
+                    query.Append(whereClause);
+                    query.Append("PRAGMA case_sensitive_like=OFF;");
+
+                    command.CommandText = query.ToString();
+
+                    Dictionary<int, int> foundFields = new Dictionary<int, int>();
+
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                            foundFields.Add(Int32.Parse(reader["FieldID"].ToString()), Int32.Parse(reader["RecordID"].ToString()));
+                    }
+
+                    command.CommandText = "BEGIN";
+                    command.ExecuteNonQuery();
+
+                    Dictionary<int, int> added = new Dictionary<int, int>();
+
+                    switch (batchEditForm.Action)
+                    {
+                        case "Add":
+                            command.CommandText = "INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2, ControlData) VALUES (@RecordID, @TagNumber, @Ind1, @Ind2, @ControlData);";
+                            command.Parameters.Clear();
+                            command.Parameters.Add("@RecordID", DbType.Int32);
+                            command.Parameters.Add("@TagNumber", DbType.String);
+                            command.Parameters.Add("@Ind1", DbType.String);
+                            command.Parameters.Add("@Ind2", DbType.String);
+                            command.Parameters.Add("@ControlData", DbType.String);
+
+                            added.Clear();
+
+                            foreach (KeyValuePair<int, int> field in foundFields)
                             {
-                                query.Insert(0, "PRAGMA case_sensitive_like=ON;");
-                            }
-
-                            command.Parameters.Add("@ReplaceData", DbType.String).Value = form.Data;
-
-                            StringBuilder whereClause = new StringBuilder(" WHERE ");
-
-                            if (form.SelectedTags.Contains("Any"))
-                            {
-                                // Do nothing!
-                            }
-                            else if (form.SelectedTags.Count == 1)
-                            {
-                                whereClause.Append("f.TagNumber = @TagNumber AND ");
-                                command.Parameters.Add("@TagNumber", DbType.String).Value = form.SelectedTags[0];
-                            }
-                            else if (form.SelectedTags.Count > 1)
-                            {
-                                int i = 0;
-                                whereClause.Append("f.TagNumber IN (");
-
-                                foreach (string tag in form.SelectedTags)
+                                //Added is keyed on recordID so we only get one added per record.
+                                if (!added.Keys.Contains(field.Value))
                                 {
-                                    string tagNumber = string.Format(CultureInfo.InvariantCulture, "@TagNumber{0}", i);
-                                    command.Parameters.Add(tagNumber, DbType.String).Value = tag;
-                                    whereClause.AppendFormat("{0}, ", tagNumber);
+                                    command.Parameters["@RecordID"].Value = field.Value;
+                                    command.Parameters["@TagNumber"].Value = batchEditForm.TagModification;
 
-                                    i++;
-                                }
-
-                                whereClause.Remove(whereClause.Length - 2, 2);
-                                whereClause.Append(") AND ");
-                            }
-
-                            if (form.SelectedIndicator1s.Contains("Any"))
-                            {
-                                // Do nothing!
-                            }
-                            else if (form.SelectedIndicator1s.Count == 1)
-                            {
-                                whereClause.Append("f.Ind1 = @Ind1 AND ");
-                                command.Parameters.Add("@Ind1", DbType.String).Value = form.SelectedIndicator1s[0];
-                            }
-                            else if (form.SelectedIndicator1s.Count > 1)
-                            {
-                                int i = 0;
-                                whereClause.Append("f.Ind1 IN (");
-
-                                foreach (string ind1 in form.SelectedIndicator1s)
-                                {
-                                    string indicator = string.Format(CultureInfo.InvariantCulture, "@Ind1{0}", i);
-                                    command.Parameters.Add(indicator, DbType.String).Value = ind1;
-                                    whereClause.AppendFormat("{0}, ", indicator);
-
-                                    i++;
-                                }
-                                whereClause.Remove(whereClause.Length - 2, 2);
-                                whereClause.Append(") AND ");
-                            }
-
-                            if (form.SelectedIndicator2s.Contains("Any"))
-                            {
-                                // Do nothing!
-                            }
-                            else if (form.SelectedIndicator2s.Count == 1)
-                            {
-                                whereClause.Append("f.Ind2 = @Ind2 AND ");
-                                command.Parameters.Add("@Ind2", DbType.String).Value = form.SelectedIndicator2s[0];
-                            }
-                            else if (form.SelectedIndicator1s.Count > 1)
-                            {
-                                int i = 0;
-                                whereClause.Append("f.Ind2 IN (");
-
-                                foreach (string ind2 in form.SelectedIndicator2s)
-                                {
-                                    string indicator = string.Format(CultureInfo.InvariantCulture, "@Ind2{0}", i);
-                                    command.Parameters.Add(indicator, DbType.String).Value = ind2;
-                                    whereClause.AppendFormat("{0}, ", indicator);
-
-                                    i++;
-                                }
-                                whereClause.Remove(whereClause.Length - 2, 2);
-                                whereClause.Append(") AND ");
-                            }
-
-                            if (form.SelectedCodes.Contains("Any"))
-                            {
-                                // Do nothing!
-                            }
-                            else if (form.SelectedCodes.Count == 1)
-                            {
-                                whereClause.Append("s.Code = @Code AND ");
-                                command.Parameters.Add("@Code", DbType.String).Value = form.SelectedCodes[0];
-                            }
-                            else if (form.SelectedCodes.Count > 1)
-                            {
-                                int i = 0;
-                                whereClause.Append("s.Code IN (");
-
-                                foreach (string code in form.SelectedCodes)
-                                {
-                                    string codeParam = string.Format(CultureInfo.InvariantCulture, "@Code{0}", i);
-                                    command.Parameters.Add(codeParam, DbType.String).Value = code;
-                                    whereClause.AppendFormat("{0}, ", codeParam);
-
-                                    i++;
-                                }
-                                whereClause.Remove(whereClause.Length - 2, 2);
-                                whereClause.Append(") AND ");
-                            }
-
-                            if (form.Regex)
-                                whereClause.Append("Data REGEXP @Data;");
-                            else
-                                whereClause.Append("Data LIKE @Data;");
-
-                            command.Parameters.Add("@Data", DbType.String).Value = "%" + form.Data + "%";
-
-                            query.Append(whereClause);
-                            query.Append("PRAGMA case_sensitive_like=OFF;");
-
-                            command.CommandText = query.ToString();
-
-                            Dictionary<int, int> foundFields = new Dictionary<int, int>();
-
-                            using (SQLiteDataReader reader = command.ExecuteReader())
-                            {
-                                while (reader.Read())
-                                    foundFields.Add(Int32.Parse(reader["FieldID"].ToString()), Int32.Parse(reader["RecordID"].ToString()));
-                            }
-
-                            command.CommandText = "BEGIN";
-                            command.ExecuteNonQuery();
-
-                            Dictionary<int, int> added = new Dictionary<int, int>();
-
-                            switch (form.Action)
-                            {
-                                case "Add":
-                                    command.CommandText = "INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2, ControlData) VALUES (@RecordID, @TagNumber, @Ind1, @Ind2, @ControlData);";
-                                    command.Parameters.Clear();
-                                    command.Parameters.Add("@RecordID", DbType.Int32);
-                                    command.Parameters.Add("@TagNumber", DbType.String);
-                                    command.Parameters.Add("@Ind1", DbType.String);
-                                    command.Parameters.Add("@Ind2", DbType.String);
-                                    command.Parameters.Add("@ControlData", DbType.String);
-
-                                    added.Clear();
-
-                                    foreach (KeyValuePair<int, int> field in foundFields)
+                                    if (!batchEditForm.TagModification.StartsWith("00"))
                                     {
-                                        //Added is keyed on recordID so we only get one added per record.
-                                        if (!added.Keys.Contains(field.Value))
+                                        if (String.IsNullOrEmpty(batchEditForm.Ind1))
+                                            command.Parameters["@Ind1"].Value = " ";
+                                        else
+                                            command.Parameters["@Ind1"].Value = batchEditForm.Ind1;
+
+                                        if (String.IsNullOrEmpty(batchEditForm.Ind2))
+                                            command.Parameters["@Ind2"].Value = " ";
+                                        else
+                                            command.Parameters["@Ind2"].Value = batchEditForm.Ind2;
+
+                                        command.Parameters["@ControlData"].Value = null;
+                                    }
+                                    else
+                                    {
+                                        command.Parameters["@Ind1"].Value = null;
+                                        command.Parameters["@Ind2"].Value = null;
+
+                                        command.Parameters["@ControlData"].Value = batchEditForm.Subfields[0].Cells[1].Value;
+                                    }
+
+                                    command.ExecuteNonQuery();
+                                    int fieldID = (int)connection.LastInsertRowId;
+                                    added.Add(field.Value, fieldID);
+                                }
+                            }
+
+                            if (!batchEditForm.TagModification.StartsWith("00"))
+                            {
+                                command.CommandText = "INSERT INTO Subfields (FieldID, Code, Data) VALUES (@FieldID, @Code, @Data);";
+                                command.Parameters.Clear();
+                                command.Parameters.Add("@FieldID", DbType.Int32);
+                                command.Parameters.Add("@Code", DbType.String);
+                                command.Parameters.Add("@Data", DbType.String);
+
+                                foreach (KeyValuePair<int, int> field in added)
+                                {
+                                    foreach (DataGridViewRow row in batchEditForm.Subfields)
+                                    {
+                                        if (!row.IsNewRow)
                                         {
-                                            command.Parameters["@RecordID"].Value = field.Value;
-                                            command.Parameters["@TagNumber"].Value = form.TagModification;
-
-                                            if (!form.TagModification.StartsWith("00"))
-                                            {
-                                                if (String.IsNullOrEmpty(form.Ind1))
-                                                    command.Parameters["@Ind1"].Value = " ";
-                                                else
-                                                    command.Parameters["@Ind1"].Value = form.Ind1;
-
-                                                if (String.IsNullOrEmpty(form.Ind2))
-                                                    command.Parameters["@Ind2"].Value = " ";
-                                                else
-                                                    command.Parameters["@Ind2"].Value = form.Ind2;
-
-                                                command.Parameters["@ControlData"].Value = null;
-                                            }
-                                            else
-                                            {
-                                                command.Parameters["@Ind1"].Value = null;
-                                                command.Parameters["@Ind2"].Value = null;
-
-                                                command.Parameters["@ControlData"].Value = form.Subfields[0].Cells[1].Value;
-                                            }
+                                            command.Parameters["@FieldID"].Value = field.Value;
+                                            command.Parameters["@Code"].Value = row.Cells[0].Value;
+                                            command.Parameters["@Data"].Value = row.Cells[1].Value;
 
                                             command.ExecuteNonQuery();
-                                            int fieldID = (int)connection.LastInsertRowId;
-                                            added.Add(field.Value, fieldID);
+
+                                            SortSubfields(field.Value);
                                         }
                                     }
+                                }
+                            }
+                            break;
+                        case "Delete":
+                            if (!String.IsNullOrEmpty(batchEditForm.TagModification))
+                            {
+                                if (batchEditForm.Subfields.Count > 1) //1 is the new row
+                                {
+                                    command.CommandText = "DELETE FROM Subfields WHERE FieldID = @FieldID and Code = @Code";
+                                    command.Parameters.Clear();
+                                    command.Parameters.Add("@FieldID", DbType.Int32);
+                                    command.Parameters.Add("@Code", DbType.String);
 
-                                    if (!form.TagModification.StartsWith("00"))
+                                    foreach (DataGridViewRow row in batchEditForm.Subfields)
                                     {
-                                        command.CommandText = "INSERT INTO Subfields (FieldID, Code, Data) VALUES (@FieldID, @Code, @Data);";
-                                        command.Parameters.Clear();
-                                        command.Parameters.Add("@FieldID", DbType.Int32);
-                                        command.Parameters.Add("@Code", DbType.String);
-                                        command.Parameters.Add("@Data", DbType.String);
-
-                                        foreach (KeyValuePair<int, int> field in added)
+                                        if (!row.IsNewRow)
                                         {
-                                            foreach (DataGridViewRow row in form.Subfields)
-                                            {
-                                                if (!row.IsNewRow)
-                                                {
-                                                    command.Parameters["@FieldID"].Value = field.Value;
-                                                    command.Parameters["@Code"].Value = row.Cells[0].Value;
-                                                    command.Parameters["@Data"].Value = row.Cells[1].Value;
-
-                                                    command.ExecuteNonQuery();
-
-                                                    SortSubfields(field.Value);
-                                                }
-                                            }
-                                        }
-                                    }
-                                    break;
-                                case "Delete":
-                                    if (!String.IsNullOrEmpty(form.TagModification))
-                                    {
-                                        if (form.Subfields.Count > 1) //1 is the new row
-                                        {
-                                            command.CommandText = "DELETE FROM Subfields WHERE FieldID = @FieldID and Code = @Code";
-                                            command.Parameters.Clear();
-                                            command.Parameters.Add("@FieldID", DbType.Int32);
-                                            command.Parameters.Add("@Code", DbType.String);
-
-                                            foreach (DataGridViewRow row in form.Subfields)
-                                            {
-                                                if (!row.IsNewRow)
-                                                {
-                                                    foreach (KeyValuePair<int, int> field in foundFields)
-                                                    {
-                                                        command.Parameters["@FieldID"].Value = field.Key;
-                                                        command.Parameters["@Code"].Value = row.Cells[0].Value;
-                                                        command.ExecuteNonQuery();
-
-                                                        SortSubfields(field.Key);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        else
-                                        {
-                                            command.CommandText = "DELETE FROM Fields WHERE FieldID = @FieldID";
-                                            command.Parameters.Clear();
-                                            command.Parameters.Add("@FieldID", DbType.Int32);
-
                                             foreach (KeyValuePair<int, int> field in foundFields)
                                             {
                                                 command.Parameters["@FieldID"].Value = field.Key;
-                                                command.ExecuteNonQuery();
-                                            }
-                                        }
-                                    }
-                                    break;
-                                case "Edit":
-                                    if (!String.IsNullOrEmpty(form.TagModification))
-                                    {
-                                        command.Parameters.Clear();
-                                        
-                                        command.CommandText = "DELETE FROM Subfields WHERE FieldID IN (SELECT FieldID FROM Fields WHERE TagNumber = @TagNumber";
-
-                                        if (!String.IsNullOrEmpty(form.Ind1))
-                                        {
-                                            command.CommandText += " AND Ind1 = @Ind1";
-                                            command.Parameters.Add("@Ind1", DbType.String).Value = form.Ind1;
-                                        }
-
-                                        if (!String.IsNullOrEmpty(form.Ind2))
-                                        {
-                                            command.CommandText += " AND Ind2 = @Ind2";
-                                            command.Parameters.Add("@Ind2", DbType.String).Value = form.Ind2;
-                                        }
-
-                                        command.CommandText += " AND Code IN (";
-
-                                        foreach (DataGridViewRow row in form.Subfields)
-                                        {
-                                            if (!row.IsNewRow)
-                                                command.CommandText += "'" + row.Cells[0].Value + "', ";
-                                        }
-
-                                        command.CommandText = command.CommandText.Substring(0, command.CommandText.Length - 2);
-
-                                        command.CommandText += "));";
-
-                                        command.Parameters.Add("@TagNumber", DbType.Int32).Value = form.TagModification;
-                                        command.ExecuteNonQuery();
-
-                                        command.Parameters.Clear();
-                                        command.CommandText = "INSERT INTO Subfields (FieldID, Code, Data) SELECT FieldID, @Code, @Data FROM Fields WHERE TagNumber = @TagNumber";
-
-                                        command.Parameters.Add("@Code", DbType.String);
-                                        command.Parameters.Add("@Data", DbType.String);
-
-                                        if (!String.IsNullOrEmpty(form.Ind1))
-                                        {
-                                            command.CommandText += " AND Ind1 = @Ind1";
-                                            command.Parameters.Add("@Ind1", DbType.String).Value = form.Ind1;
-                                        }
-
-                                        if (!String.IsNullOrEmpty(form.Ind2))
-                                        {
-                                            command.CommandText += " AND Ind2 = @Ind2";
-                                            command.Parameters.Add("@Ind2", DbType.String).Value = form.Ind2;
-                                        }
-
-                                        command.Parameters.Add("@TagNumber", DbType.Int32).Value = form.TagModification;
-
-                                        foreach (DataGridViewRow row in form.Subfields)
-                                        {
-                                            if (!row.IsNewRow)
-                                            {
                                                 command.Parameters["@Code"].Value = row.Cells[0].Value;
-                                                command.Parameters["@Data"].Value = row.Cells[1].Value;
                                                 command.ExecuteNonQuery();
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        command.CommandText = "DELETE FROM Subfields WHERE FieldID = @FieldID";
-
-                                        command.CommandText += " AND Code IN (";
-
-                                        foreach (DataGridViewRow row in form.Subfields)
-                                        {
-                                            if (!row.IsNewRow)
-                                                command.CommandText += "'" + row.Cells[0].Value + "', ";
-                                        }
-
-                                        command.CommandText = command.CommandText.Substring(0, command.CommandText.Length - 2) + ");";
-
-                                        command.Parameters.Clear();
-                                        command.Parameters.Add("@FieldID", DbType.Int32);
-
-                                        foreach (DataGridViewRow row in form.Subfields)
-                                        {
-                                            if (!row.IsNewRow)
-                                            {
-                                                foreach (KeyValuePair<int, int> field in foundFields)
-                                                {
-                                                    command.Parameters["@FieldID"].Value = field.Key;
-                                                    command.ExecuteNonQuery();
-                                                }
-                                            }
-                                        }
-
-                                        command.CommandText = "INSERT INTO Subfields (FieldID, Code, Data) VALUES (@FieldID, @Code, @Data);";
-                                        command.Parameters.Clear();
-                                        command.Parameters.Add("@FieldID", DbType.Int32);
-                                        command.Parameters.Add("@Code", DbType.String);
-                                        command.Parameters.Add("@Data", DbType.String);
-
-                                        added.Clear();
-
-                                        foreach (KeyValuePair<int, int> field in foundFields)
-                                        {
-                                            //Added is keyed on recordID so we only get one added per record.
-                                            if (!added.Keys.Contains(field.Key))
-                                            {
-                                                foreach (DataGridViewRow row in form.Subfields)
-                                                {
-                                                    if (!row.IsNewRow)
-                                                    {
-                                                        command.Parameters["@FieldID"].Value = field.Key;
-                                                        command.Parameters["@Code"].Value = row.Cells[0].Value;
-                                                        command.Parameters["@Data"].Value = row.Cells[1].Value;
-
-                                                        command.ExecuteNonQuery();
-                                                    }
-                                                }
-
-                                                int fieldID = (int)connection.LastInsertRowId;
-                                                added.Add(field.Key, fieldID);
-
-                                                SortSubfields(fieldID);
-                                            }
-                                        }
-                                    }
-                                    break;
-                                case "Replace":
-                                    if (!String.IsNullOrEmpty(form.TagModification))
-                                    {
-                                        command.Parameters.Clear();
-                                        command.CommandText = "DELETE FROM Subfields WHERE FieldID IN (SELECT FieldID FROM Fields WHERE TagNumber = @TagNumber";
-
-                                        if (!String.IsNullOrEmpty(form.Ind1))
-                                        {
-                                            command.CommandText += " AND Ind1 = @Ind1";
-                                            command.Parameters.Add("@Ind1", DbType.String).Value = form.Ind1;
-                                        }
-
-                                        if (!String.IsNullOrEmpty(form.Ind2))
-                                        {
-                                            command.CommandText += " AND Ind2 = @Ind2";
-                                            command.Parameters.Add("@Ind2", DbType.String).Value = form.Ind2;
-                                        }
-
-                                        command.CommandText += ");";
-
-                                        command.Parameters.Add("@TagNumber", DbType.Int32).Value = form.TagModification;
-                                        command.ExecuteNonQuery();
-
-                                        command.Parameters.Clear();
-                                        command.CommandText = "INSERT INTO Subfields (FieldID, Code, Data) SELECT FieldID, @Code, @Data FROM Fields WHERE TagNumber = @TagNumber";
-
-                                        command.Parameters.Add("@Code", DbType.String);
-                                        command.Parameters.Add("@Data", DbType.String);
-
-                                        if (!String.IsNullOrEmpty(form.Ind1))
-                                        {
-                                            command.CommandText += " AND Ind1 = @Ind1";
-                                            command.Parameters.Add("@Ind1", DbType.String).Value = form.Ind1;
-                                        }
-
-                                        if (!String.IsNullOrEmpty(form.Ind2))
-                                        {
-                                            command.CommandText += " AND Ind2 = @Ind2";
-                                            command.Parameters.Add("@Ind2", DbType.String).Value = form.Ind2;
-                                        }
-
-                                        command.Parameters.Add("@TagNumber", DbType.Int32).Value = form.TagModification;
-
-                                        foreach (DataGridViewRow row in form.Subfields)
-                                        {
-                                            if (!row.IsNewRow)
-                                            {
-                                                command.Parameters["@Code"].Value = row.Cells[0].Value;
-                                                command.Parameters["@Data"].Value = row.Cells[1].Value;
-                                                command.ExecuteNonQuery();
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        command.CommandText = "DELETE FROM Subfields WHERE FieldID = @FieldID";
-                                        command.Parameters.Clear();
-                                        command.Parameters.Add("@FieldID", DbType.Int32);
-
-                                        foreach (DataGridViewRow row in form.Subfields)
-                                        {
-                                            if (!row.IsNewRow)
-                                            {
-                                                foreach (KeyValuePair<int, int> field in foundFields)
-                                                {
-                                                    command.Parameters["@FieldID"].Value = field.Key;
-                                                    command.ExecuteNonQuery();
-                                                }
-                                            }
-                                        }
-
-                                        command.CommandText = "INSERT INTO Subfields (FieldID, Code, Data) VALUES (@FieldID, @Code, @Data);";
-                                        command.Parameters.Clear();
-                                        command.Parameters.Add("@FieldID", DbType.Int32);
-                                        command.Parameters.Add("@Code", DbType.String);
-                                        command.Parameters.Add("@Data", DbType.String);
-
-                                        added.Clear();
-
-                                        foreach (KeyValuePair<int, int> field in foundFields)
-                                        {
-                                            //Added is keyed on recordID so we only get one added per record.
-                                            if (!added.Keys.Contains(field.Key))
-                                            {
-                                                foreach (DataGridViewRow row in form.Subfields)
-                                                {
-                                                    if (!row.IsNewRow)
-                                                    {
-                                                        command.Parameters["@FieldID"].Value = field.Key;
-                                                        command.Parameters["@Code"].Value = row.Cells[0].Value;
-                                                        command.Parameters["@Data"].Value = row.Cells[1].Value;
-
-                                                        command.ExecuteNonQuery();
-                                                    }
-                                                }
-
-                                                added.Add(field.Key, field.Key);
 
                                                 SortSubfields(field.Key);
                                             }
                                         }
                                     }
-                                    break;
-                            }
+                                }
+                                else
+                                {
+                                    command.CommandText = "DELETE FROM Fields WHERE FieldID = @FieldID";
+                                    command.Parameters.Clear();
+                                    command.Parameters.Add("@FieldID", DbType.Int32);
 
-                            command.CommandText = "END";
-                            command.ExecuteNonQuery();
-                        }
+                                    foreach (KeyValuePair<int, int> field in foundFields)
+                                    {
+                                        command.Parameters["@FieldID"].Value = field.Key;
+                                        command.ExecuteNonQuery();
+                                    }
+                                }
+                            }
+                            break;
+                        case "Edit":
+                            if (!String.IsNullOrEmpty(batchEditForm.TagModification))
+                            {
+                                command.Parameters.Clear();
+
+                                command.CommandText = "DELETE FROM Subfields WHERE FieldID IN (SELECT FieldID FROM Fields WHERE TagNumber = @TagNumber";
+
+                                if (!String.IsNullOrEmpty(batchEditForm.Ind1))
+                                {
+                                    command.CommandText += " AND Ind1 = @Ind1";
+                                    command.Parameters.Add("@Ind1", DbType.String).Value = batchEditForm.Ind1;
+                                }
+
+                                if (!String.IsNullOrEmpty(batchEditForm.Ind2))
+                                {
+                                    command.CommandText += " AND Ind2 = @Ind2";
+                                    command.Parameters.Add("@Ind2", DbType.String).Value = batchEditForm.Ind2;
+                                }
+
+                                command.CommandText += " AND Code IN (";
+
+                                foreach (DataGridViewRow row in batchEditForm.Subfields)
+                                {
+                                    if (!row.IsNewRow)
+                                        command.CommandText += "'" + row.Cells[0].Value + "', ";
+                                }
+
+                                command.CommandText = command.CommandText.Substring(0, command.CommandText.Length - 2);
+
+                                command.CommandText += "));";
+
+                                command.Parameters.Add("@TagNumber", DbType.Int32).Value = batchEditForm.TagModification;
+                                command.ExecuteNonQuery();
+
+                                command.Parameters.Clear();
+                                command.CommandText = "INSERT INTO Subfields (FieldID, Code, Data) SELECT FieldID, @Code, @Data FROM Fields WHERE TagNumber = @TagNumber";
+
+                                command.Parameters.Add("@Code", DbType.String);
+                                command.Parameters.Add("@Data", DbType.String);
+
+                                if (!String.IsNullOrEmpty(batchEditForm.Ind1))
+                                {
+                                    command.CommandText += " AND Ind1 = @Ind1";
+                                    command.Parameters.Add("@Ind1", DbType.String).Value = batchEditForm.Ind1;
+                                }
+
+                                if (!String.IsNullOrEmpty(batchEditForm.Ind2))
+                                {
+                                    command.CommandText += " AND Ind2 = @Ind2";
+                                    command.Parameters.Add("@Ind2", DbType.String).Value = batchEditForm.Ind2;
+                                }
+
+                                command.Parameters.Add("@TagNumber", DbType.Int32).Value = batchEditForm.TagModification;
+
+                                foreach (DataGridViewRow row in batchEditForm.Subfields)
+                                {
+                                    if (!row.IsNewRow)
+                                    {
+                                        command.Parameters["@Code"].Value = row.Cells[0].Value;
+                                        command.Parameters["@Data"].Value = row.Cells[1].Value;
+                                        command.ExecuteNonQuery();
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                command.CommandText = "DELETE FROM Subfields WHERE FieldID = @FieldID";
+
+                                command.CommandText += " AND Code IN (";
+
+                                foreach (DataGridViewRow row in batchEditForm.Subfields)
+                                {
+                                    if (!row.IsNewRow)
+                                        command.CommandText += "'" + row.Cells[0].Value + "', ";
+                                }
+
+                                command.CommandText = command.CommandText.Substring(0, command.CommandText.Length - 2) + ");";
+
+                                command.Parameters.Clear();
+                                command.Parameters.Add("@FieldID", DbType.Int32);
+
+                                foreach (DataGridViewRow row in batchEditForm.Subfields)
+                                {
+                                    if (!row.IsNewRow)
+                                    {
+                                        foreach (KeyValuePair<int, int> field in foundFields)
+                                        {
+                                            command.Parameters["@FieldID"].Value = field.Key;
+                                            command.ExecuteNonQuery();
+                                        }
+                                    }
+                                }
+
+                                command.CommandText = "INSERT INTO Subfields (FieldID, Code, Data) VALUES (@FieldID, @Code, @Data);";
+                                command.Parameters.Clear();
+                                command.Parameters.Add("@FieldID", DbType.Int32);
+                                command.Parameters.Add("@Code", DbType.String);
+                                command.Parameters.Add("@Data", DbType.String);
+
+                                added.Clear();
+
+                                foreach (KeyValuePair<int, int> field in foundFields)
+                                {
+                                    //Added is keyed on recordID so we only get one added per record.
+                                    if (!added.Keys.Contains(field.Key))
+                                    {
+                                        foreach (DataGridViewRow row in batchEditForm.Subfields)
+                                        {
+                                            if (!row.IsNewRow)
+                                            {
+                                                command.Parameters["@FieldID"].Value = field.Key;
+                                                command.Parameters["@Code"].Value = row.Cells[0].Value;
+                                                command.Parameters["@Data"].Value = row.Cells[1].Value;
+
+                                                command.ExecuteNonQuery();
+                                            }
+                                        }
+
+                                        int fieldID = (int)connection.LastInsertRowId;
+                                        added.Add(field.Key, fieldID);
+
+                                        SortSubfields(fieldID);
+                                    }
+                                }
+                            }
+                            break;
+                        case "Replace":
+                            if (!String.IsNullOrEmpty(batchEditForm.TagModification))
+                            {
+                                command.Parameters.Clear();
+                                command.CommandText = "DELETE FROM Subfields WHERE FieldID IN (SELECT FieldID FROM Fields WHERE TagNumber = @TagNumber";
+
+                                if (!String.IsNullOrEmpty(batchEditForm.Ind1))
+                                {
+                                    command.CommandText += " AND Ind1 = @Ind1";
+                                    command.Parameters.Add("@Ind1", DbType.String).Value = batchEditForm.Ind1;
+                                }
+
+                                if (!String.IsNullOrEmpty(batchEditForm.Ind2))
+                                {
+                                    command.CommandText += " AND Ind2 = @Ind2";
+                                    command.Parameters.Add("@Ind2", DbType.String).Value = batchEditForm.Ind2;
+                                }
+
+                                command.CommandText += ");";
+
+                                command.Parameters.Add("@TagNumber", DbType.Int32).Value = batchEditForm.TagModification;
+                                command.ExecuteNonQuery();
+
+                                command.Parameters.Clear();
+                                command.CommandText = "INSERT INTO Subfields (FieldID, Code, Data) SELECT FieldID, @Code, @Data FROM Fields WHERE TagNumber = @TagNumber";
+
+                                command.Parameters.Add("@Code", DbType.String);
+                                command.Parameters.Add("@Data", DbType.String);
+
+                                if (!String.IsNullOrEmpty(batchEditForm.Ind1))
+                                {
+                                    command.CommandText += " AND Ind1 = @Ind1";
+                                    command.Parameters.Add("@Ind1", DbType.String).Value = batchEditForm.Ind1;
+                                }
+
+                                if (!String.IsNullOrEmpty(batchEditForm.Ind2))
+                                {
+                                    command.CommandText += " AND Ind2 = @Ind2";
+                                    command.Parameters.Add("@Ind2", DbType.String).Value = batchEditForm.Ind2;
+                                }
+
+                                command.Parameters.Add("@TagNumber", DbType.Int32).Value = batchEditForm.TagModification;
+
+                                foreach (DataGridViewRow row in batchEditForm.Subfields)
+                                {
+                                    if (!row.IsNewRow)
+                                    {
+                                        command.Parameters["@Code"].Value = row.Cells[0].Value;
+                                        command.Parameters["@Data"].Value = row.Cells[1].Value;
+                                        command.ExecuteNonQuery();
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                command.CommandText = "DELETE FROM Subfields WHERE FieldID = @FieldID";
+                                command.Parameters.Clear();
+                                command.Parameters.Add("@FieldID", DbType.Int32);
+
+                                foreach (DataGridViewRow row in batchEditForm.Subfields)
+                                {
+                                    if (!row.IsNewRow)
+                                    {
+                                        foreach (KeyValuePair<int, int> field in foundFields)
+                                        {
+                                            command.Parameters["@FieldID"].Value = field.Key;
+                                            command.ExecuteNonQuery();
+                                        }
+                                    }
+                                }
+
+                                command.CommandText = "INSERT INTO Subfields (FieldID, Code, Data) VALUES (@FieldID, @Code, @Data);";
+                                command.Parameters.Clear();
+                                command.Parameters.Add("@FieldID", DbType.Int32);
+                                command.Parameters.Add("@Code", DbType.String);
+                                command.Parameters.Add("@Data", DbType.String);
+
+                                added.Clear();
+
+                                foreach (KeyValuePair<int, int> field in foundFields)
+                                {
+                                    //Added is keyed on recordID so we only get one added per record.
+                                    if (!added.Keys.Contains(field.Key))
+                                    {
+                                        foreach (DataGridViewRow row in batchEditForm.Subfields)
+                                        {
+                                            if (!row.IsNewRow)
+                                            {
+                                                command.Parameters["@FieldID"].Value = field.Key;
+                                                command.Parameters["@Code"].Value = row.Cells[0].Value;
+                                                command.Parameters["@Data"].Value = row.Cells[1].Value;
+
+                                                command.ExecuteNonQuery();
+                                            }
+                                        }
+
+                                        added.Add(field.Key, field.Key);
+
+                                        SortSubfields(field.Key);
+                                    }
+                                }
+                            }
+                            break;
                     }
 
-                    RebuildRecordsPreviewInformation();
-
-                    this.OnLoad(new EventArgs());
-                    EnableForm();
+                    command.CommandText = "END";
+                    command.ExecuteNonQuery();
                 }
             }
+
+            RebuildRecordsPreviewInformation();
+        }
+
+        /// <summary>
+        /// Handles the ProgressChanged event of the batchEditBackgroundWorker control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="ProgressChangedEventArgs"/> instance containing the event data.</param>
+        private void batchEditBackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+        }
+
+        /// <summary>
+        /// Handles the RunWorkerCompleted event of the batchEditBackgroundWorker control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RunWorkerCompletedEventArgs"/> instance containing the event data.</param>
+        private void batchEditBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            progressToolStripStatusLabel.Text = "";
+            toolStripProgressBar.Visible = false;
+            toolStripProgressBar.Enabled = false;
+            progressToolStripStatusLabel.Visible = false;
+            cancelButtonToolStripStatusLabel.Visible = false;
+            toolStripProgressBar.MarqueeAnimationSpeed = 0;
+            batchEditForm.Dispose();
+            batchEditForm = null;
+            loading = false;
+            EnableForm();
+            Console.WriteLine("End batch edit: " + DateTime.Now.ToString(CultureInfo.CurrentCulture));
         }
 
         /// <summary>
@@ -5027,9 +5077,27 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void sortAllFieldsAndSubfieldsToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            Console.WriteLine("Start sort: " + DateTime.Now.ToString(CultureInfo.CurrentCulture));
+            DisableForm();
+            toolStripProgressBar.Style = ProgressBarStyle.Continuous;
+            toolStripProgressBar.Enabled = true;
+            toolStripProgressBar.Visible = true;
+            progressToolStripStatusLabel.Visible = true;
+            sortAllBackgroundWorker.RunWorkerAsync(batchEditForm);
+        }
+
+        /// <summary>
+        /// Handles the DoWork event of the sortAllBackgroundWorker control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="DoWorkEventArgs"/> instance containing the event data.</param>
+        private void sortAllBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
             using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
             {
                 connection.Open();
+                List<int> ids = new List<int>();
+                int i = 1;
 
                 using (SQLiteCommand command = new SQLiteCommand("SELECT RecordID FROM Records", connection))
                 {
@@ -5037,10 +5105,20 @@ namespace CSharp_MARC_Editor
                     {
                         while (reader.Read())
                         {
-                            SortFields(Int32.Parse(reader["RecordID"].ToString()));
+                            ids.Add(Int32.Parse(reader["RecordID"].ToString()));
                         }
                     }
                 }
+
+                foreach (int id in ids)
+                {
+                    SortFields(id);
+                    sortAllBackgroundWorker.ReportProgress(Convert.ToInt32(((float)i / (float)ids.Count) * 100), "Sorting Fields...");
+                    i++;
+                }
+
+                ids.Clear();
+                i = 1;
 
                 using (SQLiteCommand command = new SQLiteCommand("SELECT FieldID FROM Fields", connection))
                 {
@@ -5048,11 +5126,50 @@ namespace CSharp_MARC_Editor
                     {
                         while (reader.Read())
                         {
-                            SortSubfields(Int32.Parse(reader["FieldID"].ToString()));
+                            ids.Add(Int32.Parse(reader["FieldID"].ToString()));
                         }
                     }
                 }
+
+                foreach (int id in ids)
+                {
+                    SortSubfields(id);
+                    sortAllBackgroundWorker.ReportProgress(Convert.ToInt32(((float)i / (float)ids.Count) * 100), "Sorting Subfields...");
+                    i++;
+                }
             }
+        }
+
+        /// <summary>
+        /// Handles the ProgressChanged event of the sortAllBackgroundWorker control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="ProgressChangedEventArgs"/> instance containing the event data.</param>
+        private void sortAllBackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            if (e.ProgressPercentage <= 100)
+            {
+                progressToolStripStatusLabel.Text = e.ProgressPercentage.ToString(CultureInfo.CurrentCulture) + "%" + " - " + e.UserState.ToString();
+                toolStripProgressBar.Value = e.ProgressPercentage;
+            }
+        }
+
+        /// <summary>
+        /// Handles the RunWorkerCompleted event of the sortAllBackgroundWorker control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RunWorkerCompletedEventArgs"/> instance containing the event data.</param>
+        private void sortAllBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            progressToolStripStatusLabel.Text = "";
+            toolStripProgressBar.Visible = false;
+            toolStripProgressBar.Enabled = false;
+            progressToolStripStatusLabel.Visible = false;
+            cancelButtonToolStripStatusLabel.Visible = false;
+            toolStripProgressBar.MarqueeAnimationSpeed = 0;
+            loading = false;
+            EnableForm();
+            Console.WriteLine("End sort: " + DateTime.Now.ToString(CultureInfo.CurrentCulture));
         }
 
         #endregion
