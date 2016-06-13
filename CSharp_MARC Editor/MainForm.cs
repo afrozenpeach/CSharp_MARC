@@ -1491,6 +1491,10 @@ namespace CSharp_MARC_Editor
             }
         }
 
+        /// <summary>
+        /// Sorts the subfields.
+        /// </summary>
+        /// <param name="fieldID">The field identifier.</param>
         private void SortSubfields(int fieldID)
         {
             List<int> subfields = new List<int>();
@@ -1522,6 +1526,53 @@ namespace CSharp_MARC_Editor
                     foreach (int subfieldID in subfields)
                     {
                         command.Parameters["@SubfieldID"].Value = subfieldID;
+                        command.Parameters["@Sort"].Value = i;
+                        command.ExecuteNonQuery();
+
+                        i++;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sorts the fields.
+        /// </summary>
+        /// <param name="recordID">The record identifier.</param>
+        private void SortFields(int recordID)
+        {
+            List<int> fields = new List<int>();
+            int i = 0;
+
+            using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
+            {
+                connection.Open();
+
+                using (SQLiteCommand command = new SQLiteCommand(connection))
+                {
+                    command.CommandText = "SELECT RecordID FROM Fields WHERE RecordID = @RecordID ORDER BY CASE WHEN TagNumber = 'LDR' THEN 0 ELSE 1 END, Sort, TagNumber, FieldID";
+                    command.Parameters.Add("@RecordID", DbType.Int32).Value = recordID;
+
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            fields.Add(Int32.Parse(reader["RecordID"].ToString(), CultureInfo.InvariantCulture));
+                        }
+                    }
+                }
+
+                using (SQLiteCommand command = new SQLiteCommand(connection))
+                { 
+                    command.Parameters.Clear();
+
+                    command.CommandText = "UPDATE Fields SET Sort = @Sort WHERE FieldID = @FieldID";
+                    command.Parameters.Add("@FieldID", DbType.Int32);
+                    command.Parameters.Add("@Sort", DbType.Int32);
+
+                    foreach (int fieldID in fields)
+                    {
+                        command.Parameters["@FieldID"].Value = fieldID;
                         command.Parameters["@Sort"].Value = i;
                         command.ExecuteNonQuery();
 
@@ -1934,19 +1985,22 @@ namespace CSharp_MARC_Editor
                         
                         int recordID = (int)connection.LastInsertRowId;
 
-                        command.CommandText = "INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2, ControlData) VALUES (@RecordID, @TagNumber, @Ind1, @Ind2, @ControlData)";
+                        command.CommandText = "INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2, ControlData, Sort) VALUES (@RecordID, @TagNumber, @Ind1, @Ind2, @ControlData, @Sort)";
                         command.Parameters.Add("@RecordID", DbType.Int32).Value = recordID;
                         command.Parameters.Add("@TagNumber", DbType.String).Value ="LDR";
                         command.Parameters.Add("@Ind1", DbType.String).Value = DBNull.Value;
                         command.Parameters.Add("@Ind2", DbType.String).Value = DBNull.Value;
                         command.Parameters.Add("@ControlData", DbType.String).Value = record.Leader;
+                        command.Parameters.Add("@Sort", DbType.Int32).Value = 0;
                         command.ExecuteNonQuery();
                         command.Parameters.Clear();
 
                         int fieldNumber = 1;
+                        int sortNumber = 1;
+
                         foreach (Field field in record.Fields)
                         {
-                            command.CommandText = "INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2, ControlData) VALUES (@RecordID, @TagNumber, @Ind1, @Ind2, @ControlData)";
+                            command.CommandText = "INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2, ControlData, Sort) VALUES (@RecordID, @TagNumber, @Ind1, @Ind2, @ControlData, @Sort)";
                             command.Parameters.Add("@RecordID", DbType.Int32).Value = recordID;
                             command.Parameters.Add("@TagNumber", DbType.String).Value = field.Tag;
 
@@ -1958,6 +2012,7 @@ namespace CSharp_MARC_Editor
                                 command.Parameters.Add("@Ind1", DbType.String).Value = dataField.Indicator1;
                                 command.Parameters.Add("@Ind2", DbType.String).Value = dataField.Indicator2;
                                 command.Parameters.Add("@ControlData", DbType.String).Value = DBNull.Value;
+                                command.Parameters.Add("@Sort", DbType.Int32).Value = sortNumber;
                                 
                                 command.ExecuteNonQuery();
                                 
@@ -1975,13 +2030,18 @@ namespace CSharp_MARC_Editor
 
                                     subfieldNumber++;
                                 }
+
+                                sortNumber++;
                             }
                             else
                             {
                                 command.Parameters.Add("@Ind1", DbType.String).Value = DBNull.Value;
                                 command.Parameters.Add("@Ind2", DbType.String).Value = DBNull.Value;
                                 command.Parameters.Add("@ControlData", DbType.String).Value = ((ControlField)field).Data;
+                                command.Parameters.Add("@Sort", DbType.Int32).Value = sortNumber;
                                 command.ExecuteNonQuery();
+
+                                sortNumber++;
                             }
                         }
                         command.Parameters.Clear();
@@ -4960,6 +5020,41 @@ namespace CSharp_MARC_Editor
             }
         }
 
+        /// <summary>
+        /// Handles the Click event of the sortAllFieldsAndSubfieldsToolStripMenuItem control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void sortAllFieldsAndSubfieldsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
+            {
+                connection.Open();
+
+                using (SQLiteCommand command = new SQLiteCommand("SELECT RecordID FROM Records", connection))
+                {
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            SortFields(Int32.Parse(reader["RecordID"].ToString()));
+                        }
+                    }
+                }
+
+                using (SQLiteCommand command = new SQLiteCommand("SELECT FieldID FROM Fields", connection))
+                {
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            SortSubfields(Int32.Parse(reader["FieldID"].ToString()));
+                        }
+                    }
+                }
+            }
+        }
+
         #endregion
 
         #region Print Events
@@ -5173,14 +5268,14 @@ namespace CSharp_MARC_Editor
                     using (SQLiteCommand command = new SQLiteCommand(connection))
                     {
                         command.CommandText = "UPDATE Fields SET Sort = Sort - 1 WHERE FieldID = @FieldID";
-                        command.Parameters.Add("@SubfieldID", DbType.Int32).Value = fieldID;
+                        command.Parameters.Add("@FieldID", DbType.Int32).Value = fieldID;
                         command.ExecuteNonQuery();
 
                         command.CommandText = "UPDATE Fields SET Sort = Sort + 1 WHERE FieldID = @FieldID";
                         command.Parameters["@FieldID"].Value = otherFieldID;
                         command.ExecuteNonQuery();
 
-                        LoadSubfields(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString(), CultureInfo.InvariantCulture));
+                        LoadFields(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString(), CultureInfo.InvariantCulture));
 
                         fieldsDataGridView.ClearSelection();
                         fieldsDataGridView.Rows[index - 1].Selected = true;
@@ -5214,7 +5309,7 @@ namespace CSharp_MARC_Editor
                     command.Parameters["@FieldID"].Value = otherFieldID;
                     command.ExecuteNonQuery();
 
-                    LoadSubfields(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString(), CultureInfo.InvariantCulture));
+                    LoadFields(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString(), CultureInfo.InvariantCulture));
 
                     fieldsDataGridView.ClearSelection();
                     fieldsDataGridView.Rows[index + 1].Selected = true;
@@ -5232,44 +5327,10 @@ namespace CSharp_MARC_Editor
             if (recordsDataGridView.SelectedCells.Count > 0)
             {
                 int recordID = Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString(), CultureInfo.InvariantCulture);
-                List<int> fields = new List<int>();
-                int i = 0;
 
-                using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
-                {
-                    connection.Open();
+                SortFields(recordID);
 
-                    using (SQLiteCommand command = new SQLiteCommand(connection))
-                    {
-                        command.CommandText = "SELECT RecordID FROM Fields WHERE RecordID = @RecordID ORDER BY CASE WHEN TagNumber = 'LDR' THEN 0 ELSE 1 END, Sort, TagNumber, FieldID";
-                        command.Parameters.Add("@RecordID", DbType.Int32).Value = recordID;
-
-                        using (SQLiteDataReader reader = command.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                fields.Add(Int32.Parse(reader["FieldID"].ToString(), CultureInfo.InvariantCulture));
-                            }
-                        }
-
-                        command.Parameters.Clear();
-
-                        command.CommandText = "UPDATE Fields SET Sort = @Sort WHERE FieldID = @FieldID";
-                        command.Parameters.Add("@FieldID", DbType.Int32);
-                        command.Parameters.Add("@Sort", DbType.Int32);
-
-                        foreach (int fieldID in fields)
-                        {
-                            command.Parameters["@FieldID"].Value = fieldID;
-                            command.Parameters["@Sort"].Value = i;
-                            command.ExecuteNonQuery();
-
-                            i++;
-                        }
-
-                        LoadFields(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString(), CultureInfo.InvariantCulture));
-                    }
-                }
+                LoadFields(recordID);
             }
         }
 

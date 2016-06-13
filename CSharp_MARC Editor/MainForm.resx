@@ -334,6 +334,19 @@
         gg==
 </value>
   </data>
+  <data name="sortAllFieldsAndSubfieldsToolStripMenuItem.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAWCAYAAADJqhx8AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAZdEVYdFNvZnR3YXJlAEFkb2JlIEltYWdlUmVhZHlxyWU8AAABd0lEQVQ4T6WQTUsCURSG/RFR
+        20BaykjRP5CkiFo0geAyKIKWgTMLQdoYtSgsBrMWEdSmL4fJcNMnSIVE2a6gNm1Et+5Pc65zpntv44zS
+        gWc4H/d9EEN8DU5kYzbgEHXWHQsAnM4uChesl9bZ/UdXEldA4R2z1pxOl2Bx4wouH78CJUxA4fWjan1c
+        s4DHrHz6SkgAxmm1kd5/AoTCNN+9fjOJkxHKFSBDU2uuIK6ds340maNfAP3D8y5OXvwTwyRImTCmFSFz
+        8ADhyVWY1YsCPQuSKxZE1G1QZgxIZEr+Ar1QEcBdTwIvMBRRt0BR86wfsAV9yhxDEPCFx+ObdxZAMEwC
+        ZHmz3AgSRPGBUay5YWIhW67jzSbWUYBFkr2LN4gvHcJIYhdSxm2TwvjGV4BFktzJM+j56xYfxgoUYJFE
+        DmMxAX7+gziwUXyA4F7GvVHDBunohXz/c5Af8Hjdfhu7JfiZ7rTjZ7Zjn24eeuyQ9idAgLNM+wahHwcu
+        ZwXLejM2AAAAAElFTkSuQmCC
+</value>
+  </data>
   <data name="importRecordsToolStripMenuItem.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAN

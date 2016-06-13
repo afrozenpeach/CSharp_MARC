@@ -57,12 +57,12 @@ namespace CSharp_MARC_Editor
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.recordsDataGridView = new System.Windows.Forms.DataGridView();
             this.recordIDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -161,6 +161,7 @@ namespace CSharp_MARC_Editor
             this.loadingBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.rdaConversionBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.validationBackgroundWorker = new System.ComponentModel.BackgroundWorker();
+            this.sortAllFieldsAndSubfieldsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -275,8 +276,8 @@ namespace CSharp_MARC_Editor
             // authorDataGridViewTextBoxColumn
             // 
             this.authorDataGridViewTextBoxColumn.DataPropertyName = "Author";
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.authorDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.authorDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle11;
             this.authorDataGridViewTextBoxColumn.HeaderText = "Author";
             this.authorDataGridViewTextBoxColumn.MinimumWidth = 20;
             this.authorDataGridViewTextBoxColumn.Name = "authorDataGridViewTextBoxColumn";
@@ -286,8 +287,8 @@ namespace CSharp_MARC_Editor
             // titleDataGridViewTextBoxColumn
             // 
             this.titleDataGridViewTextBoxColumn.DataPropertyName = "Title";
-            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.titleDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.titleDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle12;
             this.titleDataGridViewTextBoxColumn.HeaderText = "Title";
             this.titleDataGridViewTextBoxColumn.MinimumWidth = 20;
             this.titleDataGridViewTextBoxColumn.Name = "titleDataGridViewTextBoxColumn";
@@ -360,8 +361,8 @@ namespace CSharp_MARC_Editor
             // ImportErrors
             // 
             this.ImportErrors.DataPropertyName = "ImportErrors";
-            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.ImportErrors.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.ImportErrors.DefaultCellStyle = dataGridViewCellStyle13;
             this.ImportErrors.HeaderText = "Import Errors";
             this.ImportErrors.Name = "ImportErrors";
             this.ImportErrors.ReadOnly = true;
@@ -370,8 +371,8 @@ namespace CSharp_MARC_Editor
             // ValidationErrors
             // 
             this.ValidationErrors.DataPropertyName = "ValidationErrors";
-            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.ValidationErrors.DefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.ValidationErrors.DefaultCellStyle = dataGridViewCellStyle14;
             this.ValidationErrors.HeaderText = "Validation Errors";
             this.ValidationErrors.Name = "ValidationErrors";
             this.ValidationErrors.ReadOnly = true;
@@ -550,8 +551,8 @@ namespace CSharp_MARC_Editor
             // dataDataGridViewTextBoxColumn
             // 
             this.dataDataGridViewTextBoxColumn.DataPropertyName = "Data";
-            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle15;
             this.dataDataGridViewTextBoxColumn.HeaderText = "Data";
             this.dataDataGridViewTextBoxColumn.MinimumWidth = 100;
             this.dataDataGridViewTextBoxColumn.Name = "dataDataGridViewTextBoxColumn";
@@ -818,7 +819,8 @@ namespace CSharp_MARC_Editor
             this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.createBlankRecordToolStripMenuItem,
             this.findAndReplaceToolStripMenuItem,
-            this.advancedBatchEditToolStripMenuItem});
+            this.advancedBatchEditToolStripMenuItem,
+            this.sortAllFieldsAndSubfieldsToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.editToolStripMenuItem.Text = "Edit";
@@ -1083,6 +1085,14 @@ namespace CSharp_MARC_Editor
             this.validationBackgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.validationBackgroundWorker_ProgressChanged);
             this.validationBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.validationBackgroundWorker_RunWorkerCompleted);
             // 
+            // sortAllFieldsAndSubfieldsToolStripMenuItem
+            // 
+            this.sortAllFieldsAndSubfieldsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("sortAllFieldsAndSubfieldsToolStripMenuItem.Image")));
+            this.sortAllFieldsAndSubfieldsToolStripMenuItem.Name = "sortAllFieldsAndSubfieldsToolStripMenuItem";
+            this.sortAllFieldsAndSubfieldsToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.sortAllFieldsAndSubfieldsToolStripMenuItem.Text = "Sort all fields and subfields";
+            this.sortAllFieldsAndSubfieldsToolStripMenuItem.Click += new System.EventHandler(this.sortAllFieldsAndSubfieldsToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1216,6 +1226,7 @@ namespace CSharp_MARC_Editor
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
         private System.Windows.Forms.ToolStripMenuItem forceUTF8ImportToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem advancedBatchEditToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sortAllFieldsAndSubfieldsToolStripMenuItem;
     }
 }
 
