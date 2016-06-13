@@ -1550,14 +1550,14 @@ namespace CSharp_MARC_Editor
 
                 using (SQLiteCommand command = new SQLiteCommand(connection))
                 {
-                    command.CommandText = "SELECT RecordID FROM Fields WHERE RecordID = @RecordID ORDER BY CASE WHEN TagNumber = 'LDR' THEN 0 ELSE 1 END, Sort, TagNumber, FieldID";
+                    command.CommandText = "SELECT FieldID FROM Fields WHERE RecordID = @RecordID ORDER BY CASE WHEN TagNumber = 'LDR' THEN 0 ELSE 1 END, TagNumber, Sort, FieldID";
                     command.Parameters.Add("@RecordID", DbType.Int32).Value = recordID;
 
                     using (SQLiteDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
                         {
-                            fields.Add(Int32.Parse(reader["RecordID"].ToString(), CultureInfo.InvariantCulture));
+                            fields.Add(Int32.Parse(reader["FieldID"].ToString(), CultureInfo.InvariantCulture));
                         }
                     }
                 }
