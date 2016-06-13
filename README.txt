@@ -84,7 +84,7 @@ Add option to force UTF8 encoding
 Fix issue with RDA Conversion relating to 300c being changed from cm. and mm. to cm and mm
 Remove some build warnings
  
-2016-05-16 Changes:
+2016-05-16.1 Changes:
 
 Fix issue exporting records
 

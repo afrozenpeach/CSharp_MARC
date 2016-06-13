@@ -10,6 +10,8 @@ This project is built upon the CSharp_MARC project of the same name available at
 * FAST and lightweight! Capable of importing 28,000 records a minute!
 * Can handle MARC Records of any size
 * Find and Replace with Regular Expression support with tag, indicator, and subfield level filtering
+* Advanced Batch Edit allows easily adding, editing, replacing, or deleting multiple fields in a record set
+* Automatically resort fields and subfields
 * Export to MARC21 UTF8 or MARC8 encoding, MARCXML, or CSV file formats
 * Split large record sets into multiple files
 * Z39.50 support using the SRU API with customizable address string
