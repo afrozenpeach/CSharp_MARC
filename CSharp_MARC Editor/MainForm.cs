@@ -633,78 +633,78 @@ namespace CSharp_MARC_Editor
                     using (SQLiteCommand command = new SQLiteCommand(connection))
                     {
                         command.CommandText = @"CREATE TABLE [Fields](
-                                                    [FieldID] integer PRIMARY KEY ASC AUTOINCREMENT NOT NULL, 
-                                                    [RecordID] nvarchar(2147483647) NOT NULL, 
-                                                    [TagNumber] nvarchar(2147483647) NOT NULL, 
-                                                    [Ind1] char, 
-                                                    [Ind2] char, 
-                                                    [ControlData] nvarchar(2147483647), 
-                                                    [Sort] integer, 
-                                                    FOREIGN KEY([RecordID]) REFERENCES Records([RecordID]) ON DELETE CASCADE ON UPDATE RESTRICT);
+                                                [FieldID] integer PRIMARY KEY ASC AUTOINCREMENT NOT NULL, 
+                                                [RecordID] nvarchar(2147483647) NOT NULL, 
+                                                [TagNumber] nvarchar(2147483647) NOT NULL, 
+                                                [Ind1] char, 
+                                                [Ind2] char, 
+                                                [ControlData] nvarchar(2147483647), 
+                                                [Sort] integer, 
+                                                FOREIGN KEY([RecordID]) REFERENCES Records([RecordID]) ON DELETE CASCADE ON UPDATE RESTRICT);
 
-                                                CREATE TABLE [Records](
-                                                    [RecordID] integer PRIMARY KEY ASC AUTOINCREMENT NOT NULL, 
-                                                    [DateAdded] datetime NOT NULL, 
-                                                    [DateChanged] datetime, 
-                                                    [Author] nvarchar(2147483647), 
-                                                    [Title] nvarchar(2147483647), 
-                                                    [CopyrightDate] integer, 
-                                                    [Barcode] nvarchar(2147483647), 
-                                                    [Classification] nvarchar(2147483647), 
-                                                    [MainEntry] nvarchar(2147483647), 
-                                                    [Custom1] nvarchar(2147483647), 
-                                                    [Custom2] nvarchar(2147483647), 
-                                                    [Custom3] nvarchar(2147483647), 
-                                                    [Custom4] nvarchar(2147483647), 
-                                                    [Custom5] nvarchar(2147483647), 
-                                                    [ImportErrors] nvarchar(2147483647), 
-                                                    [ValidationErrors] nvarchar(2147483647));
+                                            CREATE TABLE [Records](
+                                                [RecordID] integer PRIMARY KEY ASC AUTOINCREMENT NOT NULL, 
+                                                [DateAdded] datetime NOT NULL, 
+                                                [DateChanged] datetime, 
+                                                [Author] nvarchar(2147483647), 
+                                                [Title] nvarchar(2147483647), 
+                                                [CopyrightDate] integer, 
+                                                [Barcode] nvarchar(2147483647), 
+                                                [Classification] nvarchar(2147483647), 
+                                                [MainEntry] nvarchar(2147483647), 
+                                                [Custom1] nvarchar(2147483647), 
+                                                [Custom2] nvarchar(2147483647), 
+                                                [Custom3] nvarchar(2147483647), 
+                                                [Custom4] nvarchar(2147483647), 
+                                                [Custom5] nvarchar(2147483647), 
+                                                [ImportErrors] nvarchar(2147483647), 
+                                                [ValidationErrors] nvarchar(2147483647));
 
-                                                CREATE TABLE [Settings](
-                                                    [RecordListAtTop] bool, 
-                                                    [ClearDatabaseOnExit] bool, 
-                                                    [ExportFormat] char(1), 
-                                                    [CustomTag1] nvarchar(3), 
-                                                    [CustomCode1] nvarchar(1), 
-                                                    [CustomData1] nvarchar(2147483647), 
-                                                    [CustomTag2] nvarchar(3), 
-                                                    [CustomCode2] nvarchar(1), 
-                                                    [CustomData2] nvarchar(2147483647), 
-                                                    [CustomTag3] nvarchar(3), 
-                                                    [CustomCode3] nvarchar(1), 
-                                                    [CustomData3] nvarchar(2147483647), 
-                                                    [CustomTag4] nvarchar(3), 
-                                                    [CustomCode4] nvarchar(1), 
-                                                    [CustomData4] nvarchar(2147483647), 
-                                                    [CustomTag5] nvarchar(3), 
-                                                    [CustomCode5] varchar(1), 
-                                                    [CustomData5] nvarchar(2147483647)),
-                                                    [ForceUTF8Import] bool;
+                                            CREATE TABLE [Settings](
+                                                [RecordListAtTop] bool, 
+                                                [ClearDatabaseOnExit] bool, 
+                                                [ExportFormat] char(1), 
+                                                [CustomTag1] nvarchar(3), 
+                                                [CustomCode1] nvarchar(1), 
+                                                [CustomData1] nvarchar(2147483647), 
+                                                [CustomTag2] nvarchar(3), 
+                                                [CustomCode2] nvarchar(1), 
+                                                [CustomData2] nvarchar(2147483647), 
+                                                [CustomTag3] nvarchar(3), 
+                                                [CustomCode3] nvarchar(1), 
+                                                [CustomData3] nvarchar(2147483647), 
+                                                [CustomTag4] nvarchar(3), 
+                                                [CustomCode4] nvarchar(1), 
+                                                [CustomData4] nvarchar(2147483647), 
+                                                [CustomTag5] nvarchar(3), 
+                                                [CustomCode5] varchar(1), 
+                                                [CustomData5] nvarchar(2147483647), 
+                                                [ForceUTF8Import] bool);
 
-                                                CREATE TABLE [Subfields](
-                                                    [SubfieldID] integer PRIMARY KEY ASC AUTOINCREMENT NOT NULL, 
-                                                    [FieldID] bigint NOT NULL, 
-                                                    [Code] char NOT NULL, 
-                                                    [Data] nvarchar(2147483647) NOT NULL, 
-                                                    [Sort] integer, 
-                                                    FOREIGN KEY([FieldID]) REFERENCES Fields([FieldID]) ON DELETE CASCADE ON UPDATE RESTRICT);
+                                            CREATE TABLE [Subfields](
+                                                [SubfieldID] integer PRIMARY KEY ASC AUTOINCREMENT NOT NULL, 
+                                                [FieldID] bigint NOT NULL, 
+                                                [Code] char NOT NULL, 
+                                                [Data] nvarchar(2147483647) NOT NULL, 
+                                                [Sort] integer, 
+                                                FOREIGN KEY([FieldID]) REFERENCES Fields([FieldID]) ON DELETE CASCADE ON UPDATE RESTRICT);
 
-                                                CREATE TABLE [TempUpdates](
-                                                    [RecordID] integer, 
-                                                    [Data] nvarchar);
+                                            CREATE TABLE [TempUpdates](
+                                                [RecordID] integer, 
+                                                [Data] nvarchar);
 
-                                                CREATE INDEX [FieldID]
-                                                ON [Subfields](
-                                                    [FieldID] ASC);
+                                            CREATE INDEX [FieldID]
+                                            ON [Subfields](
+                                                [FieldID] ASC);
 
-                                                CREATE INDEX [RecordID]
-                                                ON [Fields](
-                                                    [RecordID] ASC);
+                                            CREATE INDEX [RecordID]
+                                            ON [Fields](
+                                                [RecordID] ASC);
 
-                                                CREATE INDEX [RecordID_Data]
-                                                ON [TempUpdates](
-                                                    [RecordID], 
-                                                    [Data]);";
+                                            CREATE INDEX [RecordID_Data]
+                                            ON [TempUpdates](
+                                                [RecordID], 
+                                                [Data]);";
 
                         command.ExecuteNonQuery();
                     }
