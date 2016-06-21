@@ -41,6 +41,7 @@ using System.Text.RegularExpressions;
 using System.Collections;
 using System.Drawing.Printing;
 using System.Globalization;
+using System.Collections.ObjectModel;
 
 namespace CSharp_MARC_Editor
 {
@@ -1928,7 +1929,7 @@ namespace CSharp_MARC_Editor
         private void importingBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             IEnumerable recordEnumerator = null;
-            List<Record> importedSRU;
+            Collection<Record> importedSRU;
 
             if (e.Argument.GetType() == typeof(string))
             {
@@ -1937,7 +1938,7 @@ namespace CSharp_MARC_Editor
             }
             else
             {
-                importedSRU = (List<Record>)e.Argument;
+                importedSRU = (Collection<Record>)e.Argument;
                 recordEnumerator = importedSRU;
             }
 
