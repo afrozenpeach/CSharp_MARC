@@ -78,10 +78,15 @@ namespace CSharp_MARC_Editor
             this.importButton = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.serverGroupBox = new System.Windows.Forms.GroupBox();
-            this.serverTextBox = new System.Windows.Forms.TextBox();
-            this.namespaceTextBox = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.oclcTextBox = new System.Windows.Forms.TextBox();
+            this.oclcWSKeyLabel = new System.Windows.Forms.Label();
+            this.otherRadioButton = new System.Windows.Forms.RadioButton();
+            this.oclcRadioButton = new System.Windows.Forms.RadioButton();
+            this.locRadioButton = new System.Windows.Forms.RadioButton();
             this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.namespaceTextBox = new System.Windows.Forms.TextBox();
+            this.serverTextBox = new System.Windows.Forms.TextBox();
             this.searchGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.searchResultsDataGridView)).BeginInit();
             this.importGroupBox.SuspendLayout();
@@ -103,9 +108,9 @@ namespace CSharp_MARC_Editor
             this.searchGroupBox.Controls.Add(this.lccnLabel);
             this.searchGroupBox.Controls.Add(this.isbnTextBox);
             this.searchGroupBox.Controls.Add(this.isbnLabel);
-            this.searchGroupBox.Location = new System.Drawing.Point(12, 89);
+            this.searchGroupBox.Location = new System.Drawing.Point(12, 120);
             this.searchGroupBox.Name = "searchGroupBox";
-            this.searchGroupBox.Size = new System.Drawing.Size(471, 401);
+            this.searchGroupBox.Size = new System.Drawing.Size(477, 370);
             this.searchGroupBox.TabIndex = 0;
             this.searchGroupBox.TabStop = false;
             this.searchGroupBox.Text = "Search";
@@ -134,7 +139,7 @@ namespace CSharp_MARC_Editor
             this.searchResultsDataGridView.Location = new System.Drawing.Point(6, 126);
             this.searchResultsDataGridView.Name = "searchResultsDataGridView";
             this.searchResultsDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.searchResultsDataGridView.Size = new System.Drawing.Size(459, 269);
+            this.searchResultsDataGridView.Size = new System.Drawing.Size(465, 238);
             this.searchResultsDataGridView.TabIndex = 8;
             this.searchResultsDataGridView.SelectionChanged += new System.EventHandler(this.searchResultsDataGridView_SelectionChanged);
             // 
@@ -176,7 +181,7 @@ namespace CSharp_MARC_Editor
             | System.Windows.Forms.AnchorStyles.Right)));
             this.authorTextBox.Location = new System.Drawing.Point(59, 71);
             this.authorTextBox.Name = "authorTextBox";
-            this.authorTextBox.Size = new System.Drawing.Size(406, 20);
+            this.authorTextBox.Size = new System.Drawing.Size(412, 20);
             this.authorTextBox.TabIndex = 4;
             this.authorTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.searchFieldTextBox_KeyPress);
             // 
@@ -195,7 +200,7 @@ namespace CSharp_MARC_Editor
             | System.Windows.Forms.AnchorStyles.Right)));
             this.titleTextBox.Location = new System.Drawing.Point(59, 45);
             this.titleTextBox.Name = "titleTextBox";
-            this.titleTextBox.Size = new System.Drawing.Size(406, 20);
+            this.titleTextBox.Size = new System.Drawing.Size(412, 20);
             this.titleTextBox.TabIndex = 3;
             this.titleTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.searchFieldTextBox_KeyPress);
             // 
@@ -262,7 +267,7 @@ namespace CSharp_MARC_Editor
             // 
             // cancelButton
             // 
-            this.cancelButton.Location = new System.Drawing.Point(201, 449);
+            this.cancelButton.Location = new System.Drawing.Point(216, 449);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 13;
@@ -286,7 +291,7 @@ namespace CSharp_MARC_Editor
             // importButton
             // 
             this.importButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.importButton.Location = new System.Drawing.Point(150, 449);
+            this.importButton.Location = new System.Drawing.Point(135, 449);
             this.importButton.Name = "importButton";
             this.importButton.Size = new System.Drawing.Size(75, 23);
             this.importButton.TabIndex = 12;
@@ -300,54 +305,113 @@ namespace CSharp_MARC_Editor
             // 
             // serverGroupBox
             // 
+            this.serverGroupBox.Controls.Add(this.oclcTextBox);
+            this.serverGroupBox.Controls.Add(this.oclcWSKeyLabel);
+            this.serverGroupBox.Controls.Add(this.otherRadioButton);
+            this.serverGroupBox.Controls.Add(this.oclcRadioButton);
+            this.serverGroupBox.Controls.Add(this.locRadioButton);
             this.serverGroupBox.Controls.Add(this.label2);
             this.serverGroupBox.Controls.Add(this.label1);
             this.serverGroupBox.Controls.Add(this.namespaceTextBox);
             this.serverGroupBox.Controls.Add(this.serverTextBox);
             this.serverGroupBox.Location = new System.Drawing.Point(12, 12);
             this.serverGroupBox.Name = "serverGroupBox";
-            this.serverGroupBox.Size = new System.Drawing.Size(477, 71);
+            this.serverGroupBox.Size = new System.Drawing.Size(477, 102);
             this.serverGroupBox.TabIndex = 2;
             this.serverGroupBox.TabStop = false;
             this.serverGroupBox.Text = "Server Information";
             // 
-            // serverTextBox
+            // oclcTextBox
             // 
-            this.serverTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.serverTextBox.Location = new System.Drawing.Point(79, 19);
-            this.serverTextBox.Name = "serverTextBox";
-            this.serverTextBox.Size = new System.Drawing.Size(392, 20);
-            this.serverTextBox.TabIndex = 0;
-            this.serverTextBox.Text = "http://lx2.loc.gov:210/lcdb?version=1.1&operation=searchRetrieve&query=";
+            this.oclcTextBox.Enabled = false;
+            this.oclcTextBox.Location = new System.Drawing.Point(337, 68);
+            this.oclcTextBox.Name = "oclcTextBox";
+            this.oclcTextBox.Size = new System.Drawing.Size(134, 20);
+            this.oclcTextBox.TabIndex = 8;
             // 
-            // namespaceTextBox
+            // oclcWSKeyLabel
             // 
-            this.namespaceTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.namespaceTextBox.Location = new System.Drawing.Point(79, 45);
-            this.namespaceTextBox.Name = "namespaceTextBox";
-            this.namespaceTextBox.Size = new System.Drawing.Size(392, 20);
-            this.namespaceTextBox.TabIndex = 1;
-            this.namespaceTextBox.Text = "http://www.loc.gov/zing/srw/";
+            this.oclcWSKeyLabel.AutoSize = true;
+            this.oclcWSKeyLabel.Location = new System.Drawing.Point(251, 71);
+            this.oclcWSKeyLabel.Name = "oclcWSKeyLabel";
+            this.oclcWSKeyLabel.Size = new System.Drawing.Size(80, 13);
+            this.oclcWSKeyLabel.TabIndex = 7;
+            this.oclcWSKeyLabel.Text = "OCLC WS Key:";
+            // 
+            // otherRadioButton
+            // 
+            this.otherRadioButton.AutoSize = true;
+            this.otherRadioButton.Location = new System.Drawing.Point(186, 19);
+            this.otherRadioButton.Name = "otherRadioButton";
+            this.otherRadioButton.Size = new System.Drawing.Size(51, 17);
+            this.otherRadioButton.TabIndex = 6;
+            this.otherRadioButton.Text = "Other";
+            this.otherRadioButton.UseVisualStyleBackColor = true;
+            this.otherRadioButton.CheckedChanged += new System.EventHandler(this.otherRadioButton_CheckedChanged);
+            // 
+            // oclcRadioButton
+            // 
+            this.oclcRadioButton.AutoSize = true;
+            this.oclcRadioButton.Location = new System.Drawing.Point(127, 19);
+            this.oclcRadioButton.Name = "oclcRadioButton";
+            this.oclcRadioButton.Size = new System.Drawing.Size(53, 17);
+            this.oclcRadioButton.TabIndex = 5;
+            this.oclcRadioButton.Text = "OCLC";
+            this.oclcRadioButton.UseVisualStyleBackColor = true;
+            this.oclcRadioButton.CheckedChanged += new System.EventHandler(this.oclcRadioButton_CheckedChanged);
+            // 
+            // locRadioButton
+            // 
+            this.locRadioButton.AutoSize = true;
+            this.locRadioButton.Checked = true;
+            this.locRadioButton.Location = new System.Drawing.Point(6, 19);
+            this.locRadioButton.Name = "locRadioButton";
+            this.locRadioButton.Size = new System.Drawing.Size(115, 17);
+            this.locRadioButton.TabIndex = 4;
+            this.locRadioButton.TabStop = true;
+            this.locRadioButton.Text = "Library of Congress";
+            this.locRadioButton.UseVisualStyleBackColor = true;
+            this.locRadioButton.CheckedChanged += new System.EventHandler(this.locRadioButton_CheckedChanged);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 71);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(67, 13);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "Namespace:";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(7, 22);
+            this.label1.Location = new System.Drawing.Point(7, 45);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(66, 13);
             this.label1.TabIndex = 2;
             this.label1.Text = "Server URL:";
             // 
-            // label2
+            // namespaceTextBox
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 48);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(67, 13);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Namespace:";
+            this.namespaceTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.namespaceTextBox.Enabled = false;
+            this.namespaceTextBox.Location = new System.Drawing.Point(79, 68);
+            this.namespaceTextBox.Name = "namespaceTextBox";
+            this.namespaceTextBox.Size = new System.Drawing.Size(166, 20);
+            this.namespaceTextBox.TabIndex = 1;
+            this.namespaceTextBox.Text = "http://www.loc.gov/zing/srw/";
+            // 
+            // serverTextBox
+            // 
+            this.serverTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.serverTextBox.Enabled = false;
+            this.serverTextBox.Location = new System.Drawing.Point(79, 42);
+            this.serverTextBox.Name = "serverTextBox";
+            this.serverTextBox.Size = new System.Drawing.Size(392, 20);
+            this.serverTextBox.TabIndex = 0;
+            this.serverTextBox.Text = "http://lx2.loc.gov:210/lcdb?version=1.1&operation=searchRetrieve&query=";
             // 
             // ImportSRU
             // 
@@ -402,6 +466,10 @@ namespace CSharp_MARC_Editor
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox namespaceTextBox;
-
-	}
+        private System.Windows.Forms.TextBox oclcTextBox;
+        private System.Windows.Forms.Label oclcWSKeyLabel;
+        private System.Windows.Forms.RadioButton otherRadioButton;
+        private System.Windows.Forms.RadioButton oclcRadioButton;
+        private System.Windows.Forms.RadioButton locRadioButton;
+    }
 }

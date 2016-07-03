@@ -396,6 +396,44 @@ namespace CSharp_MARC_Editor
             }
         }
 
-		#endregion
-	}
+        /// <summary>
+        /// Handles the CheckedChanged event of the radioButton control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void locRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            serverTextBox.Enabled = false;
+            namespaceTextBox.Enabled = false;
+            oclcTextBox.Enabled = false;
+            serverTextBox.Text = "http://lx2.loc.gov:210/lcdb?version=1.1&operation=searchRetrieve&query=";
+        }
+
+        /// <summary>
+        /// Handles the CheckedChanged event of the oclcRadioButton control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void oclcRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            serverTextBox.Enabled = false;
+            namespaceTextBox.Enabled = false;
+            oclcTextBox.Enabled = true;
+            serverTextBox.Text = "http://www.worldcat.org/webservices/catalog/search/sru?query=";
+        }
+
+        /// <summary>
+        /// Handles the CheckedChanged event of the otherRadioButton control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void otherRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            serverTextBox.Enabled = true;
+            namespaceTextBox.Enabled = true;
+            oclcTextBox.Enabled = false;
+        }
+
+        #endregion
+    }
 }
