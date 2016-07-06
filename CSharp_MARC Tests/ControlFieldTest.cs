@@ -174,15 +174,15 @@ namespace CSharp_MARC_Tests
 		///</summary>
 		[TestMethod()]
 		public void DataTest()
-		{
-			string tag = "001";
-			string data = "  2007032296";
-			ControlField target = new ControlField(tag, data);
-			string expected = "  2011022800";
-			string actual = target.Data;
+        {
+            string tag = "001";
+            string data = "  2007032296";
+            ControlField target = new ControlField(tag, data);
+            string expected = "  2011022800";
             target.Data = expected;
-			Assert.AreEqual(expected, actual);
-		}
+            string actual = target.Data;
+            Assert.AreEqual(expected, actual);
+        }
 
 		/// <summary>
 		///A test for Clone
