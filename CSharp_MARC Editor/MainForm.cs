@@ -2219,9 +2219,7 @@ namespace CSharp_MARC_Editor
                             int i = 1;
                             int recordCounter = 1;
                             int fileCounter = 1;
-                            FileMARCWriter.RecordEncoding recordEncoding;
-
-                            recordEncoding = mARC8ToolStripMenuItem.Checked ? FileMARCWriter.RecordEncoding.MARC8 : FileMARCWriter.RecordEncoding.UTF8;
+                            FileMARCWriter.RecordEncoding recordEncoding = mARC8ToolStripMenuItem.Checked ? FileMARCWriter.RecordEncoding.MARC8 : FileMARCWriter.RecordEncoding.UTF8;
 
                             int max = marcDataSet.Tables["Records"].Rows.Count;
 
@@ -2306,8 +2304,7 @@ namespace CSharp_MARC_Editor
                                 marcWriter.Dispose();
                             }
 
-                            if (xmlWriter != null)
-                                xmlWriter.Dispose();
+                            xmlWriter?.Dispose();
                         }
                     }
                 }
