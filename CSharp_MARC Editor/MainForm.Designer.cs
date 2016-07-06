@@ -130,6 +130,7 @@ namespace CSharp_MARC_Editor
             this.createBlankRecordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.findAndReplaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.advancedBatchEditToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sortAllFieldsAndSubfieldsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.recordListAtTopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearDatabaseOnExitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -161,7 +162,6 @@ namespace CSharp_MARC_Editor
             this.loadingBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.rdaConversionBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.validationBackgroundWorker = new System.ComponentModel.BackgroundWorker();
-            this.sortAllFieldsAndSubfieldsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sortAllBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.batchEditBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -858,6 +858,14 @@ namespace CSharp_MARC_Editor
             this.advancedBatchEditToolStripMenuItem.Text = "Advanced Batch Edit";
             this.advancedBatchEditToolStripMenuItem.Click += new System.EventHandler(this.advancedBatchEditToolStripMenuItem_Click);
             // 
+            // sortAllFieldsAndSubfieldsToolStripMenuItem
+            // 
+            this.sortAllFieldsAndSubfieldsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("sortAllFieldsAndSubfieldsToolStripMenuItem.Image")));
+            this.sortAllFieldsAndSubfieldsToolStripMenuItem.Name = "sortAllFieldsAndSubfieldsToolStripMenuItem";
+            this.sortAllFieldsAndSubfieldsToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.sortAllFieldsAndSubfieldsToolStripMenuItem.Text = "Sort all fields and subfields";
+            this.sortAllFieldsAndSubfieldsToolStripMenuItem.Click += new System.EventHandler(this.sortAllFieldsAndSubfieldsToolStripMenuItem_Click);
+            // 
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -1036,7 +1044,7 @@ namespace CSharp_MARC_Editor
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
@@ -1093,14 +1101,6 @@ namespace CSharp_MARC_Editor
             this.validationBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.validationBackgroundWorker_DoWork);
             this.validationBackgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.validationBackgroundWorker_ProgressChanged);
             this.validationBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.validationBackgroundWorker_RunWorkerCompleted);
-            // 
-            // sortAllFieldsAndSubfieldsToolStripMenuItem
-            // 
-            this.sortAllFieldsAndSubfieldsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("sortAllFieldsAndSubfieldsToolStripMenuItem.Image")));
-            this.sortAllFieldsAndSubfieldsToolStripMenuItem.Name = "sortAllFieldsAndSubfieldsToolStripMenuItem";
-            this.sortAllFieldsAndSubfieldsToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
-            this.sortAllFieldsAndSubfieldsToolStripMenuItem.Text = "Sort all fields and subfields";
-            this.sortAllFieldsAndSubfieldsToolStripMenuItem.Click += new System.EventHandler(this.sortAllFieldsAndSubfieldsToolStripMenuItem_Click);
             // 
             // sortAllBackgroundWorker
             // 

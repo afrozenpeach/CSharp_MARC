@@ -286,8 +286,8 @@ namespace MARC
         /// <returns></returns>
         public override XElement ToXML()
         {
-            XElement dataField = new XElement(FileMARCXML.Namespace + "datafield", new XAttribute("tag", this.tag), new XAttribute("ind1", this.ind1.ToString()), new XAttribute("ind2", this.ind2.ToString()));
-            foreach (Subfield subfield in this.subfields)
+            XElement dataField = new XElement(FileMARCXML.Namespace + "datafield", new XAttribute("tag", tag), new XAttribute("ind1", ind1.ToString()), new XAttribute("ind2", ind2.ToString()));
+            foreach (Subfield subfield in subfields)
             {
                 dataField.Add(subfield.ToXML());
             }
@@ -352,8 +352,8 @@ namespace MARC
 		/// <returns></returns>
 		public override Field Clone()
 		{
-			Field clone = new DataField(this.tag, new List<Subfield>(), this.ind1, this.ind2);
-			foreach (Subfield needsCloned in this.subfields)
+			Field clone = new DataField(tag, new List<Subfield>(), ind1, ind2);
+			foreach (Subfield needsCloned in subfields)
 				((DataField)clone).subfields.Add(needsCloned.Clone());
 			return clone;
 		}

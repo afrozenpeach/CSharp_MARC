@@ -230,8 +230,8 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void cancelButton_Click(object sender, EventArgs e)
         {
-            this.DialogResult = DialogResult.Cancel;
-            this.Close();
+            DialogResult = DialogResult.Cancel;
+            Close();
         }
 
         /// <summary>
@@ -241,17 +241,17 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void replaceAllButton_Click(object sender, EventArgs e)
         {
-            if (this.SelectedTags.Count == 0)
+            if (SelectedTags.Count == 0)
                 MessageBox.Show("Select at least one tag, or choose the \"Any\" option");
-            else if (this.SelectedIndicator1s.Count == 0 || this.SelectedIndicator2s.Count == 0)
+            else if (SelectedIndicator1s.Count == 0 || SelectedIndicator2s.Count == 0)
                 MessageBox.Show("Select at least one of each indicator, or choose the \"Any\" option");
-            else if (this.SelectedCodes.Count == 0)
+            else if (SelectedCodes.Count == 0)
                 MessageBox.Show("Select at least one of each subfield code, or choose the \"Any\" option");
-            else if (this.Data.Length == 0)
+            else if (Data.Length == 0)
                 MessageBox.Show("The data to find cannot be empty.");
             else {
-                this.DialogResult = DialogResult.OK;
-                this.Close();
+                DialogResult = DialogResult.OK;
+                Close();
             }
         }
 

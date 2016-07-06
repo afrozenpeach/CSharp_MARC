@@ -50,7 +50,7 @@ namespace CSharp_MARC_Editor
 
         public ReportDataSourceCollection DataSources
         {
-            get { return this.reportViewer.LocalReport.DataSources; }
+            get { return reportViewer.LocalReport.DataSources; }
         }
 
         public string Report
@@ -66,7 +66,7 @@ namespace CSharp_MARC_Editor
 
         private void ReportForm_Shown(object sender, EventArgs e)
         {
-            this.reportViewer.RefreshReport();
+            reportViewer.RefreshReport();
         }
     }
 }

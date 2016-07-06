@@ -287,7 +287,7 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void okButton_Click(object sender, EventArgs e)
         {
-            switch (this.Action)
+            switch (Action)
             {
                 case "Add":
                     if (string.IsNullOrEmpty(TagModification))

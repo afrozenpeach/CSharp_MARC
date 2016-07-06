@@ -335,7 +335,7 @@ namespace CSharp_MARC_Editor
 		/// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
 		private void importButton_Click(object sender, EventArgs e)
 		{
-            this.DialogResult = DialogResult.OK;
+            DialogResult = DialogResult.OK;
             Close();
 		}
 
@@ -346,7 +346,7 @@ namespace CSharp_MARC_Editor
 		/// <param name="e">The <see cref="System.Windows.Forms.FormClosingEventArgs"/> instance containing the event data.</param>
 		private void ImportMARC_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			if (this.DialogResult == DialogResult.None)
+			if (DialogResult == DialogResult.None)
 				DialogResult = DialogResult.Cancel;
 		}
 
@@ -379,7 +379,7 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void cancelButton_Click(object sender, EventArgs e)
         {
-            this.DialogResult = DialogResult.Cancel;
+            DialogResult = DialogResult.Cancel;
             Close();
         }
 

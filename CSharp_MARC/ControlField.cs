@@ -69,7 +69,7 @@ namespace MARC
         /// </returns>
         public override bool IsEmpty()
         {
-            return (this.data == string.Empty) ? true : false;
+            return (data == string.Empty) ? true : false;
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace MARC
         /// <returns></returns>
         public override XElement ToXML()
         {
-            return new XElement(FileMARCXML.Namespace + "controlfield", new XAttribute("tag", this.tag), this.data);
+            return new XElement(FileMARCXML.Namespace + "controlfield", new XAttribute("tag", tag), data);
         }
 
         /// <summary>
@@ -117,7 +117,7 @@ namespace MARC
 		/// <returns></returns>
 		public override Field Clone()
 		{
-			Field clone = new ControlField(this.tag, this.data);
+			Field clone = new ControlField(tag, data);
 			return clone;
 		}
     }

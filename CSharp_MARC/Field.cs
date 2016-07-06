@@ -54,7 +54,7 @@ namespace MARC
             get { return tag; }
             set
 			{
-				if (Field.ValidateTag(value.PadLeft(3)))
+				if (ValidateTag(value.PadLeft(3)))
 					tag = value.PadLeft(3);
 				else
 					throw new ArgumentException("Invalid tag.");
@@ -72,7 +72,7 @@ namespace MARC
         /// <param name="ind2">The ind2.</param>
         public Field(string tag)
         {
-            this.Tag = tag;
+            Tag = tag;
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace MARC
         /// </returns>
         public bool IsControlField()
         {
-            if (this.GetType() == typeof(ControlField))
+            if (GetType() == typeof(ControlField))
                 return true;
             return false;
         }
@@ -96,7 +96,7 @@ namespace MARC
         /// </returns>
         public bool IsDataField()
         {
-            if (this.GetType() == typeof(DataField))
+            if (GetType() == typeof(DataField))
                 return true;
             return false;
         }

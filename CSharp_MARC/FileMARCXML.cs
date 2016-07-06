@@ -95,9 +95,9 @@ namespace MARC
 		/// <param name="source">XDocument consisting of one or more raw MARCXML records.</param>
 		public FileMARCXML(XDocument source)
         {
-			this.rawSource = new List<XElement>();
+			rawSource = new List<XElement>();
 
-			this.Add(source);
+			Add(source);
         }
 
 		/// <summary>
@@ -106,9 +106,9 @@ namespace MARC
 		/// <param name="source">XML String consisting of one or more raw MARCXML records.</param>
 		public FileMARCXML(string source)
 		{
-			this.rawSource = new List<XElement>();
+			rawSource = new List<XElement>();
 
-			this.Add(XDocument.Parse(source));
+			Add(XDocument.Parse(source));
 		}
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace MARC
         /// </summary>
         public FileMARCXML()
         {
-			this.rawSource = new List<XElement>();
+			rawSource = new List<XElement>();
         }
 
 		#endregion
@@ -131,7 +131,7 @@ namespace MARC
 		public void ImportMARCXML(string file)
 		{
 			XDocument xmlSource = XDocument.Load(file);
-			this.Add(xmlSource);
+			Add(xmlSource);
 		}
 
 		/// <summary>
@@ -168,7 +168,7 @@ namespace MARC
 		/// <param name="source">XML String consisting of one or more raw MARCXML records.</param>
 		public int Add(string source)
 		{
-			return this.Add(XDocument.Parse(source));
+			return Add(XDocument.Parse(source));
 		}
 
 		/// <summary>

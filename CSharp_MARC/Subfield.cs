@@ -105,7 +105,7 @@ namespace MARC
         /// <returns></returns>
         public XElement ToXML()
         {
-            return new XElement(FileMARCXML.Namespace + "subfield", new XAttribute("code", this.code), this.data);
+            return new XElement(FileMARCXML.Namespace + "subfield", new XAttribute("code", code), data);
         }
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace MARC
 		/// <returns></returns>
 		public Subfield Clone()
 		{
-			Subfield clone = new Subfield(this.code, this.data);
+			Subfield clone = new Subfield(code, data);
 			return clone;
 		}
     }

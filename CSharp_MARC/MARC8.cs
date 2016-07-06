@@ -1899,7 +1899,7 @@ namespace MARC
                 }
 
 				//Since this is a three byte combination, just need to handle it SOMEHOW before the third byte is lost, or any introduced problem gets compounded. So, default this to just Unicode encoding.
-                string fallbackEncoding = Encoding.UTF8.GetString(new byte[] { (byte) marcByte3, (byte) marcByte2, (byte) marcByte1 });
+                string fallbackEncoding = UTF8.GetString(new byte[] { (byte) marcByte3, (byte) marcByte2, (byte) marcByte1 });
 				foreach (char c in fallbackEncoding)
 				{
 					chars[charIndex] = c;

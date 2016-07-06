@@ -2879,7 +2879,7 @@ namespace CSharp_MARC_Editor
                 {
                     command.ExecuteNonQuery();
 
-                    this.OnLoad(new EventArgs());
+                    OnLoad(new EventArgs());
                 }
             }
         }
@@ -3237,7 +3237,7 @@ namespace CSharp_MARC_Editor
 
                     RebuildRecordsPreviewInformation();
 
-                    this.OnLoad(new EventArgs());
+                    OnLoad(new EventArgs());
                     EnableForm();
                 }
             }
@@ -3812,7 +3812,7 @@ namespace CSharp_MARC_Editor
             recordsDataGridView.DataSource = marcDataSet.Tables["Records"];
             recordsDataGridView.ResumeLayout();
             loading = false;
-            this.OnLoad(new EventArgs());
+            OnLoad(new EventArgs());
             EnableForm();
         }
 
@@ -5770,7 +5770,7 @@ namespace CSharp_MARC_Editor
         private void rebuildBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             if (rebuildingID == null)
-                this.OnLoad(new EventArgs());
+                OnLoad(new EventArgs());
             else
                 ReloadRecordRow(recordsDataGridView.SelectedCells[0].OwningRow);
 
@@ -5806,7 +5806,7 @@ namespace CSharp_MARC_Editor
                     }
                 }
 
-                this.OnLoad(new EventArgs());
+                OnLoad(new EventArgs());
                 EnableForm();
             }
         }
@@ -5821,7 +5821,7 @@ namespace CSharp_MARC_Editor
             DisableForm();
             ResetDatabase();
 
-            this.OnLoad(new EventArgs());
+            OnLoad(new EventArgs());
             EnableForm();
         }
 

@@ -108,9 +108,9 @@ namespace MARC
         /// <param name="source">String consisting of one or more raw MARC records.</param>
         public FileMARC(string source)
         {
-            this.rawSource = new List<string>();
+            rawSource = new List<string>();
 
-			this.Add(source);
+			Add(source);
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace MARC
         /// </summary>
         public FileMARC()
         {
-            this.rawSource = new List<string>();
+            rawSource = new List<string>();
         }
 
         #endregion
@@ -141,7 +141,7 @@ namespace MARC
 
             if (fileContents != null)
             {
-				this.Add(fileContents);
+				Add(fileContents);
             }
         }
 
@@ -159,7 +159,7 @@ namespace MARC
 				if (record != string.Empty && record != "\x1A")
 				{
 					//Split removes the END_OF_RECORD. Put it back in
-					this.rawSource.Add(record + END_OF_RECORD.ToString());
+					rawSource.Add(record + END_OF_RECORD.ToString());
 				}
             }
         }
@@ -231,9 +231,9 @@ namespace MARC
             int dataStart = Convert.ToInt32(raw.Substring(12, 5));
 
             //Verify data start matches the first end of field marker
-            if (raw.IndexOf(FileMARC.END_OF_FIELD) + 1 != dataStart)
+            if (raw.IndexOf(END_OF_FIELD) + 1 != dataStart)
             {
-                dataStart = raw.IndexOf(FileMARC.END_OF_FIELD) + 1;
+                dataStart = raw.IndexOf(END_OF_FIELD) + 1;
                 marc.AddWarnings("Leader specifies incorrect base address of data.");
             }
 

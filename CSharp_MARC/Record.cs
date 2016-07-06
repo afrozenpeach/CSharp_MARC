@@ -222,9 +222,9 @@ namespace MARC
         public XElement ToXML()
         {
             XElement record = new XElement(FileMARCXML.Namespace + "record");
-            this.CalculateLeader();
-            record.Add(new XElement(FileMARCXML.Namespace + "leader", this.leader));
-            foreach (Field field in this.fields)
+            CalculateLeader();
+            record.Add(new XElement(FileMARCXML.Namespace + "leader", leader));
+            foreach (Field field in fields)
             {
                 record.Add(field.ToXML());
             }
@@ -241,7 +241,7 @@ namespace MARC
         public XDocument ToXMLDocument()
         {
             XDocument recordDocument = new XDocument(new XDeclaration("1.0", "utf-8", null));
-            recordDocument.Add(this.ToXML());
+            recordDocument.Add(ToXML());
             return recordDocument;
         }
 
@@ -313,11 +313,11 @@ namespace MARC
 		{
 			Record clone = new Record();
 
-			clone.leader = this.leader;
+			clone.leader = leader;
 			foreach (string needsCloned in warnings)
 				clone.AddWarnings(needsCloned);
 
-			foreach (Field needsCloned in this.fields)
+			foreach (Field needsCloned in fields)
 				clone.fields.Add(needsCloned.Clone());
 
 			return clone;
