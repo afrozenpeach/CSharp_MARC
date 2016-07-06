@@ -292,8 +292,7 @@ namespace CSharp_MARC_Tests
 			DataField target = new DataField(tag, subfields);
 			char[] excludeCodes = { 'a', 'b' };
 			string expected = "Some text Some more text -- Some fancy text -- Some more fancy text";
-			string actual;
-			actual = target.FormatField(excludeCodes);
+			string actual = target.FormatField(excludeCodes);
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -319,8 +318,7 @@ namespace CSharp_MARC_Tests
 			subfields.Add(subfield);
 			DataField target = new DataField(tag, subfields);
 			string expected = "It's a book! Anne Author Some text Some more text -- Some fancy text -- Some more fancy text";
-			string actual;
-			actual = target.FormatField();
+			string actual = target.FormatField();
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -342,8 +340,7 @@ namespace CSharp_MARC_Tests
 			expected.Add(subfield);
 			subfield = new Subfield('b', "Anne Author");
 			expected.Add(subfield);
-			List<Subfield> actual;
-			actual = target.GetSubfields();
+			List<Subfield> actual = target.GetSubfields();
 
 			Assert.AreEqual(expected.Count, actual.Count);
 			for (int i = 0; i < expected.Count; i++)
@@ -373,8 +370,7 @@ namespace CSharp_MARC_Tests
 			expected.Add(subfield);
 			subfield = new Subfield('b', "Anne Otter Author");
 			expected.Add(subfield);
-			List<Subfield> actual;
-			actual = target.GetSubfields('b');
+			List<Subfield> actual = target.GetSubfields('b');
 
 			Assert.AreEqual(expected.Count, actual.Count);
 			for (int i = 0; i < expected.Count; i++)
@@ -393,8 +389,7 @@ namespace CSharp_MARC_Tests
 			string tag = "100";
 			DataField target = new DataField(tag);
 			bool expected = true;
-			bool actual;
-			actual = target.IsEmpty();
+			bool actual = target.IsEmpty();
 			Assert.AreEqual(expected, actual);
 			List<Subfield> subfields = new List<Subfield>();
 			Subfield subfield = new Subfield('a', "It's a book!");
@@ -423,8 +418,7 @@ namespace CSharp_MARC_Tests
 			subfields.Add(subfield);
 			DataField target = new DataField(tag, subfields);
 			string expected = "  " + FileMARC.SUBFIELD_INDICATOR.ToString() + "aIt's a book!" + FileMARC.SUBFIELD_INDICATOR.ToString() + "bAnne Author" + FileMARC.END_OF_FIELD.ToString();
-			string actual;
-			actual = target.ToRaw();
+			string actual = target.ToRaw();
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -442,8 +436,7 @@ namespace CSharp_MARC_Tests
 			subfields.Add(subfield);
 			DataField target = new DataField(tag, subfields);
 			string expected = "100    [a]: It's a book!" + Environment.NewLine + "       [b]: Anne Author";
-			string actual;
-			actual = target.ToString();
+			string actual = target.ToString();
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -455,8 +448,7 @@ namespace CSharp_MARC_Tests
 		{
 			char ind = 'x';
 			bool expected = true;
-			bool actual;
-			actual = DataField.ValidateIndicator(ind);
+			bool actual = DataField.ValidateIndicator(ind);
 			Assert.AreEqual(expected, actual);
 			ind = '1';
 			actual = DataField.ValidateIndicator(ind);
@@ -477,9 +469,8 @@ namespace CSharp_MARC_Tests
 			string tag = "100";
 			DataField target = new DataField(tag);
 			char expected = '1';
-			char actual;
 			target.Indicator1 = expected;
-			actual = target.Indicator1;
+			char actual = target.Indicator1;
 			Assert.AreEqual(expected, actual);
 			expected = '%';
 			target.Indicator1 = expected; //Will throw exception
@@ -495,9 +486,8 @@ namespace CSharp_MARC_Tests
 			string tag = "100";
 			DataField target = new DataField(tag);
 			char expected = '1';
-			char actual;
 			target.Indicator2 = expected;
-			actual = target.Indicator2;
+			char actual = target.Indicator2;
 			Assert.AreEqual(expected, actual);
 			expected = '%';
 			target.Indicator2 = expected; //Will throw exception
@@ -518,8 +508,7 @@ namespace CSharp_MARC_Tests
 			DataField target = new DataField(tag, subfields);
 			char code = 'a';
 			Subfield expected = new Subfield('a', "It's a book!");
-			Subfield actual;
-			actual = target[code];
+			Subfield actual = target[code];
 			Assert.AreEqual(expected.Code, actual.Code);
 			Assert.AreEqual(expected.Data, actual.Data);
 		}
@@ -542,9 +531,8 @@ namespace CSharp_MARC_Tests
 			expected.Add(subfield);
 			subfield = new Subfield('b', "Anne Otter Author");
 			expected.Add(subfield);
-			List<Subfield> actual;
 			target.Subfields = expected;
-			actual = target.Subfields;
+            List<Subfield> actual = target.Subfields;
 
 			Assert.AreEqual(expected.Count, actual.Count);
 			for (int i = 0; i < expected.Count; i++)
@@ -568,15 +556,13 @@ namespace CSharp_MARC_Tests
 			subfield = new Subfield('b', "Anne Author");
 			subfields.Add(subfield);
 			Field target = new DataField(tag, subfields);
-			Field actual;
-			actual = target.Clone();
+			Field actual = target.Clone();
 			Assert.AreNotEqual(target, actual);
 
 			target.Tag = "200";
 
 			string expectedString = tag;
-			string actualString;
-			actualString = actual.Tag;
+			string actualString = actual.Tag;
 			Assert.AreEqual(expectedString, actualString);
 
 			((DataField)target).Indicator1 = '1';
@@ -662,8 +648,7 @@ namespace CSharp_MARC_Tests
                                         new XElement(FileMARCXML.Namespace + "subfield", new XAttribute("code", "a"), "It's a book!"),
                                         new XElement(FileMARCXML.Namespace + "subfield", new XAttribute("code", "b"), "Anne Author"));
 
-            XElement actual;
-            actual = target.ToXML();
+            XElement actual = target.ToXML();
             Assert.IsTrue(XNode.DeepEquals(expected, actual));
         }
 	}

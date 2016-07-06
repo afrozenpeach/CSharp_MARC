@@ -116,7 +116,7 @@ namespace MARC
         /// </returns>
         public bool IsEmpty()
         {
-            return (data == null || data == string.Empty) ? true : false;
+            return (string.IsNullOrEmpty(data) ? true : false);
         }
 
 		/// <summary>

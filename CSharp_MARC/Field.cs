@@ -64,13 +64,10 @@ namespace MARC
         #endregion
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Field"/> class.
+        /// Initializes a new instance of the <see cref="Field" /> class.
         /// </summary>
         /// <param name="tag">The tag.</param>
-        /// <param name="subfields">The subfields.</param>
-        /// <param name="ind1">The ind1.</param>
-        /// <param name="ind2">The ind2.</param>
-        public Field(string tag)
+        protected Field(string tag)
         {
             Tag = tag;
         }

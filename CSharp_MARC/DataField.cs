@@ -192,13 +192,13 @@ namespace MARC
 			return GetSubfields(null);
 		}
 
-		/// <summary>
-		/// Inserts the subfield into position before the first subfield found with a higher code.
-		/// Numbers always get sorted after letters
-		/// This assumes the subfield has already been sorted.
-		/// </summary>
-		/// <param name="field">The field.</param>
-		public void InsertSubfield(Subfield newSubfield)
+        /// <summary>
+        /// Inserts the subfield into position before the first subfield found with a higher code.
+        /// Numbers always get sorted after letters
+        /// This assumes the subfield has already been sorted.
+        /// </summary>
+        /// <param name="newSubfield">The new subfield.</param>
+        public void InsertSubfield(Subfield newSubfield)
 		{
 			int rowNum = 0;
 			foreach (Subfield subfield in subfields)

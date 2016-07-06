@@ -126,8 +126,7 @@ namespace CSharp_MARC_Tests
 			string data = "Test Data";
 			Subfield target = new Subfield(code, data);
 			bool expected = false;
-			bool actual;
-			actual = target.IsEmpty();
+			bool actual = target.IsEmpty();
 			Assert.AreEqual(expected, actual);
 			target.Data = null;
 			expected = true;
@@ -148,8 +147,7 @@ namespace CSharp_MARC_Tests
 			string data = "Test Data";
 			Subfield target = new Subfield(code, data);
 			string expected = FileMARC.SUBFIELD_INDICATOR.ToString() + "aTest Data";
-			string actual;
-			actual = target.ToRaw();
+			string actual = target.ToRaw();
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -163,8 +161,7 @@ namespace CSharp_MARC_Tests
 			string data = "Test Data";
 			Subfield target = new Subfield(code, data);
 			string expected = "[a]: Test Data";
-			string actual;
-			actual = target.ToString();
+			string actual = target.ToString();
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -178,9 +175,8 @@ namespace CSharp_MARC_Tests
 			string data = "Test Data";
 			Subfield target = new Subfield(code, data);
 			char expected = 'b';
-			char actual;
 			target.Code = expected;
-			actual = target.Code;
+			char actual = target.Code;
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -194,9 +190,8 @@ namespace CSharp_MARC_Tests
 			string data = "Test Data";
 			Subfield target = new Subfield(code, data);
 			string expected = "Test Data Again";
-			string actual;
 			target.Data = expected;
-			actual = target.Data;
+			string actual = target.Data;
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -210,15 +205,13 @@ namespace CSharp_MARC_Tests
 			string data = "Test Data";
 			Subfield target = new Subfield(code, data);
 			Subfield expected = target;
-			Subfield actual;
-			actual = target.Clone();
+			Subfield actual = target.Clone();
 			Assert.AreNotEqual(expected, actual);
 
 			target.Code = 'b';
 
 			string expectedString = "a";
-			string actualString;
-			actualString = actual.Code.ToString();
+			string actualString = actual.Code.ToString();
 			Assert.AreEqual(expectedString, actualString);
 
 			target.Data = "New Test Data";
@@ -238,8 +231,7 @@ namespace CSharp_MARC_Tests
             string data = "Test Data";
             Subfield target = new Subfield(code, data);
             XElement expected = new XElement(FileMARCXML.Namespace + "subfield", new XAttribute("code", "a"), "Test Data");
-            XElement actual;
-            actual = target.ToXML();
+            XElement actual = target.ToXML();
             Assert.IsTrue(XNode.DeepEquals(expected, actual));
         }
 	}

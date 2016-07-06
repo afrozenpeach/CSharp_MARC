@@ -44,10 +44,10 @@ namespace MARC
 		#region Member Variables and Properties
 
 		private string filename = null;
-        private FileStream reader = null;
-        private bool forceUTF8 = false;
+        private readonly FileStream reader = null;
+        private readonly bool forceUTF8 = false;
 
-        private string byteOrderMarkUtf8 = Encoding.UTF8.GetString(Encoding.UTF8.GetPreamble());
+        private readonly string byteOrderMarkUtf8 = Encoding.UTF8.GetString(Encoding.UTF8.GetPreamble());
 
 		#endregion
 
@@ -87,7 +87,6 @@ namespace MARC
 			while (reader.Position < reader.Length)
 			{
 				int DelPosition, RealReadSize;
-				string encoded;
 
 				do
 				{
@@ -109,8 +108,10 @@ namespace MARC
 				//The record has to at least be longer than the leader length of a MARC record, so it's a good place to make sure we have enough to at least try and make a record
 				//Otherwise we will relying error checking in the FileMARC class
 				if (ByteArray.Length > FileMARC.LEADER_LEN)
-				{
-					reader.Position = reader.Position - (RealReadSize - DelPosition);
+                {
+                    string encoded;
+
+                    reader.Position = reader.Position - (RealReadSize - DelPosition);
 					char marc8utf8Flag = Convert.ToChar(ByteArray[9]);
 
                     if (marc8utf8Flag == ' ' && !forceUTF8)

@@ -42,8 +42,8 @@ namespace MARC
         public const char END_OF_FILE = '\x1A';
 
         private string filename = null;
-        private StreamWriter writer = null;
-		private Encoding encoding;
+        private readonly StreamWriter writer = null;
+		private readonly Encoding encoding;
 
         #endregion
 
@@ -60,10 +60,10 @@ namespace MARC
 		}
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FileMARCWriter"/> class.
+        /// Initializes a new instance of the <see cref="FileMARCWriter" /> class.
         /// </summary>
         /// <param name="filename">The filename.</param>
-        /// <param name="mode">The FileMode.</param>
+        /// <param name="recordEncoding">The record encoding.</param>
         public FileMARCWriter(string filename, RecordEncoding recordEncoding) : this(filename, recordEncoding, false)
         {
         }

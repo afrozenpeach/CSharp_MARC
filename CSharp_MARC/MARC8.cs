@@ -73,17 +73,18 @@ namespace MARC
 		/// <exception cref="System.NotImplementedException"></exception>
 		public override int GetBytes(char[] chars, int charIndex, int charCount, byte[] bytes, int byteIndex)
 		{
-			byte?[] convertedBytes;
 			int byteCount = 0;
 			
 			for (int i = 0; i < charCount; i++)
 			{
 				//A byteIndex of -1 means just keep reusing the same char. This saves memory when only doing counts
 				int writeIndex = byteIndex;
-				if (writeIndex < 0)
+
+                if (writeIndex < 0)
 					writeIndex = 0;
 
-				convertedBytes = ConvertToMARC8Bytes(chars[charIndex + i]);
+                byte?[] convertedBytes = ConvertToMARC8Bytes(chars[charIndex + i]);
+
 				foreach (byte? b in convertedBytes)				
 				{
 					if (b != null)
@@ -133,13 +134,13 @@ namespace MARC
 		{
             int marcByte1 = -1;
             int marcByte2 = -1;
-            int marcByte3 = -1;
 			int charCount = 0;
 
             //Step through all the bytes in the array
             for (int i = 0; i < byteCount; i++)
             {
                 //If any previous bytes, save them
+                int marcByte3 = -1;
                 marcByte3 = marcByte2;
                 marcByte2 = marcByte1;
                 
@@ -196,15 +197,16 @@ namespace MARC
 			return byteCount;
         }
 
-		/// <summary>
-		/// Appends the unicode_ character.
-		/// Based on code from Mark V. Sullivan's SobekCM MARC Library (https://sourceforge.net/projects/marclibrary/) which is also GPLv3
-		/// </summary>
-		/// <param name="chars">The chars.</param>
-		/// <param name="marcByte1">The marc byte1.</param>
-		/// <param name="marcByte2">The marc byte2.</param>
-		/// <param name="marcByte3">The marc byte3.</param>
-		/// <returns></returns>
+        /// <summary>
+        /// Appends the unicode_ character.
+        /// Based on code from Mark V. Sullivan's SobekCM MARC Library (https://sourceforge.net/projects/marclibrary/) which is also GPLv3
+        /// </summary>
+        /// <param name="chars">The chars.</param>
+        /// <param name="charIndex">Index of the character.</param>
+        /// <param name="marcByte1">The marc byte1.</param>
+        /// <param name="marcByte2">The marc byte2.</param>
+        /// <param name="marcByte3">The marc byte3.</param>
+        /// <returns></returns>
         private static int AppendUnicodeCharacter(char[] chars, int charIndex, int marcByte1, int marcByte2, int marcByte3)
         {
             //For the special characters in MARC encoding, return FALSE, indicating the byte was not yet handled. (Need the next byte(s))

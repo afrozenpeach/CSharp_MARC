@@ -40,18 +40,17 @@ namespace MARC
         #region Member Variables and Properties
 
         private string filename = null;
-        private StreamWriter writer = null;
+        private readonly StreamWriter writer = null;
 
         #endregion
 
-		//Constructors
-		#region Constructors
+        //Constructors
+        #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FileMARCWriter"/> class.
+        /// Initializes a new instance of the <see cref="FileMARCWriter" /> class.
         /// </summary>
         /// <param name="filename">The filename.</param>
-        /// <param name="mode">The FileMode.</param>
         public FileMARCXMLWriter(string filename) : this(filename, false)
         {
         }

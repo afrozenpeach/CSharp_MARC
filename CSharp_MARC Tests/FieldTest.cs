@@ -116,8 +116,7 @@ namespace CSharp_MARC_Tests
 		{
 			Field target = CreateControlField();
 			string expected = string.Empty;
-			string actual;
-			actual = target.FormatField();
+			string actual = target.FormatField();
 			Assert.AreNotEqual(expected, actual);
 		}
 
@@ -129,8 +128,7 @@ namespace CSharp_MARC_Tests
 		{
 			Field target = CreateControlField();
 			bool expected = true;
-			bool actual;
-			actual = target.IsControlField();
+			bool actual = target.IsControlField();
 			Assert.AreEqual(expected, actual);
 			target = CreateDataField();
 			expected = false;
@@ -146,8 +144,7 @@ namespace CSharp_MARC_Tests
 		{
 			Field target = CreateDataField();
 			bool expected = true;
-			bool actual;
-			actual = target.IsDataField();
+			bool actual = target.IsDataField();
 			Assert.AreEqual(expected, actual);
 			expected = false;
 			target = CreateControlField();
@@ -163,8 +160,7 @@ namespace CSharp_MARC_Tests
 		{
 			Field target = CreateControlField();
 			bool expected = false;
-			bool actual;
-			actual = target.IsEmpty();
+			bool actual = target.IsEmpty();
 			Assert.AreEqual(expected, actual);
 			expected = true;
 			((ControlField)target).Data = string.Empty;
@@ -188,8 +184,7 @@ namespace CSharp_MARC_Tests
 		{
 			Field target = CreateControlField();
 			string expected = "  2007032296" + FileMARC.END_OF_FIELD.ToString();
-			string actual;
-			actual = target.ToRaw();
+			string actual = target.ToRaw();
 			Assert.AreEqual(expected, actual);
 			target = CreateDataField();
 			expected = "1 " + FileMARC.SUBFIELD_INDICATOR.ToString() + "aIt's a book!" + FileMARC.SUBFIELD_INDICATOR.ToString() + "bAnne Author" + FileMARC.END_OF_FIELD.ToString();
@@ -205,8 +200,7 @@ namespace CSharp_MARC_Tests
 		{
 			Field target = CreateControlField();
 			string expected = "001       2007032296";
-			string actual;
-			actual = target.ToString();
+			string actual = target.ToString();
 			Assert.AreEqual(expected, actual);
 			target = CreateDataField();
 			expected = "100 1  [a]: It's a book!" + Environment.NewLine + "       [b]: Anne Author";
@@ -222,9 +216,8 @@ namespace CSharp_MARC_Tests
 		{
 			Field target = CreateControlField();
 			string expected = "001";
-			string actual;
-			target.Tag = expected;
-			actual = target.Tag;
+			string actual = target.Tag;
+            target.Tag = expected;
 			Assert.AreEqual(expected, actual);
 			target = CreateDataField();
 			expected = "100";
@@ -240,8 +233,7 @@ namespace CSharp_MARC_Tests
 		{
 			string tag = "001";
 			bool expected = true;
-			bool actual;
-			actual = Field.ValidateTag(tag);
+			bool actual = Field.ValidateTag(tag);
 			Assert.AreEqual(expected, actual);
 			tag = "###";
 			expected = false;
@@ -257,8 +249,7 @@ namespace CSharp_MARC_Tests
 		{
 			Field target = CreateControlField();
 			Field expected = target;
-			Field actual;
-			actual = target.Clone();
+			Field actual = target.Clone();
 			Assert.AreNotEqual(expected, actual);
 
 			target = CreateDataField();

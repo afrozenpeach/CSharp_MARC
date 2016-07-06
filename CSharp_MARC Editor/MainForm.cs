@@ -59,7 +59,7 @@ namespace CSharp_MARC_Editor
         private bool loading = true;
         private bool reloadFields = false;
         private decimal recordsPerFile = 0;
-        private CustomFieldsForm customFieldsForm = new CustomFieldsForm();
+        private readonly CustomFieldsForm customFieldsForm = new CustomFieldsForm();
         private AdvancedBatchEditForm batchEditForm = null;
         private List<string> linesToPrint;
         private Exception errorLoading = null;
@@ -471,6 +471,7 @@ namespace CSharp_MARC_Editor
         /// Loads the preview.
         /// </summary>
         /// <param name="recordID">The record identifier.</param>
+        /// <param name="recordsTableReload">if set to <c>true</c> [records table reload].</param>
         private void LoadPreview(int recordID, bool recordsTableReload = false)
         {
             Record record = new Record();
@@ -1929,7 +1930,6 @@ namespace CSharp_MARC_Editor
         private void importingBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             IEnumerable recordEnumerator = null;
-            Collection<Record> importedSRU;
 
             if (e.Argument.GetType() == typeof(string))
             {
@@ -1938,7 +1938,7 @@ namespace CSharp_MARC_Editor
             }
             else
             {
-                importedSRU = (Collection<Record>)e.Argument;
+                Collection<Record> importedSRU = (Collection<Record>)e.Argument;
                 recordEnumerator = importedSRU;
             }
 
@@ -5286,7 +5286,6 @@ namespace CSharp_MARC_Editor
             Font headerFont = new Font("Courier New", 8, FontStyle.Bold);
             Font printFont = new Font("Courier New", 10, FontStyle.Regular);
             SizeF marginBoundsSize = new SizeF(e.MarginBounds.Size.Width, e.MarginBounds.Size.Height);
-            SizeF actualSize;
             bool newPage = true;
             string currentHeader = "";
 
@@ -5323,7 +5322,7 @@ namespace CSharp_MARC_Editor
                 format.FormatFlags = StringFormatFlags.LineLimit;
                 format.Trimming = StringTrimming.Word;
 
-                actualSize = e.Graphics.MeasureString(line, printFont, marginBoundsSize, format);
+                SizeF actualSize = e.Graphics.MeasureString(line, printFont, marginBoundsSize, format);
                 e.Graphics.DrawString(line, printFont, Brushes.Black, new RectangleF(leftMargin, yPos, e.MarginBounds.Size.Width, e.MarginBounds.Size.Height), format);
 
                 yPos = yPos + actualSize.Height;

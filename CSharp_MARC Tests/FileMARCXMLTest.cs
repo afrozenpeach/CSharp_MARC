@@ -106,8 +106,7 @@ namespace CSharp_MARC_Tests
 		{
 			FileMARCXML target = new FileMARCXML();
 			int expected = 0;
-			int actual;
-			actual = target.RawSource.Count;
+			int actual = target.RawSource.Count;
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -123,15 +122,13 @@ namespace CSharp_MARC_Tests
 
 			{
 				int expected = 1;
-				int actual;
-				actual = target.RawSource.Count;
+				int actual = target.RawSource.Count;
 				Assert.AreEqual(expected, actual);
 			}
 
 			{
 				string expected = XDocument.Parse(source).Elements().First(e => e.Name.LocalName == "collection").Elements().First(e => e.Name.LocalName == "record").ToString();
-				string actual;
-				actual = target.RawSource[0].ToString();
+				string actual = target.RawSource[0].ToString();
 				Assert.AreEqual(expected, actual);
 			}
 		}
@@ -148,15 +145,13 @@ namespace CSharp_MARC_Tests
 
 			{
 				int expected = 1;
-				int actual;
-				actual = target.RawSource.Count;
+				int actual = target.RawSource.Count;
 				Assert.AreEqual(expected, actual);
 			}
 
 			{
 				string expected = source.Elements().First(e => e.Name.LocalName == "collection").Elements().First(e => e.Name.LocalName == "record").ToString();
-				string actual;
-				actual = target.RawSource[0].ToString();
+				string actual = target.RawSource[0].ToString();
 				Assert.AreEqual(expected, actual);
 			}
 		}
@@ -173,15 +168,13 @@ namespace CSharp_MARC_Tests
 
 			{
 				int expected = 1;
-				int actual;
-				actual = target.Add(source);
+				int actual = target.Add(source);
 				Assert.AreEqual(expected, actual);
 			}
 
 			{
 				string expected = source.Elements().First(e => e.Name.LocalName == "collection").Elements().First(e => e.Name.LocalName == "record").ToString();
-				string actual;
-				actual = target.RawSource[0].ToString();
+				string actual = target.RawSource[0].ToString();
 				Assert.AreEqual(expected, actual);
 			}
 		}
@@ -198,15 +191,13 @@ namespace CSharp_MARC_Tests
 
 			{
 				int expected = 1;
-				int actual;
-				actual = target.Add(source);
+				int actual = target.Add(source);
 				Assert.AreEqual(expected, actual);
 			}
 
 			{
 				string expected = XDocument.Parse(source).Elements().First(e => e.Name.LocalName == "collection").Elements().First(e => e.Name.LocalName == "record").ToString();
-				string actual;
-				actual = target.RawSource[0].ToString();
+				string actual = target.RawSource[0].ToString();
 				Assert.AreEqual(expected, actual);
 			}
 		}
@@ -218,8 +209,7 @@ namespace CSharp_MARC_Tests
 		public void GetEnumeratorTest()
 		{
 			FileMARCXML target = new FileMARCXML();
-			IEnumerator actual;
-			actual = target.GetEnumerator();
+			IEnumerator actual = target.GetEnumerator();
 			Assert.IsInstanceOfType(actual, typeof(IEnumerator));
 		}
 
@@ -236,15 +226,13 @@ namespace CSharp_MARC_Tests
 
 			{
 				int expected = 1;
-				int actual;
-				actual = target.Count;
+				int actual = target.Count;
 				Assert.AreEqual(expected, actual);
 			}
 
 			{
 				string expected = XDocument.Load("sandburg.xml").Elements().First(e => e.Name.LocalName == "collection").Elements().First(e => e.Name.LocalName == "record").ToString();
-				string actual;
-				actual = target.RawSource[0].ToString();
+				string actual = target.RawSource[0].ToString();
 				Assert.AreEqual(expected, actual);
 			}
 		}
@@ -261,8 +249,7 @@ namespace CSharp_MARC_Tests
 			target.ImportMARCXML("sandburg.xml");
 			target.ImportMARCXML("bigarchive.xml");
 			bool expected = true;
-			bool actual;
-			actual = target.MoveNext();
+			bool actual = target.MoveNext();
 			Assert.AreEqual(expected, actual);
 			actual = target.MoveNext();
 			Assert.AreEqual(expected, actual);
@@ -288,8 +275,7 @@ namespace CSharp_MARC_Tests
 			target.Reset();
 			target.MoveNext();
 			bool expected = true;
-			bool actual;
-			actual = target.MoveNext();
+			bool actual = target.MoveNext();
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -305,8 +291,7 @@ namespace CSharp_MARC_Tests
 				XDocument source = XDocument.Load("sandburg.xml");
 				List<string> errors = FileMARCXML.Validate(source);
 				int expected = 0;
-				int actual;
-				actual = errors.Count;
+				int actual = errors.Count;
 				Assert.AreEqual(expected, actual);
 			}
 
@@ -314,8 +299,7 @@ namespace CSharp_MARC_Tests
 				XDocument source = XDocument.Load("bad_example.xml");
 				List<string> errors = FileMARCXML.Validate(source);
 				int expected = 4;
-				int actual;
-				actual = errors.Count;
+				int actual = errors.Count;
 				Assert.AreEqual(expected, actual);
 			}
 		}
@@ -335,36 +319,31 @@ namespace CSharp_MARC_Tests
 
 			{
 				string expected = "01142cam  2200301 a 4500";
-				string actual;
-				actual = decoded.Leader;
+				string actual = decoded.Leader;
 				Assert.AreEqual(expected, actual);
 			}
 
 			{
 				int expected = 23;
-				int actual;
-				actual = decoded.Fields.Count();
+				int actual = decoded.Fields.Count();
 				Assert.AreEqual(expected, actual);
 			}
 
 			{
 				string expected = "   92005291 ";
-				string actual;
-				actual = ((ControlField)decoded["001"]).Data;
+				string actual = ((ControlField)decoded["001"]).Data;
 				Assert.AreEqual(expected, actual);
 			}
 
 			{
 				string expected = "Arithmetic /";
-				string actual;
-				actual = ((DataField)decoded["245"])['a'].Data;
+				string actual = ((DataField)decoded["245"])['a'].Data;
 				Assert.AreEqual(expected, actual);
 			}
 
 			{
 				char expected = '1';
-				char actual;
-				actual = ((DataField)decoded["245"]).Indicator1;
+				char actual = ((DataField)decoded["245"]).Indicator1;
 				Assert.AreEqual(expected, actual);
 			}
 		}
@@ -381,8 +360,7 @@ namespace CSharp_MARC_Tests
 			target.ImportMARCXML("sandburg.xml");
 			target.ImportMARCXML("bigarchive.xml");
 			int expected = 2;
-			int actual;
-			actual = target.Count;
+			int actual = target.Count;
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -397,10 +375,9 @@ namespace CSharp_MARC_Tests
 			FileMARCXML target = new FileMARCXML();
 			target.ImportMARCXML("sandburg.xml");
 			string expected = "01142cam  2200301 a 4500001001300000003000400013005001700017008004100034010001700075020002500092040001800117042000900135050002600144082001600170100003200186245008600218250001200304260005200316300004900368500004000417520022800457650003300685650003300718650002400751650002100775650002300796700002100819   92005291 DLC19930521155141.9920219s1993    caua   j      000 0 eng    a   92005291   a0152038655 :c$15.95  aDLCcDLCdDLC  alcac00aPS3537.A618bA88 199300a811/.522201 aSandburg, Carl,d1878-1967.10aArithmetic /cCarl Sandburg ; illustrated as an anamorphic adventure by Ted Rand.  a1st ed.  aSan Diego :bHarcourt Brace Jovanovich,cc1993.  a1 v. (unpaged) :bill. (some col.) ;c26 cm.  aOne Mylar sheet included in pocket.  aA poem about numbers and their characteristics. Features anamorphic, or distorted, drawings which can be restored to normal by viewing from a particular angle or by viewing the image's reflection in the provided Mylar cone. 0aArithmeticxJuvenile poetry. 0aChildren's poetry, American. 1aArithmeticxPoetry. 1aAmerican poetry. 1aVisual perception.1 aRand, Ted,eill.";
-			string actual;
 			target.MoveNext();
 			object current = target.Current;
-			actual = ((Record)current).ToRaw();
+			string actual = ((Record)current).ToRaw();
 			Assert.AreEqual(expected, actual);
 			target.Reset();
 			current = target.Current; //This will throw an exception
@@ -416,11 +393,9 @@ namespace CSharp_MARC_Tests
 			FileMARCXML target = new FileMARCXML();
 			target.ImportMARCXML("sandburg.xml");
 			int index = 0;
-			Record recordAtIndex;
-			recordAtIndex = target[index];
+			Record recordAtIndex = target[index];
 			string expected = "01142cam  2200301 a 4500001001300000003000400013005001700017008004100034010001700075020002500092040001800117042000900135050002600144082001600170100003200186245008600218250001200304260005200316300004900368500004000417520022800457650003300685650003300718650002400751650002100775650002300796700002100819   92005291 DLC19930521155141.9920219s1993    caua   j      000 0 eng    a   92005291   a0152038655 :c$15.95  aDLCcDLCdDLC  alcac00aPS3537.A618bA88 199300a811/.522201 aSandburg, Carl,d1878-1967.10aArithmetic /cCarl Sandburg ; illustrated as an anamorphic adventure by Ted Rand.  a1st ed.  aSan Diego :bHarcourt Brace Jovanovich,cc1993.  a1 v. (unpaged) :bill. (some col.) ;c26 cm.  aOne Mylar sheet included in pocket.  aA poem about numbers and their characteristics. Features anamorphic, or distorted, drawings which can be restored to normal by viewing from a particular angle or by viewing the image's reflection in the provided Mylar cone. 0aArithmeticxJuvenile poetry. 0aChildren's poetry, American. 1aArithmeticxPoetry. 1aAmerican poetry. 1aVisual perception.1 aRand, Ted,eill.";
-			string actual;
-			actual = recordAtIndex.ToRaw();
+			string actual = recordAtIndex.ToRaw();
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -434,8 +409,7 @@ namespace CSharp_MARC_Tests
 			FileMARCXML target = new FileMARCXML();
 			target.ImportMARCXML("sandburg.xml");
 			string expected = XDocument.Load("sandburg.xml").Elements().First(e => e.Name.LocalName == "collection").Elements().First(e => e.Name.LocalName == "record").ToString();
-			string actual;
-			actual = target.RawSource[0].ToString();
+			string actual = target.RawSource[0].ToString();
 			Assert.AreEqual(expected, actual);
 		}
 	}

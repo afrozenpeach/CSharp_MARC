@@ -119,8 +119,7 @@ namespace CSharp_MARC_Tests
 			string data = "  2007032296";
 			ControlField target = new ControlField(tag, data);
 			string expected = "  2007032296";
-			string actual;
-			actual = target.FormatField();
+			string actual = target.FormatField();
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -134,8 +133,7 @@ namespace CSharp_MARC_Tests
 			string data = "  2007032296";
 			ControlField target = new ControlField(tag, data);
 			bool expected = false;
-			bool actual;
-			actual = target.IsEmpty();
+			bool actual = target.IsEmpty();
 			Assert.AreEqual(expected, actual);
 			target = new ControlField(tag, string.Empty);
 			expected = true;
@@ -153,8 +151,7 @@ namespace CSharp_MARC_Tests
 			string data = "  2007032296";
 			ControlField target = new ControlField(tag, data);
 			string expected = "  2007032296" + FileMARC.END_OF_FIELD.ToString();
-			string actual;
-			actual = target.ToRaw();
+			string actual = target.ToRaw();
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -168,8 +165,7 @@ namespace CSharp_MARC_Tests
 			string data = "  2007032296";
 			ControlField target = new ControlField(tag, data);
 			string expected = "001       2007032296";
-			string actual;
-			actual = target.ToString();
+			string actual = target.ToString();
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -183,9 +179,8 @@ namespace CSharp_MARC_Tests
 			string data = "  2007032296";
 			ControlField target = new ControlField(tag, data);
 			string expected = "  2011022800";
-			string actual;
-			target.Data = expected;
-			actual = target.Data;
+			string actual = target.Data;
+            target.Data = expected;
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -200,15 +195,13 @@ namespace CSharp_MARC_Tests
 			ControlField target = new ControlField(tag, data);
 
 			Field expected = target;
-			Field actual;
-			actual = target.Clone();
+			Field actual = target.Clone();
 			Assert.AreNotEqual(expected, actual);
 
 			target.Data = "  2011063096";
 
 			string expectedString = data;
-			string actualString;
-			actualString = ((ControlField)actual).Data;
+			string actualString = ((ControlField)actual).Data;
 			Assert.AreEqual(expectedString, actualString);
 
 			target.Tag = "002";
@@ -229,8 +222,7 @@ namespace CSharp_MARC_Tests
             ControlField target = new ControlField(tag, data);
 
             XElement expected = new XElement(FileMARCXML.Namespace + "controlfield", new XAttribute("tag", "001"), "  2007032296");
-            XElement actual;
-            actual = target.ToXML();
+            XElement actual = target.ToXML();
             Assert.IsTrue(XNode.DeepEquals(expected, actual));
         }
 	}

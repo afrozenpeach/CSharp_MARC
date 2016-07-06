@@ -132,8 +132,7 @@ namespace CSharp_MARC_Tests
 			target.Fields.Add(new DataField("521", new List<Subfield>(), ' ', '1'));
 			List<Field> expected = new List<Field>();
 			expected.Add(new DataField(tag));
-			List<Field> actual;
-			actual = target.GetFields(tag);
+			List<Field> actual = target.GetFields(tag);
 			Assert.AreEqual(expected.Count, actual.Count);
 			Assert.AreEqual(expected[0].ToRaw(), actual[0].ToRaw());
 		}
@@ -167,8 +166,7 @@ namespace CSharp_MARC_Tests
 			//I broke each bit of the record out into their own strings and concatenated because it's easier to follow.
 			//Leader -> Tag -> Length (+1 for EoF) -> Starts At -> EoF -> Data -> EoF -> EoR
 			string expected = "00083     2200037   4500" + "001" + "0045" + "00000" + FileMARC.END_OF_FIELD + "I am data! (But not Data from Star Trek TNG)" + FileMARC.END_OF_FIELD + FileMARC.END_OF_RECORD;
-			string actual;
-			actual = target.ToRaw();
+			string actual = target.ToRaw();
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -186,8 +184,7 @@ namespace CSharp_MARC_Tests
 			//I broke each bit of the record out into their own strings and concatenated because it's easier to follow.
 			//Leader -> Tag -> Length (+1 for EoF) -> Starts At -> EoF -> Data -> EoF -> EoR
 			string expected = "00086     2200037   4500" + "001" + "0048" + "00000" + FileMARC.END_OF_FIELD + "I am data! © (But not Data from Star Trek TNG)" + FileMARC.END_OF_FIELD + FileMARC.END_OF_RECORD;
-			string actual;
-			actual = target.ToRaw(encoding);
+			string actual = target.ToRaw(encoding);
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -203,8 +200,7 @@ namespace CSharp_MARC_Tests
 			target.Fields.Add(new DataField("245"));
 			string expected = "LDR 00083     2200037   4500" + Environment.NewLine +
 							  "001" + "     " + "I am data! (But not Data from Star Trek TNG)" + Environment.NewLine;
-			string actual;
-			actual = target.ToString();
+			string actual = target.ToString();
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -224,15 +220,13 @@ namespace CSharp_MARC_Tests
 
 			{
 				int expected = 3;
-				int actual;
-				actual = target.Fields.Count;
+				int actual = target.Fields.Count;
 				Assert.AreEqual(expected, actual);
 			}
 
 			{
 				Field expected = controlField;
-				Field actual;
-				actual = target.Fields[0];
+				Field actual = target.Fields[0];
 				Assert.AreSame(expected, actual);
 				expected = dataField;
 				actual = target.Fields[1];
@@ -248,8 +242,7 @@ namespace CSharp_MARC_Tests
 				expected.Add(dataField);
 				expected.Add(dataField2);
 				target.Fields = expected;
-				List<Field> actual;
-				actual = target.Fields;
+				List<Field> actual = target.Fields;
 				Assert.AreSame(expected, actual);
 			}
 		}
@@ -269,8 +262,7 @@ namespace CSharp_MARC_Tests
 			target.Fields.Add(dataField);
 			target.Fields.Add(dataField2);
 			Field expected = dataField;
-			Field actual;
-			actual = target[tag];
+			Field actual = target[tag];
 		}
 
 		/// <summary>
@@ -281,9 +273,8 @@ namespace CSharp_MARC_Tests
 		{
 			Record target = new Record();
 			string expected = "Take me to your leader!";
-			string actual;
 			target.Leader = expected;
-			actual = target.Leader;
+			string actual = target.Leader;
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -296,8 +287,7 @@ namespace CSharp_MARC_Tests
 			Record target = new Record();
 			string expected = "IT'S ALL BROKEN! SOUND THE ALARM!";
 			target.AddWarnings("IT'S ALL BROKEN! SOUND THE ALARM!");
-			List<string> actual;
-			actual = target.Warnings;
+			List<string> actual = target.Warnings;
 			Assert.AreEqual(expected, actual[0]);
 		}
 
@@ -309,22 +299,19 @@ namespace CSharp_MARC_Tests
 		{
 			Record target = new Record();
 			Record expected = target;
-			Record actual;
-			actual = target.Clone();
+			Record actual = target.Clone();
 			Assert.AreNotEqual(expected, actual);
 
 			target.Leader = "Take me to your leader!";
 
 			string expectedString = string.Empty.PadRight(FileMARC.LEADER_LEN);
-			string actualString;
-			actualString = actual.Leader;
+			string actualString = actual.Leader;
 			Assert.AreEqual(expectedString, actualString);
 
 			target.Warnings.Add("Testing!");
 
 			int expectedCount = 0;
-			int actualCount;
-			actualCount = actual.Warnings.Count;
+			int actualCount = actual.Warnings.Count;
 			Assert.AreEqual(expectedCount, actualCount);
 
 			target.Fields.Add(new ControlField("001", "Test Data"));
@@ -347,8 +334,7 @@ namespace CSharp_MARC_Tests
 
             XDocument xdoc = XDocument.Parse(source);
             XElement expected = xdoc.Elements().First(e => e.Name.LocalName == "collection").Elements().First(e => e.Name.LocalName == "record");
-            XElement actual;
-            actual = target.ToXML();
+            XElement actual = target.ToXML();
             Assert.IsTrue(XNode.DeepEquals(expected, actual));
         }
 
@@ -364,12 +350,11 @@ namespace CSharp_MARC_Tests
             Record target = targetXML[0];
 
             string expected = source;
-            string actual;
             XDocument xdoc = target.ToXMLDocument();
             using (StringWriter writer = new Utf8StringWriter())
             {
                 xdoc.Save(writer);
-                actual = writer.ToString();
+                string actual = writer.ToString();
                 Assert.AreEqual(expected, actual);
             }
         }
