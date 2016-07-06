@@ -95,10 +95,7 @@ namespace MARC
         /// Gets the warnings.
         /// </summary>
         /// <value>The warnings.</value>
-        public List<string> Warnings
-        {
-            get { return warnings; }
-        }
+        public List<string> Warnings => warnings;
 
         #endregion
 
@@ -312,10 +309,9 @@ namespace MARC
 		/// <returns></returns>
 		public Record Clone()
 		{
-			Record clone = new Record();
+		    Record clone = new Record {leader = leader};
 
-			clone.leader = leader;
-			foreach (string needsCloned in warnings)
+		    foreach (string needsCloned in warnings)
 				clone.AddWarnings(needsCloned);
 
 			foreach (Field needsCloned in fields)

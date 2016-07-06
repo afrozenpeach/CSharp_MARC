@@ -87,10 +87,7 @@ namespace MARC
 		{
 			this.filename = filename;
 
-			if (recordEncoding == RecordEncoding.MARC8)
-				encoding = new MARC8();
-			else
-				encoding = Encoding.UTF8;
+			encoding = recordEncoding == RecordEncoding.MARC8 ? new MARC8() : Encoding.UTF8;
 
 			writer = new StreamWriter(filename, append, encoding);
 		}

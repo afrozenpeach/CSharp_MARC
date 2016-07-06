@@ -45,27 +45,13 @@ namespace CSharp_MARC_Tests
 	[TestClass()]
 	public class RecordTest
 	{
-
-
-		private TestContext testContextInstance;
-
-		/// <summary>
+        /// <summary>
 		///Gets or sets the test context which provides
 		///information about and functionality for the current test run.
 		///</summary>
-		public TestContext TestContext
-		{
-			get
-			{
-				return testContextInstance;
-			}
-			set
-			{
-				testContextInstance = value;
-			}
-		}
+		public TestContext TestContext { get; set; }
 
-		#region Additional test attributes
+        #region Additional test attributes
 		//
 		//You can use the following additional attributes as you write your tests:
 		//
@@ -130,9 +116,8 @@ namespace CSharp_MARC_Tests
 			target.Fields.Add(new ControlField("001", "I am data! (But not Data from Star Trek TNG)"));
 			target.Fields.Add(new DataField(tag));
 			target.Fields.Add(new DataField("521", new List<Subfield>(), ' ', '1'));
-			List<Field> expected = new List<Field>();
-			expected.Add(new DataField(tag));
-			List<Field> actual = target.GetFields(tag);
+		    List<Field> expected = new List<Field> {new DataField(tag)};
+		    List<Field> actual = target.GetFields(tag);
 			Assert.AreEqual(expected.Count, actual.Count);
 			Assert.AreEqual(expected[0].ToRaw(), actual[0].ToRaw());
 		}
@@ -237,11 +222,8 @@ namespace CSharp_MARC_Tests
 			}
 
 			{
-				List<Field> expected = new List<Field>();
-				expected.Add(controlField);
-				expected.Add(dataField);
-				expected.Add(dataField2);
-				target.Fields = expected;
+			    List<Field> expected = new List<Field> {controlField, dataField, dataField2};
+			    target.Fields = expected;
 				List<Field> actual = target.Fields;
 				Assert.AreSame(expected, actual);
 			}
@@ -361,7 +343,7 @@ namespace CSharp_MARC_Tests
 
         public class Utf8StringWriter : StringWriter
         {
-            public override Encoding Encoding { get { return Encoding.UTF8; } }
+            public override Encoding Encoding => Encoding.UTF8;
         }
 	}
 }

@@ -74,21 +74,12 @@ namespace CSharp_MARC_Editor
 
 		#region Utility Functions
 
-		/// <summary>
-		/// Adds the result.
-		/// </summary>
-		/// <param name="importedRecord">The imported record.</param>
-		private void AddResult(Record importedRecord)
-		{
-			AddResult(importedRecord, false);
-		}
-
-		/// <summary>
+	    /// <summary>
 		/// Adds the result.
 		/// </summary>
 		/// <param name="importedRecord">The imported record.</param>
 		/// <param name="colorRow">if set to <c>true</c> [color row].</param>
-		private void AddResult(Record importedRecord, bool colorRow)
+		private void AddResult(Record importedRecord, bool colorRow = false)
 		{
 			//Build the title/author display for the search results
 			string title = string.Empty;

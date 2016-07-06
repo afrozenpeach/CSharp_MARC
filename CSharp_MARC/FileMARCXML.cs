@@ -62,29 +62,20 @@ namespace MARC
 		/// Gets the raw source.
 		/// </summary>
 		/// <value>The raw source.</value>
-		public List<XElement> RawSource
-		{
-			get { return rawSource; }
-		}
+		public List<XElement> RawSource => rawSource;
 
-		/// <summary>
+	    /// <summary>
 		/// Gets the <see cref="MARC.Record"/> at the specified index.
 		/// </summary>
 		/// <value></value>
-		public Record this[int index]
-		{
-			get { return decode(index); }
-		}
+		public Record this[int index] => decode(index);
 
-		/// <summary>
+	    /// <summary>
 		/// Gets the number of single records that have been imported.
 		/// </summary>
-		public int Count
-		{
-			get { return rawSource.Count; }
-		}
+		public int Count => rawSource.Count;
 
-		#endregion
+	    #endregion
 
         //Constructors
         #region Constructors
@@ -204,12 +195,11 @@ namespace MARC
 		private Record decode(int index)
 		{
 			XElement record = rawSource[index];
-			Record marcXML = new Record();
+		    Record marcXML = new Record {Leader = record.Elements().First(e => e.Name.LocalName == "leader").Value};
 
-			//First we get the leader
-			marcXML.Leader = record.Elements().First(e => e.Name.LocalName == "leader").Value;
+		    //First we get the leader
 
-			//Now we get the control fields
+		    //Now we get the control fields
 			foreach (XElement controlField in record.Elements().Where(e => e.Name.LocalName == "controlfield"))
 			{
 				ControlField newField = new ControlField(controlField.Attribute("tag").Value, controlField.Value);
@@ -247,12 +237,9 @@ namespace MARC
 
 		#region IEnumerator Members
 
-		public object Current
-		{
-			get { return this[position]; }
-		}
+		public object Current => this[position];
 
-		public bool MoveNext()
+	    public bool MoveNext()
 		{
 			position++;
 			return (position < rawSource.Count);

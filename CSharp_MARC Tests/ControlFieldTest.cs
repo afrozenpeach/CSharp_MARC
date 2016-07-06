@@ -41,27 +41,13 @@ namespace CSharp_MARC_Tests
 	[TestClass()]
 	public class ControlFieldTest
 	{
-
-
-		private TestContext testContextInstance;
-
-		/// <summary>
+        /// <summary>
 		///Gets or sets the test context which provides
 		///information about and functionality for the current test run.
 		///</summary>
-		public TestContext TestContext
-		{
-			get
-			{
-				return testContextInstance;
-			}
-			set
-			{
-				testContextInstance = value;
-			}
-		}
+		public TestContext TestContext { get; set; }
 
-		#region Additional test attributes
+        #region Additional test attributes
 		//
 		//You can use the following additional attributes as you write your tests:
 		//

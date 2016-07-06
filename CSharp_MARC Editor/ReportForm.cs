@@ -40,18 +40,9 @@ namespace CSharp_MARC_Editor
 {
     public partial class ReportForm : Form
     {
-        private DataTable dataTable;
+        public DataTable DataTable { get; set; }
 
-        public DataTable DataTable
-        {
-            get { return dataTable; }
-            set { dataTable = value; }
-        }
-
-        public ReportDataSourceCollection DataSources
-        {
-            get { return reportViewer.LocalReport.DataSources; }
-        }
+        public ReportDataSourceCollection DataSources => reportViewer.LocalReport.DataSources;
 
         public string Report
         {

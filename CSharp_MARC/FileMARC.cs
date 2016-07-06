@@ -75,27 +75,18 @@ namespace MARC
         /// Gets the raw source.
         /// </summary>
         /// <value>The raw source.</value>
-        public List<string> RawSource
-        {
-            get { return rawSource; }
-        }
+        public List<string> RawSource => rawSource;
 
         /// <summary>
         /// Gets the <see cref="MARC.Record"/> at the specified index.
         /// </summary>
         /// <value></value>
-        public Record this[int index]
-        {
-            get { return decode(index);  }
-        }
+        public Record this[int index] => decode(index);
 
-		/// <summary>
+        /// <summary>
 		/// Gets the number of single records that have been imported.
 		/// </summary>
-		public int Count
-		{
-			get { return rawSource.Count; }
-		}
+		public int Count => rawSource.Count;
 
         #endregion
 
@@ -420,10 +411,7 @@ namespace MARC
 
         #region IEnumerator Members
 
-        public object Current
-        {
-            get { return this[position]; }
-        }
+        public object Current => this[position];
 
         public bool MoveNext()
         {

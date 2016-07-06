@@ -38,12 +38,9 @@ namespace MARC
 {
 	public class MARC8 : Encoding
 	{
-		public override string EncodingName 
-		{
-			get { return "MARC8"; }
-		}
-		
-		/// <summary>
+		public override string EncodingName => "MARC8";
+
+	    /// <summary>
 		/// When overridden in a derived class, calculates the number of bytes produced by encoding a set of characters from the specified character array.
 		/// </summary>
 		/// <param name="chars">The character array containing the set of characters to encode.</param>

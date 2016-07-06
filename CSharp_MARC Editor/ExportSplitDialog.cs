@@ -45,13 +45,7 @@ namespace CSharp_MARC_Editor
         /// <value>
         /// The records per file.
         /// </value>
-        public decimal RecordsPerFile
-        {
-            get
-            {
-                return recordsPerFileNumericUpDown.Value;
-            }
-        }
+        public decimal RecordsPerFile => recordsPerFileNumericUpDown.Value;
 
         public ExportSplitDialog()
         {

@@ -103,13 +103,7 @@ namespace CSharp_MARC_Editor
         /// <value>
         /// The data.
         /// </value>
-        public string Data
-        {
-            get
-            {
-                return dataTextBox.Text;
-            }
-        }
+        public string Data => dataTextBox.Text;
 
         /// <summary>
         /// Gets the replace with.
@@ -117,13 +111,7 @@ namespace CSharp_MARC_Editor
         /// <value>
         /// The replace with.
         /// </value>
-        public string ReplaceWith
-        {
-            get
-            {
-                return replaceWithTextBox.Text;
-            }
-        }
+        public string ReplaceWith => replaceWithTextBox.Text;
 
         /// <summary>
         /// Gets a value indicating whether [case sensitive].
@@ -131,13 +119,7 @@ namespace CSharp_MARC_Editor
         /// <value>
         ///   <c>true</c> if [case sensitive]; otherwise, <c>false</c>.
         /// </value>
-        public bool CaseSensitive
-        {
-            get
-            {
-                return caseSensitiveCheckBox.Checked;
-            }
-        }
+        public bool CaseSensitive => caseSensitiveCheckBox.Checked;
 
         /// <summary>
         /// Gets a value indicating whether [regex].
@@ -145,13 +127,7 @@ namespace CSharp_MARC_Editor
         /// <value>
         ///   <c>true</c> if [regex]; otherwise, <c>false</c>.
         /// </value>
-        public bool Regex
-        {
-            get
-            {
-                return regexCheckBox.Checked;
-            }
-        }
+        public bool Regex => regexCheckBox.Checked;
 
         #endregion
 

@@ -104,13 +104,7 @@ namespace CSharp_MARC_Editor
         /// <value>
         /// The data.
         /// </value>
-        public string Data
-        {
-            get
-            {
-                return dataTextBox.Text;
-            }
-        }
+        public string Data => dataTextBox.Text;
 
         /// <summary>
         /// Gets a value indicating whether [case sensitive].
@@ -118,13 +112,7 @@ namespace CSharp_MARC_Editor
         /// <value>
         ///   <c>true</c> if [case sensitive]; otherwise, <c>false</c>.
         /// </value>
-        public bool CaseSensitive
-        {
-            get
-            {
-                return caseSensitiveCheckBox.Checked;
-            }
-        }
+        public bool CaseSensitive => caseSensitiveCheckBox.Checked;
 
         /// <summary>
         /// Gets a value indicating whether [regex].
@@ -132,13 +120,7 @@ namespace CSharp_MARC_Editor
         /// <value>
         ///   <c>true</c> if [regex]; otherwise, <c>false</c>.
         /// </value>
-        public bool Regex
-        {
-            get
-            {
-                return regexCheckBox.Checked;
-            }
-        }
+        public bool Regex => regexCheckBox.Checked;
 
         /// <summary>
         /// Gets the action.
@@ -146,13 +128,7 @@ namespace CSharp_MARC_Editor
         /// <value>
         /// The action.
         /// </value>
-        public string Action
-        {
-            get
-            {
-                return actionComboBox.SelectedItem.ToString();
-            }
-        }
+        public string Action => actionComboBox.SelectedItem.ToString();
 
         /// <summary>
         /// Gets the tag modification.
@@ -160,13 +136,7 @@ namespace CSharp_MARC_Editor
         /// <value>
         /// The tag modification.
         /// </value>
-        public string TagModification
-        {
-            get
-            {
-                return tagTextBox.Text;
-            }
-        }
+        public string TagModification => tagTextBox.Text;
 
         /// <summary>
         /// Gets the ind1.
@@ -174,13 +144,7 @@ namespace CSharp_MARC_Editor
         /// <value>
         /// The ind1.
         /// </value>
-        public string Ind1
-        {
-            get
-            {
-                return ind1TextBox.Text;
-            }
-        }
+        public string Ind1 => ind1TextBox.Text;
 
         /// <summary>
         /// Gets the ind2.
@@ -188,13 +152,7 @@ namespace CSharp_MARC_Editor
         /// <value>
         /// The ind2.
         /// </value>
-        public string Ind2
-        {
-            get
-            {
-                return ind2TextBox.Text;
-            }
-        }
+        public string Ind2 => ind2TextBox.Text;
 
         /// <summary>
         /// Gets the subfields.
@@ -202,13 +160,7 @@ namespace CSharp_MARC_Editor
         /// <value>
         /// The subfields.
         /// </value>
-        public DataGridViewRowCollection Subfields
-        {
-            get
-            {
-                return modificationsDataGridView.Rows;
-            }
-        }
+        public DataGridViewRowCollection Subfields => modificationsDataGridView.Rows;
 
         #endregion
 

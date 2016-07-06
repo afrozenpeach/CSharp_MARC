@@ -129,10 +129,7 @@ namespace CSharp_MARC_Editor
                 dateChanged = field005.Data.Substring(0, 4) + "/" + field005.Data.Substring(4, 2) + "/" + field005.Data.Substring(6, 2) + " " + field005.Data.Substring(8, 2) + ":" + field005.Data.Substring(10, 2) + ":" + field005.Data.Substring(12);
                 DateTime dateTimeChanged = new DateTime();
 
-                if (DateTime.TryParse(dateChanged, out dateTimeChanged))
-                    dateChanged = dateTimeChanged.ToString(CultureInfo.CurrentCulture);
-                else
-                    dateChanged = null;
+                dateChanged = DateTime.TryParse(dateChanged, out dateTimeChanged) ? dateTimeChanged.ToString(CultureInfo.CurrentCulture) : null;
             }
 
             DataField datafield = (DataField)record["100"];
@@ -2224,10 +2221,7 @@ namespace CSharp_MARC_Editor
                             int fileCounter = 1;
                             FileMARCWriter.RecordEncoding recordEncoding;
 
-                            if (mARC8ToolStripMenuItem.Checked)
-                                recordEncoding = FileMARCWriter.RecordEncoding.MARC8;
-                            else
-                                recordEncoding = FileMARCWriter.RecordEncoding.UTF8;
+                            recordEncoding = mARC8ToolStripMenuItem.Checked ? FileMARCWriter.RecordEncoding.MARC8 : FileMARCWriter.RecordEncoding.UTF8;
 
                             int max = marcDataSet.Tables["Records"].Rows.Count;
 
@@ -2295,11 +2289,9 @@ namespace CSharp_MARC_Editor
                                     if (mARCXMLToolStripMenuItem.Checked)
                                         marcWriter.WriteEnd();
 
-                                    if (marcWriter != null)
-                                        marcWriter.Dispose();
+                                    marcWriter?.Dispose();
 
-                                    if (xmlWriter != null)
-                                        xmlWriter.Dispose();
+                                    xmlWriter?.Dispose();
 
                                     if (mARCXMLToolStripMenuItem.Checked)
                                         xmlWriter = new FileMARCXMLWriter(fileName);
@@ -3219,11 +3211,8 @@ namespace CSharp_MARC_Editor
                                 whereClause.Append(") AND ");
                             }
 
-                            if (form.Regex)
-                                whereClause.Append("Data REGEXP @Data;");
-                            else
-                                whereClause.Append("Data LIKE @Data;");
-                            
+                            whereClause.Append(form.Regex ? "Data REGEXP @Data;" : "Data LIKE @Data;");
+
                             command.Parameters.Add("@Data", DbType.String).Value = "%" + form.Data + "%";
 
                             query.Append(whereClause);
@@ -4664,10 +4653,7 @@ namespace CSharp_MARC_Editor
                         whereClause.Append(") AND ");
                     }
 
-                    if (batchEditForm.Regex)
-                        whereClause.Append("Data REGEXP @Data;");
-                    else
-                        whereClause.Append("Data LIKE @Data;");
+                    whereClause.Append(batchEditForm.Regex ? "Data REGEXP @Data;" : "Data LIKE @Data;");
 
                     command.Parameters.Add("@Data", DbType.String).Value = "%" + batchEditForm.Data + "%";
 
@@ -4712,15 +4698,9 @@ namespace CSharp_MARC_Editor
 
                                     if (!batchEditForm.TagModification.StartsWith("00"))
                                     {
-                                        if (String.IsNullOrEmpty(batchEditForm.Ind1))
-                                            command.Parameters["@Ind1"].Value = " ";
-                                        else
-                                            command.Parameters["@Ind1"].Value = batchEditForm.Ind1;
+                                        command.Parameters["@Ind1"].Value = String.IsNullOrEmpty(batchEditForm.Ind1) ? " " : batchEditForm.Ind1;
 
-                                        if (String.IsNullOrEmpty(batchEditForm.Ind2))
-                                            command.Parameters["@Ind2"].Value = " ";
-                                        else
-                                            command.Parameters["@Ind2"].Value = batchEditForm.Ind2;
+                                        command.Parameters["@Ind2"].Value = String.IsNullOrEmpty(batchEditForm.Ind2) ? " " : batchEditForm.Ind2;
 
                                         command.Parameters["@ControlData"].Value = null;
                                     }
@@ -5303,10 +5283,7 @@ namespace CSharp_MARC_Editor
                 {
                     currentHeader = string.Empty;
                     linesToPrint.Remove(line);
-                    if (linesToPrint.Count > 0)
-                        e.HasMorePages = true;
-                    else
-                        e.HasMorePages = false;
+                    e.HasMorePages = linesToPrint.Count > 0;
                     break;
                 }
 
@@ -5328,10 +5305,7 @@ namespace CSharp_MARC_Editor
                 yPos = yPos + actualSize.Height;
 
                 linesToPrint.Remove(line);
-                if (linesToPrint.Count > 0)
-                    e.HasMorePages = true;
-                else
-                    e.HasMorePages = false;
+                e.HasMorePages = linesToPrint.Count > 0;
             }
         }
 
@@ -5651,14 +5625,7 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void forceUTF8ImportToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (forceUTF8ImportToolStripMenuItem.Checked)
-            {
-                forceUTF8ImportToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                forceUTF8ImportToolStripMenuItem.Checked = true;
-            }
+            forceUTF8ImportToolStripMenuItem.Checked = !forceUTF8ImportToolStripMenuItem.Checked;
 
             SaveOptions();
         }
@@ -5670,10 +5637,7 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void clearDatabaseOnExitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (clearDatabaseOnExitToolStripMenuItem.Checked)
-                clearDatabaseOnExitToolStripMenuItem.Checked = false;
-            else
-                clearDatabaseOnExitToolStripMenuItem.Checked = true;
+            clearDatabaseOnExitToolStripMenuItem.Checked = !clearDatabaseOnExitToolStripMenuItem.Checked;
 
             SaveOptions();
         }
