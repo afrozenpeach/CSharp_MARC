@@ -25,9 +25,6 @@
  * @license   http://www.gnu.org/copyleft/lesser.html  LGPL License 3
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Xml.Linq;
 
 namespace MARC

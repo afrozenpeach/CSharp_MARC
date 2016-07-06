@@ -27,16 +27,10 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using MARC;
-using System.IO;
-using System.Xml;
 using System.Collections;
 using System.Net;
 using System.Xml.Linq;
@@ -250,7 +244,7 @@ namespace CSharp_MARC_Editor
 		{
 			if (openFileDialog.ShowDialog() == DialogResult.OK)
 			{
-				IEnumerable loopy = null;
+				IEnumerable loopy;
 
 				if (openFileDialog.FileName.EndsWith(".mrc", StringComparison.OrdinalIgnoreCase) || openFileDialog.FileName.EndsWith(".usm", StringComparison.OrdinalIgnoreCase) || openFileDialog.FileName.EndsWith(".001", StringComparison.OrdinalIgnoreCase))
 				{

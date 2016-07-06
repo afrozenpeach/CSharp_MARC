@@ -29,11 +29,9 @@ using MARC;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Xml.Linq;
-using System.Xml;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
-using System.Xml.Schema;
 using System.IO;
 
 namespace CSharp_MARC_Tests

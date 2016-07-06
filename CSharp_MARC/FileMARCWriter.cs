@@ -27,7 +27,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.IO;
 
@@ -40,8 +39,7 @@ namespace MARC
 
 		public enum RecordEncoding { MARC8, UTF8 };
         public const char END_OF_FILE = '\x1A';
-
-        private string filename = null;
+        
         private readonly StreamWriter writer = null;
 		private readonly Encoding encoding;
 
@@ -85,8 +83,6 @@ namespace MARC
 		/// <param name="append">if set to <c>true</c> [append].</param>
 		public FileMARCWriter(string filename, RecordEncoding recordEncoding, bool append)
 		{
-			this.filename = filename;
-
 			encoding = recordEncoding == RecordEncoding.MARC8 ? new MARC8() : Encoding.UTF8;
 
 			writer = new StreamWriter(filename, append, encoding);

@@ -24,13 +24,10 @@
  * @copyright 2009-2016 Matt Schraeder and Bound to Stay Bound Books <http://www.btsb.com>
  * @license   http://www.gnu.org/copyleft/lesser.html  LGPL License 3
  */
-
-using System;
+ 
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Collections;
-using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
 using MARC.Properties;

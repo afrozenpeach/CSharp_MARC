@@ -27,7 +27,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.IO;
 using System.Xml.Linq;
@@ -38,8 +37,7 @@ namespace MARC
     {
         //Member Variables and Properties
         #region Member Variables and Properties
-
-        private string filename = null;
+            
         private readonly StreamWriter writer = null;
 
         #endregion
@@ -57,8 +55,6 @@ namespace MARC
 
 		public FileMARCXMLWriter(string filename, bool append)
 		{
-			this.filename = filename;
-
 			writer = new StreamWriter(filename, append, Encoding.UTF8);
 		}
 

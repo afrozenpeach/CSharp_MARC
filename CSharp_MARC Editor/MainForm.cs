@@ -1928,7 +1928,7 @@ namespace CSharp_MARC_Editor
         {
             IEnumerable recordEnumerator = null;
 
-            if (e.Argument.GetType() == typeof(string))
+            if (e.Argument is string)
             {
                 marcRecords = new FileMARCReader(e.Argument.ToString(), forceUTF8ImportToolStripMenuItem.Checked);
                 recordEnumerator = marcRecords;

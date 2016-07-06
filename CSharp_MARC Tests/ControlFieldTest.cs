@@ -27,7 +27,6 @@
 
 using MARC;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using System.Xml.Linq;
 
 namespace CSharp_MARC_Tests
