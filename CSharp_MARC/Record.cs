@@ -287,7 +287,7 @@ namespace MARC
             foreach (Field field in fields)
             {
                 if (!field.IsEmpty())
-					formatted += field.ToString() + Environment.NewLine;
+					formatted += field + Environment.NewLine;
             }
 
             return formatted;

@@ -113,7 +113,7 @@ namespace MARC
         /// </returns>
         public bool IsEmpty()
         {
-            return (string.IsNullOrEmpty(data) ? true : false);
+            return (string.IsNullOrEmpty(data));
         }
 
 		/// <summary>

@@ -253,7 +253,7 @@ namespace MARC
 
 		public IEnumerator GetEnumerator()
 		{
-			return (IEnumerator)this;
+			return this;
 		}
 
 		#endregion

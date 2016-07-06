@@ -103,7 +103,7 @@ namespace CSharp_MARC_Editor
             string custom4 = null;
             string custom5 = null;
 
-            ControlField field005 = null;
+            ControlField field005;
             Subfield subfield100a = null;
             Subfield subfield245a = null;
             Subfield subfield245b = null;
@@ -127,7 +127,7 @@ namespace CSharp_MARC_Editor
             if (field005 != null && field005.Data.Length >= 14)
             {
                 dateChanged = field005.Data.Substring(0, 4) + "/" + field005.Data.Substring(4, 2) + "/" + field005.Data.Substring(6, 2) + " " + field005.Data.Substring(8, 2) + ":" + field005.Data.Substring(10, 2) + ":" + field005.Data.Substring(12);
-                DateTime dateTimeChanged = new DateTime();
+                DateTime dateTimeChanged;
 
                 dateChanged = DateTime.TryParse(dateChanged, out dateTimeChanged) ? dateTimeChanged.ToString(CultureInfo.CurrentCulture) : null;
             }
@@ -532,7 +532,7 @@ namespace CSharp_MARC_Editor
 
             previewTextBox.Text = record.ToString();
 
-            if (recordsTableReload == true)
+            if (recordsTableReload)
             {
                 DataRow newRow = GetRecordRow(record);
                 using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
@@ -1692,8 +1692,7 @@ namespace CSharp_MARC_Editor
                 string[] split = args[0].ToString().Split(args[1].ToString().ToCharArray());
                 int args2 = -1;
 
-                if (!Int32.TryParse(args[2].ToString(), out args2))
-                    args2 = -1;
+                Int32.TryParse(args[2].ToString(), out args2);
 
                 if (args2 != -1 && args2 < split.Length)
                     return split[args2];
@@ -1814,7 +1813,7 @@ namespace CSharp_MARC_Editor
         {
             if (errorLoading != null)
             {
-                if (MessageBox.Show("Error loading database: " + errorLoading.GetType().ToString() + " - " + errorLoading.Message + Environment.NewLine + Environment.NewLine + "If you continue to see this message, it may be necessary to reset the database. Doing so will permanently delete all records from the database." + Environment.NewLine + Environment.NewLine + "Do you want to reset the database?", "Error loading database.", MessageBoxButtons.YesNo, MessageBoxIcon.Error, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+                if (MessageBox.Show("Error loading database: " + errorLoading.GetType() + " - " + errorLoading.Message + Environment.NewLine + Environment.NewLine + "If you continue to see this message, it may be necessary to reset the database. Doing so will permanently delete all records from the database." + Environment.NewLine + Environment.NewLine + "Do you want to reset the database?", "Error loading database.", MessageBoxButtons.YesNo, MessageBoxIcon.Error, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
                 {
                     ResetDatabase(true);
                 }
@@ -1926,7 +1925,7 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="DoWorkEventArgs"/> instance containing the event data.</param>
         private void importingBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            IEnumerable recordEnumerator = null;
+            IEnumerable recordEnumerator;
 
             if (e.Argument is string)
             {
@@ -1962,7 +1961,7 @@ namespace CSharp_MARC_Editor
                         command.CommandText = "INSERT INTO Records (DateAdded, DateChanged, Author, Title, CopyrightDate, Barcode, Classification, MainEntry, Custom1, Custom2, Custom3, Custom4, Custom5, ImportErrors) VALUES (@DateAdded, @DateChanged, @Author, @Title, @CopyrightDate, @Barcode, @Classification, @MainEntry, @Custom1, @Custom2, @Custom3, @Custom4, @CUstom5, @ImportErrors)";
 
                         command.Parameters.Add("@DateAdded", DbType.DateTime).Value = DateTime.Now;
-                        DateTime changed = new DateTime();
+                        DateTime changed;
                         if (DateTime.TryParse(newRow["DateChanged"].ToString(), out changed))
                             command.Parameters.Add("@DateChanged", DbType.DateTime).Value = changed;
                         else
@@ -2633,9 +2632,9 @@ namespace CSharp_MARC_Editor
             catch (Exception ex)
             {
                 e.Cancel = true;
-                errorProvider.SetError((Control)fieldsDataGridView.EditingControl, ex.Message);
-                errorProvider.SetIconAlignment((Control)fieldsDataGridView.EditingControl, ErrorIconAlignment.MiddleRight);
-                errorProvider.SetIconPadding((Control)fieldsDataGridView.EditingControl, -20);
+                errorProvider.SetError(fieldsDataGridView.EditingControl, ex.Message);
+                errorProvider.SetIconAlignment(fieldsDataGridView.EditingControl, ErrorIconAlignment.MiddleRight);
+                errorProvider.SetIconPadding(fieldsDataGridView.EditingControl, -20);
             }
         }
 
@@ -2733,9 +2732,9 @@ namespace CSharp_MARC_Editor
             catch (Exception ex)
             {
                 e.Cancel = true;
-                errorProvider.SetError((Control)subfieldsDataGridView.EditingControl, ex.Message);
-                errorProvider.SetIconAlignment((Control)subfieldsDataGridView.EditingControl, ErrorIconAlignment.MiddleRight);
-                errorProvider.SetIconPadding((Control)subfieldsDataGridView.EditingControl, -20);
+                errorProvider.SetError(subfieldsDataGridView.EditingControl, ex.Message);
+                errorProvider.SetIconAlignment(subfieldsDataGridView.EditingControl, ErrorIconAlignment.MiddleRight);
+                errorProvider.SetIconPadding(subfieldsDataGridView.EditingControl, -20);
             }
         }
 
@@ -5127,7 +5126,7 @@ namespace CSharp_MARC_Editor
         {
             if (e.ProgressPercentage <= 100)
             {
-                progressToolStripStatusLabel.Text = e.ProgressPercentage.ToString(CultureInfo.CurrentCulture) + "%" + " - " + e.UserState.ToString();
+                progressToolStripStatusLabel.Text = e.ProgressPercentage.ToString(CultureInfo.CurrentCulture) + "%" + " - " + e.UserState;
                 toolStripProgressBar.Value = e.ProgressPercentage;
             }
         }
@@ -5171,7 +5170,7 @@ namespace CSharp_MARC_Editor
                 printDocument.DefaultPageSettings.Margins.Right = 75;
                 printDocument.DefaultPageSettings.Margins.Bottom = 75;
 
-                linesToPrint.Add(START_OF_HEADING.ToString() + "Title: " + recordsDataGridView.SelectedCells[0].OwningRow.Cells[4].Value.ToString() + " -- Author: " + recordsDataGridView.SelectedCells[0].OwningRow.Cells[3].Value.ToString());
+                linesToPrint.Add(START_OF_HEADING.ToString() + "Title: " + recordsDataGridView.SelectedCells[0].OwningRow.Cells[4].Value + " -- Author: " + recordsDataGridView.SelectedCells[0].OwningRow.Cells[3].Value.ToString());
 
                 linesToPrint.AddRange(previewTextBox.Lines);
 
@@ -5203,7 +5202,7 @@ namespace CSharp_MARC_Editor
                     printDocument.DefaultPageSettings.Margins.Right = 75;
                     printDocument.DefaultPageSettings.Margins.Bottom = 75;
 
-                    linesToPrint.Add(START_OF_HEADING.ToString() + "Title: " + row.Cells[4].Value.ToString() + " -- Author: " + row.Cells[3].Value.ToString());
+                    linesToPrint.Add(START_OF_HEADING + "Title: " + row.Cells[4].Value + " -- Author: " + row.Cells[3].Value);
 
                     linesToPrint.AddRange(previewTextBox.Lines);
 

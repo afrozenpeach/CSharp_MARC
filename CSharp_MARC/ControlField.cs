@@ -66,7 +66,7 @@ namespace MARC
         /// </returns>
         public override bool IsEmpty()
         {
-            return (data == string.Empty) ? true : false;
+            return (data == string.Empty);
         }
 
         /// <summary>

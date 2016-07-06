@@ -234,7 +234,7 @@ namespace MARC
         /// </returns>
         public override bool IsEmpty()
         {
-            return (subfields == null || subfields.Count == 0) ? true : false;
+            return (subfields == null || subfields.Count == 0);
         }
 
         /// <summary>
@@ -342,7 +342,7 @@ namespace MARC
         public static bool ValidateIndicator(char ind)
         {
             Match match = Regex.Match(ind.ToString(), "^[0-9a-z]{1}$");
-            return (match.Captures.Count > 0 || ind == ' ') ? true : false;
+            return (match.Captures.Count > 0 || ind == ' ');
         }
 
 		/// <summary>
