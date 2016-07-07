@@ -139,7 +139,7 @@ namespace MARC
                 marcByte2 = marcByte1;
                 
                 //Get this byte from the array
-                marcByte1 = (int)bytes[byteIndex + i];
+                marcByte1 = bytes[byteIndex + i];
 
 				//A charIndex of -1 means just keep reusing the same char. This saves memory when only doing counts
 				int writeCharIndex = charIndex;
@@ -1895,7 +1895,7 @@ namespace MARC
                 }
 
 				//Since this is a three byte combination, just need to handle it SOMEHOW before the third byte is lost, or any introduced problem gets compounded. So, default this to just Unicode encoding.
-                string fallbackEncoding = UTF8.GetString(new byte[] { (byte) marcByte3, (byte) marcByte2, (byte) marcByte1 });
+                string fallbackEncoding = UTF8.GetString(new [] { (byte) marcByte3, (byte) marcByte2, (byte) marcByte1 });
 				foreach (char c in fallbackEncoding)
 				{
 					chars[charIndex] = c;
@@ -1915,13 +1915,13 @@ namespace MARC
 		/// <returns>The converted MARC8 bytes</returns>
 		private static byte?[] ConvertToMARC8Bytes(char c)
 		{
-			byte?[] bytes = new byte?[3] { null, null, null };
+			byte?[] bytes = new byte?[] { null, null, null };
 
-			if ((int)c < 127)
+			if (c < 127)
 			{
 				bytes[0] = (byte)c;
 			}
-			else if ((int)c < 224)
+			else if (c < 224)
 			{
 				switch (c)
 				{

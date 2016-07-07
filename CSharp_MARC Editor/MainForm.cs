@@ -51,10 +51,7 @@ namespace CSharp_MARC_Editor
 
         private FileMARCReader marcRecords;
         public const string ConnectionString = "Data Source=MARC.db;Version=3";
-
-        private string reloadingDB = "Reloading Database...";
-        private string committingTransaction = "Committing Transaction...";
-        private string rebuildingPreview = "Rebuilding Records Previews...";
+        
         private bool startEdit = false;
         private bool loading = true;
         private bool reloadFields = false;
@@ -67,7 +64,6 @@ namespace CSharp_MARC_Editor
 
         private const char START_OF_HEADING = '\x01';
         private const char NEW_PAGE = '\xFF';
-        private const char END_OF_FILE = '\x1A';
 
         #endregion
 
@@ -103,7 +99,6 @@ namespace CSharp_MARC_Editor
             string custom4 = null;
             string custom5 = null;
 
-            ControlField field005;
             Subfield subfield100a = null;
             Subfield subfield245a = null;
             Subfield subfield245b = null;
@@ -123,7 +118,7 @@ namespace CSharp_MARC_Editor
             Subfield subfieldCustom4 = null;
             Subfield subfieldCustom5 = null;
 
-            field005 = (ControlField)record["005"];
+            ControlField field005 = (ControlField)record["005"];
             if (field005 != null && field005.Data.Length >= 14)
             {
                 dateChanged = field005.Data.Substring(0, 4) + "/" + field005.Data.Substring(4, 2) + "/" + field005.Data.Substring(6, 2) + " " + field005.Data.Substring(8, 2) + ":" + field005.Data.Substring(10, 2) + ":" + field005.Data.Substring(12);
@@ -2001,7 +1996,6 @@ namespace CSharp_MARC_Editor
                         command.ExecuteNonQuery();
                         command.Parameters.Clear();
 
-                        int fieldNumber = 1;
                         int sortNumber = 1;
 
                         foreach (Field field in record.Fields)
@@ -2009,8 +2003,6 @@ namespace CSharp_MARC_Editor
                             command.CommandText = "INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2, ControlData, Sort) VALUES (@RecordID, @TagNumber, @Ind1, @Ind2, @ControlData, @Sort)";
                             command.Parameters.Add("@RecordID", DbType.Int32).Value = recordID;
                             command.Parameters.Add("@TagNumber", DbType.String).Value = field.Tag;
-
-                            fieldNumber++;
 
                             if (field.IsDataField())
                             {
@@ -2078,13 +2070,13 @@ namespace CSharp_MARC_Editor
             switch (e.ProgressPercentage)
             {
                 case -1:
-                    progressToolStripStatusLabel.Text = reloadingDB;
+                    progressToolStripStatusLabel.Text = "Reloading Database...";
                     break;
                 case -2:
-                    progressToolStripStatusLabel.Text = committingTransaction;
+                    progressToolStripStatusLabel.Text = "Committing Transaction...";
                     break;
                 case -3:
-                    progressToolStripStatusLabel.Text = rebuildingPreview;
+                    progressToolStripStatusLabel.Text = "Rebuilding Preview...";
                     break;
                 default:
                     progressToolStripStatusLabel.Text = e.ProgressPercentage.ToString(CultureInfo.CurrentCulture);
@@ -4472,7 +4464,7 @@ namespace CSharp_MARC_Editor
         private void rdaConversionBackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             if (e.ProgressPercentage == -1)
-                progressToolStripStatusLabel.Text = rebuildingPreview;
+                progressToolStripStatusLabel.Text = "Rebuilding Preview...";
             else if (e.ProgressPercentage == 0)
                 progressToolStripStatusLabel.Text = "Converting Leader...";
             else
@@ -5170,7 +5162,7 @@ namespace CSharp_MARC_Editor
                 printDocument.DefaultPageSettings.Margins.Right = 75;
                 printDocument.DefaultPageSettings.Margins.Bottom = 75;
 
-                linesToPrint.Add(START_OF_HEADING.ToString() + "Title: " + recordsDataGridView.SelectedCells[0].OwningRow.Cells[4].Value + " -- Author: " + recordsDataGridView.SelectedCells[0].OwningRow.Cells[3].Value.ToString());
+                linesToPrint.Add(START_OF_HEADING + "Title: " + recordsDataGridView.SelectedCells[0].OwningRow.Cells[4].Value + " -- Author: " + recordsDataGridView.SelectedCells[0].OwningRow.Cells[3].Value);
 
                 linesToPrint.AddRange(previewTextBox.Lines);
 
@@ -5236,7 +5228,7 @@ namespace CSharp_MARC_Editor
                     printDocument.DefaultPageSettings.Margins.Right = 75;
                     printDocument.DefaultPageSettings.Margins.Bottom = 75;
 
-                    linesToPrint.Add(START_OF_HEADING.ToString() + "Title: " + row.Cells[4].Value.ToString() + " -- Author: " + row.Cells[3].Value.ToString());
+                    linesToPrint.Add(START_OF_HEADING + "Title: " + row.Cells[4].Value + " -- Author: " + row.Cells[3].Value);
 
                     linesToPrint.AddRange(previewTextBox.Lines);
 
@@ -5718,7 +5710,7 @@ namespace CSharp_MARC_Editor
         /// <param name="e">The <see cref="ProgressChangedEventArgs"/> instance containing the event data.</param>
         private void rebuildBackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            progressToolStripStatusLabel.Text = rebuildingPreview;
+            progressToolStripStatusLabel.Text = "Rebuilding Preview...";
         }
 
         /// <summary>

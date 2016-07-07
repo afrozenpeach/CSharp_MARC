@@ -31,7 +31,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using MARC;
-using System.Collections;
 using System.Net;
 using System.Xml.Linq;
 using System.Diagnostics;
@@ -236,57 +235,6 @@ namespace CSharp_MARC_Editor
 		}
 
 		/// <summary>
-		/// Handles the Click event of the fromFileButton control.
-		/// </summary>
-		/// <param name="sender">The source of the event.</param>
-		/// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-		private void fromFileButton_Click(object sender, EventArgs e)
-		{
-			if (openFileDialog.ShowDialog() == DialogResult.OK)
-			{
-				IEnumerable loopy;
-
-				if (openFileDialog.FileName.EndsWith(".mrc", StringComparison.OrdinalIgnoreCase) || openFileDialog.FileName.EndsWith(".usm", StringComparison.OrdinalIgnoreCase) || openFileDialog.FileName.EndsWith(".001", StringComparison.OrdinalIgnoreCase))
-				{
-					FileMARC import = new FileMARC();
-					import.ImportMARC(openFileDialog.FileName);
-
-					loopy = import;
-				}
-				else if (openFileDialog.FileName.EndsWith(".xml", StringComparison.OrdinalIgnoreCase))
-				{
-					FileMARCXML import = new FileMARCXML(XDocument.Load(openFileDialog.FileName));
-
-					loopy = import;
-				}
-				else
-				{
-					switch(MessageBox.Show("Unable to import records from the selected file." + Environment.NewLine + Environment.NewLine + "If this is a MARC21 File click 'YES'" + Environment.NewLine + "If this is a MARCXML file click 'NO'" + Environment.NewLine + "Otherwise hit 'CANCEL'", "Unknown filetype.", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Asterisk))
-					{
-						case DialogResult.Yes:
-							FileMARC import = new FileMARC();
-							import.ImportMARC(openFileDialog.FileName);
-
-							loopy = import;
-							break;
-						case DialogResult.No:
-							FileMARCXML importXML = new FileMARCXML(XDocument.Load(openFileDialog.FileName));
-
-							loopy = importXML;
-							break;
-						default:
-							return;
-					}
-				}
-
-				foreach (Record record in loopy)
-					AddResult(record);
-
-				SortResults();
-			}
-		}
-
-		/// <summary>
 		/// Handles the SelectionChanged event of the searchResultsDataGridView control.
 		/// </summary>
 		/// <param name="sender">The source of the event.</param>
@@ -344,17 +292,6 @@ namespace CSharp_MARC_Editor
 		{
 			if (e.KeyChar == (char)Keys.Enter)
 				searchButton_Click(sender, e);
-		}
-
-		/// <summary>
-		/// Handles the KeyPress event of the importTextBox control.
-		/// </summary>
-		/// <param name="sender">The source of the event.</param>
-		/// <param name="e">The <see cref="System.Windows.Forms.KeyPressEventArgs"/> instance containing the event data.</param>
-		private void importTextBox_KeyPress(object sender, KeyPressEventArgs e)
-		{
-			if (e.KeyChar == (char)Keys.Enter)
-				importButton_Click(sender, e);
 		}
 
         /// <summary>

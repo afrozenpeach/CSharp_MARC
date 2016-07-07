@@ -245,6 +245,7 @@ namespace CSharp_MARC_Tests
 			target.Fields.Add(dataField2);
 			Field expected = dataField;
 			Field actual = target[tag];
+		    Assert.Equals(expected, actual);
 		}
 
 		/// <summary>
