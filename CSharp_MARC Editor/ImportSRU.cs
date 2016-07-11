@@ -179,18 +179,38 @@ namespace CSharp_MARC_Editor
 
 				string sruQuery = string.Empty;
 
-				//The actual query in CQL syntax
-				if (titleTextBox.Text.Trim() != string.Empty)
-					sruQuery += " and dc.title%20=%20%22" + titleTextBox.Text.Trim() + "%22";
+                if (locRadioButton.Checked)
+                {
+                    //The actual query in CQL syntax
+                    if (titleTextBox.Text.Trim() != string.Empty)
+                        sruQuery += " and dc.title%20=%20%22" + titleTextBox.Text.Trim() + "%22";
 
-				if (authorTextBox.Text.Trim() != string.Empty)
-					sruQuery += " and dc.author%20=%20%22" + authorTextBox.Text.Trim() + "%22";
+                    if (authorTextBox.Text.Trim() != string.Empty)
+                        sruQuery += " and dc.author%20=%20%22" + authorTextBox.Text.Trim() + "%22";
 
-				if (lccnTextBox.Text.Trim() != string.Empty)
-					sruQuery += " and bath.lccn%20=%20" + lccnTextBox.Text.Trim();
+                    if (lccnTextBox.Text.Trim() != string.Empty)
+                        sruQuery += " and bath.lccn%20=%20" + lccnTextBox.Text.Trim();
 
-				if (isbnTextBox.Text.Trim() != string.Empty)
-					sruQuery += " and bath.isbn%20=%20" + isbnTextBox.Text.Trim();
+                    if (isbnTextBox.Text.Trim() != string.Empty)
+                        sruQuery += " and bath.isbn%20=%20" + isbnTextBox.Text.Trim();
+                }
+                else if (oclcRadioButton.Checked)
+                {
+                    //The actual query in CQL syntax
+                    if (titleTextBox.Text.Trim() != string.Empty)
+                        sruQuery += " and srw.ti%20=%20%22" + titleTextBox.Text.Trim() + "%22";
+
+                    if (authorTextBox.Text.Trim() != string.Empty)
+                        sruQuery += " and srw.au%20=%20%22" + authorTextBox.Text.Trim() + "%22";
+
+                    if (lccnTextBox.Text.Trim() != string.Empty)
+                        sruQuery += " and srw.dn%20=%20" + lccnTextBox.Text.Trim();
+
+                    if (isbnTextBox.Text.Trim() != string.Empty)
+                        sruQuery += " and srw.bn%20=%20" + isbnTextBox.Text.Trim();
+
+                    sruQuery += "&wskey=" + oclcTextBox.Text;
+                }
 
 				//Maximum records and record schema will always be the same. We get records back in actual MARCXML format making it easy to parse into a BookMaster record
 				string sruPostfix = "&maximumRecords=200&recordSchema=marcxml";
