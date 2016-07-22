@@ -40,7 +40,7 @@ namespace CSharp_MARC_Editor
             {
                 Collection<string> selectedIndicators = new Collection<string>();
 
-                foreach (object item in ind1ListBox.Items)
+                foreach (object item in ind1ListBox.SelectedItems)
                 {
                     if (item != null)
                         selectedIndicators.Add(item.ToString());
@@ -62,7 +62,7 @@ namespace CSharp_MARC_Editor
             {
                 Collection<string> selectedIndicators = new Collection<string>();
 
-                foreach (object item in ind2ListBox.Items)
+                foreach (object item in ind2ListBox.SelectedItems)
                 {
                     if (item != null)
                         selectedIndicators.Add(item.ToString());
@@ -84,7 +84,7 @@ namespace CSharp_MARC_Editor
             {
                 Collection<string> selectedCodes = new Collection<string>();
 
-                foreach (string item in codesListBox.Items)
+                foreach (string item in codesListBox.SelectedItems)
                     selectedCodes.Add(item);
 
                 return selectedCodes;
