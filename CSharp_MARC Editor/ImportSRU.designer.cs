@@ -110,7 +110,7 @@ namespace CSharp_MARC_Editor
             this.searchGroupBox.Controls.Add(this.isbnLabel);
             this.searchGroupBox.Location = new System.Drawing.Point(12, 120);
             this.searchGroupBox.Name = "searchGroupBox";
-            this.searchGroupBox.Size = new System.Drawing.Size(477, 318);
+            this.searchGroupBox.Size = new System.Drawing.Size(477, 366);
             this.searchGroupBox.TabIndex = 0;
             this.searchGroupBox.TabStop = false;
             this.searchGroupBox.Text = "Search";
@@ -139,7 +139,7 @@ namespace CSharp_MARC_Editor
             this.searchResultsDataGridView.Location = new System.Drawing.Point(6, 126);
             this.searchResultsDataGridView.Name = "searchResultsDataGridView";
             this.searchResultsDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.searchResultsDataGridView.Size = new System.Drawing.Size(465, 186);
+            this.searchResultsDataGridView.Size = new System.Drawing.Size(465, 234);
             this.searchResultsDataGridView.TabIndex = 8;
             this.searchResultsDataGridView.SelectionChanged += new System.EventHandler(this.searchResultsDataGridView_SelectionChanged);
             // 
@@ -260,7 +260,7 @@ namespace CSharp_MARC_Editor
             this.importGroupBox.Enabled = false;
             this.importGroupBox.Location = new System.Drawing.Point(495, 12);
             this.importGroupBox.Name = "importGroupBox";
-            this.importGroupBox.Size = new System.Drawing.Size(354, 426);
+            this.importGroupBox.Size = new System.Drawing.Size(354, 474);
             this.importGroupBox.TabIndex = 1;
             this.importGroupBox.TabStop = false;
             this.importGroupBox.Text = "Import Preview";
@@ -268,7 +268,7 @@ namespace CSharp_MARC_Editor
             // cancelButton
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cancelButton.Location = new System.Drawing.Point(180, 397);
+            this.cancelButton.Location = new System.Drawing.Point(180, 445);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 13;
@@ -285,14 +285,14 @@ namespace CSharp_MARC_Editor
             this.importRichTextBox.Location = new System.Drawing.Point(6, 19);
             this.importRichTextBox.Name = "importRichTextBox";
             this.importRichTextBox.ReadOnly = true;
-            this.importRichTextBox.Size = new System.Drawing.Size(342, 372);
+            this.importRichTextBox.Size = new System.Drawing.Size(342, 420);
             this.importRichTextBox.TabIndex = 9;
             this.importRichTextBox.Text = "";
             // 
             // importButton
             // 
             this.importButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.importButton.Location = new System.Drawing.Point(99, 397);
+            this.importButton.Location = new System.Drawing.Point(99, 445);
             this.importButton.Name = "importButton";
             this.importButton.Size = new System.Drawing.Size(75, 23);
             this.importButton.TabIndex = 12;
@@ -418,7 +418,7 @@ namespace CSharp_MARC_Editor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(861, 450);
+            this.ClientSize = new System.Drawing.Size(861, 498);
             this.Controls.Add(this.serverGroupBox);
             this.Controls.Add(this.importGroupBox);
             this.Controls.Add(this.searchGroupBox);
