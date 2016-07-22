@@ -52,7 +52,18 @@
  * @copyright 2016 Matt Schraeder
  * @license   http://www.gnu.org/licenses/gpl-3.0.html  GPL License 3
  */ 
- 
+
+2016-07-22 Changes:
+
+Fix issues with moving a field or subfield up past the top or down past the new row
+Fix moving fields to work as expected
+Add tooltips to field and subfield sorting buttons
+Fix issue importing multiple records from SRU
+Add LoC and OCLC options to the import SRU feature
+Fix ReSharper Inspection fixes
+Fix import and cancel buttons when form gets resized
+Selected Codes and Indicators should actually return selected codes and indicators, respectively, rather than... you know, everything.
+
 2016-06-12.2 Changes:
 
 Fix database reset

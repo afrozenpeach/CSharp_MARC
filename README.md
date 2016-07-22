@@ -22,9 +22,20 @@ This project is built upon the CSharp_MARC project of the same name available at
 
 ## Changelog:
 
+###2016-07-22 Changes:
+
+* Fix issues with moving a field or subfield up past the top or down past the new row
+* Fix moving fields to work as expected
+* Add tooltips to field and subfield sorting buttons
+* Fix issue importing multiple records from SRU
+* Add LoC and OCLC options to the import SRU feature
+* Fix ReSharper Inspection fixes
+* Fix import and cancel buttons when form gets resized
+* Selected Codes and Indicators should actually return selected codes and indicators, respectively, rather than... you know, everything.
+
 ###2016-06-12.2 Changes:
 
-Fix database reset
+* Fix database reset
 
 ###2016-06-12.1 Changes:
 
