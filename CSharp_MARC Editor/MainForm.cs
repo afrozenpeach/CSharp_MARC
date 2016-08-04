@@ -237,7 +237,7 @@ namespace CSharp_MARC_Editor
                 if (split.Length > 1)
                     mainEntry = split[1];
             }
-            else if (subfield949a != null && subfield949i == null)
+            else if (subfield949a != null)
             {
                 string[] split = subfield949a.Data.Split(' ');
 

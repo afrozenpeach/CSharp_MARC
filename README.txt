@@ -53,6 +53,10 @@
  * @license   http://www.gnu.org/licenses/gpl-3.0.html  GPL License 3
  */ 
 
+2016-08-03 Changes:
+
+Fix loading preview information for records with holdings information in the 949a
+
 2016-07-22 Changes:
 
 Fix issues with moving a field or subfield up past the top or down past the new row
