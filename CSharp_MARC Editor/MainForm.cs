@@ -227,7 +227,10 @@ namespace CSharp_MARC_Editor
             else if (subfield949g != null)
                 barcode = subfield949g.Data;
             else if (subfield949b != null)
+            {
                 barcode = subfield949b.Data;
+                subfield949b = null;
+            }
 
             if (subfield852h != null)
             {
