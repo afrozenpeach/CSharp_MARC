@@ -1507,7 +1507,7 @@ namespace CSharp_MARC_Editor
                     command.CommandText = "BEGIN";
                     command.ExecuteNonQuery();
 
-                    command.CommandText = "SELECT SubfieldID FROM Subfields WHERE FieldID = @FieldID ORDER BY CASE WHEN Code >= '0' AND Code < '9' THEN 1 ELSE 0 END, Code";
+                    command.CommandText = "SELECT SubfieldID FROM Subfields WHERE FieldID = @FieldID ORDER BY CASE WHEN Code >= '0' AND Code <= '9' THEN 1 ELSE 0 END, Code";
                     command.Parameters.Add("@FieldID", DbType.Int32).Value = fieldID;
 
                     using (SQLiteDataReader reader = command.ExecuteReader())
