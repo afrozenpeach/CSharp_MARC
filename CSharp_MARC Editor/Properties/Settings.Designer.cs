@@ -21,8 +21,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @author    Matt Schraeder <mschraeder@csharpmarc.net>
- * @copyright 2016 Matt Schraeder
+ * @author    Matt Schraeder-Urbanowicz <matt@csharpmarc.net>
+ * @copyright 2016 Matt Schraeder-Urbanowicz
  * @license   http://www.gnu.org/licenses/gpl-3.0.html  GPL License 3
  */
 

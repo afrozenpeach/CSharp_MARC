@@ -20,8 +20,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @author    Matt Schraeder <mschraeder@btsb.com> <mschraeder@csharpmarc.net>
- * @copyright 2009-2011 Matt Schraeder and Bound to Stay Bound Books <http://www.btsb.com>
+ * @author    Matt Schraeder-Urbanowicz <matt@btsb.com> <matt@csharpmarc.net>
+ * @copyright 2009-2011 Matt Schraeder-Urbanowicz and Bound to Stay Bound Books <http://www.btsb.com>
  * @license   http://www.gnu.org/copyleft/lesser.html  LGPL License 3
  */
 
@@ -36,7 +36,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Bound To Stay Bound Books")]
 [assembly: AssemblyProduct("CSharp_MARC Tests")]
-[assembly: AssemblyCopyright("Copyright © Matt Schraeder and Bound To Stay Bound Books 2009-2016")]
+[assembly: AssemblyCopyright("Copyright © Matt Schraeder-Urbanowicz and Bound To Stay Bound Books 2009-2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
