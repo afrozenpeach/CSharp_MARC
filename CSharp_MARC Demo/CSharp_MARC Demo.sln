@@ -1,6 +1,8 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.4
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharp_MARC Demo", "CSharp_MARC Demo\CSharp_MARC Demo.csproj", "{DF886736-481D-495D-BDC8-5001A34B2AFA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharp_MARC", "..\CSharp_MARC\CSharp_MARC.csproj", "{D76C0576-2B55-4B45-82F5-97FAD347676C}"
@@ -13,7 +15,8 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{DF886736-481D-495D-BDC8-5001A34B2AFA}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{DF886736-481D-495D-BDC8-5001A34B2AFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF886736-481D-495D-BDC8-5001A34B2AFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF886736-481D-495D-BDC8-5001A34B2AFA}.Debug|x86.ActiveCfg = Debug|x86
 		{DF886736-481D-495D-BDC8-5001A34B2AFA}.Debug|x86.Build.0 = Debug|x86
 		{DF886736-481D-495D-BDC8-5001A34B2AFA}.Release|Any CPU.ActiveCfg = Release|x86
