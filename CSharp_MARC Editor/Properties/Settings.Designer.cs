@@ -22,7 +22,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author    Matt Schraeder-Urbanowicz <matt@csharpmarc.net>
- * @copyright 2016 Matt Schraeder-Urbanowicz
+ * @copyright 2016-2017 Mattie Schraeder-Urbanowicz
  * @license   http://www.gnu.org/licenses/gpl-3.0.html  GPL License 3
  */
 
