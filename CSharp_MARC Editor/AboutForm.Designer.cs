@@ -57,7 +57,6 @@ namespace CSharp_MARC_Editor
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AboutForm));
-            this.mattPictureBox = new System.Windows.Forms.PictureBox();
             this.lgpl3PictureBox = new System.Windows.Forms.PictureBox();
             this.btsbPictureBox = new System.Windows.Forms.PictureBox();
             this.okButton = new System.Windows.Forms.Button();
@@ -70,27 +69,16 @@ namespace CSharp_MARC_Editor
             this.btsbLabel = new System.Windows.Forms.Label();
             this.btsbLinkLabel = new System.Windows.Forms.LinkLabel();
             this.gpl3PictureBox = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.mattPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lgpl3PictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btsbPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gpl3PictureBox)).BeginInit();
             this.SuspendLayout();
             // 
-            // mattPictureBox
-            // 
-            this.mattPictureBox.Image = ((System.Drawing.Image)(resources.GetObject("mattPictureBox.Image")));
-            this.mattPictureBox.InitialImage = null;
-            this.mattPictureBox.Location = new System.Drawing.Point(12, 12);
-            this.mattPictureBox.Name = "mattPictureBox";
-            this.mattPictureBox.Size = new System.Drawing.Size(146, 183);
-            this.mattPictureBox.TabIndex = 0;
-            this.mattPictureBox.TabStop = false;
-            // 
             // lgpl3PictureBox
             // 
             this.lgpl3PictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lgpl3PictureBox.Image = ((System.Drawing.Image)(resources.GetObject("lgpl3PictureBox.Image")));
-            this.lgpl3PictureBox.Location = new System.Drawing.Point(742, 12);
+            this.lgpl3PictureBox.Location = new System.Drawing.Point(742, 9);
             this.lgpl3PictureBox.Name = "lgpl3PictureBox";
             this.lgpl3PictureBox.Size = new System.Drawing.Size(148, 50);
             this.lgpl3PictureBox.TabIndex = 1;
@@ -100,7 +88,7 @@ namespace CSharp_MARC_Editor
             // 
             this.btsbPictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btsbPictureBox.Image = ((System.Drawing.Image)(resources.GetObject("btsbPictureBox.Image")));
-            this.btsbPictureBox.Location = new System.Drawing.Point(769, 49);
+            this.btsbPictureBox.Location = new System.Drawing.Point(769, 46);
             this.btsbPictureBox.Name = "btsbPictureBox";
             this.btsbPictureBox.Size = new System.Drawing.Size(100, 210);
             this.btsbPictureBox.TabIndex = 2;
@@ -112,7 +100,7 @@ namespace CSharp_MARC_Editor
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.okButton.Location = new System.Drawing.Point(413, 388);
+            this.okButton.Location = new System.Drawing.Point(261, 385);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
             this.okButton.TabIndex = 3;
@@ -122,17 +110,16 @@ namespace CSharp_MARC_Editor
             // 
             // copyrightLabel
             // 
-            this.copyrightLabel.Location = new System.Drawing.Point(28, 198);
+            this.copyrightLabel.Location = new System.Drawing.Point(12, 29);
             this.copyrightLabel.Name = "copyrightLabel";
-            this.copyrightLabel.Size = new System.Drawing.Size(115, 31);
+            this.copyrightLabel.Size = new System.Drawing.Size(262, 17);
             this.copyrightLabel.TabIndex = 4;
-            this.copyrightLabel.Text = "Copyright @ 2016 Matt Schraeder-Urbanowicz";
-            this.copyrightLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.copyrightLabel.Text = "Copyright @ 2016-2017 Mattie Schraeder-Urbanowicz";
             // 
             // versionLabel
             // 
             this.versionLabel.AutoSize = true;
-            this.versionLabel.Location = new System.Drawing.Point(165, 49);
+            this.versionLabel.Location = new System.Drawing.Point(12, 64);
             this.versionLabel.Name = "versionLabel";
             this.versionLabel.Size = new System.Drawing.Size(48, 13);
             this.versionLabel.TabIndex = 5;
@@ -141,7 +128,7 @@ namespace CSharp_MARC_Editor
             // linkLabel
             // 
             this.linkLabel.AutoSize = true;
-            this.linkLabel.Location = new System.Drawing.Point(165, 62);
+            this.linkLabel.Location = new System.Drawing.Point(12, 77);
             this.linkLabel.Name = "linkLabel";
             this.linkLabel.Size = new System.Drawing.Size(111, 13);
             this.linkLabel.TabIndex = 6;
@@ -152,7 +139,7 @@ namespace CSharp_MARC_Editor
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(164, 12);
+            this.label1.Location = new System.Drawing.Point(12, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(147, 20);
             this.label1.TabIndex = 7;
@@ -164,25 +151,25 @@ namespace CSharp_MARC_Editor
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.richTextBox1.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.richTextBox1.Location = new System.Drawing.Point(164, 96);
+            this.richTextBox1.Location = new System.Drawing.Point(12, 93);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(572, 286);
+            this.richTextBox1.Size = new System.Drawing.Size(751, 286);
             this.richTextBox1.TabIndex = 8;
             this.richTextBox1.Text = resources.GetString("richTextBox1.Text");
             // 
             // emailLabel
             // 
             this.emailLabel.AutoSize = true;
-            this.emailLabel.Location = new System.Drawing.Point(30, 229);
+            this.emailLabel.Location = new System.Drawing.Point(12, 46);
             this.emailLabel.Name = "emailLabel";
-            this.emailLabel.Size = new System.Drawing.Size(111, 13);
+            this.emailLabel.Size = new System.Drawing.Size(119, 13);
             this.emailLabel.TabIndex = 9;
             this.emailLabel.TabStop = true;
-            this.emailLabel.Text = "matt@csharpmarc.net";
+            this.emailLabel.Text = "mattie@csharpmarc.net";
             // 
             // btsbLabel
             // 
-            this.btsbLabel.Location = new System.Drawing.Point(769, 250);
+            this.btsbLabel.Location = new System.Drawing.Point(769, 247);
             this.btsbLabel.Name = "btsbLabel";
             this.btsbLabel.Size = new System.Drawing.Size(100, 43);
             this.btsbLabel.TabIndex = 10;
@@ -192,7 +179,7 @@ namespace CSharp_MARC_Editor
             // btsbLinkLabel
             // 
             this.btsbLinkLabel.AutoSize = true;
-            this.btsbLinkLabel.Location = new System.Drawing.Point(765, 293);
+            this.btsbLinkLabel.Location = new System.Drawing.Point(765, 290);
             this.btsbLinkLabel.Name = "btsbLinkLabel";
             this.btsbLinkLabel.Size = new System.Drawing.Size(108, 13);
             this.btsbLinkLabel.TabIndex = 11;
@@ -203,7 +190,7 @@ namespace CSharp_MARC_Editor
             // 
             this.gpl3PictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.gpl3PictureBox.Image = ((System.Drawing.Image)(resources.GetObject("gpl3PictureBox.Image")));
-            this.gpl3PictureBox.Location = new System.Drawing.Point(606, 12);
+            this.gpl3PictureBox.Location = new System.Drawing.Point(606, 9);
             this.gpl3PictureBox.Name = "gpl3PictureBox";
             this.gpl3PictureBox.Size = new System.Drawing.Size(130, 50);
             this.gpl3PictureBox.TabIndex = 12;
@@ -227,17 +214,14 @@ namespace CSharp_MARC_Editor
             this.Controls.Add(this.copyrightLabel);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.lgpl3PictureBox);
-            this.Controls.Add(this.mattPictureBox);
             this.Controls.Add(this.btsbPictureBox);
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(918, 462);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(918, 462);
             this.Name = "AboutForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "About C# MARC Editor";
             this.Load += new System.EventHandler(this.AboutForm_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.mattPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lgpl3PictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btsbPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gpl3PictureBox)).EndInit();
@@ -247,8 +231,6 @@ namespace CSharp_MARC_Editor
         }
 
         #endregion
-
-        private System.Windows.Forms.PictureBox mattPictureBox;
         private System.Windows.Forms.PictureBox lgpl3PictureBox;
         private System.Windows.Forms.PictureBox btsbPictureBox;
         private System.Windows.Forms.Button okButton;

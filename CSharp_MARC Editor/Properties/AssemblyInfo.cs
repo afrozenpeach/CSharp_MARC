@@ -37,7 +37,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("csharpmarc.net")]
 [assembly: AssemblyProduct("CSharp_MARC Editor")]
-[assembly: AssemblyCopyright("Copyright © Matt Schraeder-Urbanowicz 2016")]
+[assembly: AssemblyCopyright("Copyright © Mattie Schraeder-Urbanowicz 2016-2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

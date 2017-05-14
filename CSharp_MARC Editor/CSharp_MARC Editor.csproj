@@ -26,10 +26,10 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>https://csharpmarc.net/download/</InstallUrl>
-    <SupportUrl>https://sourceforge.net/p/csharpmarc/discussion/</SupportUrl>
-    <ErrorReportUrl>https://sourceforge.net/p/csharpmarc/discussion/</ErrorReportUrl>
+    <SupportUrl>https://github.com/frozen-solid/CSharp_MARC/issues</SupportUrl>
+    <ErrorReportUrl>https://github.com/frozen-solid/CSharp_MARC/issues</ErrorReportUrl>
     <ProductName>CSharp_MARC Editor</ProductName>
-    <PublisherName>Matt Schraeder</PublisherName>
+    <PublisherName>Mattie Schraeder-Urbanowicz</PublisherName>
     <SuiteName>csharpmarc.net</SuiteName>
     <ApplicationRevision>1</ApplicationRevision>
     <ApplicationVersion>2016.08.03.%2a</ApplicationVersion>
