@@ -23,8 +23,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @author    Matt Schraeder-Urbanowicz <matt@csharpmarc.net> <matt@btsb.com>
- * @copyright 2009-2016 Matt Schraeder-Urbanowicz and Bound to Stay Bound Books <http://www.btsb.com>
+ * @author    Mattie Schraeder-Urbanowicz <mattie@csharpmarc.net>
+ * @copyright 2009-2017 Mattie Schraeder-Urbanowicz and Bound to Stay Bound Books <http://www.btsb.com>
  * @license   http://www.gnu.org/copyleft/lesser.html  LGPL License 3
  * 
  */
