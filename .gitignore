@@ -9,3 +9,5 @@ CSharp_MARC/bin/
 packages/
 *.snk
 TestResults/
+CSharp_MARC Demo/CSharp_MARC Demo/obj/
+*.cer
