@@ -565,7 +565,7 @@ namespace CSharp_MARC_Editor
                         command.Parameters.Add("@RecordID", DbType.Int32).Value = recordID;
                         command.ExecuteNonQuery();
 
-                        foreach (DataGridViewRow row in recordsDataGridView.Rows)
+                        foreach (DataGridViewRow row in recordsDataGridView.SelectedRows)
                         {
                             if (Int32.Parse(row.Cells[0].Value.ToString(), CultureInfo.InvariantCulture) == recordID)
                             {
