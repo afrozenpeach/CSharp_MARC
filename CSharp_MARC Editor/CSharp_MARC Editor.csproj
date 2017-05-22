@@ -32,7 +32,7 @@
     <PublisherName>Mattie Schraeder-Urbanowicz</PublisherName>
     <SuiteName>csharpmarc.net</SuiteName>
     <ApplicationRevision>1</ApplicationRevision>
-    <ApplicationVersion>2016.08.03.%2a</ApplicationVersion>
+    <ApplicationVersion>2017.05.22.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -104,6 +104,9 @@
   <PropertyGroup />
   <PropertyGroup>
     <DelaySign>false</DelaySign>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestTimestampUrl>http://timestamp.digicert.com</ManifestTimestampUrl>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
