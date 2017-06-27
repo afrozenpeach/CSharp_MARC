@@ -50,6 +50,8 @@ namespace CSharp_MARC_Editor
         #region Private member variables
 
         private FileMARCReader marcRecords;
+        private FileMARCXMLReader marcxmlRecords;
+
         public const string ConnectionString = "Data Source=MARC.db;Version=3";
         
         private bool startEdit = false;
@@ -2139,6 +2141,158 @@ namespace CSharp_MARC_Editor
             loading = false;
             EnableForm();
             Console.WriteLine("End Import: " + DateTime.Now.ToString(CultureInfo.CurrentCulture));
+        }
+
+        private void fromXMLFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                Console.WriteLine("Start Import: " + DateTime.Now.ToString(CultureInfo.CurrentCulture));
+                DisableForm();
+                toolStripProgressBar.Style = ProgressBarStyle.Marquee;
+                toolStripProgressBar.MarqueeAnimationSpeed = 30;
+                toolStripProgressBar.Enabled = true;
+                toolStripProgressBar.Visible = true;
+                progressToolStripStatusLabel.Visible = true;
+                cancelButtonToolStripStatusLabel.Visible = true;
+                recordsDataGridView.SuspendLayout();
+                recordsDataGridView.DataSource = null;
+                importingXMLBackgroundWorker.RunWorkerAsync(openFileDialog.FileName);
+            }
+        }
+
+        private void importingXMLBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            IEnumerable recordEnumerator;
+
+            marcxmlRecords = new FileMARCXMLReader(e.Argument.ToString());
+            recordEnumerator = marcxmlRecords;
+
+            int i = 0;
+
+            using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
+            {
+                connection.Open();
+                using (SQLiteCommand command = new SQLiteCommand(connection))
+                {
+                    command.CommandText = "BEGIN";
+                    command.ExecuteNonQuery();
+
+                    foreach (Record record in recordEnumerator)
+                    {
+                        if (importingBackgroundWorker.CancellationPending)
+                        {
+                            e.Cancel = true;
+                            cancelButtonToolStripStatusLabel.Visible = false;
+                            break;
+                        }
+                        DataRow newRow = GetRecordRow(record);
+
+                        command.CommandText = "INSERT INTO Records (DateAdded, DateChanged, Author, Title, CopyrightDate, Barcode, Classification, MainEntry, Custom1, Custom2, Custom3, Custom4, Custom5, ImportErrors) VALUES (@DateAdded, @DateChanged, @Author, @Title, @CopyrightDate, @Barcode, @Classification, @MainEntry, @Custom1, @Custom2, @Custom3, @Custom4, @CUstom5, @ImportErrors)";
+
+                        command.Parameters.Add("@DateAdded", DbType.DateTime).Value = DateTime.Now;
+                        DateTime changed;
+                        if (DateTime.TryParse(newRow["DateChanged"].ToString(), out changed))
+                            command.Parameters.Add("@DateChanged", DbType.DateTime).Value = changed;
+                        else
+                            command.Parameters.Add("@DateChanged", DbType.DateTime).Value = null;
+                        command.Parameters.Add("@Author", DbType.String).Value = newRow["Author"];
+                        command.Parameters.Add("@Title", DbType.String).Value = newRow["Title"];
+                        command.Parameters.Add("@CopyrightDate", DbType.String).Value = newRow["CopyrightDate"];
+                        command.Parameters.Add("@Barcode", DbType.String).Value = newRow["Barcode"];
+                        command.Parameters.Add("@Classification", DbType.String).Value = newRow["Classification"];
+                        command.Parameters.Add("@MainEntry", DbType.String).Value = newRow["MainEntry"];
+                        command.Parameters.Add("@Custom1", DbType.String).Value = newRow["Custom1"];
+                        command.Parameters.Add("@Custom2", DbType.String).Value = newRow["Custom2"];
+                        command.Parameters.Add("@Custom3", DbType.String).Value = newRow["Custom3"];
+                        command.Parameters.Add("@Custom4", DbType.String).Value = newRow["Custom4"];
+                        command.Parameters.Add("@Custom5", DbType.String).Value = newRow["Custom5"];
+
+                        string errors = "";
+                        foreach (string error in record.Warnings)
+                            errors += error + Environment.NewLine;
+
+                        if (errors.Length > 1)
+                            errors = errors.Substring(0, errors.Length - 1);
+
+                        command.Parameters.Add("@ImportErrors", DbType.String).Value = errors;
+
+                        command.ExecuteNonQuery();
+
+                        int recordID = (int)connection.LastInsertRowId;
+
+                        command.CommandText = "INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2, ControlData, Sort) VALUES (@RecordID, @TagNumber, @Ind1, @Ind2, @ControlData, @Sort)";
+                        command.Parameters.Add("@RecordID", DbType.Int32).Value = recordID;
+                        command.Parameters.Add("@TagNumber", DbType.String).Value = "LDR";
+                        command.Parameters.Add("@Ind1", DbType.String).Value = DBNull.Value;
+                        command.Parameters.Add("@Ind2", DbType.String).Value = DBNull.Value;
+                        command.Parameters.Add("@ControlData", DbType.String).Value = record.Leader;
+                        command.Parameters.Add("@Sort", DbType.Int32).Value = 0;
+                        command.ExecuteNonQuery();
+                        command.Parameters.Clear();
+
+                        int sortNumber = 1;
+
+                        foreach (Field field in record.Fields)
+                        {
+                            command.CommandText = "INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2, ControlData, Sort) VALUES (@RecordID, @TagNumber, @Ind1, @Ind2, @ControlData, @Sort)";
+                            command.Parameters.Add("@RecordID", DbType.Int32).Value = recordID;
+                            command.Parameters.Add("@TagNumber", DbType.String).Value = field.Tag;
+
+                            if (field.IsDataField())
+                            {
+                                DataField dataField = (DataField)field;
+                                command.Parameters.Add("@Ind1", DbType.String).Value = dataField.Indicator1;
+                                command.Parameters.Add("@Ind2", DbType.String).Value = dataField.Indicator2;
+                                command.Parameters.Add("@ControlData", DbType.String).Value = DBNull.Value;
+                                command.Parameters.Add("@Sort", DbType.Int32).Value = sortNumber;
+
+                                command.ExecuteNonQuery();
+
+                                int fieldID = (int)connection.LastInsertRowId;
+
+                                int subfieldNumber = 0;
+                                foreach (Subfield subfield in dataField.Subfields)
+                                {
+                                    command.CommandText = "INSERT INTO Subfields (FieldID, Code, Data, Sort) VALUES (@FieldID, @Code, @Data, @Sort)";
+                                    command.Parameters.Add("@FieldID", DbType.Int32).Value = fieldID;
+                                    command.Parameters.Add("@Code", DbType.String).Value = subfield.Code;
+                                    command.Parameters.Add("@Data", DbType.String).Value = subfield.Data;
+                                    command.Parameters.Add("@Sort", DbType.Int32).Value = subfieldNumber;
+                                    command.ExecuteNonQuery();
+
+                                    subfieldNumber++;
+                                }
+
+                                sortNumber++;
+                            }
+                            else
+                            {
+                                command.Parameters.Add("@Ind1", DbType.String).Value = DBNull.Value;
+                                command.Parameters.Add("@Ind2", DbType.String).Value = DBNull.Value;
+                                command.Parameters.Add("@ControlData", DbType.String).Value = ((ControlField)field).Data;
+                                command.Parameters.Add("@Sort", DbType.Int32).Value = sortNumber;
+                                command.ExecuteNonQuery();
+
+                                sortNumber++;
+                            }
+                        }
+                        command.Parameters.Clear();
+                        i++;
+                        importingBackgroundWorker.ReportProgress(i);
+                    }
+
+                    i = -2;
+                    importingBackgroundWorker.ReportProgress(i);
+
+                    Console.WriteLine("Start Commit: " + DateTime.Now.ToString(CultureInfo.CurrentCulture));
+                    command.CommandText = "END";
+                    command.ExecuteNonQuery();
+                }
+
+                i = -1;
+                importingBackgroundWorker.ReportProgress(i);
+            }
         }
 
         /// <summary>

@@ -115,6 +115,7 @@ namespace CSharp_MARC_Editor
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importRecordsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fromFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fromXMLFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fromZ3950SRUToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportRecordsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fullToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -165,6 +166,7 @@ namespace CSharp_MARC_Editor
             this.sortAllBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.batchEditBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.importingXMLBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -501,7 +503,7 @@ namespace CSharp_MARC_Editor
             this.previewTextBox.Name = "previewTextBox";
             this.previewTextBox.ReadOnly = true;
             this.previewTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.previewTextBox.Size = new System.Drawing.Size(293, 420);
+            this.previewTextBox.Size = new System.Drawing.Size(293, 398);
             this.previewTextBox.TabIndex = 2;
             // 
             // subfieldsDataGridView
@@ -524,7 +526,7 @@ namespace CSharp_MARC_Editor
             this.subfieldsDataGridView.Location = new System.Drawing.Point(243, 3);
             this.subfieldsDataGridView.MultiSelect = false;
             this.subfieldsDataGridView.Name = "subfieldsDataGridView";
-            this.subfieldsDataGridView.Size = new System.Drawing.Size(407, 420);
+            this.subfieldsDataGridView.Size = new System.Drawing.Size(407, 398);
             this.subfieldsDataGridView.TabIndex = 1;
             this.subfieldsDataGridView.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.subfieldsDataGridView_CellBeginEdit);
             this.subfieldsDataGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.subfieldsDataGridView_CellEndEdit);
@@ -597,7 +599,7 @@ namespace CSharp_MARC_Editor
             this.fieldsDataGridView.Location = new System.Drawing.Point(3, 3);
             this.fieldsDataGridView.MultiSelect = false;
             this.fieldsDataGridView.Name = "fieldsDataGridView";
-            this.fieldsDataGridView.Size = new System.Drawing.Size(202, 420);
+            this.fieldsDataGridView.Size = new System.Drawing.Size(202, 398);
             this.fieldsDataGridView.TabIndex = 0;
             this.fieldsDataGridView.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.fieldsDataGridView_CellBeginEdit);
             this.fieldsDataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.fieldsDataGridView_CellClick);
@@ -719,6 +721,7 @@ namespace CSharp_MARC_Editor
             // 
             this.importRecordsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fromFileToolStripMenuItem,
+            this.fromXMLFileToolStripMenuItem,
             this.fromZ3950SRUToolStripMenuItem});
             this.importRecordsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("importRecordsToolStripMenuItem.Image")));
             this.importRecordsToolStripMenuItem.Name = "importRecordsToolStripMenuItem";
@@ -729,15 +732,23 @@ namespace CSharp_MARC_Editor
             // 
             this.fromFileToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("fromFileToolStripMenuItem.Image")));
             this.fromFileToolStripMenuItem.Name = "fromFileToolStripMenuItem";
-            this.fromFileToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
-            this.fromFileToolStripMenuItem.Text = "From File";
+            this.fromFileToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.fromFileToolStripMenuItem.Text = "From MARC21 File";
             this.fromFileToolStripMenuItem.Click += new System.EventHandler(this.importToolStripMenuItem_Click);
+            // 
+            // fromXMLFileToolStripMenuItem
+            // 
+            this.fromXMLFileToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("fromXMLFileToolStripMenuItem.Image")));
+            this.fromXMLFileToolStripMenuItem.Name = "fromXMLFileToolStripMenuItem";
+            this.fromXMLFileToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.fromXMLFileToolStripMenuItem.Text = "From XML File";
+            this.fromXMLFileToolStripMenuItem.Click += new System.EventHandler(this.fromXMLFileToolStripMenuItem_Click);
             // 
             // fromZ3950SRUToolStripMenuItem
             // 
             this.fromZ3950SRUToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("fromZ3950SRUToolStripMenuItem.Image")));
             this.fromZ3950SRUToolStripMenuItem.Name = "fromZ3950SRUToolStripMenuItem";
-            this.fromZ3950SRUToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.fromZ3950SRUToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
             this.fromZ3950SRUToolStripMenuItem.Text = "From Z39.50/SRU";
             this.fromZ3950SRUToolStripMenuItem.Click += new System.EventHandler(this.fromZ3950SRUToolStripMenuItem_Click);
             // 
@@ -1118,6 +1129,14 @@ namespace CSharp_MARC_Editor
             this.batchEditBackgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.batchEditBackgroundWorker_ProgressChanged);
             this.batchEditBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.batchEditBackgroundWorker_RunWorkerCompleted);
             // 
+            // importingXMLBackgroundWorker
+            // 
+            this.importingXMLBackgroundWorker.WorkerReportsProgress = true;
+            this.importingXMLBackgroundWorker.WorkerSupportsCancellation = true;
+            this.importingXMLBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.importingXMLBackgroundWorker_DoWork);
+            this.importingXMLBackgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.importingBackgroundWorker_ProgressChanged);
+            this.importingXMLBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.importingBackgroundWorker_RunWorkerCompleted);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1255,6 +1274,8 @@ namespace CSharp_MARC_Editor
         private System.ComponentModel.BackgroundWorker sortAllBackgroundWorker;
         private System.ComponentModel.BackgroundWorker batchEditBackgroundWorker;
         private System.Windows.Forms.ToolTip toolTip;
+        private System.Windows.Forms.ToolStripMenuItem fromXMLFileToolStripMenuItem;
+        private System.ComponentModel.BackgroundWorker importingXMLBackgroundWorker;
     }
 }
 

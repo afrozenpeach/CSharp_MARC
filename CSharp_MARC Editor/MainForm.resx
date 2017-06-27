@@ -280,6 +280,23 @@
         IHf+omT08N8eV63SsHtaKVz4BYlNulYdU+xqAAAAAElFTkSuQmCC
 </value>
   </data>
+  <data name="fromXMLFileToolStripMenuItem.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAN
+        1wAADdcBQiibeAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAJ0SURBVDhPjdHd
+        T5JRHAfw57ab7vpHmi91101LyxtWoPhorAukseaNFwktWzU3q602TUoxTeV5CmJGskJrTFkyx4VBvKgg
+        KCLIm7NaFyhv3845LpKt0ovPzsU5v+/5nd/heJ6vImu5stcslxbIWiQrI+ebS61tLSXFtfZlqVR66vB5
+        TqvVjmk0mp3fSCFyuRz29/eRz+dRKBSYYrGIickJ8G0tm6TwZCWgu7v7u8vlwuLiIhYWFiBtvoxQKASf
+        z8d4vV643W4sLS2hXC5jYKC/zF9t9ZNOTrCArq6ub06nExaLBWazmQWEw2GMvBipEgj4WUCpVILuma7M
+        t8uHWUBnZ+euwzHPik0mE+gTYrEYNjY2sL6+zkQiEUSjUaTTaSQSCXg8HrQr+B8sQK1W79jtdhiNRgiC
+        wAK2t7cx9nKU3KyvoCFbW1uM56sHpIOfLECpVGZtNhtEUcT4+DjI1JHNZpHJZBh6K5VKpZhkMolgMEiG
+        KT/oQKFQpK1WK87dEHDm+oF6oq7jQC1jqKhR/lGvEuP0K9JTU1Ps4Hwg81cOarnaJ2+KhAhlTiaTJen7
+        afpnstH/fu1IgzNhzHqSqOkwlDiJRJIQBANp1wDnShbPZyNHGrSFMfMlSbsucE1NTXE6vHqVgDlvGvqP
+        EQz/g44UPpkO4ZFlFe9ccRqQ5xoaGmJ6vZ4NT3Bs4vF0EA/frqLXvIL7pmXcNQbQ88oPzaQPNye8zC3B
+        h8EPa6hViXtcY2NjdGhoCGdJwFPyvnumAG6L/v+689qP3jcB+ks52kG0p0/HAqR9c5A9mD+WSz021KnE
+        IHf+omT08N8eV63SsHtaKVz4BYlNulYdU+xqAAAAAElFTkSuQmCC
+</value>
+  </data>
   <data name="fromZ3950SRUToolStripMenuItem.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
@@ -1786,5 +1803,8 @@
   </metadata>
   <metadata name="batchEditBackgroundWorker.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>655, 95</value>
+  </metadata>
+  <metadata name="importingXMLBackgroundWorker.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>953, 95</value>
   </metadata>
 </root>
