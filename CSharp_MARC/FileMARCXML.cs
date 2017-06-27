@@ -185,7 +185,7 @@ namespace MARC
 		#region Private utility functions
 
 		/// <summary>
-		/// Decodes the raw MARC record into a <see cref="MARC.Record"/> at the specified index.///
+		/// Decodes the raw MARC record into a <see cref="MARC.Record"/> at the specified index.
 		/// </summary>
 		/// <param name="index">The index of the record to retrieve.</param>
 		/// <returns></returns>
