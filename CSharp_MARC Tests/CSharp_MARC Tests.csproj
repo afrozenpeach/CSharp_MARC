@@ -67,6 +67,7 @@
     <Compile Include="FileMARCReaderTest.cs" />
     <Compile Include="FileMARCTest.cs" />
     <Compile Include="FileMARCWriterTest.cs" />
+    <Compile Include="FileMARCXMLReaderTest.cs" />
     <Compile Include="FileMARCXMLTest.cs" />
     <Compile Include="FileMARCXMLWriterTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -121,6 +122,9 @@
     <None Include="Test Records\music.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Content Include="Test Records\manyrecords.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Test Records\onerecord.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>

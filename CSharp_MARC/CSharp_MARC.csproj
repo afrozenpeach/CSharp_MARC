@@ -72,6 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ControlField.cs" />
+    <Compile Include="FileMARCXMLReader.cs" />
     <Compile Include="FileMARCXMLWriter.cs" />
     <Compile Include="DataField.cs" />
     <Compile Include="Field.cs" />
