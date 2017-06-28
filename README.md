@@ -22,6 +22,17 @@ This project is built upon the CSharp_MARC project of the same name available at
 
 ## Changelog:
 
+###2017-06-27 Changes:
+
+* Fixed loading and exporting MARCXML format records
+
+###2017-05-22 Changes:
+
+* Speed up handling of large databases
+* Updated copyright information
+* If barcode information is in the b subfield, don't use it for classification data
+* Fixed some sorting issues
+
 ###2016-08-03 Changes:
 
 * Fix loading preview information for records with holdings information in the 949a
