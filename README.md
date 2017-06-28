@@ -22,22 +22,22 @@ This project is built upon the CSharp_MARC project of the same name available at
 
 ## Changelog:
 
-###2017-06-27 Changes:
+### 2017-06-27 Changes:
 
 * Fixed loading and exporting MARCXML format records
 
-###2017-05-22 Changes:
+### 2017-05-22 Changes:
 
 * Speed up handling of large databases
 * Updated copyright information
 * If barcode information is in the b subfield, don't use it for classification data
 * Fixed some sorting issues
 
-###2016-08-03 Changes:
+### 2016-08-03 Changes:
 
 * Fix loading preview information for records with holdings information in the 949a
 
-###2016-07-22 Changes:
+### 2016-07-22 Changes:
 
 * Fix issues with moving a field or subfield up past the top or down past the new row
 * Fix moving fields to work as expected
@@ -48,33 +48,33 @@ This project is built upon the CSharp_MARC project of the same name available at
 * Fix import and cancel buttons when form gets resized
 * Selected Codes and Indicators should actually return selected codes and indicators, respectively, rather than... you know, everything.
 
-###2016-06-12.2 Changes:
+### 2016-06-12.2 Changes:
 
 * Fix database reset
 
-###2016-06-12.1 Changes:
+### 2016-06-12.1 Changes:
 
 * Fix field sorting
 * Speed sorting up
 * Batch Edit is now in a background worker thread
 * Add sort all fields and subfields functionality
 
-###2016-06-12 Changes:
+### 2016-06-12 Changes:
 
 * Add Advanced Batch Edit feature
 * Fix database reset
  
-###2016-06-09 Changes:
+### 2016-06-09 Changes:
 
 * Fix some more warnings
 * Fix issue importing records with certain 949 holdings tags
 
-###2016-06-05 Changes:
+### 2016-06-05 Changes:
 
 * Fix issue importing UTF8 records with some strange encoding issues
 * Add option to force UTF8 encoding
 
-###2016-06-01 Changes:
+### 2016-06-01 Changes:
 
 * Fix issue with RDA Conversion relating to 300c being changed from cm. and mm. to cm and mm
 * Remove some build warnings
