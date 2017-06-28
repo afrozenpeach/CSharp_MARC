@@ -66,10 +66,10 @@ namespace MARC
 		/// <returns></returns>
 		public IEnumerator GetEnumerator()
 		{
-			while (reader.Read())
+			while (!reader.EOF)
 			{
-                if(reader.NodeType == XmlNodeType.Element)
-            {
+                if (reader.NodeType == XmlNodeType.Element)
+                {
                     if (reader.Name.Equals("record"))
                     {
                         XElement element = XElement.ReadFrom(reader) as XElement;
@@ -85,7 +85,11 @@ namespace MARC
                             yield return marcRecord;
                         }
                     }
+                    else
+                        reader.Read();
                 }
+                else
+                    reader.Read();
 			}
 		}
 
