@@ -2431,8 +2431,10 @@ namespace CSharp_MARC_Editor
                                     fileCounter++;
                                     
                                     fileName = e.Argument.ToString().Substring(0, e.Argument.ToString().LastIndexOf('.')) + "." + fileCounter + "." + e.Argument.ToString().Substring(e.Argument.ToString().LastIndexOf('.') + 1);
-                                    
+
                                     if (mARCXMLToolStripMenuItem.Checked)
+                                        xmlWriter.WriteEnd();
+                                    else
                                         marcWriter.WriteEnd();
 
                                     marcWriter?.Dispose();
@@ -2452,7 +2454,11 @@ namespace CSharp_MARC_Editor
                                 marcWriter.Dispose();
                             }
 
-                            xmlWriter?.Dispose();
+                            if (xmlWriter != null)
+                            {
+                                xmlWriter.WriteEnd();
+                                xmlWriter?.Dispose();
+                            }
                         }
                     }
                 }

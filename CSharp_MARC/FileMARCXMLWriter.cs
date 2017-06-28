@@ -30,6 +30,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Xml.Linq;
+using System.Xml;
 
 namespace MARC
 {
@@ -38,25 +39,24 @@ namespace MARC
         //Member Variables and Properties
         #region Member Variables and Properties
             
-        private readonly StreamWriter writer = null;
+        private readonly XmlWriter writer = null;
 
         #endregion
 
         //Constructors
         #region Constructors
-
+            
         /// <summary>
         /// Initializes a new instance of the <see cref="FileMARCWriter" /> class.
         /// </summary>
         /// <param name="filename">The filename.</param>
-        public FileMARCXMLWriter(string filename) : this(filename, false)
-        {
-        }
-
-		public FileMARCXMLWriter(string filename, bool append)
+        public FileMARCXMLWriter(string filename)
 		{
-			writer = new StreamWriter(filename, append, Encoding.UTF8);
-		}
+            writer = XmlWriter.Create(filename);
+
+            writer.WriteStartDocument();
+            writer.WriteStartElement("collection");
+        }
 
 		#endregion
 
@@ -66,9 +66,8 @@ namespace MARC
         /// <param name="record">The record.</param>
         public void Write(Record record)
         {
-            XDocument xml = record.ToXMLDocument();
-
-            xml.Save(writer);
+            XElement xml = record.ToXML();
+            xml.WriteTo(writer);
         }
 
         /// <summary>
@@ -77,14 +76,20 @@ namespace MARC
         /// <param name="records">The records.</param>
         public void Write(List<Record> records)
         {
-            XDocument xml = new XDocument(new XDeclaration("1.0", "utf-8", null));
-            XElement collection = new XElement(FileMARCXML.Namespace + "collection");
-            xml.Add(collection);
-
             foreach (Record record in records)
-                collection.Add(record.ToXML());
+            {
+                XElement xml = record.ToXML();
+                xml.WriteTo(writer);
+            }
+        }
 
-            xml.Save(writer);
+        /// <summary>
+        /// Writes the end of file marker.
+        /// </summary>
+        public void WriteEnd()
+        {
+            writer.WriteEndElement();
+            writer.WriteEndDocument();
         }
 
         /// <summary>
@@ -92,7 +97,7 @@ namespace MARC
         /// </summary>
         public void Dispose()
         {
-            writer.Dispose();
+            ((IDisposable)writer).Dispose();
         }
     }
 }

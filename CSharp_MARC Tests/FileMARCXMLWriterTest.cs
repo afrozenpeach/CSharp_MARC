@@ -50,39 +50,15 @@ namespace CSharp_MARC_Tests
         //
         #endregion
 
-
         /// <summary>
         ///A test for Write
         ///</summary>
         [TestMethod()]
-        [DeploymentItem("Test Records\\onerecord.xml")]
+        [DeploymentItem("Test Records\\manyrecords.xml")]
         public void WriteTest()
         {
-            string filename = "onerecord.xml";
-            string testFilename = "onerecord_test.xml";
-            string source = File.ReadAllText(filename);
-            FileMARCXML targetXML = new FileMARCXML(source);
-            Record record = targetXML[0];
-
-            using (FileMARCXMLWriter target = new FileMARCXMLWriter(testFilename))
-            {
-                target.Write(record);
-            }
-
-            string expected = source;
-            string actual = File.ReadAllText(testFilename);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        ///A test for Write
-        ///</summary>
-        [TestMethod()]
-        [DeploymentItem("Test Records\\music.xml")]
-        public void WriteTest1()
-        {
-            string filename = "music.xml";
-            string testFilename = "music_test.xml";
+            string filename = "manyrecords.xml";
+            string testFilename = "manyrecords_test.xml";
             string source = File.ReadAllText(filename);
             FileMARCXML targetXML = new FileMARCXML(source);
             List<Record> records = new List<Record>();
@@ -95,6 +71,7 @@ namespace CSharp_MARC_Tests
             using (FileMARCXMLWriter target = new FileMARCXMLWriter(testFilename))
             {
                 target.Write(records);
+                target.WriteEnd();
             }
 
             string expected = source;
