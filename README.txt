@@ -53,6 +53,10 @@
  * @license   http://www.gnu.org/licenses/gpl-3.0.html  GPL License 3
  */ 
 
+2017-08-18 Changes:
+
+If a record is completely unreadable, allow importing records to continue. A "blank" record is inserted instead with error information in the warnings field.
+
 2017-06-27 Changes:
 
 Fixed loading and exporting MARCXML format records
