@@ -170,230 +170,243 @@ namespace MARC
             string raw = rawSource[index];
             Record marc = new Record();
             Match match = Regex.Match(raw, "^(\\d{5})");
-            int recordLength = 0;
-            int totalExtraBytesRead = 0;
 
-            // Store record length
-            if (match.Captures.Count == 0)
+            try
             {
-                marc.AddWarnings("MARC record length is not numeric or incorrect number of characters.");
-                string[] split = Regex.Split(raw, "[^0-9]");
-                
-                if (Int32.TryParse(split[0], out recordLength))
-                {
-                    string padding = "";
-                    padding = padding.PadLeft(5 - split[0].Length, '0');
-                    raw = padding + raw;
-                }
-            }
-            else
-                recordLength = Convert.ToInt32(match.Captures[0].Value);
+                int recordLength = 0;
+                int totalExtraBytesRead = 0;
 
-            if (recordLength != raw.Length)
-            {
-                //Check if there are multi-byte characters in the string
-                System.Globalization.StringInfo stringInfo = new System.Globalization.StringInfo(raw);
-                
-                int extraBytes = raw.Length - stringInfo.LengthInTextElements;
-                int extraBytes2 = Encoding.UTF8.GetByteCount(raw) - raw.Length;
+                // Store record length
+                if (match.Captures.Count == 0)
+                {
+                    marc.AddWarnings("MARC record length is not numeric or incorrect number of characters.");
+                    string[] split = Regex.Split(raw, "[^0-9]");
 
-                if (recordLength == extraBytes + raw.Length)
-                {
-                    recordLength -= extraBytes;
-                }
-                else if (recordLength == extraBytes2 + raw.Length)
-                {
-                    recordLength -= extraBytes2;
+                    if (Int32.TryParse(split[0], out recordLength))
+                    {
+                        string padding = "";
+                        padding = padding.PadLeft(5 - split[0].Length, '0');
+                        raw = padding + raw;
+                    }
                 }
                 else
+                    recordLength = Convert.ToInt32(match.Captures[0].Value);
+
+                if (recordLength != raw.Length)
                 {
-                    marc.AddWarnings("MARC record length does not match actual length.");
-                    recordLength = raw.Length;
-                }
-            }
+                    //Check if there are multi-byte characters in the string
+                    System.Globalization.StringInfo stringInfo = new System.Globalization.StringInfo(raw);
 
-            if (!raw.EndsWith(END_OF_RECORD.ToString()))
-                throw new InvalidDataException("MARC record ends with an invalid terminator");
+                    int extraBytes = raw.Length - stringInfo.LengthInTextElements;
+                    int extraBytes2 = Encoding.UTF8.GetByteCount(raw) - raw.Length;
 
-            //Store leader
-            marc.Leader = raw.Substring(0, LEADER_LEN);
-
-            //Bytes 12-16 of leader give offset to the body of the record
-            int dataStart = Convert.ToInt32(raw.Substring(12, 5));
-
-            //Verify data start matches the first end of field marker
-            if (raw.IndexOf(END_OF_FIELD) + 1 != dataStart)
-            {
-                dataStart = raw.IndexOf(END_OF_FIELD) + 1;
-                marc.AddWarnings("Leader specifies incorrect base address of data.");
-            }
-
-            //Immediately after the leader comes the directory (no separator)
-
-            string directory = raw.Substring(LEADER_LEN, dataStart - LEADER_LEN - 1);
-
-            //Character after the directory should be END_OF_FIELD
-            if (raw.Substring(dataStart - 1, 1) != END_OF_FIELD.ToString())
-                marc.AddWarnings("No directory found.");
-
-            //All directory entries must be DIRECTORY_ENTRY_LEN long, so length % DIRECTORY_ENTRY_LEN should be 0
-            if (directory.Length % DIRECTORY_ENTRY_LEN != 0)
-                marc.AddWarnings("Invalid directory length.");
-
-            //Go through all the fields
-            int fieldCount = directory.Length / DIRECTORY_ENTRY_LEN;
-
-            for (int i = 0; i < fieldCount; i++)
-            {
-                string tag = directory.Substring(i * DIRECTORY_ENTRY_LEN, DIRECTORY_ENTRY_LEN).Substring(0, 3);
-                int fieldLength = 0;
-                int fieldOffset = 0;
-                try
-                {
-                    fieldLength = Convert.ToInt32(directory.Substring(i * DIRECTORY_ENTRY_LEN, DIRECTORY_ENTRY_LEN).Substring(3, 4));
-                }
-                catch (FormatException)
-                {
-                    marc.AddWarnings("Invalid Directory Tag Length for tag " + tag + ".");
-                }
-
-                try
-                {
-                    fieldOffset = Convert.ToInt32(directory.Substring(i * DIRECTORY_ENTRY_LEN, DIRECTORY_ENTRY_LEN).Substring(7, 5)) + totalExtraBytesRead;
-                }
-                catch (FormatException)
-                {
-                    marc.AddWarnings("Invalid Directory Offset for tag " + tag + ".");
-                }
-
-                //Check Directory validity
-
-				//If a tag isn't valid, default it to ZZZ. This should at least make the record valid enough to be readable and not throw exceptions
-				if (!Field.ValidateTag(tag))
-				{
-					marc.AddWarnings("Invalid tag " + tag + " in directory.");
-					tag = "ZZZ";
-				}
-
-                if (fieldOffset + fieldLength > recordLength)
-                    marc.AddWarnings("Directory entry for tag " + tag + " runs past the end of the record.");
-
-				int fieldStart = dataStart + fieldOffset - (totalExtraBytesRead * 2);
-				if (fieldStart > recordLength)
-				{
-					marc.AddWarnings("Directory entry for tag " + tag + " starts past the end of the record. Skipping tag and all proceeding tags.");
-					break;
-				}
-				else if (fieldStart + fieldLength > recordLength)
-				{
-					marc.AddWarnings("Directory entry for tag " + tag + " runs past the end of the record.");
-					fieldLength = recordLength - fieldStart;
-                }
-
-                string tagData = raw.Substring(fieldStart, fieldLength);
-
-                //Check if there are multi-byte characters in the string
-                System.Globalization.StringInfo stringInfo = new System.Globalization.StringInfo(tagData);
-                int extraBytes = fieldLength - stringInfo.LengthInTextElements;
-                int extraBytes2 = Encoding.UTF8.GetByteCount(tagData) - fieldLength;
-                int endOfFieldIndex = tagData.IndexOf(END_OF_FIELD);
-
-                if (tagData.Length - 1 != endOfFieldIndex)
-                {
-                    int differenceLength = tagData.Length - 1 - endOfFieldIndex;
-
-                    if (differenceLength != extraBytes && differenceLength != extraBytes2)
+                    if (recordLength == extraBytes + raw.Length)
                     {
-                        fieldLength -= differenceLength;
-                        totalExtraBytesRead += differenceLength;
-                        tagData = raw.Substring(fieldStart, endOfFieldIndex + 1);
+                        recordLength -= extraBytes;
+                    }
+                    else if (recordLength == extraBytes2 + raw.Length)
+                    {
+                        recordLength -= extraBytes2;
                     }
                     else
                     {
-                        if (extraBytes > 0)
+                        marc.AddWarnings("MARC record length does not match actual length.");
+                        recordLength = raw.Length;
+                    }
+                }
+
+                if (!raw.EndsWith(END_OF_RECORD.ToString()))
+                    throw new InvalidDataException("MARC record ends with an invalid terminator");
+
+                //Store leader
+                marc.Leader = raw.Substring(0, LEADER_LEN);
+
+                //Bytes 12-16 of leader give offset to the body of the record
+
+                int dataStart;
+
+                if (!Int32.TryParse(raw.Substring(12, 5), out dataStart))
+                    throw new InvalidDataException("MARC record starts with an invalid leader");
+
+                //Verify data start matches the first end of field marker
+                if (raw.IndexOf(END_OF_FIELD) + 1 != dataStart)
+                {
+                    dataStart = raw.IndexOf(END_OF_FIELD) + 1;
+                    marc.AddWarnings("Leader specifies incorrect base address of data.");
+                }
+
+                //Immediately after the leader comes the directory (no separator)
+
+                string directory = raw.Substring(LEADER_LEN, dataStart - LEADER_LEN - 1);
+
+                //Character after the directory should be END_OF_FIELD
+                if (raw.Substring(dataStart - 1, 1) != END_OF_FIELD.ToString())
+                    marc.AddWarnings("No directory found.");
+
+                //All directory entries must be DIRECTORY_ENTRY_LEN long, so length % DIRECTORY_ENTRY_LEN should be 0
+                if (directory.Length % DIRECTORY_ENTRY_LEN != 0)
+                    marc.AddWarnings("Invalid directory length.");
+
+                //Go through all the fields
+                int fieldCount = directory.Length / DIRECTORY_ENTRY_LEN;
+
+                for (int i = 0; i < fieldCount; i++)
+                {
+                    string tag = directory.Substring(i * DIRECTORY_ENTRY_LEN, DIRECTORY_ENTRY_LEN).Substring(0, 3);
+                    int fieldLength = 0;
+                    int fieldOffset = 0;
+                    try
+                    {
+                        fieldLength = Convert.ToInt32(directory.Substring(i * DIRECTORY_ENTRY_LEN, DIRECTORY_ENTRY_LEN).Substring(3, 4));
+                    }
+                    catch (FormatException)
+                    {
+                        marc.AddWarnings("Invalid Directory Tag Length for tag " + tag + ".");
+                    }
+
+                    try
+                    {
+                        fieldOffset = Convert.ToInt32(directory.Substring(i * DIRECTORY_ENTRY_LEN, DIRECTORY_ENTRY_LEN).Substring(7, 5)) + totalExtraBytesRead;
+                    }
+                    catch (FormatException)
+                    {
+                        marc.AddWarnings("Invalid Directory Offset for tag " + tag + ".");
+                    }
+
+                    //Check Directory validity
+
+                    //If a tag isn't valid, default it to ZZZ. This should at least make the record valid enough to be readable and not throw exceptions
+                    if (!Field.ValidateTag(tag))
+                    {
+                        marc.AddWarnings("Invalid tag " + tag + " in directory.");
+                        tag = "ZZZ";
+                    }
+
+                    if (fieldOffset + fieldLength > recordLength)
+                        marc.AddWarnings("Directory entry for tag " + tag + " runs past the end of the record.");
+
+                    int fieldStart = dataStart + fieldOffset - (totalExtraBytesRead * 2);
+                    if (fieldStart > recordLength)
+                    {
+                        marc.AddWarnings("Directory entry for tag " + tag + " starts past the end of the record. Skipping tag and all proceeding tags.");
+                        break;
+                    }
+                    else if (fieldStart + fieldLength > recordLength)
+                    {
+                        marc.AddWarnings("Directory entry for tag " + tag + " runs past the end of the record.");
+                        fieldLength = recordLength - fieldStart;
+                    }
+
+                    string tagData = raw.Substring(fieldStart, fieldLength);
+
+                    //Check if there are multi-byte characters in the string
+                    System.Globalization.StringInfo stringInfo = new System.Globalization.StringInfo(tagData);
+                    int extraBytes = fieldLength - stringInfo.LengthInTextElements;
+                    int extraBytes2 = Encoding.UTF8.GetByteCount(tagData) - fieldLength;
+                    int endOfFieldIndex = tagData.IndexOf(END_OF_FIELD);
+
+                    if (tagData.Length - 1 != endOfFieldIndex)
+                    {
+                        int differenceLength = tagData.Length - 1 - endOfFieldIndex;
+
+                        if (differenceLength != extraBytes && differenceLength != extraBytes2)
                         {
-                            fieldLength -= extraBytes;
-                            totalExtraBytesRead += extraBytes;
-                            tagData = raw.Substring(fieldStart, fieldLength);
+                            fieldLength -= differenceLength;
+                            totalExtraBytesRead += differenceLength;
+                            tagData = raw.Substring(fieldStart, endOfFieldIndex + 1);
                         }
-                        else if (extraBytes2 > 0)
-                        {
-                            fieldLength -= extraBytes2;
-                            totalExtraBytesRead += extraBytes2;
-                            tagData = raw.Substring(fieldStart, fieldLength);
-                        }
-                    }
-                }
-
-                if (fieldLength > 0)
-                {
-                    string endCharacter = tagData.Substring(tagData.Length - 1, 1);
-                    if (endCharacter == END_OF_FIELD.ToString())
-                    {
-                        //Get rid of the end of tag character
-                        tagData = tagData.Remove(tagData.Length - 1);
-                        fieldLength--;
-                    }
-                    else
-                    {
-                        marc.AddWarnings("Field for tag " + tag + " does not end with an end of field character.");
-                    }
-                }
-                else
-                    marc.AddWarnings("Field for tag " + tag + " has a length of 0.");
-
-                match = Regex.Match(tag, "^\\d+$");
-                if (match.Captures.Count > 0 && Convert.ToInt32(tag) < 10)
-                    marc.Fields.Add(new ControlField(tag, tagData));
-                else
-                {
-                    List<string> rawSubfields = new List<string>(tagData.Split(SUBFIELD_INDICATOR));
-                    string indicators = rawSubfields[0];
-                    rawSubfields.RemoveAt(0);
-
-                    char ind1;
-                    char ind2;
-
-                    if (indicators.Length != 2)
-                    {
-                        marc.AddWarnings("Invalid indicator length. Forced indicators to blanks for tag " + tag + ".");
-                        ind1 = ind2 = ' ';
-                    }
-                    else
-                    {
-                        ind1 = char.ToLower(indicators[0]);
-
-						if (!DataField.ValidateIndicator(ind1))
-						{
-							ind1 = ' ';
-							marc.AddWarnings("Invalid first indicator. Forced first indicator to blank for tag " + tag + ".");
-						}
-
-                        ind2 = char.ToLower(indicators[1]);
-
-						if (!DataField.ValidateIndicator(ind2))
-						{
-							ind2 = ' ';
-							marc.AddWarnings("Invalid second indicator. Forced second indicator to blank for tag " + tag + ".");
-						}
-                    }
-
-                    //Split the subfield data into subfield name and data pairs
-                    List<Subfield> subfieldData = new List<Subfield>();
-                    foreach (string subfield in rawSubfields)
-                    {
-                        if (subfield.Length > 0)
-                            subfieldData.Add(new Subfield(subfield[0], subfield.Substring(1)));
                         else
-                            marc.AddWarnings("No subfield data found in tag " + tag + ".");
+                        {
+                            if (extraBytes > 0)
+                            {
+                                fieldLength -= extraBytes;
+                                totalExtraBytesRead += extraBytes;
+                                tagData = raw.Substring(fieldStart, fieldLength);
+                            }
+                            else if (extraBytes2 > 0)
+                            {
+                                fieldLength -= extraBytes2;
+                                totalExtraBytesRead += extraBytes2;
+                                tagData = raw.Substring(fieldStart, fieldLength);
+                            }
+                        }
                     }
 
-                    if (subfieldData.Count == 0)
-                        marc.AddWarnings("No subfield data found in tag " + tag + ".");
+                    if (fieldLength > 0)
+                    {
+                        string endCharacter = tagData.Substring(tagData.Length - 1, 1);
+                        if (endCharacter == END_OF_FIELD.ToString())
+                        {
+                            //Get rid of the end of tag character
+                            tagData = tagData.Remove(tagData.Length - 1);
+                            fieldLength--;
+                        }
+                        else
+                        {
+                            marc.AddWarnings("Field for tag " + tag + " does not end with an end of field character.");
+                        }
+                    }
+                    else
+                        marc.AddWarnings("Field for tag " + tag + " has a length of 0.");
 
-                    marc.Fields.Add(new DataField(tag, subfieldData, ind1, ind2));
+                    match = Regex.Match(tag, "^\\d+$");
+                    if (match.Captures.Count > 0 && Convert.ToInt32(tag) < 10)
+                        marc.Fields.Add(new ControlField(tag, tagData));
+                    else
+                    {
+                        List<string> rawSubfields = new List<string>(tagData.Split(SUBFIELD_INDICATOR));
+                        string indicators = rawSubfields[0];
+                        rawSubfields.RemoveAt(0);
+
+                        char ind1;
+                        char ind2;
+
+                        if (indicators.Length != 2)
+                        {
+                            marc.AddWarnings("Invalid indicator length. Forced indicators to blanks for tag " + tag + ".");
+                            ind1 = ind2 = ' ';
+                        }
+                        else
+                        {
+                            ind1 = char.ToLower(indicators[0]);
+
+                            if (!DataField.ValidateIndicator(ind1))
+                            {
+                                ind1 = ' ';
+                                marc.AddWarnings("Invalid first indicator. Forced first indicator to blank for tag " + tag + ".");
+                            }
+
+                            ind2 = char.ToLower(indicators[1]);
+
+                            if (!DataField.ValidateIndicator(ind2))
+                            {
+                                ind2 = ' ';
+                                marc.AddWarnings("Invalid second indicator. Forced second indicator to blank for tag " + tag + ".");
+                            }
+                        }
+
+                        //Split the subfield data into subfield name and data pairs
+                        List<Subfield> subfieldData = new List<Subfield>();
+                        foreach (string subfield in rawSubfields)
+                        {
+                            if (subfield.Length > 0)
+                                subfieldData.Add(new Subfield(subfield[0], subfield.Substring(1)));
+                            else
+                                marc.AddWarnings("No subfield data found in tag " + tag + ".");
+                        }
+
+                        if (subfieldData.Count == 0)
+                            marc.AddWarnings("No subfield data found in tag " + tag + ".");
+
+                        marc.Fields.Add(new DataField(tag, subfieldData, ind1, ind2));
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                marc.AddWarnings(ex.Message);
+            }
+
             return marc;
         }
 
