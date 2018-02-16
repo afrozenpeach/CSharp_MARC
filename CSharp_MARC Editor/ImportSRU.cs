@@ -21,8 +21,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @author    Mattie Schraeder-Urbanowicz <mattie@csharpmarc.net>
- * @copyright 2016-2017 Mattie Schraeder-Urbanowicz and Bound to Stay Bound Books
+ * @author    Mattie Schraeder <mattie@csharpmarc.net>
+ * @copyright 2016-2018 Mattie Schraeder and Bound to Stay Bound Books
  * @license   http://www.gnu.org/licenses/gpl-3.0.html  GPL License 3
  */
 

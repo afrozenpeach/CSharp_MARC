@@ -21,8 +21,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @author    Matt Schraeder-Urbanowicz <matt@csharpmarc.net>
- * @copyright 2016-2017 Matt Schraeder-Urbanowicz
+ * @author    Mattie Schraeder <mattie@csharpmarc.net>
+ * @copyright 2016-2018 Mattie Schraeder
  * @license   http://www.gnu.org/licenses/gpl-3.0.html  GPL License 3
  */
 
@@ -3152,8 +3152,6 @@ namespace CSharp_MARC_Editor
                         command.Parameters.Add("@RecordID", DbType.Int32).Value = Int32.Parse(e.Row.Cells[0].Value.ToString(), CultureInfo.InvariantCulture);
                         command.ExecuteNonQuery();
                     }
-
-                    RebuildRecordsPreviewInformation(Int32.Parse(recordsDataGridView.SelectedCells[0].OwningRow.Cells[0].Value.ToString(), CultureInfo.InvariantCulture));
                 }
             }
         }

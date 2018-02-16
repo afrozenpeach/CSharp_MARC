@@ -31,7 +31,7 @@
     <ProductName>CSharp_MARC Editor</ProductName>
     <PublisherName>Mattie Schraeder-Urbanowicz</PublisherName>
     <SuiteName>csharpmarc.net</SuiteName>
-    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationRevision>1</ApplicationRevision>
     <ApplicationVersion>2017.08.18.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>

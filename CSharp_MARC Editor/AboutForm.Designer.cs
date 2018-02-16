@@ -21,8 +21,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @author    Matt Schraeder-Urbanowicz <matt@csharpmarc.net>
- * @copyright 2016-2017 Mattie Schraeder-Urbanowicz
+ * @author    Mattie Schraeder <mattie@csharpmarc.net>
+ * @copyright 2016-2018 Mattie Schraeder
  * @license   http://www.gnu.org/licenses/gpl-3.0.html  GPL License 3
  */
 
@@ -114,7 +114,7 @@ namespace CSharp_MARC_Editor
             this.copyrightLabel.Name = "copyrightLabel";
             this.copyrightLabel.Size = new System.Drawing.Size(262, 17);
             this.copyrightLabel.TabIndex = 4;
-            this.copyrightLabel.Text = "Copyright @ 2016-2017 Mattie Schraeder-Urbanowicz";
+            this.copyrightLabel.Text = "Copyright @ 2016-2018 Mattie Schraeder";
             // 
             // versionLabel
             // 

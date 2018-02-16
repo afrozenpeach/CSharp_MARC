@@ -21,8 +21,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @author    Matt Schraeder-Urbanowicz <matt@csharpmarc.net>
- * @copyright 2016-2017 Mattie Schraeder-Urbanowicz
+ * @author    Mattie Schraeder <mattie@csharpmarc.net>
+ * @copyright 2016-2018 Mattie Schraeder
  * @license   http://www.gnu.org/licenses/gpl-3.0.html  GPL License 3
  */
 
@@ -37,7 +37,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("csharpmarc.net")]
 [assembly: AssemblyProduct("CSharp_MARC Editor")]
-[assembly: AssemblyCopyright("Copyright © Mattie Schraeder-Urbanowicz 2016-2017")]
+[assembly: AssemblyCopyright("Copyright © Mattie Schraeder 2016-2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
