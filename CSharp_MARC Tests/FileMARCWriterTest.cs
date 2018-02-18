@@ -56,7 +56,6 @@ namespace CSharp_MARC_Tests
 		///Read the records, write them back out to a new file, then read them back in. The first read and second read should be the same.
 		///</summary>
 		[TestMethod()]
-		[DeploymentItem("Test Records\\testwriter.mrc")]
 		[DeploymentItem("Test Records\\tworecords_onerda.mrc")]
 		public void WriteTest()
 		{
@@ -121,7 +120,6 @@ namespace CSharp_MARC_Tests
 		///A test for Write
 		///</summary>
 		[TestMethod()]
-		[DeploymentItem("Test Records\\testwriter.mrc")]
 		public void WriteTest1()
 		{
 			string filename = "testwriter.mrc";
@@ -154,7 +152,6 @@ namespace CSharp_MARC_Tests
 		///A test for WriteEnd
 		///</summary>
 		[TestMethod()]
-		[DeploymentItem("Test Records\\testwriter.mrc")]
 		public void WriteEndTest()
 		{
 			string filename = "testwriter.mrc";
