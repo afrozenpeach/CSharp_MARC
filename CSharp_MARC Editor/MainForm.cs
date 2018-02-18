@@ -4827,13 +4827,16 @@ namespace CSharp_MARC_Editor
                     switch (batchEditForm.Action)
                     {
                         case "Add":
-                            command.CommandText = "INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2, ControlData) VALUES (@RecordID, @TagNumber, @Ind1, @Ind2, @ControlData);";
+                            command.CommandText = "INSERT INTO Fields (RecordID, TagNumber, Ind1, Ind2, ControlData, Sort) VALUES (@RecordID, @TagNumber, @Ind1, @Ind2, @ControlData, (SELECT MAX(sort) + 1 FROM Fields WHERE RecordID = @RecordID2 AND TagNumber < @TagNumber2));";
                             command.Parameters.Clear();
                             command.Parameters.Add("@RecordID", DbType.Int32);
                             command.Parameters.Add("@TagNumber", DbType.String);
                             command.Parameters.Add("@Ind1", DbType.String);
                             command.Parameters.Add("@Ind2", DbType.String);
                             command.Parameters.Add("@ControlData", DbType.String);
+                            command.Parameters.Add("@Sort", DbType.Int32);
+                            command.Parameters.Add("@RecordID2", DbType.Int32);
+                            command.Parameters.Add("@TagNumber2", DbType.String);
 
                             added.Clear();
 
@@ -4843,7 +4846,9 @@ namespace CSharp_MARC_Editor
                                 if (!added.Keys.Contains(field.Value))
                                 {
                                     command.Parameters["@RecordID"].Value = field.Value;
+                                    command.Parameters["@RecordID2"].Value = field.Value;
                                     command.Parameters["@TagNumber"].Value = batchEditForm.TagModification;
+                                    command.Parameters["@TagNumber2"].Value = batchEditForm.TagModification;
 
                                     if (!batchEditForm.TagModification.StartsWith("00"))
                                     {
@@ -4869,11 +4874,14 @@ namespace CSharp_MARC_Editor
 
                             if (!batchEditForm.TagModification.StartsWith("00"))
                             {
-                                command.CommandText = "INSERT INTO Subfields (FieldID, Code, Data) VALUES (@FieldID, @Code, @Data);";
+                                command.CommandText = "INSERT INTO Subfields (FieldID, Code, Data, Sort) VALUES (@FieldID, @Code, @Data, @Sort);";
                                 command.Parameters.Clear();
                                 command.Parameters.Add("@FieldID", DbType.Int32);
                                 command.Parameters.Add("@Code", DbType.String);
                                 command.Parameters.Add("@Data", DbType.String);
+                                command.Parameters.Add("@Sort", DbType.Int32);
+
+                                int SortValue = 0;
 
                                 foreach (KeyValuePair<int, int> field in added)
                                 {
@@ -4884,12 +4892,15 @@ namespace CSharp_MARC_Editor
                                             command.Parameters["@FieldID"].Value = field.Value;
                                             command.Parameters["@Code"].Value = row.Cells[0].Value;
                                             command.Parameters["@Data"].Value = row.Cells[1].Value;
+                                            command.Parameters["@Sort"].Value = SortValue;
 
                                             command.ExecuteNonQuery();
 
                                             SortSubfields(field.Value);
                                         }
                                     }
+
+                                    SortValue++;
                                 }
                             }
                             break;
@@ -4967,10 +4978,11 @@ namespace CSharp_MARC_Editor
                                 command.ExecuteNonQuery();
 
                                 command.Parameters.Clear();
-                                command.CommandText = "INSERT INTO Subfields (FieldID, Code, Data) SELECT FieldID, @Code, @Data FROM Fields WHERE TagNumber = @TagNumber";
+                                command.CommandText = "INSERT INTO Subfields (FieldID, Code, Data, Sort) SELECT FieldID, @Code, @Data @Sort FROM Fields WHERE TagNumber = @TagNumber";
 
                                 command.Parameters.Add("@Code", DbType.String);
                                 command.Parameters.Add("@Data", DbType.String);
+                                command.Parameters.Add("@Sort", DbType.Int32);
 
                                 if (!String.IsNullOrEmpty(batchEditForm.Ind1))
                                 {
@@ -4986,14 +4998,19 @@ namespace CSharp_MARC_Editor
 
                                 command.Parameters.Add("@TagNumber", DbType.Int32).Value = batchEditForm.TagModification;
 
+                                int SortValue = 0;
+
                                 foreach (DataGridViewRow row in batchEditForm.Subfields)
                                 {
                                     if (!row.IsNewRow)
                                     {
                                         command.Parameters["@Code"].Value = row.Cells[0].Value;
                                         command.Parameters["@Data"].Value = row.Cells[1].Value;
+                                        command.Parameters["@Sort"].Value = SortValue;
                                         command.ExecuteNonQuery();
                                     }
+
+                                    SortValue++;
                                 }
                             }
                             else
@@ -5025,11 +5042,12 @@ namespace CSharp_MARC_Editor
                                     }
                                 }
 
-                                command.CommandText = "INSERT INTO Subfields (FieldID, Code, Data) VALUES (@FieldID, @Code, @Data);";
+                                command.CommandText = "INSERT INTO Subfields (FieldID, Code, Data, Sort) VALUES (@FieldID, @Code, @Data, @Sort);";
                                 command.Parameters.Clear();
                                 command.Parameters.Add("@FieldID", DbType.Int32);
                                 command.Parameters.Add("@Code", DbType.String);
                                 command.Parameters.Add("@Data", DbType.String);
+                                command.Parameters.Add("@Sort", DbType.Int32);
 
                                 added.Clear();
 
@@ -5038,6 +5056,8 @@ namespace CSharp_MARC_Editor
                                     //Added is keyed on recordID so we only get one added per record.
                                     if (!added.Keys.Contains(field.Key))
                                     {
+                                        int SortValue = 0;
+
                                         foreach (DataGridViewRow row in batchEditForm.Subfields)
                                         {
                                             if (!row.IsNewRow)
@@ -5045,9 +5065,12 @@ namespace CSharp_MARC_Editor
                                                 command.Parameters["@FieldID"].Value = field.Key;
                                                 command.Parameters["@Code"].Value = row.Cells[0].Value;
                                                 command.Parameters["@Data"].Value = row.Cells[1].Value;
+                                                command.Parameters["@Sort"].Value = SortValue;
 
                                                 command.ExecuteNonQuery();
                                             }
+
+                                            SortValue++;
                                         }
 
                                         int fieldID = (int)connection.LastInsertRowId;
@@ -5082,7 +5105,7 @@ namespace CSharp_MARC_Editor
                                 command.ExecuteNonQuery();
 
                                 command.Parameters.Clear();
-                                command.CommandText = "INSERT INTO Subfields (FieldID, Code, Data) SELECT FieldID, @Code, @Data FROM Fields WHERE TagNumber = @TagNumber";
+                                command.CommandText = "INSERT INTO Subfields (FieldID, Code, Data, Sort) SELECT FieldID, @Code, @Data, Sort FROM Fields WHERE TagNumber = @TagNumber";
 
                                 command.Parameters.Add("@Code", DbType.String);
                                 command.Parameters.Add("@Data", DbType.String);
@@ -5129,11 +5152,12 @@ namespace CSharp_MARC_Editor
                                     }
                                 }
 
-                                command.CommandText = "INSERT INTO Subfields (FieldID, Code, Data) VALUES (@FieldID, @Code, @Data);";
+                                command.CommandText = "INSERT INTO Subfields (FieldID, Code, Data, Sort) VALUES (@FieldID, @Code, @Data, @Sort);";
                                 command.Parameters.Clear();
                                 command.Parameters.Add("@FieldID", DbType.Int32);
                                 command.Parameters.Add("@Code", DbType.String);
                                 command.Parameters.Add("@Data", DbType.String);
+                                command.Parameters.Add("@Sort", DbType.Int32);
 
                                 added.Clear();
 
@@ -5142,6 +5166,8 @@ namespace CSharp_MARC_Editor
                                     //Added is keyed on recordID so we only get one added per record.
                                     if (!added.Keys.Contains(field.Key))
                                     {
+                                        int SortValue = 0;
+
                                         foreach (DataGridViewRow row in batchEditForm.Subfields)
                                         {
                                             if (!row.IsNewRow)
@@ -5149,9 +5175,12 @@ namespace CSharp_MARC_Editor
                                                 command.Parameters["@FieldID"].Value = field.Key;
                                                 command.Parameters["@Code"].Value = row.Cells[0].Value;
                                                 command.Parameters["@Data"].Value = row.Cells[1].Value;
+                                                command.Parameters["@Sort"].Value = SortValue;
 
                                                 command.ExecuteNonQuery();
                                             }
+
+                                            SortValue++;
                                         }
 
                                         added.Add(field.Key, field.Key);
