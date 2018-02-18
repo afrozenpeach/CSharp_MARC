@@ -289,50 +289,6 @@ namespace CSharp_MARC_Tests
 		}
 
 		/// <summary>
-		///A test for decode
-		///</summary>
-		[TestMethod()]
-		[DeploymentItem("CSharp_MARC.dll")]
-		[DeploymentItem("Test Records\\sandburg.xml")]
-		public void decodeTest()
-		{
-			FileMARCXML_Accessor target = new FileMARCXML_Accessor();
-			target.ImportMARCXML("sandburg.xml");
-			int index = 0;
-			Record decoded = target.decode(index);
-
-			{
-				string expected = "01142cam  2200301 a 4500";
-				string actual = decoded.Leader;
-				Assert.AreEqual(expected, actual);
-			}
-
-			{
-				int expected = 23;
-				int actual = decoded.Fields.Count();
-				Assert.AreEqual(expected, actual);
-			}
-
-			{
-				string expected = "   92005291 ";
-				string actual = ((ControlField)decoded["001"]).Data;
-				Assert.AreEqual(expected, actual);
-			}
-
-			{
-				string expected = "Arithmetic /";
-				string actual = ((DataField)decoded["245"])['a'].Data;
-				Assert.AreEqual(expected, actual);
-			}
-
-			{
-				char expected = '1';
-				char actual = ((DataField)decoded["245"]).Indicator1;
-				Assert.AreEqual(expected, actual);
-			}
-		}
-
-		/// <summary>
 		///A test for Count
 		///</summary>
 		[TestMethod()]

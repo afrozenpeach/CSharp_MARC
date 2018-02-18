@@ -9,7 +9,8 @@
         </AssemblyResolution>
       </UnitTestRunConfig>
     </TestTypeSpecific>
-    <AgentRule name="Execution Agents">
+    <AgentRule name="LocalMachineDefaultRole">
     </AgentRule>
   </Execution>
+  <Properties />
 </TestSettings>

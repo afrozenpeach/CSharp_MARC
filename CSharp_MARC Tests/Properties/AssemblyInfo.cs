@@ -36,7 +36,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Bound To Stay Bound Books")]
 [assembly: AssemblyProduct("CSharp_MARC Tests")]
-[assembly: AssemblyCopyright("Copyright © Mattie Schraeder and Bound To Stay Bound Books 2009-2016")]
+[assembly: AssemblyCopyright("Copyright © Mattie Schraeder and Bound To Stay Bound Books 2009-2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

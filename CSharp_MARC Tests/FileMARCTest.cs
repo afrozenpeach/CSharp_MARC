@@ -139,29 +139,6 @@ namespace CSharp_MARC_Tests
 		}
 
 		/// <summary>
-		///A test for CleanSource
-		///</summary>
-		[TestMethod()]
-		[DeploymentItem("CSharp_MARC.dll")]
-		public void CleanSourceTest()
-		{
-			FileMARC_Accessor target = new FileMARC_Accessor();
-			string source = "\x0a";
-			string expected = string.Empty;
-			string actual = target.CleanSource(source);
-			Assert.AreEqual(expected, actual);
-			source = "\x0d";
-			actual = target.CleanSource(source);
-			Assert.AreEqual(expected, actual);
-			source = "\x00";
-			actual = target.CleanSource(source);
-			Assert.AreEqual(expected, actual);
-			source = "\x0a\x0d\x0a\x0d\x00\x00\x0a\x0d\x0a\x0d\x00\x00\x0a\x0d\x00";
-			actual = target.CleanSource(source);
-			Assert.AreEqual(expected, actual);
-		}
-
-		/// <summary>
 		///A test for GetEnumerator
 		///</summary>
 		[TestMethod()]
