@@ -33,8 +33,8 @@
     <ProductName>CSharp_MARC Editor</ProductName>
     <PublisherName>Mattie Schraeder</PublisherName>
     <SuiteName>csharpmarc.net</SuiteName>
-    <ApplicationRevision>1</ApplicationRevision>
-    <ApplicationVersion>2017.08.18.%2a</ApplicationVersion>
+    <ApplicationRevision>3</ApplicationRevision>
+    <ApplicationVersion>2018.02.19.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -113,6 +113,10 @@
   </PropertyGroup>
   <PropertyGroup>
     <ManifestTimestampUrl>http://timestamp.digicert.com</ManifestTimestampUrl>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>
+    </ManifestKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
@@ -253,6 +257,7 @@
     <Content Include="MARC.db">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="CSharp_MARC Editor_TemporaryKey.pfx" />
     <None Include="CSharp_MARC.pfx" />
     <None Include="MARCDataSet.xsc">
       <DependentUpon>MARCDataSet.xsd</DependentUpon>
