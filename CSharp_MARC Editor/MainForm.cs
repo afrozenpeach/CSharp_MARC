@@ -2631,6 +2631,7 @@ namespace CSharp_MARC_Editor
                                     columns["Custom4"] = row.Cells[12].Value.ToString();
                                     columns["Custom5"] = row.Cells[13].Value.ToString();
                                     columns["ImportErrors"] = row.Cells[14].Value.ToString();
+                                    columns["ValidationErrors"] = row.Cells[15].Value.ToString();
 
                                     using (SQLiteDataReader fieldsReader = fieldsCommand.ExecuteReader())
                                     {
