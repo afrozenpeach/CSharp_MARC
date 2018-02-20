@@ -34,7 +34,7 @@
     <PublisherName>Mattie Schraeder</PublisherName>
     <SuiteName>csharpmarc.net</SuiteName>
     <ApplicationRevision>3</ApplicationRevision>
-    <ApplicationVersion>2018.02.19.%2a</ApplicationVersion>
+    <ApplicationVersion>2018.02.20.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
