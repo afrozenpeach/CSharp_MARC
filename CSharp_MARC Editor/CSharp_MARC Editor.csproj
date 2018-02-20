@@ -15,7 +15,9 @@
     </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>true</IsWebBootstrapper>
-    <PublishUrl>C:\Users\froze_000\Google Drive\CSharp MARC Editor\Deploy\</PublishUrl>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <PublishUrl>G:\My Drive\CSharp MARC Editor\Deploy\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
@@ -29,15 +31,13 @@
     <SupportUrl>https://github.com/frozen-solid/CSharp_MARC/issues</SupportUrl>
     <ErrorReportUrl>https://github.com/frozen-solid/CSharp_MARC/issues</ErrorReportUrl>
     <ProductName>CSharp_MARC Editor</ProductName>
-    <PublisherName>Mattie Schraeder-Urbanowicz</PublisherName>
+    <PublisherName>Mattie Schraeder</PublisherName>
     <SuiteName>csharpmarc.net</SuiteName>
     <ApplicationRevision>1</ApplicationRevision>
     <ApplicationVersion>2017.08.18.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -90,16 +90,16 @@
     <ApplicationIcon>CatCardIcon.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>false</SignManifests>
+    <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>false</SignAssembly>
+    <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>95D99163F033D4BEE04EA3FB32B342198FB01B98</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>9314065F175584B36595EB1E27EB0529EB54F3B8</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>CSharp_MARC_2017.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>CSharp_MARC.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <TargetZone>LocalIntranet</TargetZone>
@@ -253,7 +253,7 @@
     <Content Include="MARC.db">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="CSharp_MARC_sn.pfx" />
+    <None Include="CSharp_MARC.pfx" />
     <None Include="MARCDataSet.xsc">
       <DependentUpon>MARCDataSet.xsd</DependentUpon>
     </None>

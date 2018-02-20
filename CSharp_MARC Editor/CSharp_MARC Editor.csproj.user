@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <PublishUrlHistory>C:\Users\froze_000\Google Drive\CSharp MARC Editor\Deploy\|https://csharpmarc.net/download/|publish\</PublishUrlHistory>
+    <PublishUrlHistory>G:\My Drive\CSharp MARC Editor\Deploy\|C:\Users\froze_000\Google Drive\CSharp MARC Editor\Deploy\|https://csharpmarc.net/download/|publish\</PublishUrlHistory>
     <InstallUrlHistory>https://csharpmarc.net/download/</InstallUrlHistory>
-    <SupportUrlHistory />
+    <SupportUrlHistory>https://github.com/frozen-solid/CSharp_MARC/issues</SupportUrlHistory>
     <UpdateUrlHistory />
     <BootstrapperUrlHistory />
-    <ErrorReportUrlHistory />
+    <ErrorReportUrlHistory>https://github.com/frozen-solid/CSharp_MARC/issues</ErrorReportUrlHistory>
     <FallbackCulture>en-US</FallbackCulture>
     <VerifyUploadedFiles>false</VerifyUploadedFiles>
   </PropertyGroup>
