@@ -22,6 +22,15 @@ This project is built upon the CSharp_MARC project of the same name available at
 
 ## Changelog:
 
+### 2018-02-20 Changes:
+
+* Export CSV now exports validation results column
+
+### 2018-02-19 Changes:
+
+* Advanced Batch Editing features now properly insert new fields in sorted order
+* Updated copyright information
+
 ### 2017-08-18 Changes:
 
 * If a record is completely unreadable, allow importing records to continue. A "blank" record is inserted instead with error information in the warnings field.
