@@ -80,11 +80,10 @@ namespace MARC
 			if (bufferSize > reader.Length)
 				bufferSize = Convert.ToInt32(reader.Length);
 
-			byte[] ByteArray = new byte[bufferSize];
-
 			while (reader.Position < reader.Length)
-			{
-				int DelPosition, RealReadSize;
+            {
+                byte[] ByteArray = new byte[bufferSize];
+                int DelPosition, RealReadSize;
 
 				do
 				{

@@ -64,7 +64,7 @@
     <DelaySign>false</DelaySign>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>CSharp_MARC.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>CSharp_MARC.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -96,7 +96,7 @@
     <Compile Include="SubfieldTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="CSharp_MARC.pfx" />
+    <None Include="CSharp_MARC.snk" />
     <None Include="packages.config" />
     <None Include="Test Records\bad_example.mrc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

@@ -99,7 +99,7 @@
     <ManifestCertificateThumbprint>9314065F175584B36595EB1E27EB0529EB54F3B8</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>CSharp_MARC.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>CSharp_MARC.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <TargetZone>LocalIntranet</TargetZone>
@@ -257,8 +257,7 @@
     <Content Include="MARC.db">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="CSharp_MARC Editor_TemporaryKey.pfx" />
-    <None Include="CSharp_MARC.pfx" />
+    <None Include="CSharp_MARC.snk" />
     <None Include="MARCDataSet.xsc">
       <DependentUpon>MARCDataSet.xsd</DependentUpon>
     </None>
