@@ -435,6 +435,8 @@ namespace CSharp_MARC_Editor
             LoadPreview(recordID);
             fieldsDataGridView.Enabled = true;
             subfieldsDataGridView.Enabled = true;
+            fieldsDataGridView.AllowUserToAddRows = true;
+            subfieldsDataGridView.AllowUserToAddRows = true;
         }
 
         /// <summary>
@@ -1887,7 +1889,9 @@ namespace CSharp_MARC_Editor
                         LoadSubfields(Int32.Parse(rowClicked.Cells[0].Value.ToString(), CultureInfo.InvariantCulture));
                 }
                 else
+                {
                     marcDataSet.Tables["Subfields"].Clear();
+                }
             }
         }
 
