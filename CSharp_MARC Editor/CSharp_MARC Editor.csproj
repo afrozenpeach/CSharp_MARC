@@ -33,8 +33,8 @@
     <ProductName>CSharp_MARC Editor</ProductName>
     <PublisherName>Mattie Schraeder</PublisherName>
     <SuiteName>csharpmarc.net</SuiteName>
-    <ApplicationRevision>1</ApplicationRevision>
-    <ApplicationVersion>2018.02.20.%2a</ApplicationVersion>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>2018.07.06.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>

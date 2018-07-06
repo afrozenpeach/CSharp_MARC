@@ -20,8 +20,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @author    Mattie Schraeder-Urbanwoicz <mattie@csharpmarc.net>
- * @copyright 2009-2017 Mattie Schraeder-Urbanowicz and Bound to Stay Bound Books <http://www.btsb.com>
+ * @author    Mattie Schraeder <mattie@csharpmarc.net>
+ * @copyright 2009-2017 Mattie Schraeder and Bound to Stay Bound Books <http://www.btsb.com>
  * @license   http://www.gnu.org/copyleft/lesser.html  LGPL License 3
  */
  
@@ -48,10 +48,15 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @author    Mattie Schraeder-Urbanowicz <mattie@csharpmarc.net>
- * @copyright 2016-2017 Mattie Schraeder-Urbanowicz
+ * @author    Mattie Schraeder <mattie@csharpmarc.net>
+ * @copyright 2016-2017 Mattie Schraeder
  * @license   http://www.gnu.org/licenses/gpl-3.0.html  GPL License 3
  */ 
+
+2018-07-06 Changes:
+
+Fixed issue where a user could attempt to add tags and subfields before a record has been added
+Fixed issue with some MARC21 records not loading properly
 
 2018-02-20 Changes:
 
