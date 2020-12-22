@@ -29,21 +29,23 @@ namespace PMarcWin
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.btnOpenMARC = new System.Windows.Forms.Button();
             this.lvRecords = new System.Windows.Forms.ListView();
-            this.lblNumRecordsLabel = new System.Windows.Forms.Label();
-            this.lblNumRecords = new System.Windows.Forms.Label();
             this.Författare = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Titel = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Typ = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Bibliotek = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Placering = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.lblNumRecordsLabel = new System.Windows.Forms.Label();
+            this.lblNumRecords = new System.Windows.Forms.Label();
             this.txtFilter = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.btnExport = new System.Windows.Forms.Button();
             this.lblStatus = new System.Windows.Forms.Label();
             this.btnDelete = new System.Windows.Forms.Button();
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -53,7 +55,7 @@ namespace PMarcWin
             // 
             // btnOpenMARC
             // 
-            this.btnOpenMARC.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.btnOpenMARC.BackColor = System.Drawing.Color.YellowGreen;
             this.btnOpenMARC.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnOpenMARC.Location = new System.Drawing.Point(1, 1);
             this.btnOpenMARC.Name = "btnOpenMARC";
@@ -81,25 +83,6 @@ namespace PMarcWin
             this.lvRecords.TabIndex = 1;
             this.lvRecords.UseCompatibleStateImageBehavior = false;
             this.lvRecords.View = System.Windows.Forms.View.Details;
-            this.lvRecords.SelectedIndexChanged += new System.EventHandler(this.lvRecords_SelectedIndexChanged);
-            // 
-            // lblNumRecordsLabel
-            // 
-            this.lblNumRecordsLabel.AutoSize = true;
-            this.lblNumRecordsLabel.Location = new System.Drawing.Point(131, 16);
-            this.lblNumRecordsLabel.Name = "lblNumRecordsLabel";
-            this.lblNumRecordsLabel.Size = new System.Drawing.Size(84, 17);
-            this.lblNumRecordsLabel.TabIndex = 2;
-            this.lblNumRecordsLabel.Text = "Antal poster";
-            // 
-            // lblNumRecords
-            // 
-            this.lblNumRecords.AutoSize = true;
-            this.lblNumRecords.Location = new System.Drawing.Point(221, 16);
-            this.lblNumRecords.Name = "lblNumRecords";
-            this.lblNumRecords.Size = new System.Drawing.Size(13, 17);
-            this.lblNumRecords.TabIndex = 3;
-            this.lblNumRecords.Text = "-";
             // 
             // Författare
             // 
@@ -125,9 +108,27 @@ namespace PMarcWin
             this.Placering.Text = "Placering";
             this.Placering.Width = 100;
             // 
+            // lblNumRecordsLabel
+            // 
+            this.lblNumRecordsLabel.AutoSize = true;
+            this.lblNumRecordsLabel.Location = new System.Drawing.Point(131, 16);
+            this.lblNumRecordsLabel.Name = "lblNumRecordsLabel";
+            this.lblNumRecordsLabel.Size = new System.Drawing.Size(84, 17);
+            this.lblNumRecordsLabel.TabIndex = 2;
+            this.lblNumRecordsLabel.Text = "Antal poster";
+            // 
+            // lblNumRecords
+            // 
+            this.lblNumRecords.AutoSize = true;
+            this.lblNumRecords.Location = new System.Drawing.Point(221, 16);
+            this.lblNumRecords.Name = "lblNumRecords";
+            this.lblNumRecords.Size = new System.Drawing.Size(13, 17);
+            this.lblNumRecords.TabIndex = 3;
+            this.lblNumRecords.Text = "-";
+            // 
             // txtFilter
             // 
-            this.txtFilter.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.txtFilter.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.txtFilter.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtFilter.Location = new System.Drawing.Point(393, 12);
             this.txtFilter.Name = "txtFilter";
@@ -146,13 +147,13 @@ namespace PMarcWin
             // 
             // btnExport
             // 
-            this.btnExport.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.btnExport.BackColor = System.Drawing.Color.YellowGreen;
             this.btnExport.Enabled = false;
             this.btnExport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnExport.Location = new System.Drawing.Point(1231, 1);
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(113, 46);
-            this.btnExport.TabIndex = 6;
+            this.btnExport.TabIndex = 3;
             this.btnExport.Text = "Exportera";
             this.btnExport.UseVisualStyleBackColor = false;
             this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
@@ -168,20 +169,26 @@ namespace PMarcWin
             // 
             // btnDelete
             // 
-            this.btnDelete.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.btnDelete.BackColor = System.Drawing.Color.DarkTurquoise;
             this.btnDelete.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnDelete.Location = new System.Drawing.Point(1096, 1);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(113, 46);
-            this.btnDelete.TabIndex = 8;
+            this.btnDelete.TabIndex = 2;
             this.btnDelete.Text = "Radera markerad";
             this.btnDelete.UseVisualStyleBackColor = false;
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
+            // 
+            // saveFileDialog1
+            // 
+            this.saveFileDialog1.DefaultExt = "xlsx";
+            this.saveFileDialog1.Filter = "Excelfiler|*.xlsx|Alla filer|*.*";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
             this.ClientSize = new System.Drawing.Size(1356, 728);
             this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.lblStatus);
@@ -192,6 +199,9 @@ namespace PMarcWin
             this.Controls.Add(this.lblNumRecordsLabel);
             this.Controls.Add(this.lvRecords);
             this.Controls.Add(this.btnOpenMARC);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "Form1";
             this.Text = "PMarcWin";
             this.ResumeLayout(false);
@@ -216,6 +226,7 @@ namespace PMarcWin
         private System.Windows.Forms.Button btnExport;
         private System.Windows.Forms.Label lblStatus;
         private System.Windows.Forms.Button btnDelete;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
     }
 }
 

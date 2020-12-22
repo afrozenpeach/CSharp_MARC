@@ -27,7 +27,6 @@ namespace PMarcWin
             {
                 //result=MessageBox.Show("Dafk");
                 marcRecords.ImportMARC(openFileDialog1.FileName);
-                lblNumRecords.Text = marcRecords.Count.ToString();
                 if(marcRecords.Count>0)
                 {
                     lblStatus.Text = "Läser in MARC-fil...";
@@ -191,43 +190,61 @@ namespace PMarcWin
                 
             }
             lblStatus.Text = "Läste in MARC-fil. Klicka på Exportera för att spara som en Excelfil.";
+            lblNumRecords.Text = lvRecords.Items.Count.ToString();
             btnExport.Enabled = true;
-        }
-
-        private void lvRecords_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
         }
 
         private void btnExport_Click(object sender, EventArgs e)
         {
             if(lvRecords.Items.Count>0)
             {
-                ExportListView();
+                var result = saveFileDialog1.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    ExportListView(saveFileDialog1.FileName);
+                }
+                
             }
             
         }
 
-        private void ExportListView()
+        private void ExportListView(string FileName)
         {
 
             int xlRow = 1;
-            
-            using (var ew = new ExcelWriter("D:\\test.xlsx"))
+
+            using (var ew = new ExcelWriter(FileName))
             {
                 for (int n = 0; n < lvRecords.Columns.Count; n++)
                 {
-                    ew.Write($"{lvRecords.Columns[n].Text}", n+1, xlRow);
+                    ew.Write($"{lvRecords.Columns[n].Text}", n + 1, xlRow);
                 }
-                
-                for (int itemrow = 0; itemrow< lvRecords.Items.Count;itemrow++)
+
+                for (int itemrow = 0; itemrow < lvRecords.Items.Count; itemrow++)
                 {
-                    for(int itemcol=0; itemcol< lvRecords.Columns.Count; itemcol++)
+                    for (int itemcol = 0; itemcol < lvRecords.Columns.Count; itemcol++)
                     {
-                        ew.Write($"{lvRecords.Items[itemrow].SubItems[itemcol].Text}", itemcol + 1, itemrow+2);
+                        ew.Write($"{lvRecords.Items[itemrow].SubItems[itemcol].Text}", itemcol + 1, itemrow + 2);
                     }
                 }
             }
+            lblStatus.Text = $"Klar! Exporterade {FileName}";
+        }
+
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            var count = 0;
+            for(int n=lvRecords.Items.Count-1;n>=0;n--)
+            {
+                if(lvRecords.Items[n].Selected)
+                {
+                    lvRecords.Items[n].Remove();
+                    count++;
+                }
+            }
+            lblStatus.Text = $"Raderade {count} poster från listan";
+            lblNumRecords.Text = lvRecords.Items.Count.ToString();
+            
         }
     }
 }
