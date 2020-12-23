@@ -74,10 +74,10 @@ namespace PMarcWin
             this.lvRecords.FullRowSelect = true;
             this.lvRecords.GridLines = true;
             this.lvRecords.HideSelection = false;
-            this.lvRecords.Location = new System.Drawing.Point(0, 43);
+            this.lvRecords.Location = new System.Drawing.Point(0, 42);
             this.lvRecords.Margin = new System.Windows.Forms.Padding(2);
             this.lvRecords.Name = "lvRecords";
-            this.lvRecords.Size = new System.Drawing.Size(1017, 549);
+            this.lvRecords.Size = new System.Drawing.Size(1055, 675);
             this.lvRecords.TabIndex = 1;
             this.lvRecords.UseCompatibleStateImageBehavior = false;
             this.lvRecords.View = System.Windows.Forms.View.Details;
@@ -129,7 +129,7 @@ namespace PMarcWin
             this.btnExport.BackColor = System.Drawing.Color.YellowGreen;
             this.btnExport.Enabled = false;
             this.btnExport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnExport.Location = new System.Drawing.Point(923, 1);
+            this.btnExport.Location = new System.Drawing.Point(970, 1);
             this.btnExport.Margin = new System.Windows.Forms.Padding(2);
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(85, 37);
@@ -140,25 +140,25 @@ namespace PMarcWin
             // 
             // lblStatus
             // 
-            this.lblStatus.AutoSize = true;
-            this.lblStatus.Location = new System.Drawing.Point(503, 13);
+            this.lblStatus.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.lblStatus.Location = new System.Drawing.Point(199, 13);
             this.lblStatus.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblStatus.Name = "lblStatus";
-            this.lblStatus.Size = new System.Drawing.Size(40, 13);
+            this.lblStatus.Size = new System.Drawing.Size(657, 13);
             this.lblStatus.TabIndex = 7;
-            this.lblStatus.Text = " Status";
+            this.lblStatus.Text = "Redo";
             this.lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // btnDelete
             // 
-            this.btnDelete.BackColor = System.Drawing.Color.DarkTurquoise;
+            this.btnDelete.BackColor = System.Drawing.Color.Crimson;
             this.btnDelete.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnDelete.Location = new System.Drawing.Point(822, 1);
+            this.btnDelete.Location = new System.Drawing.Point(881, 1);
             this.btnDelete.Margin = new System.Windows.Forms.Padding(2);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(85, 37);
             this.btnDelete.TabIndex = 2;
-            this.btnDelete.Text = "Radera markerad";
+            this.btnDelete.Text = "Radera markerad(e)";
             this.btnDelete.UseVisualStyleBackColor = false;
             this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
@@ -172,7 +172,7 @@ namespace PMarcWin
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-            this.ClientSize = new System.Drawing.Size(1017, 592);
+            this.ClientSize = new System.Drawing.Size(1055, 717);
             this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.btnExport);

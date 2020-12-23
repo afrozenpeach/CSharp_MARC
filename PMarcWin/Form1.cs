@@ -109,7 +109,7 @@ namespace PMarcWin
                         }
                         if(titleB != null)
                         {
-                            
+                            Title += " ";
                             Title += titleB.Data;
                             if (Title.EndsWith("/"))
                             {
@@ -187,8 +187,8 @@ namespace PMarcWin
                 
                 
                 lvRecords.Items.Add(new ListViewItem(new string[] { Author, Title, Type, Placement }));
-                
-                
+
+
             }
             lblStatus.Text = "Läste in MARC-fil. Klicka på Exportera för att spara som en Excelfil.";
             lblNumRecords.Text = lvRecords.Items.Count.ToString();
