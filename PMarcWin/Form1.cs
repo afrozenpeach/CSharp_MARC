@@ -30,11 +30,11 @@ namespace PMarcWin
                 if(marcRecords.Count>0)
                 {
                     lblStatus.Text = "Läser in MARC-fil...";
-                    ListRecords(txtFilter.Text);
+                    ListRecords();
                 }
             }
         }
-        private void ListRecords(string libraryFilter="")
+        private void ListRecords()
         {
             lvRecords.Items.Clear();
             /**
@@ -55,13 +55,12 @@ namespace PMarcWin
                 Field authorField = record["100"];
                 Field titleField = record["245"];
                 Field typeField = record["942"];
-                Field locationField = record["952"];
+                List<Field> locationFields = record.GetFields("952");
 
                 string Author;
                 string CoAuthors ="";
                 string Title;
                 string Type;
-                string Library;
                 string Placement;
 
                 #region authorfield
@@ -152,28 +151,30 @@ namespace PMarcWin
                 #endregion
 
                 #region locationField
-                Library = "";
                 Placement = "";
-                if (locationField != null)
+                if (locationFields != null)
                 {
-                    if (locationField.IsDataField())
+                    if (locationFields[0].IsDataField())
                     {
-                        DataField locationDataField = (DataField)locationField;
-                        Subfield libraryData = locationDataField['a'];
-                        Subfield placementData = locationDataField['c'];
-                        if(libraryData!=null)
+                        foreach(DataField locationDataField in locationFields)
                         {
-                            Library = libraryData.Data;
+                            Subfield libraryData = locationDataField['a'];
+                            Subfield placementData = locationDataField['c'];
+                            if(libraryData.Data=="TORE")
+                            {
+                                Placement = placementData.Data;
+                            }
                         }
-                        if(placementData!=null)
+                        if(Placement=="") //om inte placeringen TORE hittas, använd första bästa bara.
                         {
+                            DataField locationDataField = (DataField)locationFields[0];
+                            Subfield placementData = locationDataField['c'];
                             Placement = placementData.Data;
                         }
                         
                     }
                     else
                     {
-                        Library = "";
                         Placement = "";
                     }
                 }
@@ -183,10 +184,10 @@ namespace PMarcWin
                 {
                     Author = CoAuthors;
                 }
-                if(libraryFilter=="" || Library == libraryFilter)
-                {
-                    lvRecords.Items.Add(new ListViewItem(new string[] { Author, Title, Type, Library, Placement }));
-                }
+                
+                
+                lvRecords.Items.Add(new ListViewItem(new string[] { Author, Title, Type, Placement }));
+                
                 
             }
             lblStatus.Text = "Läste in MARC-fil. Klicka på Exportera för att spara som en Excelfil.";
