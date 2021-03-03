@@ -37,7 +37,7 @@ namespace MARC
         //Member Variables and Properties
         #region Member Variables and Properties
 
-		public enum RecordEncoding { MARC8, UTF8 };
+		public enum RecordEncoding { MARC8, UTF8, UTF8NoBOM };
         public const char END_OF_FILE = '\x1A';
         
         private readonly StreamWriter writer = null;
@@ -83,10 +83,21 @@ namespace MARC
 		/// <param name="append">if set to <c>true</c> [append].</param>
 		public FileMARCWriter(string filename, RecordEncoding recordEncoding, bool append)
 		{
-			encoding = recordEncoding == RecordEncoding.MARC8 ? new MARC8() : Encoding.UTF8;
+			switch (recordEncoding)
+			{
+				case RecordEncoding.MARC8:
+					encoding = new MARC8();
+					break;
+				case RecordEncoding.UTF8NoBOM:
+					encoding = (Encoding)new UTF8Encoding();
+					break;
+				default:
+					encoding = Encoding.UTF8;
+				break;
+			}
 
 			writer = new StreamWriter(filename, append, encoding);
-		}
+        }
 
 		#endregion
 
