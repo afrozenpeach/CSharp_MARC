@@ -21,7 +21,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author    Mattie Schraeder <mattie@csharpmarc.net>
- * @copyright 2009-2018 Mattie Schraeder and Bound to Stay Bound Books <http://www.btsb.com>
+ * @copyright 2009-2022 Mattie Schraeder and Bound to Stay Bound Books <http://www.btsb.com>
  * @license   http://www.gnu.org/copyleft/lesser.html  LGPL License 3
  */
 
@@ -70,6 +70,8 @@ namespace MARC
         //Source containing new records
         protected List<string> rawSource = null;
         protected int position = -1;
+
+        public bool ForceUTF8 { get; set; } = false;
 
         /// <summary>
         /// Gets the raw source.
@@ -221,8 +223,10 @@ namespace MARC
                 //Store leader
                 marc.Leader = raw.Substring(0, LEADER_LEN);
 
-                //Bytes 12-16 of leader give offset to the body of the record
+                if (marc.Leader[8] == '8')
+                    ForceUTF8 = true;
 
+                //Bytes 12-16 of leader give offset to the body of the record
                 int dataStart;
 
                 if (!Int32.TryParse(raw.Substring(12, 5), out dataStart))
@@ -236,7 +240,6 @@ namespace MARC
                 }
 
                 //Immediately after the leader comes the directory (no separator)
-
                 string directory = raw.Substring(LEADER_LEN, dataStart - LEADER_LEN - 1);
 
                 //Character after the directory should be END_OF_FIELD
@@ -317,7 +320,7 @@ namespace MARC
                         }
                         else
                         {
-                            if (extraBytes > 0)
+                            if (extraBytes > 0 && !ForceUTF8)
                             {
                                 fieldLength -= extraBytes;
                                 totalExtraBytesRead += extraBytes;

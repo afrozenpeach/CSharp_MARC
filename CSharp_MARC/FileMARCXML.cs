@@ -21,7 +21,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author    Mattie Schraeder <mattie@csharpmarc.net>
- * @copyright 2009-2018 Mattie Schraeder and Bound to Stay Bound Books <http://www.btsb.com>
+ * @copyright 2009-2022 Mattie Schraeder and Bound to Stay Bound Books <http://www.btsb.com>
  * @license   http://www.gnu.org/copyleft/lesser.html  LGPL License 3
  */
  

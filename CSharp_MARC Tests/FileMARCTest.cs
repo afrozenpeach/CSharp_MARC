@@ -21,7 +21,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author    Mattie Schraeder <mattie@csharpmarc.net>
- * @copyright 2009-2018 Mattie Schraeder and Bound to Stay Bound Books <http://www.btsb.com>
+ * @copyright 2009-2022 Mattie Schraeder and Bound to Stay Bound Books <http://www.btsb.com>
  * @license   http://www.gnu.org/copyleft/lesser.html  LGPL License 3
  */
 
@@ -292,6 +292,21 @@ namespace CSharp_MARC_Tests
 			Assert.AreEqual(expected.Count, actual.Count);
 			Assert.AreEqual(expected[0], actual[0]);
 			Assert.AreEqual(expected[1], actual[1]);
+		}
+
+		[TestMethod()]
+		[DeploymentItem("Test Records\\007-tit.mrc")]
+		public void UTF8Multibytetest()
+		{
+			FileMARC target = new FileMARC();
+			string file = "007-tit.mrc";
+			target.ImportMARC(file);
+
+			{
+				int expected = 4;
+				int actual = target.RawSource.Count;
+				Assert.AreEqual(expected, actual);
+			}
 		}
 	}
 }
