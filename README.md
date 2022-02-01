@@ -22,6 +22,12 @@ This project is built upon the CSharp_MARC project of the same name available at
 
 ## Changelog:
 
+### 2022-02-01 Changes:
+ 
+* Added a new public member to the FileMARC class to force UTF8 on records that don't have the correct encoding flag in the leader
+* Updated copyrights
+* Updated .NET Framework and Nuget packages
+
 ### 2018-07-06 Changes:
 
 * Fixed issue where a user could attempt to add tags and subfields before a record has been added

@@ -21,7 +21,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author    Mattie Schraeder <mattie@csharpmarc.net>
- * @copyright 2009-2017 Mattie Schraeder and Bound to Stay Bound Books <http://www.btsb.com>
+ * @copyright 2009-2022 Mattie Schraeder and Bound to Stay Bound Books <http://www.btsb.com>
  * @license   http://www.gnu.org/copyleft/lesser.html  LGPL License 3
  */
  
@@ -49,9 +49,15 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author    Mattie Schraeder <mattie@csharpmarc.net>
- * @copyright 2016-2017 Mattie Schraeder
+ * @copyright 2016-2022 Mattie Schraeder
  * @license   http://www.gnu.org/licenses/gpl-3.0.html  GPL License 3
  */ 
+
+2022-02-01 Changes:
+
+Added a new public member to the FileMARC class to force UTF8 on records that don't have the correct encoding flag in the leader
+Updated copyrights
+Updated .NET Framework and Nuget packages
 
 2018-07-06 Changes:
 
