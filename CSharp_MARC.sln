@@ -1,20 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30907.101
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32319.34
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharp_MARC", "CSharp_MARC\CSharp_MARC.csproj", "{D76C0576-2B55-4B45-82F5-97FAD347676C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharp_MARC", "CSharp_MARC\CSharp_MARC.csproj", "{D76C0576-2B55-4B45-82F5-97FAD347676C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharp_MARC Tests", "CSharp_MARC Tests\CSharp_MARC Tests.csproj", "{3058AE50-0078-41FF-A43C-DD8877862AC8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4EBA2CBA-508E-42B0-997B-EEF42136EB05}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharp_MARC Editor", "CSharp_MARC Editor\CSharp_MARC Editor.csproj", "{921BAF58-4AC3-415C-AB47-69AB8EDFB327}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{3960DB66-7046-4E4E-9106-AD2EEFDD5BC1}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\packages.config = .nuget\packages.config
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,16 +23,16 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{D76C0576-2B55-4B45-82F5-97FAD347676C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D76C0576-2B55-4B45-82F5-97FAD347676C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D76C0576-2B55-4B45-82F5-97FAD347676C}.Debug|x64.ActiveCfg = Debug|x64
-		{D76C0576-2B55-4B45-82F5-97FAD347676C}.Debug|x64.Build.0 = Debug|x64
-		{D76C0576-2B55-4B45-82F5-97FAD347676C}.Debug|x86.ActiveCfg = Debug|x86
-		{D76C0576-2B55-4B45-82F5-97FAD347676C}.Debug|x86.Build.0 = Debug|x86
+		{D76C0576-2B55-4B45-82F5-97FAD347676C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D76C0576-2B55-4B45-82F5-97FAD347676C}.Debug|x64.Build.0 = Debug|Any CPU
+		{D76C0576-2B55-4B45-82F5-97FAD347676C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D76C0576-2B55-4B45-82F5-97FAD347676C}.Debug|x86.Build.0 = Debug|Any CPU
 		{D76C0576-2B55-4B45-82F5-97FAD347676C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D76C0576-2B55-4B45-82F5-97FAD347676C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D76C0576-2B55-4B45-82F5-97FAD347676C}.Release|x64.ActiveCfg = Release|x64
-		{D76C0576-2B55-4B45-82F5-97FAD347676C}.Release|x64.Build.0 = Release|x64
-		{D76C0576-2B55-4B45-82F5-97FAD347676C}.Release|x86.ActiveCfg = Release|x86
-		{D76C0576-2B55-4B45-82F5-97FAD347676C}.Release|x86.Build.0 = Release|x86
+		{D76C0576-2B55-4B45-82F5-97FAD347676C}.Release|x64.ActiveCfg = Release|Any CPU
+		{D76C0576-2B55-4B45-82F5-97FAD347676C}.Release|x64.Build.0 = Release|Any CPU
+		{D76C0576-2B55-4B45-82F5-97FAD347676C}.Release|x86.ActiveCfg = Release|Any CPU
+		{D76C0576-2B55-4B45-82F5-97FAD347676C}.Release|x86.Build.0 = Release|Any CPU
 		{3058AE50-0078-41FF-A43C-DD8877862AC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3058AE50-0078-41FF-A43C-DD8877862AC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3058AE50-0078-41FF-A43C-DD8877862AC8}.Debug|x64.ActiveCfg = Debug|x64
